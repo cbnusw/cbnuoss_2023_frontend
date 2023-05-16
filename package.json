@@ -13,26 +13,17 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@types/node": "18.15.11",
-    "@types/react": "18.0.32",
-    "@types/react-dom": "18.0.11",
-    "eslint": "8.37.0",
-    "eslint-config-next": "13.2.4",
-    "next": "13.2.4",
+    "@types/node": "20.1.5",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "autoprefixer": "10.4.14",
+    "eslint": "8.40.0",
+    "eslint-config-next": "13.4.2",
+    "next": "13.4.2",
+    "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "typescript": "5.0.3"
-  },
-  "devDependencies": {
-    "@storybook/addon-essentials": "^7.0.2",
-    "@storybook/addon-interactions": "^7.0.2",
-    "@storybook/addon-links": "^7.0.2",
-    "@storybook/blocks": "^7.0.2",
-    "@storybook/nextjs": "^7.0.2",
-    "@storybook/react": "^7.0.2",
-    "@storybook/testing-library": "^0.0.14-next.2",
-    "prettier": "^2.8.7",
-    "sb": "^7.0.2",
-    "storybook": "^7.0.2"
+    "tailwindcss": "3.3.2",
+    "typescript": "5.0.4"
   }
 }
