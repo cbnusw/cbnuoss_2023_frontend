@@ -1,3 +1,93 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  color: #1a1f27;
+}
+
+.fade-in {
+  animation: fadeIn 3s;
+  -moz-animation: fadeIn 3s; /* Firefox */
+  -webkit-animation: fadeIn 3s; /* Safari and Chrome */
+  -o-animation: fadeIn 3s; /* Opera */
+}
+
+.bright-in {
+  animation: brightIn 3s;
+  -moz-animation: brightIn 3s; /* Firefox */
+  -webkit-animation: brightIn 3s; /* Safari and Chrome */
+  -o-animation: brightIn 3s; /* Opera */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadeIn {
+  /* Firefox */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadeIn {
+  /* Safari and Chrome */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadeIn {
+  /* Opera */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes brightIn {
+  from {
+    filter: brightness(80%);
+  }
+  to {
+    filter: brightness(100%);
+  }
+}
+@-moz-keyframes brightIn {
+  /* Firefox */
+  from {
+    filter: brightness(80%);
+  }
+  to {
+    filter: brightness(100%);
+  }
+}
+@-webkit-keyframes brightIn {
+  /* Safari and Chrome */
+  from {
+    filter: brightness(80%);
+  }
+  to {
+    filter: brightness(100%);
+  }
+}
+@-o-keyframes brightIn {
+  /* Opera */
+  from {
+    filter: brightness(80%);
+  }
+  to {
+    filter: brightness(100%);
+  }
+}
