@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 
 export default function Navbar() {
   const [rightPos, setRightPos] = useState('-right-full');
-  const [opacity, setOpacity] = useState('0');
 
   return (
     <nav
@@ -75,7 +74,6 @@ export default function Navbar() {
         <button
           onClick={(e) => {
             setRightPos('right-0');
-            setOpacity('95');
           }}
           className={`block 2md:hidden px-[0.6rem] py-3 ml-auto mr-[0.1rem] rounded-full focus:outline-none`}
         >
@@ -83,13 +81,12 @@ export default function Navbar() {
           <div className="w-[1.1rem] h-[2px] bg-[#262626] mb-[4px]"></div>
           <div className="w-[1.1rem] h-[2px] bg-[#262626]"></div>
           <div
-            className={`absolute top-0 ${rightPos} h-screen w-full bg-white border opacity-${opacity} transition-all duration-300 cursor-default`}
+            className={`absolute top-0 ${rightPos} h-screen w-full bg-white border opacity-95 transition-all duration-300 cursor-default`}
           >
             <div
               onClick={(e) => {
                 e.stopPropagation();
                 setRightPos('-right-full');
-                setOpacity('0');
               }}
               className="w-fit ml-auto mt-2 mr-2 p-1 rounded-full cursor-pointer"
             >
