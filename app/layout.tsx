@@ -19,7 +19,7 @@ export default function RootLayout({
       </head>
       <body className="text-sm">
         <Navbar />
-        {children}
+        <div className="overflow-auto">{children}</div>
         <Footer />
       </body>
     </html>
