@@ -5,15 +5,15 @@ import Assignment from './components/Assignment';
 
 export default function Home() {
   return (
-    <div>
+    <div className="w-full mx-auto">
       <div className="h-80 flex justify-center items-center bg-[url('/images/main.jpg')] bg-cover bg-center bright-in">
         <span className="text-4xl text-center text-white font-thin tracking-[1.5rem] fade-in mt-12 px-5">
-          SW ONLINE JUDGE
+          ONLINE JUDGE
         </span>
       </div>
       <div className="flex">
         <div className="flex-col 2lg:flex-row mx-auto mt-12 mb-10 flex justify-center gap-5">
-          <div className="w-[30rem] p-2 mb-8 2lg:mb-0">
+          <div className="w-[22.5rem] 3xs:w-[30rem] p-2 mb-8 2lg:mb-0">
             <div className="mb-5">
               <span className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba]">
                 신청 가능한 대회
@@ -32,7 +32,7 @@ export default function Home() {
 
           {/*  */}
 
-          <div className="w-[30rem] p-2 ">
+          <div className="w-[22.5rem] 3xs:w-[30rem] p-2 ">
             <div className="mb-5">
               <span className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba]">
                 추가된 과제

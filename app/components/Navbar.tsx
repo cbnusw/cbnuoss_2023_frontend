@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Navbar() {
-  const [group, setGroup] = useState('');
+  const [rightPos, setRightPos] = useState('-right-full');
 
   return (
-    <nav className="w-full z-10 p-2 pl-3 fixed top-0 border-b border-[#e6e8ea] whitespace-nowrap bg-white">
+    <nav
+      className={`w-full z-10 p-2 pl-3 fixed top-0 border-b border-[#e6e8ea] whitespace-nowrap bg-white`}
+    >
       <div className=" 2lg:w-[60rem] flex items-center mx-auto">
         <div className="py-2 2md:py-0">
           <Link href="/">
@@ -70,19 +72,23 @@ export default function Navbar() {
           </div>
         </div>
         <button
-          onClick={() => setGroup('group')}
-          className={`block 2md:hidden px-4 py-3 ml-auto rounded-md focus:outline-none hover:bg-gray-200 ${group}`}
+          onClick={(e) => {
+            setRightPos('right-0');
+          }}
+          className={`block 2md:hidden px-[0.6rem] py-3 ml-auto mr-[0.1rem] rounded-full focus:outline-none`}
         >
           <div className="w-[1.1rem] h-[2px] bg-[#262626] mb-[4px]"></div>
           <div className="w-[1.1rem] h-[2px] bg-[#262626] mb-[4px]"></div>
           <div className="w-[1.1rem] h-[2px] bg-[#262626]"></div>
-          <div className="absolute top-0 -right-full h-screen w-8/12 bg-white opacity-0 border group-focus:right-0 group-focus:opacity-95 transition-all duration-300 cursor-default">
+          <div
+            className={`absolute top-0 ${rightPos} h-screen w-full bg-white border opacity-95 transition-all duration-300 cursor-default`}
+          >
             <div
               onClick={(e) => {
                 e.stopPropagation();
-                setGroup('');
+                setRightPos('-right-full');
               }}
-              className="w-fit ml-auto mt-1 mr-2 p-2 cursor-pointer"
+              className="w-fit ml-auto mt-2 mr-2 p-1 rounded-full cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -94,7 +100,7 @@ export default function Navbar() {
               </svg>
             </div>
             <ul className="flex flex-col items-center w-full text-base cursor-pointer pt-4">
-              <div className="w-full flex justify-center border-b border-[#ccc] text-sm">
+              <div className="flex flex-col w-full border-b-[0.75rem] text-sm">
                 <Link
                   href="/login"
                   className="hover:bg-gray-200 py-4 px-6 w-full"
@@ -114,25 +120,25 @@ export default function Navbar() {
               </div>
               <Link
                 href="/contest"
-                className="hover:bg-gray-200 py-4 px-6 w-full"
+                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
               >
                 대회
               </Link>
               <Link
                 href="/assignment"
-                className="hover:bg-gray-200 py-4 px-6 w-full"
+                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
               >
                 교과목
               </Link>
               <Link
                 href="/practice"
-                className="hover:bg-gray-200 py-4 px-6 w-full"
+                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
               >
                 연습문제
               </Link>
               <Link
                 href="/notice"
-                className="hover:bg-gray-200 py-4 px-6 w-full"
+                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
               >
                 공지사항
               </Link>
