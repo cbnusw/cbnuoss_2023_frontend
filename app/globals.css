@@ -20,6 +20,19 @@
   -o-animation: brightIn 3s; /* Opera */
 }
 
+.box-shadow {
+  box-shadow: 0.25px 1px 1px rgb(255, 255, 255);
+  transition: box-shadow 0.325s;
+}
+
+.box-shadow:focus,
+.box-shadow:hover {
+  box-shadow: 0.25px 1px 1px 0 rgba(0, 0, 0, 0.2),
+    0.25px 1px 4px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* --------------- */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -55,6 +68,8 @@
     opacity: 1;
   }
 }
+
+/* --------------- */
 
 @keyframes brightIn {
   from {
