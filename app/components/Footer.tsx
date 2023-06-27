@@ -3,7 +3,7 @@ import React from 'react';
 
 export default function Footer() {
   return (
-    <div className="w-full flex justify-start mt-16 font-light text-[10px] py-5 px-3 leading-[1.175rem] bg-[#505050]">
+    <div className="w-full flex justify-start mt-auto font-light text-[10px] py-5 px-3 leading-[1.175rem] bg-[#505050]">
       <div className="flex flex-col 3xs:flex-row gap-10 justify-between mx-auto w-[60rem]">
         <div>
           <div className="mb-5 mx-auto">
