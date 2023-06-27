@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function Navbar() {
   const [rightPos, setRightPos] = useState('-right-full');
@@ -30,25 +30,25 @@ export default function Navbar() {
           <div className="flex gap-3 font-medium mx-auto">
             <Link
               href="/contest"
-              className="px-4 py-2 rounded-md hover:bg-[#f3f4f5]"
+              className="px-4 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               대회
             </Link>
             <Link
               href="/assignment"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               교과목
             </Link>
             <Link
               href="/practice"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               연습문제
             </Link>
             <Link
               href="/notice"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               공지사항
             </Link>
@@ -103,14 +103,14 @@ export default function Navbar() {
               <div className="flex flex-col w-full border-b-[0.75rem] text-sm">
                 <Link
                   href="/login"
-                  className="hover:bg-gray-200 py-4 px-6 w-full"
+                  className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
                 >
                   로그인
                 </Link>
                 <a
                   href="https://sw7up.cbnu.ac.kr/account/join"
                   target="_blank"
-                  className="hover:bg-gray-200 py-4 px-6 w-full"
+                  className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
                   onClick={(e) => {
                     e.stopPropagation();
                   }}
@@ -120,25 +120,25 @@ export default function Navbar() {
               </div>
               <Link
                 href="/contest"
-                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 대회
               </Link>
               <Link
                 href="/assignment"
-                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 교과목
               </Link>
               <Link
                 href="/practice"
-                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 연습문제
               </Link>
               <Link
                 href="/notice"
-                className="hover:bg-gray-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 공지사항
               </Link>

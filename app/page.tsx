@@ -5,10 +5,10 @@ import Assignment from './components/Assignment';
 
 export default function Home() {
   return (
-    <div className="w-full mx-auto">
+    <div className="mt-[-5rem]">
       <div className="h-80 flex justify-center items-center bg-[url('/images/main.jpg')] bg-cover bg-center bright-in">
-        <span className="text-4xl text-center text-white font-thin tracking-[1.5rem] fade-in mt-12 px-5">
-          ONLINE JUDGE
+        <span className="text-4xl text-center text-white font-thin tracking-[1.5rem] fade-in mt-12 px-5 uppercase">
+          online judge
         </span>
       </div>
       <div className="flex">
