@@ -19,7 +19,7 @@ export default function RootLayout({
       </head>
       <body className="text-sm">
         <Navbar />
-        <main className="w-full mx-auto mt-20 mb-14">{children}</main>
+        <main className="w-full mx-auto pt-20 mb-14">{children}</main>
         <Footer />
       </body>
     </html>

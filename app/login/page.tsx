@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 export default function Login() {
   return (
-    <div className="2md:mt-[10rem] mb-[5rem]">
+    <div className="mt-10 h-[39rem]">
       <div className="w-fit 2md:w-96 p-4 mx-auto">
         <div className="flex flex-col text-center border p-8 rounded-md border-[#d8d9dc] bg-[#fefefe] shadow-lg">
           <div className="flex flex-col gap-2 text-xl my-2">
@@ -66,7 +66,7 @@ export default function Login() {
                 <a
                   href="https://sw7up.cbnu.ac.kr/account/password"
                   target="_blank"
-                  className="text-[#437ae1] translate-x-[-0.5rem] text-[0.8rem] font-normal px-2 py-1 hover:bg-[#f3f4f5] rounded-md focus:bg-[#f3f4f5]"
+                  className="text-[#437ae1] translate-x-[-0.5rem] text-[0.8rem] font-normal px-2 py-1 hover:bg-[#f3f4f5] rounded-[0rem] focus:bg-[#f3f4f5]"
                 >
                   계정 만들기
                 </a>
