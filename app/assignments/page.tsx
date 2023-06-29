@@ -63,19 +63,19 @@ export default function Assignments() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
                     <tr>
-                      <th scope="col" className="px-4 py-3">
-                        #
+                      <th scope="col" className="px-4 py-2">
+                        번호
                       </th>
-                      <th scope="col" className="px-4 py-3">
+                      <th scope="col" className="px-4 py-2">
                         수업명
                       </th>
-                      <th scope="col" className="px-4 py-3">
+                      <th scope="col" className="px-4 py-2">
                         과제명
                       </th>
-                      <th scope="col" className="px-4 py-3">
+                      <th scope="col" className="px-4 py-2">
                         교수명
                       </th>
-                      <th scope="col" className="px-4 py-3">
+                      <th scope="col" className="px-4 py-2">
                         진행 기간
                       </th>
                     </tr>
