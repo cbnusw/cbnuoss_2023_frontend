@@ -1,13 +1,11 @@
 import React from 'react';
-import Assignment from './components/Assignment';
+import Practice from './components/Practice';
 
-export default function Assignments() {
+export default function Practices() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="text-2xl font-semibold">
-          📝 시험 <span className="text-xl"> & </span>과제 목록
-        </p>
+        <p className="text-2xl font-semibold">📚 연습문제 목록</p>
         <form className="mt-5 mb-4">
           <div className="flex">
             <div className="flex flex-col relative z-0 w-1/2 group">
@@ -38,7 +36,7 @@ export default function Assignments() {
                 검색
               </label>
               <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
-                시험명, 과제명, 교수명으로 검색
+                문제명, 작성자명으로 검색
               </p>
             </div>
             <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
@@ -67,30 +65,27 @@ export default function Assignments() {
                         #
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        수업명
+                        문제명
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        과제명
+                        작성자
                       </th>
                       <th scope="col" className="px-4 py-3">
-                        교수명
-                      </th>
-                      <th scope="col" className="px-4 py-3">
-                        진행 기간
+                        난이도
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
+                    <Practice />
+                    <Practice />
+                    <Practice />
+                    <Practice />
+                    <Practice />
+                    <Practice />
+                    <Practice />
+                    <Practice />
+                    <Practice />
+                    <Practice />
                   </tbody>
                 </table>
               </div>
