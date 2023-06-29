@@ -6,7 +6,7 @@ export default function Assignments() {
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="text-2xl font-semibold">
-          📚 시험 <span className="text-xl"> & </span>과제 목록
+          📝 시험 <span className="text-xl"> & </span>과제 목록
         </p>
         <form className="mt-5 mb-4">
           <div className="flex">
