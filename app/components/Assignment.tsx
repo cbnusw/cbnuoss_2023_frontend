@@ -11,7 +11,7 @@ export default function Assignment() {
       </p>
       <div>
         <span className="text-xs">
-          <span className="font-semibold">제출 기간</span> :{' '}
+          <span className="font-semibold">진행 기간</span> :{' '}
           <span className="font-light">
             2023.06.26. 03:00 ~ 2023.06.26. 03:00
           </span>

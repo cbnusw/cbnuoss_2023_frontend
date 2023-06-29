@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import React from 'react';
 
 export default function Assignment() {
@@ -17,13 +16,14 @@ export default function Assignment() {
       >
         1
       </th>
-      <td className="">
-        제2회 충청북도 대학생 프로그래밍 경진대회 예선 [한국교통대학교 5/10]
+      <td className="">2023-01-자료구조(소프트웨어학부 01반)</td>
+      <td className="font-medium">코딩테스트 3차</td>
+      <td className="font-medium">노서영</td>
+      <td className="font-medium">
+        <span className="text-red-500 ">
+          2023.06.26. 03:00<span> ~ </span>2023.06.26. 03:00
+        </span>
       </td>
-      <td className="font-medium">~2023.05.10</td>
-      <td className="text-red-500 font-medium">~2023.05.10 20:35</td>
-      <td className="font-medium">신재혁</td>
-      <td className="">2023.05.09</td>
     </tr>
   );
 }

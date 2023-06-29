@@ -16,7 +16,7 @@ export default function Home() {
           <div className="w-[22.5rem] 3xs:w-[30rem] p-2 mb-8 2lg:mb-0">
             <div className="mb-5">
               <Link
-                href="/contest"
+                href="/contests"
                 className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba] hover:text-black focus:text-black"
               >
                 신청 가능한 대회
@@ -37,9 +37,13 @@ export default function Home() {
 
           <div className="w-[22.5rem] 3xs:w-[30rem] p-2 ">
             <div className="mb-5">
-              <span className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba]">
-                추가된 과제
-              </span>
+              <Link
+                href="/assignments"
+                className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba]"
+              >
+                추가된 시험<span className="text-lg text-[#595f68]"> & </span>{' '}
+                과제
+              </Link>
               <div className="pb-2 border-b-[1.5px] border-dotted"></div>
             </div>
 
@@ -54,8 +58,8 @@ export default function Home() {
                   </Link>
                 </p>
                 <div>
-                  <span className="text-xs semiboldsemibold">
-                    제출 기간 :{' '}
+                  <span className="text-xs font-semibold">
+                    진행 기간 :{' '}
                     <span className="font-light">
                       2023.06.26. 03:00 ~ 2023.06.26. 03:00
                     </span>

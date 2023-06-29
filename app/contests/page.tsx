@@ -1,7 +1,7 @@
 import React from 'react';
-import Assignment from './components/Assignment';
+import Contest from './components/Contest';
 
-export default function Contest() {
+export default function Contests() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
@@ -82,16 +82,16 @@ export default function Contest() {
                     </tr>
                   </thead>
                   <tbody>
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
+                    <Contest />
+                    <Contest />
+                    <Contest />
+                    <Contest />
+                    <Contest />
+                    <Contest />
+                    <Contest />
+                    <Contest />
+                    <Contest />
+                    <Contest />
                   </tbody>
                 </table>
               </div>

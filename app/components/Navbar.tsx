@@ -29,25 +29,25 @@ export default function Navbar() {
         <div className="hidden ml-16 2md:block">
           <div className="flex gap-3 font-medium mx-auto">
             <Link
-              href="/contest"
+              href="/contests"
               className="px-4 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               대회
             </Link>
             <Link
-              href="/assignment"
+              href="/assignments"
               className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               교과목
             </Link>
             <Link
-              href="/practice"
+              href="/practices"
               className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               연습문제
             </Link>
             <Link
-              href="/notice"
+              href="/notices"
               className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               공지사항
@@ -119,25 +119,25 @@ export default function Navbar() {
                 </a>
               </div>
               <Link
-                href="/contest"
+                href="/contests"
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 대회
               </Link>
               <Link
-                href="/assignment"
+                href="/assignments"
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 교과목
               </Link>
               <Link
-                href="/practice"
+                href="/practices"
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 연습문제
               </Link>
               <Link
-                href="/notice"
+                href="/notices"
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 공지사항
