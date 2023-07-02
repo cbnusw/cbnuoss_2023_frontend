@@ -1,5 +1,5 @@
-import React from 'react';
 import Contest from './components/Contest';
+import Link from 'next/link';
 
 export default function Contests() {
   return (
@@ -42,12 +42,12 @@ export default function Contests() {
             <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
               <div className="flex justify-end mb-2">
                 <div className="flex">
-                  <button
-                    type="button"
+                  <Link
+                    href="contests/register"
                     className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
                   >
                     등록하기
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -120,9 +120,9 @@ export default function Contests() {
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
                   </a>
@@ -182,9 +182,9 @@ export default function Contests() {
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                         d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
+                        clipRule="evenodd"
                       />
                     </svg>
                   </a>
