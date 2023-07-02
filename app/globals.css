@@ -31,6 +31,17 @@
     0.25px 1px 4px 0 rgba(0, 0, 0, 0.19);
 }
 
+/* CKEDITOR5 CSS */
+.ck-editor__editable:not(.ck-editor__nested-editable) {
+  min-height: 30rem;
+  padding: 0.5rem 1.25rem !important;
+  overflow: auto !important;
+}
+
+.ck.ck-toolbar {
+  background-color: #fafafa !important;
+}
+
 /* --------------- */
 
 @keyframes fadeIn {
