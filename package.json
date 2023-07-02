@@ -11,10 +11,14 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^6.1.0",
+    "@ckeditor/ckeditor5-word-count": "^38.1.0",
     "@types/node": "20.1.5",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
+    "ckeditor5-custom-build": "./ckeditor5",
+    "dayjs": "^1.11.8",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
     "flowbite": "^1.6.6",
