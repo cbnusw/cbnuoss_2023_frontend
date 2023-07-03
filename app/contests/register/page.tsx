@@ -1,11 +1,11 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const DynamicEditor = dynamic(() => import('@/app/components/Editor'), {
   ssr: false,
-  loading: () => <p>로딩중입니다...</p>,
 });
 
 export default function RegisterContest() {
@@ -23,6 +23,8 @@ export default function RegisterContest() {
       startDate: new Date(),
       endDate: new Date(),
     });
+
+  const router = useRouter();
 
   const koreaTimeZone = 'ko-KR'; // 한국 시간을 사용하는 로케일 (예: en-US, ko-KR 등)
 
@@ -62,6 +64,13 @@ export default function RegisterContest() {
     }));
   };
 
+  const handleCancelContestRegister = () => {
+    let userResponse = confirm('대회 등록을 취소하시겠습니까?');
+    if (!userResponse) return;
+
+    router.push('/contests');
+  };
+
   useEffect(() => {
     setIsEditorReady(true);
   }, []);
@@ -83,7 +92,7 @@ export default function RegisterContest() {
           />
           <label
             htmlFor="floating_first_name"
-            className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.5rem]"
+            className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
           >
             대회명
           </label>
@@ -264,7 +273,10 @@ export default function RegisterContest() {
               </div>
             </div>
             <div className="mt-14 pb-2 flex justify-end gap-3">
-              <button className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light">
+              <button
+                onClick={handleCancelContestRegister}
+                className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+              >
                 취소
               </button>
               <button
