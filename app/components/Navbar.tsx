@@ -35,10 +35,10 @@ export default function Navbar() {
               대회
             </Link>
             <Link
-              href="/assignments"
+              href="/exams"
               className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
-              교과목
+              시험
             </Link>
             <Link
               href="/practices"
@@ -125,7 +125,7 @@ export default function Navbar() {
                 대회
               </Link>
               <Link
-                href="/assignments"
+                href="/exams"
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 교과목

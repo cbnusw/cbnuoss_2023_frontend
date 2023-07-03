@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export default function Assignment() {
+export default function exam() {
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"

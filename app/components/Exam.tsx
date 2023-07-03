@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-export default function Assignment() {
+export default function exam() {
   return (
     <div className="relative flex flex-col gap-4 bg-[#f7f7f7] p-3 group">
       <p className="font-bold">

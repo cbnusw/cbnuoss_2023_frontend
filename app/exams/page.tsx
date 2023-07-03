@@ -1,13 +1,12 @@
 import React from 'react';
-import Assignment from './components/Assignment';
+import Exam from './components/Exam';
+import Link from 'next/link';
 
-export default function Assignments() {
+export default function exams() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="text-2xl font-semibold">
-          📝 시험 <span className="text-xl"> & </span>과제 목록
-        </p>
+        <p className="text-2xl font-semibold">📝 시험 목록</p>
         <form className="mt-5 mb-4">
           <div className="flex">
             <div className="flex flex-col relative z-0 w-1/2 group">
@@ -33,23 +32,23 @@ export default function Assignments() {
               </div>
               <label
                 htmlFor="floating_first_name"
-                className="peer-focus:font-light absolute text-base font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-x-[-1.75rem] -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.375rem]"
+                className="peer-focus:font-light absolute text-base font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-x-[-1.75rem] -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
               >
                 검색
               </label>
               <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
-                시험명, 과제명, 교수명으로 검색
+                시험명, 교수명으로 검색
               </p>
             </div>
             <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
               <div className="flex justify-end mb-2">
                 <div className="flex">
-                  <button
-                    type="button"
+                  <Link
+                    href="exams/register"
                     className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
                   >
                     등록하기
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -81,16 +80,16 @@ export default function Assignments() {
                     </tr>
                   </thead>
                   <tbody>
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
-                    <Assignment />
+                    <Exam />
+                    <Exam />
+                    <Exam />
+                    <Exam />
+                    <Exam />
+                    <Exam />
+                    <Exam />
+                    <Exam />
+                    <Exam />
+                    <Exam />
                   </tbody>
                 </table>
               </div>
