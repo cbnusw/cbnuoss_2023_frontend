@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Contest from './components/Contest';
-import Assignment from './components/Assignment';
+import Exam from './components/Exam';
 
 export default function Home() {
   return (
@@ -38,19 +38,18 @@ export default function Home() {
           <div className="w-[22.5rem] 3xs:w-[30rem] p-2 ">
             <div className="mb-5">
               <Link
-                href="/assignments"
+                href="/exams"
                 className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba]"
               >
-                추가된 시험<span className="text-lg text-[#595f68]"> & </span>{' '}
-                과제
+                추가된 시험
               </Link>
               <div className="pb-2 border-b-[1.5px] border-dotted"></div>
             </div>
 
             <div className="flex flex-col gap-3">
               {/* 데이터 임시로 추가 */}
-              <Assignment />
-              <Assignment />
+              <Exam />
+              <Exam />
               <div className="relative flex flex-col gap-4 bg-[#f7f7f7] p-3 group">
                 <p className="font-bold">
                   <Link href="/" className="hover:underline">
