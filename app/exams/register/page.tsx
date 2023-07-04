@@ -170,7 +170,7 @@ export default function RegisterExam() {
                     id="helper-checkbox-text"
                     className="relative left-[-0.8rem] text-xs font-normal text-[#5762b3] dark:text-gray-300"
                   >
-                    비밀번호를 설정할 경우 문제 열람 시 비밀번호 입력이
+                    비밀번호를 설정할 경우 게시글 열람 시 비밀번호 입력이
                     필요합니다.
                   </p>
                 </div>
