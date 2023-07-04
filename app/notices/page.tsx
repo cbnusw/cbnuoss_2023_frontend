@@ -1,5 +1,6 @@
 import React from 'react';
 import Notice from './components/Notice';
+import Link from 'next/link';
 
 export default function Notices() {
   return (
@@ -42,12 +43,12 @@ export default function Notices() {
             <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
               <div className="flex justify-end mb-2">
                 <div className="flex">
-                  <button
-                    type="button"
+                  <Link
+                    href="notices/register"
                     className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
                   >
                     등록하기
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
