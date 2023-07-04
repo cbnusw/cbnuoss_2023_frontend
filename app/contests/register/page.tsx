@@ -244,7 +244,7 @@ export default function RegisterContest() {
                         id="helper-checkbox-text"
                         className="relative left-[-0.8rem] text-xs font-normal text-[#5762b3] dark:text-gray-300"
                       >
-                        비밀번호를 설정할 경우 문제 열람 시 비밀번호 입력이
+                        비밀번호를 설정할 경우 게시글 열람 시 비밀번호 입력이
                         필요합니다.
                       </p>
                     </div>
@@ -256,7 +256,7 @@ export default function RegisterContest() {
                       type="text"
                       name="floating_first_name"
                       id="floating_first_name"
-                      className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-52 font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#5762b3] focus:outline-none focus:ring-0 focus:border-[#5762b3] peer"
+                      className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-2/3 font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#5762b3] focus:outline-none focus:ring-0 focus:border-[#5762b3] peer"
                       placeholder=" "
                       required
                       value={contestPwd}
