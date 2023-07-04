@@ -128,7 +128,7 @@ export default function Navbar() {
                 href="/exams"
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
-                교과목
+                시험
               </Link>
               <Link
                 href="/practices"
