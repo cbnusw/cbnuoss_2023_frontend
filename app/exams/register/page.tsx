@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const DynamicEditor = dynamic(() => import('@/app/components/Editor'), {
+const DynamicEditor = dynamic(() => import('@/app/components/CKEditor'), {
   ssr: false,
 });
 
