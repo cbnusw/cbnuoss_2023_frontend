@@ -1,13 +1,16 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function Contest() {
+  const router = useRouter();
+
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        alert('개발 예정');
+        router.push('contests/60a5294a8d3b55eac70912f1');
       }}
     >
       <th
