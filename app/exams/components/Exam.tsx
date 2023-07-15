@@ -1,13 +1,16 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function exam() {
+export default function Exam() {
+  const router = useRouter();
+
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
-      onClick={(e) => {
-        alert('개발 예정');
+      onClick={() => {
+        router.push('exams/645f82d1dfc11e0020d07253');
       }}
     >
       <th
