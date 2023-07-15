@@ -1,9 +1,14 @@
 'use client';
 
-import { UIWEditor } from '@/app/components/UIWEditor';
 import MyDropzone from '@/app/components/MyDropzone';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+
+const MDEditor = dynamic(
+  () => import('@uiw/react-md-editor').then((mod) => mod.default),
+  { ssr: false },
+);
 
 export default function Registerpractice() {
   const [practiceName, setPracticeName] = useState('');
@@ -246,7 +251,7 @@ function sub(int a, int b) {
                         코드를 추가해 주세요.
                       </p>
                     </div>
-                    <UIWEditor
+                    <MDEditor
                       value={editorValue}
                       onChange={handleEditorChange}
                       height={500}
