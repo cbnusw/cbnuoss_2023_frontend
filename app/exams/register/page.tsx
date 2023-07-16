@@ -1,12 +1,16 @@
 'use client';
 
+import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const DynamicEditor = dynamic(() => import('@/app/components/CKEditor'), {
-  ssr: false,
-});
+const DynamicEditor = dynamic(
+  () => import('@/app/components/CKEditor/CKEditor'),
+  {
+    ssr: false,
+  },
+);
 
 export default function RegisterExam() {
   const [isEditorReady, setIsEditorReady] = useState(false);
@@ -106,7 +110,7 @@ export default function RegisterExam() {
             <DynamicEditor isEditorReady={isEditorReady} />
           </div>
         ) : (
-          <p>로딩중입니다...</p>
+          <Loading />
         )}
 
         <div className="mt-8">
