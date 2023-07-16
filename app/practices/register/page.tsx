@@ -1,5 +1,6 @@
 'use client';
 
+import Loading from '@/app/loading';
 import MyDropzone from '@/app/components/MyDropzone';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -259,7 +260,7 @@ function sub(int a, int b) {
                     />
                   </div>
                 ) : (
-                  <p>로딩중입니다...</p>
+                  <Loading />
                 )}
               </div>
             ) : null}
