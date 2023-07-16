@@ -1,5 +1,6 @@
 'use client';
 
+import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -10,6 +11,7 @@ const MarkdownPreview = dynamic(
 );
 
 export default function ExamDetail() {
+  const [isExamPostReady, setIsExamPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
   const router = useRouter();
 
@@ -22,9 +24,10 @@ export default function ExamDetail() {
 
   useEffect(() => {
     setIsMarkdownPreviewReady(true);
+    setIsExamPostReady(true);
   }, []);
 
-  return (
+  return isExamPostReady && isMarkdownPreviewReady ? (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
@@ -57,10 +60,9 @@ export default function ExamDetail() {
             </div>
           </div>
           <div className="border-b mt-8 mb-4 pb-5">
-            {isMarkdownPreviewReady ? (
-              <MarkdownPreview
-                className="markdown-preview"
-                source={`
+            <MarkdownPreview
+              className="markdown-preview"
+              source={`
 # 자료구조 알고리즘 코딩 테스트 공지
 안녕하세요, 여러분.
 
@@ -77,9 +79,9 @@ export default function ExamDetail() {
 
 ## 테스트 범위
 - 이번 테스트는 다음의 자료구조와 관련된 알고리즘에 대한 문제를 다룹니다:
-                - 스택(Stack)과 큐(Queue)
-                - 링크드 리스트(Linked List)
-                - 트리(Tree)와 그래프(Graph)
+            - 스택(Stack)과 큐(Queue)
+            - 링크드 리스트(Linked List)
+            - 트리(Tree)와 그래프(Graph)
 
 ## 기타 유의사항
 - 본 테스트는 오픈 북 형태로 진행되나, 다른 사람과의 협업은 엄격히 금지합니다.
@@ -91,8 +93,7 @@ export default function ExamDetail() {
 
 감사합니다.
 `}
-              />
-            ) : null}
+            />
           </div>
           <div>
             <div className="flex gap-3 justify-end">
@@ -161,5 +162,7 @@ export default function ExamDetail() {
         </div>
       </div>
     </div>
+  ) : (
+    <Loading />
   );
 }

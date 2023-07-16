@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Participant from './components/Participant';
+import Loading from '@/app/loading';
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
@@ -11,6 +12,7 @@ const MarkdownPreview = dynamic(
 );
 
 export default function ExamDetail() {
+  const [isContestPostReady, setIsContestPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
   const router = useRouter();
 
@@ -22,10 +24,11 @@ export default function ExamDetail() {
   };
 
   useEffect(() => {
+    setIsContestPostReady(true);
     setIsMarkdownPreviewReady(true);
   }, []);
 
-  return (
+  return isContestPostReady && isMarkdownPreviewReady ? (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
@@ -43,9 +46,9 @@ export default function ExamDetail() {
                 <span className="font-semibold">
                   대회시간:
                   {/* <span className="text-red-500 font-bold">
-                    {' '}
-                    49분 45초 남음
-                  </span> */}
+                  {' '}
+                  49분 45초 남음
+                </span> */}
                   <span className="font-light">
                     {' '}
                     2023:07:13 17:00 ~ 2023.07.13 18:00{' '}
@@ -226,5 +229,7 @@ export default function ExamDetail() {
         </div>
       </div>
     </div>
+  ) : (
+    <Loading />
   );
 }
