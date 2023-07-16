@@ -1,6 +1,6 @@
 import React from 'react';
-import Exam from './components/Exam';
 import Link from 'next/link';
+import ExamList from './components/ExamList';
 
 export default function exams() {
   return (
@@ -79,18 +79,7 @@ export default function exams() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                    <Exam />
-                  </tbody>
+                  <ExamList />
                 </table>
               </div>
             </div>
