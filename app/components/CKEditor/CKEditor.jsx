@@ -6,7 +6,7 @@ const EditorTest = ({ isEditorReady }) => {
     <>
       {isEditorReady && (
         <CKEditor
-          className={{ height: '5rem' }}
+          editor={Editor}
           config={{
             placeholder: '내용을 입력해 주세요',
           }}
@@ -17,6 +17,7 @@ const EditorTest = ({ isEditorReady }) => {
           onChange={(event, editor) => {
             const data = editor.getData();
             console.log({ event, editor, data });
+            console.log(data);
           }}
           onBlur={(event, editor) => {
             console.log('Blur.', editor);
@@ -24,7 +25,6 @@ const EditorTest = ({ isEditorReady }) => {
           onFocus={(event, editor) => {
             console.log('Focus.', editor);
           }}
-          editor={Editor}
         />
       )}
     </>
