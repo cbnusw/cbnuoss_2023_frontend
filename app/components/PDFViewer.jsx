@@ -24,7 +24,7 @@ export default function PDFViewer({ pdfFileURL }) {
           pageNumber={index + 1}
           renderAnnotationLayer={false}
           renderTextLayer={false}
-          scale={1.5}
+          scale={1.75}
         />
       ))}
     </Document>
