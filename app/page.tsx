@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import Contest from './components/Contest';
 import Exam from './components/Exam';
