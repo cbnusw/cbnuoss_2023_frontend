@@ -15,23 +15,20 @@ export default function Registerpractice() {
   const [practiceName, setPracticeName] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
-  const [difficulty, setDifficulty] = useState<number>();
   const [isCheckedUsingUtilCode, setIsCheckedUsingUtilCode] = useState(false);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const [editorValue, setEditorValue] = useState(`\`\`\`C
-
-(예시) 하단에 주어진 두 함수를 수정하지 않고 모두 사용하시오.
-
-// 두 정수의 합을 반환하는 함수
-function add(int a, int b) {
-  return a + b;
-}
-
-// 두 정수의 차이 값을 반환하는 함수
-function sub(int a, int b) {
-  return a - b;
-}
-\`\`\``);
+  // 두 정수의 합을 반환하는 함수
+  function add(int a, int b) {
+    return a + b;
+  }
+  
+  // 두 정수의 차이 값을 반환하는 함수
+  function sub(int a, int b) {
+    return a - b;
+  }
+  \`\`\`
+  > (예시) 상단에 주어진 두 함수를 수정하지 않고 모두 사용하시오.`);
   const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
   const [examPwd, setExamPwd] = useState('');
 
@@ -123,28 +120,6 @@ function sub(int a, int b) {
                 </label>
                 <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
                   테스트 당 최대 사용 메모리를 MB 단위로 입력해주세요
-                </p>
-              </div>
-
-              <div className="flex flex-col relative z-0 w-1/3 group">
-                <input
-                  type="number"
-                  name="floating_first_name"
-                  id="floating_first_name"
-                  className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                  placeholder=" "
-                  required
-                  value={difficulty}
-                  onChange={(e) => setDifficulty(parseInt(e.target.value))}
-                />
-                <label
-                  htmlFor="floating_first_name"
-                  className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
-                >
-                  난이도
-                </label>
-                <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
-                  문제의 난이도를 입력해주세요
                 </p>
               </div>
             </div>
@@ -256,7 +231,7 @@ function sub(int a, int b) {
                       value={editorValue}
                       onChange={handleEditorChange}
                       height={500}
-                      className="m-1"
+                      className="md-editor"
                     />
                   </div>
                 ) : (
