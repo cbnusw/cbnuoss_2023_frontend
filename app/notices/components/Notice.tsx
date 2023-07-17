@@ -1,13 +1,16 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function Notice() {
+  const router = useRouter();
+
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        alert('개발 예정');
+        router.push('/notices/64a52966a1203700203b8ddd');
       }}
     >
       <th
