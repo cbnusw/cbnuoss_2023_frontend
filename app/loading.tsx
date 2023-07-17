@@ -11,7 +11,7 @@ export default function Loading() {
           fill="none"
           r="14"
           strokeWidth="2"
-          style={{ stroke: 'rgb(180, 180, 180)', opacity: 0.2 }}
+          style={{ stroke: 'rgb(130, 130, 130)', opacity: 0.2 }}
         ></circle>
         <circle
           cx="16"
@@ -20,7 +20,7 @@ export default function Loading() {
           r="14"
           strokeWidth="2"
           style={{
-            stroke: 'rgb(180, 180, 180)',
+            stroke: 'rgb(80, 80, 80)',
             strokeDasharray: 80,
             strokeDashoffset: 60,
           }}

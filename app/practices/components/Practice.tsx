@@ -1,13 +1,16 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 export default function Practice() {
+  const router = useRouter();
+
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        alert('개발 예정');
+        router.push('/practices/6461d43ec14a5a002b85e081');
       }}
     >
       <th
