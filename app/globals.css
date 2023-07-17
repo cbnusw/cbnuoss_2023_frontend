@@ -42,6 +42,18 @@
   background-color: #fafafa !important;
 }
 
+/* uiw markdown(Editor) CSS */
+.md-editor {
+  margin: 0.25rem;
+}
+
+.md-editor blockquote {
+  padding: 1rem 1.75rem !important;
+  border-left: 0.25rem solid #2fc27b !important;
+  background-color: #fafcfe;
+}
+
+/* uiw markdown(Preview) CSS */
 .markdown-preview {
   letter-spacing: 0.04rem;
 }
@@ -51,7 +63,6 @@
 }
 
 .markdown-preview blockquote {
-  margin-left: 1rem !important;
   padding: 1rem 1.75rem !important;
   border-left: 0.25rem solid #2fc27b !important;
   background-color: #fafcfe;
