@@ -1,6 +1,7 @@
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import './globals.css';
+import ReduxProvider from './redux/provider';
 
 export const metadata = {
   title: '충북대학교 SW중심대학사업단 Online Judge',
@@ -18,9 +19,11 @@ export default function RootLayout({
         <link rel="icon" href="/images/logo.png" />
       </head>
       <body className="text-sm">
-        <Navbar />
-        <main className="w-full mx-auto pt-20 mb-14">{children}</main>
-        <Footer />
+        <ReduxProvider>
+          <Navbar />
+          <main className="w-full mx-auto pt-20 mb-14">{children}</main>
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );

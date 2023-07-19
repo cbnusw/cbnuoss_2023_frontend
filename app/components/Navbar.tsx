@@ -2,9 +2,25 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { AppDispatch, useAppSelector } from '../redux/store';
+import { useDispatch } from 'react-redux';
+import { signOut } from '../redux/features/authSlice';
+import { useRouter } from 'next/navigation';
 
 export default function Navbar() {
   const [rightPos, setRightPos] = useState('-right-full');
+
+  const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
+  const username = useAppSelector((state) => state.authReducer.value.username);
+
+  const router = useRouter();
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleSignOut = () => {
+    router.push('/');
+    dispatch(signOut());
+  };
 
   return (
     <nav
@@ -56,19 +72,38 @@ export default function Navbar() {
         </div>
         <div className="hidden w-[17.5rem] ml-auto 2md:flex">
           <div className="flex ml-auto gap-3">
-            <Link
-              href="/login"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
-            >
-              로그인
-            </Link>
-            <a
-              href="https://sw7up.cbnu.ac.kr/account/join"
-              target="_blank"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
-            >
-              회원가입
-            </a>
+            {isAuth ? (
+              <>
+                <Link
+                  href="/login"
+                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                >
+                  <span className="font-semibold">{username}</span>님
+                </Link>
+                <button
+                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                  onClick={handleSignOut}
+                >
+                  로그아웃
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                >
+                  로그인
+                </Link>
+                <a
+                  href="https://sw7up.cbnu.ac.kr/account/join"
+                  target="_blank"
+                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                >
+                  회원가입
+                </a>
+              </>
+            )}
           </div>
         </div>
         <button
@@ -101,43 +136,90 @@ export default function Navbar() {
             </div>
             <ul className="flex flex-col items-center w-full text-base cursor-pointer pt-4">
               <div className="flex flex-col w-full border-b-[0.75rem] text-sm">
-                <Link
-                  href="/login"
-                  className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
-                >
-                  로그인
-                </Link>
-                <a
-                  href="https://sw7up.cbnu.ac.kr/account/join"
-                  target="_blank"
-                  className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  회원가입
-                </a>
+                {isAuth ? (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRightPos('-right-full');
+                      }}
+                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                    >
+                      <span className="font-semibold">{username}</span>님
+                    </Link>
+                    <button
+                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRightPos('-right-full');
+                        handleSignOut();
+                      }}
+                    >
+                      로그아웃
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRightPos('-right-full');
+                      }}
+                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                    >
+                      로그인
+                    </Link>
+                    <a
+                      href="https://sw7up.cbnu.ac.kr/account/join"
+                      target="_blank"
+                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
+                      회원가입
+                    </a>
+                  </>
+                )}
               </div>
               <Link
                 href="/contests"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setRightPos('-right-full');
+                }}
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 대회
               </Link>
               <Link
                 href="/exams"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setRightPos('-right-full');
+                }}
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 시험
               </Link>
               <Link
                 href="/practices"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setRightPos('-right-full');
+                }}
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 연습문제
               </Link>
               <Link
                 href="/notices"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setRightPos('-right-full');
+                }}
                 className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
               >
                 공지사항
