@@ -20,7 +20,7 @@
     "@uiw/react-markdown-preview": "^4.1.13",
     "@uiw/react-md-editor": "3.6.0",
     "autoprefixer": "10.4.14",
-    "ckeditor5-custom-build": "./ckeditor5",
+    "ckeditor5-custom-build": "./app/utils/ckeditor5",
     "dayjs": "^1.11.8",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
