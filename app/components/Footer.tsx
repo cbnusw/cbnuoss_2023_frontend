@@ -2,6 +2,9 @@ import Link from 'next/link';
 import React from 'react';
 
 export default function Footer() {
+  // 현재 년도를 가져오기
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className="w-full flex justify-start mt-auto font-light text-[10px] py-5 px-3 leading-[1.175rem] bg-[#505050]">
       <div className="flex flex-col 3xs:flex-row gap-10 justify-between mx-auto w-[60rem]">
@@ -40,7 +43,7 @@ export default function Footer() {
           </a> */}
           </div>
           <div className="mt-2 text-[#ccc]">
-            © 2020 충북대학교 SW중심대학사업단. All rights reserved.
+            © {currentYear} 충북대학교 SW중심대학사업단. All rights reserved.
           </div>
         </div>
         <div className="flex gap-5 mt-auto mr-2">
