@@ -1,7 +1,7 @@
 import Editor from '@/app/utils/ckeditor5/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 
-const EditorTest = ({ isEditorReady }) => {
+const EditorTest = ({ isEditorReady, onEditorChange }) => {
   return (
     <>
       {isEditorReady && (
@@ -16,8 +16,7 @@ const EditorTest = ({ isEditorReady }) => {
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
-            console.log({ event, editor, data });
-            console.log(data);
+            onEditorChange(data);
           }}
           onBlur={(event, editor) => {
             console.log('Blur.', editor);

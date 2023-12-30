@@ -3,7 +3,7 @@
 import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
@@ -17,56 +17,25 @@ export default function RegisterContest() {
   const [isCheckedAppliedPeriod, setIsCheckedAppliedPeriod] = useState(false);
   const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
   const [contestName, setContestName] = useState('');
+  const [editorContent, setEditorContent] = useState('');
   const [contestPwd, setContestPwd] = useState('');
-  const [selectedContestDateTime, setSelectedContestDateTime] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-  });
-  const [selectedContestAppliedDateTime, setSelectedContestAppliedDateTime] =
-    useState({
-      startDate: new Date(),
-      endDate: new Date(),
-    });
+  const [contestStartDateTime, setContestStartDateTime] = useState('');
+  const [contestEndDateTime, setContestEndDateTime] = useState('');
+  const [contestAppliedStartDateTime, setContestAppliedStartDateTime] =
+    useState('');
+  const [contestAppliedEndDateTime, setContestAppliedEndDateTime] =
+    useState('');
+
+  const [isContestNameValidFail, setIsContestNameValidFail] = useState(false);
+  const [isContestPwdValidFail, setIsContestPwdValidFail] = useState(false);
+
+  const contestNameRef = useRef<HTMLInputElement>(null);
+  const contestPwdRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
 
-  const koreaTimeZone = 'ko-KR'; // 한국 시간을 사용하는 로케일 (예: en-US, ko-KR 등)
-
-  const handleContestStartDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestDateTime((prevState) => ({
-      ...prevState,
-      startDate: new Date(e.target.value),
-    }));
-  };
-
-  const handleContestEndDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestDateTime((prevState) => ({
-      ...prevState,
-      endDate: new Date(e.target.value),
-    }));
-  };
-
-  const handleContestAppliedStartDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestAppliedDateTime((prevState) => ({
-      ...prevState,
-      startDate: new Date(e.target.value),
-    }));
-  };
-
-  const handleContestAppliedEndDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestAppliedDateTime((prevState) => ({
-      ...prevState,
-      endDate: new Date(e.target.value),
-    }));
-  };
+  const currentDate = new Date().toISOString().slice(0, 16);
+  // currentDate.setDate(currentDate.getDate() + 1);
 
   const handleCancelContestRegister = () => {
     let userResponse = confirm('대회 등록을 취소하시겠습니까?');
@@ -75,9 +44,64 @@ export default function RegisterContest() {
     router.push('/contests');
   };
 
+  // (e) => setContestName(e.target.value);
+
+  const handleContestNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContestName(e.target.value);
+    setIsContestNameValidFail(false);
+  };
+
+  const handleContestPwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setContestPwd(e.target.value);
+    setIsContestPwdValidFail(false);
+  };
+
+  const handleRegisterContest = () => {
+    if (!contestName) {
+      alert('대회명을 입력해 주세요');
+      window.scrollTo(0, 0);
+      contestNameRef.current?.focus();
+      setIsContestNameValidFail(true);
+      return;
+    }
+
+    if (!editorContent) {
+      alert('본문을 입력해 주세요');
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    if (!contestStartDateTime || !contestEndDateTime) {
+      alert('대회 시간을 설정해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
+      return;
+    }
+
+    if (
+      isCheckedAppliedPeriod &&
+      (!contestAppliedStartDateTime || !contestAppliedEndDateTime)
+    ) {
+      alert('신청 기간을 설정해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
+      return;
+    }
+
+    if (isCheckedUsingPwd && !contestPwd) {
+      alert('비밀번호를 입력해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
+      contestPwdRef.current?.focus();
+      setIsContestPwdValidFail(true);
+      return;
+    }
+
+    alert('통과');
+  };
+
   useEffect(() => {
     setIsEditorReady(true);
   }, []);
+
+  console.log();
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
@@ -87,27 +111,44 @@ export default function RegisterContest() {
           <input
             type="text"
             name="floating_first_name"
-            id="floating_first_name"
-            className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+            className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+              isContestNameValidFail ? 'pink' : 'blue'
+            }-500 focus:border-${
+              isContestNameValidFail ? 'red' : 'blue'
+            }-500 focus:outline-none focus:ring-0 peer`}
             placeholder=" "
             required
             value={contestName}
-            onChange={(e) => setContestName(e.target.value)}
+            ref={contestNameRef}
+            onChange={handleContestNameChange}
           />
           <label
             htmlFor="floating_first_name"
-            className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
+            className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+              isContestNameValidFail ? 'red' : 'gray'
+            }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+              isContestNameValidFail ? 'red' : 'blue'
+            }-600 peer-focus:dark:text-${
+              isContestNameValidFail ? 'red' : 'blue'
+            }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
           >
             대회명
           </label>
-          <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
+          <p
+            className={`text-${
+              isContestNameValidFail ? 'red' : 'gray'
+            }-500 text-xs tracking-widest font-light mt-1`}
+          >
             대회명을 입력해 주세요
           </p>
         </div>
 
         {isEditorReady ? (
           <div className="w-full mx-auto overflow-auto">
-            <DynamicEditor isEditorReady={isEditorReady} />
+            <DynamicEditor
+              isEditorReady={isEditorReady}
+              onEditorChange={setEditorContent}
+            />
           </div>
         ) : (
           <Loading />
@@ -120,22 +161,20 @@ export default function RegisterContest() {
               type="datetime-local"
               id="start-date"
               name="start-date"
-              value={selectedContestDateTime.startDate
-                .toISOString()
-                .slice(0, 16)}
-              min={new Date().toISOString().slice(0, 16)}
+              value={contestStartDateTime.slice(0, 16)}
+              min={currentDate}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
-              onChange={handleContestStartDateChange}
+              onChange={(e) => setContestStartDateTime(e.target.value)}
             />
             <span>~</span>
             <input
               type="datetime-local"
               id="end-date"
               name="end-date"
-              value={selectedContestDateTime.endDate.toISOString().slice(0, 16)}
-              min={new Date().toISOString().slice(0, 16)}
+              value={contestEndDateTime.slice(0, 16)}
+              min={currentDate}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
-              onChange={handleContestEndDateChange}
+              onChange={(e) => setContestEndDateTime(e.target.value)}
             />
           </div>
 
@@ -190,24 +229,24 @@ export default function RegisterContest() {
                       type="datetime-local"
                       id="meeting-time"
                       name="meeting-time"
-                      value={selectedContestAppliedDateTime.startDate
-                        .toISOString()
-                        .slice(0, 16)}
-                      min={new Date().toISOString().slice(0, 16)}
+                      value={contestAppliedStartDateTime.slice(0, 16)}
+                      min={currentDate}
                       className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
-                      onChange={handleContestAppliedStartDateChange}
+                      onChange={(e) =>
+                        setContestAppliedStartDateTime(e.target.value)
+                      }
                     />
                     <span>~</span>
                     <input
                       type="datetime-local"
                       id="meeting-time"
                       name="meeting-time"
-                      value={selectedContestAppliedDateTime.endDate
-                        .toISOString()
-                        .slice(0, 16)}
-                      min={new Date().toISOString().slice(0, 16)}
+                      value={contestAppliedEndDateTime.slice(0, 16)}
+                      min={currentDate}
                       className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
-                      onChange={handleContestAppliedEndDateChange}
+                      onChange={(e) =>
+                        setContestAppliedEndDateTime(e.target.value)
+                      }
                     />
                   </div>
                 ) : null}
@@ -260,15 +299,26 @@ export default function RegisterContest() {
                       type="text"
                       name="floating_first_name"
                       id="floating_first_name"
-                      className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-2/3 font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#5762b3] focus:outline-none focus:ring-0 focus:border-[#5762b3] peer"
+                      className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+                        isContestPwdValidFail ? 'pink' : 'blue'
+                      }-500 focus:border-${
+                        isContestPwdValidFail ? 'red' : 'blue'
+                      }-500 focus:outline-none focus:ring-0 peer`}
                       placeholder=" "
                       required
                       value={contestPwd}
-                      onChange={(e) => setContestPwd(e.target.value)}
+                      ref={contestPwdRef}
+                      onChange={handleContestPwdChange}
                     />
                     <label
                       htmlFor="floating_first_name"
-                      className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-[#5762b3] peer-focus:dark:text-[#5762b3] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
+                      className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+                        isContestPwdValidFail ? 'red' : 'gray'
+                      }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                        isContestPwdValidFail ? 'red' : 'blue'
+                      }-600 peer-focus:dark:text-${
+                        isContestPwdValidFail ? 'red' : 'blue'
+                      }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
                     >
                       비밀번호
                     </label>
@@ -284,7 +334,7 @@ export default function RegisterContest() {
                 취소
               </button>
               <button
-                onClick={() => alert('개발 예정')}
+                onClick={handleRegisterContest}
                 className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
               >
                 등록
