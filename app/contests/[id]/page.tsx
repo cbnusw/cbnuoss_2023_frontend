@@ -17,7 +17,9 @@ export default function ExamDetail() {
   const router = useRouter();
 
   const handleDeleteExam = () => {
-    let userResponse = confirm('현재 대회 게시글을 삭제하시겠습니까?');
+    let userResponse = confirm(
+      '현재 대회 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
+    );
     if (!userResponse) return;
     alert('게시글을 삭제하였습니다.');
     router.push('/contests');
@@ -71,12 +73,12 @@ export default function ExamDetail() {
               <MarkdownPreview
                 className="markdown-preview"
                 source={`
-## 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
+# 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
 
 본선: **7월 8일 (토) 14:00~16:00 (대면)**  
 장소: **충북대학교 학연산 241호, 271호**
 
-## 시상
+### 시상
 - 최우수상(1명) 충북도지사상, 상금 100만원
 - 우수상(2명) 충북AI·SW교육공유협의체장상, 상금 50만원
 - 장려상(7명) 충북대학교 SW중심대학사업단장상, 상금 20만원
