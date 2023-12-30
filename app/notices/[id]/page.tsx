@@ -16,7 +16,9 @@ export default function NoticeDetail() {
   const router = useRouter();
 
   const handleDeleteExam = () => {
-    let userResponse = confirm('현재 공지사항 게시글을 삭제하시겠습니까?');
+    let userResponse = confirm(
+      '현재 공지사항 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
+    );
     if (!userResponse) return;
     alert('게시글을 삭제하였습니다.');
     router.push('/notices');
