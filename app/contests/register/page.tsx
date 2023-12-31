@@ -14,17 +14,17 @@ const DynamicEditor = dynamic(
 
 export default function RegisterContest() {
   const [isEditorReady, setIsEditorReady] = useState(false);
-  const [isCheckedAppliedPeriod, setIsCheckedAppliedPeriod] = useState(false);
-  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
   const [contestName, setContestName] = useState('');
   const [editorContent, setEditorContent] = useState('');
-  const [contestPwd, setContestPwd] = useState('');
   const [contestStartDateTime, setContestStartDateTime] = useState('');
   const [contestEndDateTime, setContestEndDateTime] = useState('');
+  const [isCheckedAppliedPeriod, setIsCheckedAppliedPeriod] = useState(false);
+  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
   const [contestAppliedStartDateTime, setContestAppliedStartDateTime] =
     useState('');
   const [contestAppliedEndDateTime, setContestAppliedEndDateTime] =
     useState('');
+  const [contestPwd, setContestPwd] = useState('');
 
   const [isContestNameValidFail, setIsContestNameValidFail] = useState(false);
   const [isContestPwdValidFail, setIsContestPwdValidFail] = useState(false);
@@ -37,15 +37,6 @@ export default function RegisterContest() {
   const currentDate = new Date().toISOString().slice(0, 16);
   // currentDate.setDate(currentDate.getDate() + 1);
 
-  const handleCancelContestRegister = () => {
-    let userResponse = confirm('대회 등록을 취소하시겠습니까?');
-    if (!userResponse) return;
-
-    router.push('/contests');
-  };
-
-  // (e) => setContestName(e.target.value);
-
   const handleContestNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContestName(e.target.value);
     setIsContestNameValidFail(false);
@@ -54,6 +45,13 @@ export default function RegisterContest() {
   const handleContestPwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setContestPwd(e.target.value);
     setIsContestPwdValidFail(false);
+  };
+
+  const handleCancelContestRegister = () => {
+    let userResponse = confirm('대회 등록을 취소하시겠습니까?');
+    if (!userResponse) return;
+
+    router.push('/contests');
   };
 
   const handleRegisterContest = () => {
@@ -94,7 +92,7 @@ export default function RegisterContest() {
       return;
     }
 
-    alert('통과');
+    alert('등록 기능 개발 예정');
   };
 
   useEffect(() => {
