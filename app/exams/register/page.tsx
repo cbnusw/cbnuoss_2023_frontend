@@ -1,9 +1,10 @@
 'use client';
 
 import Loading from '@/app/loading';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
@@ -14,33 +15,40 @@ const DynamicEditor = dynamic(
 
 export default function RegisterExam() {
   const [isEditorReady, setIsEditorReady] = useState(false);
-  const [courseName, setCourseName] = useState('');
   const [examName, setExamName] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [editorContent, setEditorContent] = useState('');
+  const [examStartDateTime, setExamStartDateTime] = useState('');
+  const [examEndDateTime, setExamEndDateTime] = useState('');
   const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
   const [examPwd, setExamPwd] = useState('');
-  const [selectedContestDateTime, setSelectedContestDateTime] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-  });
+
+  const [isExamNameValidFail, setIsExamNameValidFail] = useState(false);
+  const [isCourseNameValidFail, setIsCourseNameValidFail] = useState(false);
+  const [isExamPwdValidFail, setIsExamPwdValidFail] = useState(false);
+
+  const examNameRef = useRef<HTMLInputElement>(null);
+  const courseNameRef = useRef<HTMLInputElement>(null);
+  const examPwdRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
 
-  const handleContestStartDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestDateTime((prevState) => ({
-      ...prevState,
-      startDate: new Date(e.target.value),
-    }));
+  const currentDate = new Date().toISOString().slice(0, 16);
+  // currentDate.setDate(currentDate.getDate() + 1);
+
+  const handleExamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setExamName(e.target.value);
+    setIsExamNameValidFail(false);
   };
 
-  const handleContestEndDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestDateTime((prevState) => ({
-      ...prevState,
-      endDate: new Date(e.target.value),
-    }));
+  const handleCourseNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCourseName(e.target.value);
+    setIsCourseNameValidFail(false);
+  };
+
+  const handleExamPwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setExamPwd(e.target.value);
+    setIsExamPwdValidFail(false);
   };
 
   const handleCancelContestRegister = () => {
@@ -48,6 +56,46 @@ export default function RegisterExam() {
     if (!userResponse) return;
 
     router.push('/exams');
+  };
+
+  const handleRegisterExam = () => {
+    if (!examName) {
+      alert('시험명을 입력해 주세요');
+      window.scrollTo(0, 0);
+      examNameRef.current?.focus();
+      setIsExamNameValidFail(true);
+      return;
+    }
+
+    if (!courseName) {
+      alert('교과목명을 입력해 주세요');
+      window.scrollTo(0, 0);
+      courseNameRef.current?.focus();
+      setIsCourseNameValidFail(true);
+      return;
+    }
+
+    if (!editorContent) {
+      alert('본문을 입력해 주세요');
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    if (!examStartDateTime || !examEndDateTime) {
+      alert('제출 기간을 설정해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
+      return;
+    }
+
+    if (isCheckedUsingPwd && !examPwd) {
+      alert('비밀번호를 입력해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
+      examPwdRef.current?.focus();
+      setIsExamPwdValidFail(true);
+      return;
+    }
+
+    alert('등록 기능 개발 예정');
   };
 
   useEffect(() => {
@@ -65,19 +113,34 @@ export default function RegisterExam() {
               type="text"
               name="floating_first_name"
               id="floating_first_name"
-              className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+                isExamNameValidFail ? 'pink' : 'blue'
+              }-500 focus:border-${
+                isExamNameValidFail ? 'red' : 'blue'
+              }-500 focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
               value={examName}
-              onChange={(e) => setExamName(e.target.value)}
+              ref={examNameRef}
+              onChange={handleExamNameChange}
             />
             <label
               htmlFor="floating_first_name"
-              className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
+              className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+                isExamNameValidFail ? 'red' : 'gray'
+              }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                isExamNameValidFail ? 'red' : 'blue'
+              }-600 peer-focus:dark:text-${
+                isExamNameValidFail ? 'red' : 'blue'
+              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
             >
               시험명
             </label>
-            <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
+            <p
+              className={`text-${
+                isExamNameValidFail ? 'red' : 'gray'
+              }-500 text-xs tracking-widest font-light mt-1`}
+            >
               시험명을 입력해 주세요
             </p>
           </div>
@@ -87,19 +150,34 @@ export default function RegisterExam() {
               type="text"
               name="floating_first_name"
               id="floating_first_name"
-              className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+                isCourseNameValidFail ? 'pink' : 'blue'
+              }-500 focus:border-${
+                isCourseNameValidFail ? 'red' : 'blue'
+              }-500 focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
               value={courseName}
-              onChange={(e) => setCourseName(e.target.value)}
+              ref={courseNameRef}
+              onChange={handleCourseNameChange}
             />
             <label
               htmlFor="floating_first_name"
-              className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
+              className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+                isCourseNameValidFail ? 'red' : 'gray'
+              }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                isCourseNameValidFail ? 'red' : 'blue'
+              }-600 peer-focus:dark:text-${
+                isCourseNameValidFail ? 'red' : 'blue'
+              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
             >
               교과목명
             </label>
-            <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
+            <p
+              className={`text-${
+                isCourseNameValidFail ? 'red' : 'gray'
+              }-500 text-xs tracking-widest font-light mt-1`}
+            >
               교과목명을 입력해 주세요
             </p>
           </div>
@@ -107,7 +185,10 @@ export default function RegisterExam() {
 
         {isEditorReady ? (
           <div className="w-full mx-auto overflow-auto">
-            <DynamicEditor isEditorReady={isEditorReady} />
+            <DynamicEditor
+              isEditorReady={isEditorReady}
+              onEditorChange={setEditorContent}
+            />
           </div>
         ) : (
           <Loading />
@@ -120,22 +201,20 @@ export default function RegisterExam() {
               type="datetime-local"
               id="start-date"
               name="start-date"
-              value={selectedContestDateTime.startDate
-                .toISOString()
-                .slice(0, 16)}
+              value={examStartDateTime.slice(0, 16)}
               min={new Date().toISOString().slice(0, 16)}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
-              onChange={handleContestStartDateChange}
+              onChange={(e) => setExamStartDateTime(e.target.value)}
             />
             <span>~</span>
             <input
               type="datetime-local"
               id="end-date"
               name="end-date"
-              value={selectedContestDateTime.endDate.toISOString().slice(0, 16)}
+              value={examEndDateTime.slice(0, 16)}
               min={new Date().toISOString().slice(0, 16)}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
-              onChange={handleContestEndDateChange}
+              onChange={(e) => setExamEndDateTime(e.target.value)}
             />
           </div>
 
@@ -186,15 +265,26 @@ export default function RegisterExam() {
                   type="text"
                   name="floating_first_name"
                   id="floating_first_name"
-                  className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-2/3 font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#5762b3] focus:outline-none focus:ring-0 focus:border-[#5762b3] peer"
+                  className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+                    isExamPwdValidFail ? 'pink' : 'blue'
+                  }-500 focus:border-${
+                    isExamPwdValidFail ? 'red' : 'blue'
+                  }-500 focus:outline-none focus:ring-0 peer`}
                   placeholder=" "
                   required
                   value={examPwd}
-                  onChange={(e) => setExamPwd(e.target.value)}
+                  ref={examPwdRef}
+                  onChange={handleExamPwdChange}
                 />
                 <label
                   htmlFor="floating_first_name"
-                  className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-[#5762b3] peer-focus:dark:text-[#5762b3] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
+                  className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+                    isExamPwdValidFail ? 'red' : 'gray'
+                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                    isExamPwdValidFail ? 'red' : 'blue'
+                  }-600 peer-focus:dark:text-${
+                    isExamPwdValidFail ? 'red' : 'blue'
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
                 >
                   비밀번호
                 </label>
@@ -210,7 +300,7 @@ export default function RegisterExam() {
               취소
             </button>
             <button
-              onClick={() => alert('개발 예정')}
+              onClick={handleRegisterExam}
               className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
             >
               등록
