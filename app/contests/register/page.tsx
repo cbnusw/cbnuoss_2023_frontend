@@ -99,8 +99,6 @@ export default function RegisterContest() {
     setIsEditorReady(true);
   }, []);
 
-  console.log();
-
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
@@ -296,7 +294,6 @@ export default function RegisterContest() {
                     <input
                       type="text"
                       name="floating_first_name"
-                      id="floating_first_name"
                       className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
                         isContestPwdValidFail ? 'pink' : 'blue'
                       }-500 focus:border-${

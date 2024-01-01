@@ -112,7 +112,6 @@ export default function RegisterExam() {
             <input
               type="text"
               name="floating_first_name"
-              id="floating_first_name"
               className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
                 isExamNameValidFail ? 'pink' : 'blue'
               }-500 focus:border-${
@@ -149,7 +148,6 @@ export default function RegisterExam() {
             <input
               type="text"
               name="floating_first_name"
-              id="floating_first_name"
               className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
                 isCourseNameValidFail ? 'pink' : 'blue'
               }-500 focus:border-${
@@ -264,7 +262,6 @@ export default function RegisterExam() {
                 <input
                   type="text"
                   name="floating_first_name"
-                  id="floating_first_name"
                   className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
                     isExamPwdValidFail ? 'pink' : 'blue'
                   }-500 focus:border-${
