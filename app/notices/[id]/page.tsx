@@ -33,11 +33,16 @@ export default function NoticeDetail() {
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-8">
             <p className="text-2xl font-bold tracking-tight">
               시스템 이용 간 유의사항
             </p>
-            <div className="flex justify-end pb-3 border-b border-gray-300">
+            <div className="flex justify-between pb-3 border-b border-gray-300">
+              <div className="flex gap-3">
+                <span className="font-semibold">
+                  작성일: <span className="font-light">2023.07.12</span>
+                </span>
+              </div>
               <div className="flex gap-3">
                 <span className="font-semibold">
                   작성자: <span className="font-light">신재혁</span>

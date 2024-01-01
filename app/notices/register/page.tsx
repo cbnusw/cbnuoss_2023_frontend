@@ -3,7 +3,7 @@
 import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
@@ -14,33 +14,27 @@ const DynamicEditor = dynamic(
 
 export default function RegisterNotice() {
   const [isEditorReady, setIsEditorReady] = useState(false);
-  const [courseName, setCourseName] = useState('');
-  const [examName, setExamName] = useState('');
+  const [noticeName, setNoticeName] = useState('');
+  const [editorContent, setEditorContent] = useState('');
   const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
-  const [examPwd, setExamPwd] = useState('');
-  const [selectedContestDateTime, setSelectedContestDateTime] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-  });
+  const [noticePwd, setNoticePwd] = useState('');
+
+  const [isNoticeNameValidFail, setIsNoticeNameValidFail] = useState(false);
+  const [isNoticePwdValidFail, setIsNoticePwdValidFail] = useState(false);
+
+  const noticeNameRef = useRef<HTMLInputElement>(null);
+  const noticePwdRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
 
-  const handleContestStartDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestDateTime((prevState) => ({
-      ...prevState,
-      startDate: new Date(e.target.value),
-    }));
+  const handleNoticeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNoticeName(e.target.value);
+    setIsNoticeNameValidFail(false);
   };
 
-  const handleContestEndDateChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setSelectedContestDateTime((prevState) => ({
-      ...prevState,
-      endDate: new Date(e.target.value),
-    }));
+  const handleNoticePwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNoticePwd(e.target.value);
+    setIsNoticePwdValidFail(false);
   };
 
   const handleCancelContestRegister = () => {
@@ -48,6 +42,32 @@ export default function RegisterNotice() {
     if (!userResponse) return;
 
     router.push('/notices');
+  };
+
+  const handleRegisterNotice = () => {
+    if (!noticeName) {
+      alert('제목을 입력해 주세요');
+      window.scrollTo(0, 0);
+      noticeNameRef.current?.focus();
+      setIsNoticeNameValidFail(true);
+      return;
+    }
+
+    if (!editorContent) {
+      alert('본문을 입력해 주세요');
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    if (isCheckedUsingPwd && !noticePwd) {
+      alert('비밀번호를 입력해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
+      noticePwdRef.current?.focus();
+      setIsNoticePwdValidFail(true);
+      return;
+    }
+
+    alert('등록 기능 개발 예정');
   };
 
   useEffect(() => {
@@ -64,20 +84,34 @@ export default function RegisterNotice() {
             <input
               type="text"
               name="floating_first_name"
-              id="floating_first_name"
-              className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+              className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+                isNoticeNameValidFail ? 'pink' : 'blue'
+              }-500 focus:border-${
+                isNoticeNameValidFail ? 'red' : 'blue'
+              }-500 focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
-              value={examName}
-              onChange={(e) => setExamName(e.target.value)}
+              value={noticeName}
+              ref={noticeNameRef}
+              onChange={handleNoticeNameChange}
             />
             <label
               htmlFor="floating_first_name"
-              className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
+              className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+                isNoticeNameValidFail ? 'red' : 'gray'
+              }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                isNoticeNameValidFail ? 'red' : 'blue'
+              }-600 peer-focus:dark:text-${
+                isNoticeNameValidFail ? 'red' : 'blue'
+              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
             >
               제목
             </label>
-            <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
+            <p
+              className={`text-${
+                isNoticeNameValidFail ? 'red' : 'gray'
+              }-500 text-xs tracking-widest font-light mt-1`}
+            >
               제목을 입력해 주세요
             </p>
           </div>
@@ -85,7 +119,10 @@ export default function RegisterNotice() {
 
         {isEditorReady ? (
           <div className="w-full mx-auto overflow-auto">
-            <DynamicEditor isEditorReady={isEditorReady} />
+            <DynamicEditor
+              isEditorReady={isEditorReady}
+              onEditorChange={setEditorContent}
+            />
           </div>
         ) : (
           <Loading />
@@ -138,16 +175,26 @@ export default function RegisterNotice() {
                 <input
                   type="text"
                   name="floating_first_name"
-                  id="floating_first_name"
-                  className="block pt-3 pb-[0.175rem] pl-0 pr-0 w-2/3 font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-[#5762b3] focus:outline-none focus:ring-0 focus:border-[#5762b3] peer"
+                  className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+                    isNoticePwdValidFail ? 'pink' : 'blue'
+                  }-500 focus:border-${
+                    isNoticePwdValidFail ? 'red' : 'blue'
+                  }-500 focus:outline-none focus:ring-0 peer`}
                   placeholder=" "
                   required
-                  value={examPwd}
-                  onChange={(e) => setExamPwd(e.target.value)}
+                  value={noticePwd}
+                  ref={noticePwdRef}
+                  onChange={handleNoticePwdChange}
                 />
                 <label
                   htmlFor="floating_first_name"
-                  className="peer-focus:font-light absolute text-base left-[0.1rem] font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-[#5762b3] peer-focus:dark:text-[#5762b3] peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]"
+                  className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+                    isNoticePwdValidFail ? 'red' : 'gray'
+                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                    isNoticePwdValidFail ? 'red' : 'blue'
+                  }-600 peer-focus:dark:text-${
+                    isNoticePwdValidFail ? 'red' : 'blue'
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
                 >
                   비밀번호
                 </label>
@@ -163,7 +210,7 @@ export default function RegisterNotice() {
               취소
             </button>
             <button
-              onClick={() => alert('개발 예정')}
+              onClick={handleRegisterNotice}
               className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
             >
               등록
