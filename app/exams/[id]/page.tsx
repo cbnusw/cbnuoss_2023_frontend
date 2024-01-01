@@ -33,17 +33,17 @@ export default function ExamDetail() {
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-8">
             <p className="text-2xl font-bold tracking-tight">
               2023-01-자료구조(소프트웨어학부 01반)
             </p>
             <div className="flex justify-between pb-3 border-b border-gray-300">
               <span className="font-semibold">
-                과제시간:
+                제출 기간:
                 {/* <span className="text-red-500 font-bold"> 49분 45초 남음</span> */}
                 <span className="font-light">
                   {' '}
-                  2023:07:13 15:00 ~ 2023.07.13 16:00{' '}
+                  2023.07:13 15:00 ~ 2023.07.13 16:00{' '}
                   <span className="text-blue-500 font-semibold">
                     (41분 3초 전)
                   </span>
