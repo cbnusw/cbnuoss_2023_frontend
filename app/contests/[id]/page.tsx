@@ -34,26 +34,29 @@ export default function ExamDetail() {
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-8">
             <p className="text-2xl font-bold tracking-tight">
               2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
             </p>
             <div className="flex justify-between pb-3 border-b border-gray-300">
               <div className="flex gap-3">
                 <span className="font-semibold">
-                  참가신청기간:
-                  <span className="font-light"> ~ 2023.07.13 16:00 </span>
+                  참가신청 기간:
+                  <span className="font-light">
+                    {' '}
+                    2023.07:13 12:00 ~ 2023.07.13 13:00{' '}
+                  </span>
                 </span>
                 <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
                 <span className="font-semibold">
-                  대회시간:
+                  대회 시간:
                   {/* <span className="text-red-500 font-bold">
                   {' '}
                   49분 45초 남음
                 </span> */}
                   <span className="font-light">
                     {' '}
-                    2023:07:13 17:00 ~ 2023.07.13 18:00{' '}
+                    2023.07:13 17:00 ~ 2023.07.13 18:00{' '}
                     <span className="text-blue-500 font-semibold">
                       (41분 3초 전)
                     </span>
