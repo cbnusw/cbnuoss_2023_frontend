@@ -1,33 +1,35 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import dynamic from 'next/dynamic';
-
 interface MyDropzoneProps {
   type: string;
   guideMsg: string;
 }
-
 type FileObject = {
   name: string;
   url: string;
 };
 
 type Pair = {
-  in: string;
-  out: string;
+  in: FileObject;
+  out: FileObject;
 };
 
 const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
 });
 
-function MyDropzone(props: MyDropzoneProps) {
-  const { type, guideMsg } = props;
+function MyDropzone(
+  props: MyDropzoneProps & {
+    setIsFileUploaded: (isUploaded: boolean) => void;
+    isFileUploaded: boolean;
+  },
+) {
+  const { type, guideMsg, setIsFileUploaded, isFileUploaded } = props;
 
   const [fileList, setFileList] = useState<FileObject[]>([]);
   const [fileNameList, setFileNameList] = useState<string[]>([]);
   const [fileURLList, setFileURLList] = useState<string[]>([]);
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -47,10 +49,8 @@ function MyDropzone(props: MyDropzoneProps) {
           break;
         case 'inOut':
           setIsFileUploaded(true);
-          const filePairs: FileObject[] = [];
+          let newFilePairs: FileObject[] = [];
           let remainingFiles = [...acceptedFiles]; // Create a copy to manipulate while looping
-          let nameList: string[] = [];
-          let urlList: string[] = [];
 
           // Use a while loop since we'll be modifying the array during iteration
           while (remainingFiles.length > 0) {
@@ -64,7 +64,7 @@ function MyDropzone(props: MyDropzoneProps) {
               const counterpartFileName = `${baseName}.${counterpartExtension}`;
 
               const counterpartFileIndex = remainingFiles.findIndex(
-                (file: File) => file.name === counterpartFileName,
+                (f: File) => f.name === counterpartFileName,
               );
 
               // If we find a matching .in / .out file
@@ -80,9 +80,7 @@ function MyDropzone(props: MyDropzoneProps) {
                 };
 
                 // Add both files to the pairs list
-                filePairs.push(fileObj1, fileObj2);
-                nameList.push(file.name, counterpartFile.name);
-                urlList.push(fileObj1.url, fileObj2.url);
+                newFilePairs.push(fileObj1, fileObj2);
 
                 // Remove the matched files from our remaining files list
                 remainingFiles.splice(counterpartFileIndex, 1); // remove counterpart file first
@@ -96,28 +94,35 @@ function MyDropzone(props: MyDropzoneProps) {
               remainingFiles.splice(0, 1);
             }
           }
-          setFileList(filePairs);
-          setFileNameList(nameList);
-          setFileURLList(urlList);
+
+          setFileList((prevList) => [...prevList, ...newFilePairs]);
+          setFileNameList((prevList) => [
+            ...prevList,
+            ...newFilePairs.map((f) => f.name),
+          ]);
+          setFileURLList((prevList) => [
+            ...prevList,
+            ...newFilePairs.map((f) => f.url),
+          ]);
           break;
       }
     },
-    [type],
+    [type, setIsFileUploaded],
   );
 
   console.log(fileList);
 
-  const getInAndOutFilePairs = (fileList: string[]): Pair[] => {
-    const inFiles = fileList.filter((file) => file.endsWith('.in'));
-    const outFiles = fileList.filter((file) => file.endsWith('.out'));
+  const getInAndOutFilePairs = (): Pair[] => {
+    const inFiles = fileList.filter((file) => file.name.endsWith('.in'));
+    const outFiles = fileList.filter((file) => file.name.endsWith('.out'));
 
-    // Assuming inFiles and outFiles have same length and corresponding elements are pairs
-    const pairs: Pair[] = inFiles.map((inFile, index) => ({
-      in: inFile,
-      out: outFiles[index],
-    }));
-
-    return pairs;
+    return inFiles
+      .map((inFile) => {
+        const outFileName = inFile.name.replace('.in', '.out');
+        const outFile = outFiles.find((file) => file.name === outFileName);
+        return outFile ? { in: inFile, out: outFile } : null;
+      })
+      .filter((pair): pair is Pair => pair !== null); // 필터링하여 null이 아닌 쌍만 반환
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -126,18 +131,19 @@ function MyDropzone(props: MyDropzoneProps) {
     multiple: type === 'pdf' ? false : true,
   });
 
-  const deletePair = (pair: Pair, index: number) => {
+  const handleDeletePair = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    pair: Pair,
+  ) => {
+    e.preventDefault();
+    deletePair(pair);
+    setIsFileUploaded(fileList.length > 2);
+  };
+
+  const deletePair = (pair: Pair) => {
     setFileList((prevList) =>
       prevList.filter(
-        (file) => file.name !== pair.in && file.name !== pair.out,
-      ),
-    );
-    setFileNameList((prevList) =>
-      prevList.filter((name) => name !== pair.in && name !== pair.out),
-    );
-    setFileURLList((prevList) =>
-      prevList.filter(
-        (url) => !url.endsWith(pair.in) && !url.endsWith(pair.out),
+        (file) => file.url !== pair.in.url && file.url !== pair.out.url,
       ),
     );
   };
@@ -186,46 +192,44 @@ function MyDropzone(props: MyDropzoneProps) {
       {isFileUploaded ? (
         type === 'pdf' ? (
           <PDFViewer pdfFileURL={fileURLList[0]} />
-        ) : getInAndOutFilePairs(fileNameList).length > 0 ? (
-          getInAndOutFilePairs(fileNameList).map(
-            (pair: Pair, index: number) => (
-              <div
-                key={index}
-                className="flex justify-between border border-gray-400 rounded-[0.25rem] w-full py-3 px-2"
-              >
-                <div className="flex items-center gap-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="25"
-                    viewBox="0 -960 960 960"
-                    width="25"
-                    fill="#6b7280"
-                  >
-                    <path d="M226.666-80q-27 0-46.833-19.833T160-146.666v-666.668q0-27 19.833-46.833T226.666-880H574l226 226v507.334q0 27-19.833 46.833T733.334-80H226.666Zm314.001-542.667v-190.667H226.666v666.668h506.668v-476.001H540.667ZM226.666-813.334v190.667-190.667 666.668-666.668Z" />
-                  </svg>
-                  <div className="flex flex-col">
-                    <span className="text-gray-600">{pair.in}</span>
-                    <span className="text-gray-600">{pair.out}</span>
-                  </div>
-                </div>
-                <button
-                  className="mr-1"
-                  onClick={() => deletePair(pair, index)}
+        ) : (
+          getInAndOutFilePairs().map((pair, index) => (
+            <div
+              key={index}
+              className="flex justify-between border border-gray-400 rounded-[0.25rem] w-full py-3 px-2"
+            >
+              <div className="flex items-center gap-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="25"
+                  viewBox="0 -960 960 960"
+                  width="25"
+                  fill="#6b7280"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="30"
-                    viewBox="0 -960 960 960"
-                    width="30"
-                    fill="#6b7280"
-                  >
-                    <path d="M480-444.616 270.307-234.924q-7.23 7.231-17.499 7.423-10.269.193-17.884-7.423-7.616-7.615-7.616-17.691 0-10.077 7.616-17.692L444.616-480 234.924-689.693q-7.231-7.23-7.423-17.499-.193-10.269 7.423-17.884 7.615-7.616 17.691-7.616 10.077 0 17.692 7.616L480-515.384l209.693-209.692q7.23-7.231 17.499-7.423 10.269-.193 17.884 7.423 7.616 7.615 7.616 17.691 0 10.077-7.616 17.692L515.384-480l209.692 209.693q7.231 7.23 7.423 17.499.193 10.269-7.423 17.884-7.615 7.616-17.691 7.616-10.077 0-17.692-7.616L480-444.616Z" />
-                  </svg>
-                </button>
+                  <path d="M226.666-80q-27 0-46.833-19.833T160-146.666v-666.668q0-27 19.833-46.833T226.666-880H574l226 226v507.334q0 27-19.833 46.833T733.334-80H226.666Zm314.001-542.667v-190.667H226.666v666.668h506.668v-476.001H540.667ZM226.666-813.334v190.667-190.667 666.668-666.668Z" />
+                </svg>
+                <div className="flex flex-col">
+                  <span className="text-gray-600">{pair.in.name}</span>
+                  <span className="text-gray-600">{pair.out.name}</span>
+                </div>
               </div>
-            ),
-          )
-        ) : null
+              <button
+                className="mr-1"
+                onClick={(e) => handleDeletePair(e, pair)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="30"
+                  viewBox="0 -960 960 960"
+                  width="30"
+                  fill="#6b7280"
+                >
+                  <path d="M480-444.616 270.307-234.924q-7.23 7.231-17.499 7.423-10.269.193-17.884-7.423-7.616-7.615-7.616-17.691 0-10.077 7.616-17.692L444.616-480 234.924-689.693q-7.231-7.23-7.423-17.499-.193-10.269 7.423-17.884 7.615-7.616 17.691-7.616 10.077 0 17.692 7.616L480-515.384l209.693-209.692q7.23-7.231 17.499-7.423 10.269-.193 17.884 7.423 7.616 7.615 7.616 17.691 0 10.077-7.616 17.692L515.384-480l209.692 209.693q7.231 7.23 7.423 17.499.193 10.269-7.423 17.884-7.615 7.616-17.691 7.616-10.077 0-17.692-7.616L480-444.616Z" />
+                </svg>
+              </button>
+            </div>
+          ))
+        )
       ) : null}
     </div>
   );

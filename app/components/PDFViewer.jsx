@@ -6,7 +6,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export default function PDFViewer({ pdfFileURL }) {
-  const [numPages, setNumPages] = useState(null);
+  const [numPages, setNumPages] = useState(0);
 
   function onFileChange(event) {
     setFile(event.target.files[0]);
