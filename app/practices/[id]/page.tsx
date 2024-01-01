@@ -37,7 +37,7 @@ export default function PracticeDetail() {
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-8">
             <p className="text-2xl font-bold tracking-tight">기능개발</p>
             <div className="flex justify-between pb-3 border-b border-gray-300">
               <div className="flex gap-3">
