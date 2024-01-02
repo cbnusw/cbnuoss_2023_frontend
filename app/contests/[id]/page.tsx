@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Participant from './components/Participant';
 import Loading from '@/app/loading';
 
@@ -14,13 +14,36 @@ const MarkdownPreview = dynamic(
 export default function ExamDetail() {
   const [isContestPostReady, setIsContestPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+  const [isApplyContest, setIsApplyContest] = useState(false);
+
   const router = useRouter();
 
+  const handleApplyContest = () => {
+    const userResponse = confirm('대회 참가 신청을 하시겠습니까?');
+    if (!userResponse) return;
+
+    setIsApplyContest(true);
+    alert(
+      '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
+    );
+  };
+
+  const handleCancelContest = () => {
+    const userResponse = confirm(
+      '대회 참가 신청을 취소하시겠습니까?\n참가신청 기간 이후에는 다시 신청할 수 없습니다.',
+    );
+    if (!userResponse) return;
+
+    setIsApplyContest(false);
+    alert('대회 참가 신청이 취소되었습니다.');
+  };
+
   const handleDeleteExam = () => {
-    let userResponse = confirm(
+    const userResponse = confirm(
       '현재 대회 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
     if (!userResponse) return;
+
     alert('게시글을 삭제하였습니다.');
     router.push('/contests');
   };
@@ -136,6 +159,21 @@ export default function ExamDetail() {
               </button>
               <button
                 onClick={() => alert('개발 예정')}
+                className="flex gap-[0.375rem] items-center text-white bg-[#0388ca] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#007eb9] hover:bg-[#007eb9] box-shadow"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="white"
+                >
+                  <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
+                </svg>
+                문제 관리
+              </button>
+              <button
+                onClick={() => alert('개발 예정')}
                 className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
               >
                 <svg
@@ -166,10 +204,75 @@ export default function ExamDetail() {
               </button>
             </div>
           </div>
-          <div className="mt-14 py-2">
-            <p className="flex gap-2 items-center text-2xl font-semibold">
-              참가자
-            </p>
+
+          <div className="mt-2">
+            <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
+            <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
+              {isApplyContest ? (
+                <>
+                  <button
+                    onClick={handleCancelContest}
+                    className="flex gap-[0.6rem] items-center w-fit h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] box-shadow transition duration-75"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="25"
+                      viewBox="0 -960 960 960"
+                      width="25"
+                      fill="#3870e0"
+                    >
+                      <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+                    </svg>
+                    대회 참가 취소하기
+                  </button>
+
+                  <div className="flex flex-col gap-1 text-center">
+                    <div className="text-[#777] text-xs">
+                      대회 시작 전까지만{' '}
+                      <span className="text-red-500">신청 취소가 가능</span>
+                      합니다.
+                    </div>
+                    <div className="text-[#777] text-xs">
+                      비정상적인 이력이 확인될 경우, 서비스 이용이 제한됩니다.
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleApplyContest}
+                    className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow transition duration-75"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="25"
+                      viewBox="0 -960 960 960"
+                      width="25"
+                      fill="white"
+                    >
+                      <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
+                    </svg>
+                    대회 참가 신청하기
+                  </button>
+
+                  <div className="flex flex-col gap-1 text-center">
+                    <div className="text-[#777] text-xs">
+                      대회 시작 후에는{' '}
+                      <span className="text-red-500">신청이 불가능</span>
+                      합니다.
+                    </div>
+                    <div className="text-[#777] text-xs">
+                      참가 신청 이전에 반드시 대회 내용을 자세히 읽어주시기
+                      바랍니다.
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          <div className="mt-8 py-2">
+            <p className="text-2xl font-semibold">참가자</p>
             <div className="flex mt-4 justify-between items-center">
               <span>
                 신청자 수: <span className="text-red-500">8명</span>
