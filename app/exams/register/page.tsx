@@ -52,7 +52,7 @@ export default function RegisterExam() {
   };
 
   const handleCancelContestRegister = () => {
-    let userResponse = confirm('시험 등록을 취소하시겠습니까?');
+    const userResponse = confirm('시험 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
     router.push('/exams');
