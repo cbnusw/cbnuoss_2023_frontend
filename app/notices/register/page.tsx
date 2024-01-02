@@ -38,7 +38,7 @@ export default function RegisterNotice() {
   };
 
   const handleCancelContestRegister = () => {
-    let userResponse = confirm('공지사항 등록을 취소하시겠습니까?');
+    const userResponse = confirm('공지사항 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
     router.push('/notices');

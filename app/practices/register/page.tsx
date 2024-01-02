@@ -43,7 +43,7 @@ export default function Registerpractice() {
   };
 
   const handleCancelContestRegister = () => {
-    let userResponse = confirm('연습문제 등록을 취소하시겠습니까?');
+    const userResponse = confirm('연습문제 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
     router.push('/practices');
