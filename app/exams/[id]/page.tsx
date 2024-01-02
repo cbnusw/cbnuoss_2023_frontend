@@ -16,7 +16,7 @@ export default function ExamDetail() {
   const router = useRouter();
 
   const handleDeleteExam = () => {
-    let userResponse = confirm(
+    const userResponse = confirm(
       '현재 시험 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
     if (!userResponse) return;
