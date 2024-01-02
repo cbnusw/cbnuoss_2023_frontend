@@ -9,11 +9,6 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
 });
 
-const MarkdownPreview = dynamic(
-  () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
-  { ssr: false },
-);
-
 export default function PracticeDetail() {
   const [isExamPostReady, setIsExamPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
@@ -59,21 +54,6 @@ export default function PracticeDetail() {
             </div>
           </div>
           <div className="gap-5 border-b mt-8 mb-4 pb-5">
-            <MarkdownPreview
-              className="markdown-preview"
-              source={`\`\`\`C
-// 두 정수의 합을 반환하는 함수
-function add(int a, int b) {
-  return a + b;
-}
-
-// 두 정수의 차이 값을 반환하는 함수
-function sub(int a, int b) {
-  return a - b;
-}
-\`\`\`
-> (예시) 상단에 주어진 두 함수를 수정하지 않고 모두 사용하시오.`}
-            />
             <PDFViewer pdfFileURL={'/pdfs/test.pdf'} />
           </div>
           <div>
