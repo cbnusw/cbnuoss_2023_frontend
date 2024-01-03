@@ -18,23 +18,23 @@ export default function ExamDetail() {
   const router = useRouter();
 
   const handleApplyExam = () => {
-    const userResponse = confirm('대회 참가 신청을 하시겠습니까?');
+    const userResponse = confirm('시험에 응시하시겠습니까?');
     if (!userResponse) return;
 
     setIsApplyExam(true);
     alert(
-      '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
+      '시험 응시가 완료되었습니다.\n시험 시간을 확인한 후, 해당 시간에 시작해 주세요',
     );
   };
 
   const handleCancelExam = () => {
     const userResponse = confirm(
-      '대회 참가 신청을 취소하시겠습니까?\n참가신청 기간 이후에는 다시 신청할 수 없습니다.',
+      '시험 응시를 취소하시겠습니까?\n시험 시작 이후에는 다시 신청할 수 없습니다.',
     );
     if (!userResponse) return;
 
     setIsApplyExam(false);
-    alert('대회 참가 신청이 취소되었습니다.');
+    alert('시험 응시가 취소되었습니다.');
   };
 
   const handleDeleteExam = () => {
