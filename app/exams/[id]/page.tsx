@@ -13,7 +13,29 @@ const MarkdownPreview = dynamic(
 export default function ExamDetail() {
   const [isExamPostReady, setIsExamPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+  const [isApplyExam, setIsApplyExam] = useState(false);
+
   const router = useRouter();
+
+  const handleApplyExam = () => {
+    const userResponse = confirm('시험에 응시하시겠습니까?');
+    if (!userResponse) return;
+
+    setIsApplyExam(true);
+    alert(
+      '시험 응시가 완료되었습니다.\n시험 시간을 확인한 후, 해당 시간에 시작해 주세요',
+    );
+  };
+
+  const handleCancelExam = () => {
+    const userResponse = confirm(
+      '시험 응시를 취소하시겠습니까?\n시험 시작 이후에는 다시 신청할 수 없습니다.',
+    );
+    if (!userResponse) return;
+
+    setIsApplyExam(false);
+    alert('시험 응시가 취소되었습니다.');
+  };
 
   const handleDeleteExam = () => {
     const userResponse = confirm(
@@ -101,21 +123,6 @@ export default function ExamDetail() {
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => alert('개발 예정')}
-                className="flex gap-[0.375rem] items-center text-white bg-[#3870e0] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="18"
-                  viewBox="0 -960 960 960"
-                  width="18"
-                  fill="white"
-                >
-                  <path d="M319-250h322v-60H319v60Zm0-170h322v-60H319v60ZM220-80q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h361l219 219v521q0 24-18 42t-42 18H220Zm331-554h189L551-820v186Z" />
-                </svg>
-                문제 목록
-              </button>
-              <button
-                onClick={() => alert('개발 예정')}
                 className="flex gap-[0.375rem] items-center text-white bg-[#6860ff] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#5951f0] hover:bg-[#5951f0] box-shadow"
               >
                 <svg
@@ -128,6 +135,21 @@ export default function ExamDetail() {
                   <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
                 </svg>
                 코드 제출 목록
+              </button>
+              <button
+                onClick={() => alert('개발 예정')}
+                className="flex gap-[0.375rem] items-center text-white bg-[#0388ca] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#007eb9] hover:bg-[#007eb9] box-shadow"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="18"
+                  viewBox="0 -960 960 960"
+                  width="18"
+                  fill="white"
+                >
+                  <path d="M319-250h322v-60H319v60Zm0-170h322v-60H319v60ZM220-80q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h361l219 219v521q0 24-18 42t-42 18H220Zm331-554h189L551-820v186Z" />
+                </svg>
+                문제 목록
               </button>
               <button
                 onClick={() => alert('개발 예정')}
@@ -159,6 +181,72 @@ export default function ExamDetail() {
                 </svg>
                 게시글 삭제
               </button>
+            </div>
+          </div>
+
+          <div className="mt-2">
+            <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
+            <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
+              {isApplyExam ? (
+                <>
+                  <button
+                    onClick={handleCancelExam}
+                    className="flex gap-[0.6rem] items-center w-fit h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] box-shadow transition duration-75"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="25"
+                      viewBox="0 -960 960 960"
+                      width="25"
+                      fill="#3870e0"
+                    >
+                      <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+                    </svg>
+                    시험 취소하기
+                  </button>
+
+                  <div className="flex flex-col gap-1 text-center">
+                    <div className="text-[#777] text-xs">
+                      시험 시작 전까지만{' '}
+                      <span className="text-red-500">응시 취소가 가능</span>
+                      합니다.
+                    </div>
+                    <div className="text-[#777] text-xs">
+                      비정상적인 이력이 확인될 경우, 서비스 이용이 제한됩니다.
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={handleApplyExam}
+                    className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow transition duration-75"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="25"
+                      viewBox="0 -960 960 960"
+                      width="25"
+                      fill="white"
+                    >
+                      <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
+                    </svg>
+                    시험 응시하기
+                  </button>
+
+                  <div className="flex flex-col gap-1 text-center">
+                    <div className="text-[#777] text-xs">
+                      시험 시작 후에는{' '}
+                      <span className="text-red-500">응시가 불가능</span>
+                      합니다.
+                    </div>
+                    <div className="text-[#777] text-xs">
+                      시험 응시 전에 반드시 시험 내용을 자세히 읽어주시기
+                      바랍니다.
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
