@@ -155,7 +155,7 @@ export default function ExamDetail() {
                 >
                   <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
                 </svg>
-                코드 제출 이력
+                코드 제출 목록
               </button>
               <button
                 onClick={() => alert('개발 예정')}
@@ -170,7 +170,7 @@ export default function ExamDetail() {
                 >
                   <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
                 </svg>
-                문제 관리
+                문제 목록
               </button>
               <button
                 onClick={() => alert('개발 예정')}
