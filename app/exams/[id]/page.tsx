@@ -65,7 +65,7 @@ export default function ExamDetail() {
                 {/* <span className="text-red-500 font-bold"> 49분 45초 남음</span> */}
                 <span className="font-light">
                   {' '}
-                  2023.07:13 15:00 ~ 2023.07.13 16:00{' '}
+                  2023.07.13 15:00 ~ 2023.07.13 16:00{' '}
                   <span className="text-blue-500 font-semibold">
                     (41분 3초 전)
                   </span>

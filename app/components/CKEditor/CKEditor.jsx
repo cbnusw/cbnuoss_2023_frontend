@@ -1,7 +1,7 @@
 import Editor from '@/app/utils/ckeditor5/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 
-const EditorTest = ({ isEditorReady, onEditorChange }) => {
+const EditorTest = ({ isEditorReady, initEditorContent, onEditorChange }) => {
   return (
     <>
       {isEditorReady && (
@@ -12,7 +12,7 @@ const EditorTest = ({ isEditorReady, onEditorChange }) => {
           }}
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
-            console.log('Editor is ready to use!', editor);
+            if (initEditorContent) editor.setData(initEditorContent);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();

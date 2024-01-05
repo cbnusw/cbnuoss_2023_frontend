@@ -6,15 +6,23 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import Participant from './components/Participant';
 import Loading from '@/app/loading';
 
+interface DefaultProps {
+  params: {
+    id: string;
+  };
+}
+
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
   { ssr: false },
 );
 
-export default function ExamDetail() {
+export default function ExamDetail(props: DefaultProps) {
   const [isContestPostReady, setIsContestPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
   const [isApplyContest, setIsApplyContest] = useState(false);
+
+  const cid = props.params.id;
 
   const router = useRouter();
 
@@ -36,6 +44,10 @@ export default function ExamDetail() {
 
     setIsApplyContest(false);
     alert('대회 참가 신청이 취소되었습니다.');
+  };
+
+  const handleEditContest = () => {
+    router.push(`/contests/${cid}/edit`);
   };
 
   const handleDeleteExam = () => {
@@ -67,7 +79,7 @@ export default function ExamDetail() {
                   참가신청 기간:
                   <span className="font-light">
                     {' '}
-                    2023.07:13 12:00 ~ 2023.07.13 13:00{' '}
+                    2023.07.13 12:00 ~ 2023.07.13 13:00{' '}
                   </span>
                 </span>
                 <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
@@ -79,7 +91,7 @@ export default function ExamDetail() {
                 </span> */}
                   <span className="font-light">
                     {' '}
-                    2023.07:13 17:00 ~ 2023.07.13 18:00{' '}
+                    2023.07.13 17:00 ~ 2023.07.13 18:00{' '}
                     <span className="text-blue-500 font-semibold">
                       (41분 3초 전)
                     </span>
@@ -173,7 +185,7 @@ export default function ExamDetail() {
                 문제 목록
               </button>
               <button
-                onClick={() => alert('개발 예정')}
+                onClick={handleEditContest}
                 className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
               >
                 <svg
