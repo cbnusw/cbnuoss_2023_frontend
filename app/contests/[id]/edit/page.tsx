@@ -116,7 +116,7 @@ export default function EditContest(props: DefaultProps) {
     setIsContestProblemsPwdValidFail(false);
   };
 
-  const handleCancelContestRegister = () => {
+  const handleCancelContestEdit = () => {
     const userResponse = confirm('대회 수정을 취소하시겠습니까?');
     if (!userResponse) return;
 
@@ -482,7 +482,7 @@ export default function EditContest(props: DefaultProps) {
             </div>
             <div className="mt-14 pb-2 flex justify-end gap-3">
               <button
-                onClick={handleCancelContestRegister}
+                onClick={handleCancelContestEdit}
                 className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
               >
                 취소
