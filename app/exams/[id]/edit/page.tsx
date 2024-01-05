@@ -1,10 +1,15 @@
 'use client';
 
 import Loading from '@/app/loading';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+interface DefaultProps {
+  params: {
+    id: string;
+  };
+}
 
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
@@ -13,15 +18,60 @@ const DynamicEditor = dynamic(
   },
 );
 
-export default function RegisterExam() {
+export default function EditExam(props: DefaultProps) {
+  const examInfo = {
+    examName: '2023-01-자료구조(소프트웨어학부 01반)',
+    courseName: '자료구조',
+    content: `
+# 자료구조 알고리즘 코딩 테스트 공지
+안녕하세요, 여러분.
+
+자료구조 과목에서 진행하는 **알고리즘 코딩 테스트**에 대해 공지합니다.
+
+## 테스트 일정
+- 날짜: 2023년 7월 13일 (목)
+- 시간: 오후 3시 ~ 4시
+
+## 테스트 방식
+- 온라인으로 진행
+- 개인 컴퓨터를 사용하여 코딩 테스트 진행
+- Google Classroom에 공지된 링크를 통해 테스트 사이트 접속
+
+## 테스트 범위
+- 이번 테스트는 다음의 자료구조와 관련된 알고리즘에 대한 문제를 다룹니다:
+    - 스택(Stack)과 큐(Queue)
+    - 링크드 리스트(Linked List)
+    - 트리(Tree)와 그래프(Graph)
+
+## 기타 유의사항
+- 본 테스트는 오픈 북 형태로 진행되나, 다른 사람과의 협업은 엄격히 금지합니다.
+- 시작 시간에 맞춰 준비하여 테스트에 참가하시기 바랍니다.
+- 테스트 중 문제가 발생하는 경우, 바로 저에게 연락해 주세요.
+
+코딩 테스트를 통해 여러분의 알고리즘 구현 능력을 키울 수 있는 좋은 기회가 되길 바랍니다. 
+모두 최선을 다해 보세요!
+
+감사합니다.`,
+    examStartDateTime: '2023-07-13T10:00',
+    examEndDateTime: '2023-07-13T11:00',
+    isCheckedUsingExamPwd: true,
+    examPwd: 'owrejreoi12321',
+  };
+
   const [isEditorReady, setIsEditorReady] = useState(false);
-  const [examName, setExamName] = useState('');
-  const [courseName, setCourseName] = useState('');
-  const [editorContent, setEditorContent] = useState('');
-  const [examStartDateTime, setExamStartDateTime] = useState('');
-  const [examEndDateTime, setExamEndDateTime] = useState('');
-  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
-  const [examPwd, setExamPwd] = useState('');
+  const [examName, setExamName] = useState(examInfo.examName);
+  const [courseName, setCourseName] = useState(examInfo.courseName);
+  const [editorContent, setEditorContent] = useState();
+  const [examStartDateTime, setExamStartDateTime] = useState(
+    examInfo.examStartDateTime,
+  );
+  const [examEndDateTime, setExamEndDateTime] = useState(
+    examInfo.examEndDateTime,
+  );
+  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(
+    examInfo.isCheckedUsingExamPwd,
+  );
+  const [examPwd, setExamPwd] = useState(examInfo.examPwd);
 
   const [isExamNameValidFail, setIsExamNameValidFail] = useState(false);
   const [isCourseNameValidFail, setIsCourseNameValidFail] = useState(false);
@@ -30,6 +80,8 @@ export default function RegisterExam() {
   const examNameRef = useRef<HTMLInputElement>(null);
   const courseNameRef = useRef<HTMLInputElement>(null);
   const examPwdRef = useRef<HTMLInputElement>(null);
+
+  const eid = props.params.id;
 
   const router = useRouter();
 
@@ -51,14 +103,14 @@ export default function RegisterExam() {
     setIsExamPwdValidFail(false);
   };
 
-  const handleCancelContestRegister = () => {
-    const userResponse = confirm('시험 등록을 취소하시겠습니까?');
+  const handleCancelExamEdit = () => {
+    const userResponse = confirm('시험 수정을 취소하시겠습니까?');
     if (!userResponse) return;
 
-    router.push('/exams');
+    router.push(`/exams/${eid}`);
   };
 
-  const handleRegisterExam = () => {
+  const handleEditExam = () => {
     if (!examName) {
       alert('시험명을 입력해 주세요');
       window.scrollTo(0, 0);
@@ -185,7 +237,7 @@ export default function RegisterExam() {
           <div className="w-full mx-auto overflow-auto">
             <DynamicEditor
               isEditorReady={isEditorReady}
-              initEditorContent={''}
+              initEditorContent={examInfo.content}
               onEditorChange={setEditorContent}
             />
           </div>
@@ -201,7 +253,7 @@ export default function RegisterExam() {
               id="start-date"
               name="start-date"
               value={examStartDateTime.slice(0, 16)}
-              min={new Date().toISOString().slice(0, 16)}
+              min={currentDate}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
               onChange={(e) => setExamStartDateTime(e.target.value)}
             />
@@ -211,7 +263,7 @@ export default function RegisterExam() {
               id="end-date"
               name="end-date"
               value={examEndDateTime.slice(0, 16)}
-              min={new Date().toISOString().slice(0, 16)}
+              min={currentDate}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
               onChange={(e) => setExamEndDateTime(e.target.value)}
             />
@@ -292,16 +344,16 @@ export default function RegisterExam() {
 
           <div className="mt-14 pb-2 flex justify-end gap-3">
             <button
-              onClick={handleCancelContestRegister}
+              onClick={handleCancelExamEdit}
               className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
             >
               취소
             </button>
             <button
-              onClick={handleRegisterExam}
+              onClick={handleEditExam}
               className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
             >
-              등록
+              수정
             </button>
           </div>
         </div>

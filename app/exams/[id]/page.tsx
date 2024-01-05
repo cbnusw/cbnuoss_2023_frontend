@@ -5,15 +5,23 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+interface DefaultProps {
+  params: {
+    id: string;
+  };
+}
+
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
   { ssr: false },
 );
 
-export default function ExamDetail() {
+export default function ExamDetail(props: DefaultProps) {
   const [isExamPostReady, setIsExamPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
   const [isApplyExam, setIsApplyExam] = useState(false);
+
+  const eid = props.params.id;
 
   const router = useRouter();
 
@@ -35,6 +43,10 @@ export default function ExamDetail() {
 
     setIsApplyExam(false);
     alert('시험 응시가 취소되었습니다.');
+  };
+
+  const handleEditExam = () => {
+    router.push(`/exams/${eid}/edit`);
   };
 
   const handleDeleteExam = () => {
@@ -152,7 +164,7 @@ export default function ExamDetail() {
                 문제 목록
               </button>
               <button
-                onClick={() => alert('개발 예정')}
+                onClick={handleEditExam}
                 className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
               >
                 <svg
