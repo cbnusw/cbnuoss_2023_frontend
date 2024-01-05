@@ -185,6 +185,7 @@ export default function RegisterExam() {
           <div className="w-full mx-auto overflow-auto">
             <DynamicEditor
               isEditorReady={isEditorReady}
+              initEditorContent={''}
               onEditorChange={setEditorContent}
             />
           </div>
