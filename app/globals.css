@@ -38,6 +38,10 @@
   overflow: auto !important;
 }
 
+.ck-editor__editable:not(.ck-editor__nested-editable) > * {
+  margin-bottom: 20px;
+}
+
 .ck.ck-toolbar {
   background-color: #fafafa !important;
 }
