@@ -37,7 +37,7 @@ export default function RegisterNotice() {
     setIsNoticePwdValidFail(false);
   };
 
-  const handleCancelContestRegister = () => {
+  const handleCancelNoticeRegister = () => {
     const userResponse = confirm('공지사항 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
@@ -121,6 +121,7 @@ export default function RegisterNotice() {
           <div className="w-full mx-auto overflow-auto">
             <DynamicEditor
               isEditorReady={isEditorReady}
+              initEditorContent={''}
               onEditorChange={setEditorContent}
             />
           </div>
@@ -204,7 +205,7 @@ export default function RegisterNotice() {
 
           <div className="mt-14 pb-2 flex justify-end gap-3">
             <button
-              onClick={handleCancelContestRegister}
+              onClick={handleCancelNoticeRegister}
               className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
             >
               취소
