@@ -91,8 +91,8 @@ export default function RegisterPractice() {
 
     alert('등록 기능 개발 예정');
 
-    console.log('PDF: ', uploadedProblemPdfFileUrl);
-    console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
+    // console.log('PDF: ', uploadedProblemPdfFileUrl);
+    // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
   };
 
   return (
