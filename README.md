@@ -1,4 +1,4 @@
-> **Note**  
+> [!note]
 > **Pre-deployment** **URL:** **https://cbnuoss-2023-frontend.vercel.app/**
 
 ---
