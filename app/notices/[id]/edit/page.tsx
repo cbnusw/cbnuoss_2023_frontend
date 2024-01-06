@@ -5,6 +5,12 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+interface DefaultProps {
+  params: {
+    id: string;
+  };
+}
+
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
   {
@@ -12,18 +18,70 @@ const DynamicEditor = dynamic(
   },
 );
 
-export default function RegisterNotice() {
+export default function EditNotice(props: DefaultProps) {
+  const noticeInfo = {
+    title: '시스템 이용 간 유의사항',
+    content: `
+# 알고리즘 문제 채점 사이트 이용 간 유의사항
+알고리즘 문제를 풀고 제출하실 때, 다음의 사항을 꼭 확인해 주세요.
+
+> 상기 시스템은 베타 테스트 중에 있습니다.
+> 사용에 있어 궁금하신 사항은 SW중심사업단 홈페이지의 E-help 데스크로 연락주세요.
+
+## 1. 문제 이해
+
+- 문제의 조건을 정확히 이해하고 풀이를 시작하세요. 부족한 부분은 문제에 있는 예제와 예시 해답을 이용하여 이해를 보완하세요.
+
+## 2. 제출 형식
+
+- 제출 형식이 정해져 있을 경우, 그에 맞게 코드를 작성하세요.
+
+## 3. 실행 시간
+
+- 복잡한 문제일수록 실행 시간에 더욱 주의해야 합니다. 
+- 최적화 방법을 고려하고 시간 복잡도를 고려해 문제를 풀어보세요.
+
+## 4. 코드 스타일
+
+- 깔끔하고 이해하기 쉬운 코드를 작성하세요. 
+- 가독성이 좋은 코드는 더 빨리 이해되고 디버깅하기도 쉽습니다.
+
+## 5. 테스트 케이스
+
+- 문제에서 주어진 테스트 케이스 뿐만 아니라, 자신만의 테스트 케이스도 작성해보세요. 
+- 이를 통해 예상치 못한 에러나 예외 상황을 미리 파악하고 대비할 수 있습니다.
+
+## 컴파일러 버전 정보
+
+- **C** : GNU11
+- **C++** : C++17
+- **Python 2**: 2.7.17
+- **Python 3**: 3.9.2
+- **OpenJDK**: 1.8.0_292
+- **Kotlin**: 1.5.31-release-548
+- **Go**: 1.17.2
+- **Node.js**: 10.24.1
+
+감사합니다.`,
+    isCheckedUsingNoticePwd: true,
+    noticePwd: 'owrejreoi12321',
+  };
+
   const [isEditorReady, setIsEditorReady] = useState(false);
-  const [noticeName, setNoticeName] = useState('');
-  const [editorContent, setEditorContent] = useState('');
-  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
-  const [noticePwd, setNoticePwd] = useState('');
+  const [noticeName, setNoticeName] = useState(noticeInfo.title);
+  const [editorContent, setEditorContent] = useState(noticeInfo.content);
+  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(
+    noticeInfo.isCheckedUsingNoticePwd,
+  );
+  const [noticePwd, setNoticePwd] = useState(noticeInfo.noticePwd);
 
   const [isNoticeNameValidFail, setIsNoticeNameValidFail] = useState(false);
   const [isNoticePwdValidFail, setIsNoticePwdValidFail] = useState(false);
 
   const noticeNameRef = useRef<HTMLInputElement>(null);
   const noticePwdRef = useRef<HTMLInputElement>(null);
+
+  const nid = props.params.id;
 
   const router = useRouter();
 
@@ -37,14 +95,14 @@ export default function RegisterNotice() {
     setIsNoticePwdValidFail(false);
   };
 
-  const handleCancelNoticeRegister = () => {
-    const userResponse = confirm('공지사항 등록을 취소하시겠습니까?');
+  const handleCancelNoticeEdit = () => {
+    const userResponse = confirm('공지사항 수정을 취소하시겠습니까?');
     if (!userResponse) return;
 
-    router.push('/notices');
+    router.push(`/notices/${nid}`);
   };
 
-  const handleRegisterNotice = () => {
+  const handleEditNotice = () => {
     if (!noticeName) {
       alert('제목을 입력해 주세요');
       window.scrollTo(0, 0);
@@ -67,7 +125,7 @@ export default function RegisterNotice() {
       return;
     }
 
-    alert('등록 기능 개발 예정');
+    alert('수정 기능 개발 예정');
   };
 
   useEffect(() => {
@@ -121,7 +179,7 @@ export default function RegisterNotice() {
           <div className="w-full mx-auto overflow-auto">
             <DynamicEditor
               isEditorReady={isEditorReady}
-              initEditorContent={''}
+              initEditorContent={noticeInfo.content}
               onEditorChange={setEditorContent}
             />
           </div>
@@ -205,16 +263,16 @@ export default function RegisterNotice() {
 
           <div className="mt-14 pb-2 flex justify-end gap-3">
             <button
-              onClick={handleCancelNoticeRegister}
+              onClick={handleCancelNoticeEdit}
               className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
             >
               취소
             </button>
             <button
-              onClick={handleRegisterNotice}
+              onClick={handleEditNotice}
               className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
             >
-              등록
+              수정
             </button>
           </div>
         </div>

@@ -51,6 +51,8 @@ export default function EditPractice(props: DefaultProps) {
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
 
+  const pid = props.params.id;
+
   const router = useRouter();
 
   const handlePracticeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,10 +71,10 @@ export default function EditPractice(props: DefaultProps) {
   };
 
   const handleCancelContestEdit = () => {
-    const userResponse = confirm('연습문제 등록을 취소하시겠습니까?');
+    const userResponse = confirm('연습문제 수정을 취소하시겠습니까?');
     if (!userResponse) return;
 
-    router.push('/practices');
+    router.push(`/practices/${pid}`);
   };
 
   const handleEditPractice = () => {
@@ -112,7 +114,7 @@ export default function EditPractice(props: DefaultProps) {
       return;
     }
 
-    alert('등록 기능 개발 예정');
+    alert('수정 기능 개발 예정');
 
     // console.log('PDF: ', uploadedProblemPdfFileUrl);
     // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);

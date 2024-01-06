@@ -147,7 +147,7 @@ export default function EditExam(props: DefaultProps) {
       return;
     }
 
-    alert('등록 기능 개발 예정');
+    alert('수정 기능 개발 예정');
   };
 
   useEffect(() => {

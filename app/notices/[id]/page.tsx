@@ -5,17 +5,30 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+interface DefaultProps {
+  params: {
+    id: string;
+  };
+}
+
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
   { ssr: false },
 );
 
-export default function NoticeDetail() {
-  const [isExamPostReady, setIsExamPostReady] = useState(false);
+export default function NoticeDetail(props: DefaultProps) {
+  const [isNoticePostReady, setIsNoticePostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+
+  const nid = props.params.id;
+
   const router = useRouter();
 
-  const handleDeleteExam = () => {
+  const handleEditNotice = () => {
+    router.push(`/notices/${nid}/edit`);
+  };
+
+  const handleDeleteNotice = () => {
     const userResponse = confirm(
       '현재 공지사항 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
@@ -26,10 +39,10 @@ export default function NoticeDetail() {
 
   useEffect(() => {
     setIsMarkdownPreviewReady(true);
-    setIsExamPostReady(true);
+    setIsNoticePostReady(true);
   }, []);
 
-  return isExamPostReady && isMarkdownPreviewReady ? (
+  return isNoticePostReady && isMarkdownPreviewReady ? (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
@@ -101,8 +114,8 @@ export default function NoticeDetail() {
           <div>
             <div className="flex gap-3 justify-end">
               <button
-                onClick={() => alert('개발 예정')}
-                className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
+                onClick={handleEditNotice}
+                className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shad/editow"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -116,7 +129,7 @@ export default function NoticeDetail() {
                 게시글 수정
               </button>
               <button
-                onClick={handleDeleteExam}
+                onClick={handleDeleteNotice}
                 className="flex gap-[0.375rem] items-center text-white bg-red-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#e14343] hover:bg-[#e14343] box-shadow"
               >
                 <svg
