@@ -2,12 +2,15 @@
 
 import MyDropzone from '@/app/components/MyDropzone';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
-export default function Registerpractice() {
+export default function RegisterPractice() {
   const [practiceName, setPracticeName] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
+  const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
+  const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
+    useState<string[]>();
 
   const [isPracticeNameValidFail, setIsPracticeNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -87,6 +90,9 @@ export default function Registerpractice() {
     }
 
     alert('등록 기능 개발 예정');
+
+    console.log('PDF: ', uploadedProblemPdfFileUrl);
+    console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
   };
 
   return (
@@ -213,6 +219,12 @@ export default function Registerpractice() {
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsPracticeFileUploadingValidFail}
               isFileUploaded={isPracticeFileUploadingValidFail}
+              initPdfUrl={''}
+              initInAndOutFileUrls={[]}
+              setUploadedPdfFileUrl={setUploadedPdfFileUrl}
+              setUploadedProblemInAndOutFileUrls={
+                setUploadedProblemInAndOutFileUrls
+              }
             />
           </div>
 
@@ -243,6 +255,12 @@ export default function Registerpractice() {
                 guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
+                initPdfUrl={''}
+                initInAndOutFileUrls={[]}
+                setUploadedPdfFileUrl={setUploadedPdfFileUrl}
+                setUploadedProblemInAndOutFileUrls={
+                  setUploadedProblemInAndOutFileUrls
+                }
               />
             </div>
           </div>
