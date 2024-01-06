@@ -5,16 +5,29 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+interface DefaultProps {
+  params: {
+    id: string;
+  };
+}
+
 const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
 });
 
-export default function PracticeDetail() {
-  const [isExamPostReady, setIsExamPostReady] = useState(false);
+export default function PracticeDetail(props: DefaultProps) {
+  const [isPracticePostReady, setIsPracticePostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+
+  const pid = props.params.id;
+
   const router = useRouter();
 
-  const handleDeleteExam = () => {
+  const handleEditPractice = () => {
+    router.push(`/practices/${pid}/edit`);
+  };
+
+  const handleDeletePractice = () => {
     const userResponse = confirm(
       '현재 연습문제 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
@@ -25,10 +38,10 @@ export default function PracticeDetail() {
 
   useEffect(() => {
     setIsMarkdownPreviewReady(true);
-    setIsExamPostReady(true);
+    setIsPracticePostReady(true);
   }, []);
 
-  return isExamPostReady && isMarkdownPreviewReady ? (
+  return isPracticePostReady && isMarkdownPreviewReady ? (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col">
@@ -74,7 +87,7 @@ export default function PracticeDetail() {
                 코드 제출 목록
               </button>
               <button
-                onClick={() => alert('개발 예정')}
+                onClick={handleEditPractice}
                 className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
               >
                 <svg
@@ -89,7 +102,7 @@ export default function PracticeDetail() {
                 게시글 수정
               </button>
               <button
-                onClick={handleDeleteExam}
+                onClick={handleDeletePractice}
                 className="flex gap-[0.375rem] items-center text-white bg-red-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#e14343] hover:bg-[#e14343] box-shadow"
               >
                 <svg
