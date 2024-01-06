@@ -1,7 +1,6 @@
 'use client';
 
 import Loading from '@/app/loading';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';

@@ -1,10 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import dynamic from 'next/dynamic';
+
 interface MyDropzoneProps {
   type: string;
   guideMsg: string;
+  setIsFileUploaded: (isUploaded: boolean) => void;
+  isFileUploaded: boolean;
+  initPdfUrl: string;
+  initInAndOutFileUrls: string[];
+  setUploadedPdfFileUrl?: (url: string) => void; // PDF 파일 URL 업데이트 함수
+  setUploadedProblemInAndOutFileUrls?: (urls: string[]) => void; // in/out 파일 URL 업데이트 함수
 }
+
 type FileObject = {
   name: string;
   url: string;
@@ -19,13 +27,17 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
 });
 
-function MyDropzone(
-  props: MyDropzoneProps & {
-    setIsFileUploaded: (isUploaded: boolean) => void;
-    isFileUploaded: boolean;
-  },
-) {
-  const { type, guideMsg, setIsFileUploaded, isFileUploaded } = props;
+function MyDropzone(props: MyDropzoneProps) {
+  const {
+    type,
+    guideMsg,
+    setIsFileUploaded,
+    isFileUploaded,
+    initPdfUrl,
+    initInAndOutFileUrls,
+    setUploadedPdfFileUrl,
+    setUploadedProblemInAndOutFileUrls,
+  } = props;
 
   const [fileList, setFileList] = useState<FileObject[]>([]);
   const [fileNameList, setFileNameList] = useState<string[]>([]);
@@ -37,18 +49,15 @@ function MyDropzone(
         case 'pdf':
           const firstFile = acceptedFiles[0];
           if (firstFile) {
-            setIsFileUploaded(true);
-            const fileObject = {
-              name: firstFile.name,
-              url: URL.createObjectURL(firstFile),
-            };
-            setFileList([fileObject]);
+            const fileUrl = URL.createObjectURL(firstFile);
+            setFileList([{ name: firstFile.name, url: fileUrl }]);
             setFileNameList([firstFile.name]);
-            setFileURLList([fileObject.url]);
+            setFileURLList([fileUrl]);
+            setIsFileUploaded(true);
+            setUploadedPdfFileUrl?.(fileUrl); // 업로드된 PDF 파일 URL을 부모 컴포넌트에 전달
           }
           break;
         case 'inOut':
-          setIsFileUploaded(true);
           let newFilePairs: FileObject[] = [];
           let remainingFiles = [...acceptedFiles]; // Create a copy to manipulate while looping
 
@@ -104,13 +113,29 @@ function MyDropzone(
             ...prevList,
             ...newFilePairs.map((f) => f.url),
           ]);
+
+          // Update in/out file URLs
+          const inOutUrls = newFilePairs.map((f) => f.url);
+          setUploadedProblemInAndOutFileUrls?.(inOutUrls);
+
+          // 파일 쌍 검사 및 상태 업데이트
+          const hasValidPair = checkForValidPairs(newFilePairs);
+          setIsFileUploaded(hasValidPair);
           break;
       }
     },
-    [type, setIsFileUploaded],
+    [type, setIsFileUploaded, props],
   );
 
-  console.log(fileList);
+  const checkForValidPairs = (fileObjects: FileObject[]) => {
+    const inFiles = fileObjects.filter((file) => file.name.endsWith('.in'));
+    const outFiles = fileObjects.filter((file) => file.name.endsWith('.out'));
+
+    return inFiles.some((inFile) => {
+      const outFileName = inFile.name.replace('.in', '.out');
+      return outFiles.some((outFile) => outFile.name === outFileName);
+    });
+  };
 
   const getInAndOutFilePairs = (): Pair[] => {
     const inFiles = fileList.filter((file) => file.name.endsWith('.in'));
@@ -141,12 +166,61 @@ function MyDropzone(
   };
 
   const deletePair = (pair: Pair) => {
-    setFileList((prevList) =>
-      prevList.filter(
-        (file) => file.url !== pair.in.url && file.url !== pair.out.url,
-      ),
+    const updatedFileList = fileList.filter(
+      (file) => file.url !== pair.in.url && file.url !== pair.out.url,
     );
+
+    setFileList(updatedFileList);
+
+    // fileNameList와 fileURLList도 업데이트
+    const updatedFileNameList = updatedFileList.map((file) => file.name);
+    const updatedFileURLList = updatedFileList.map((file) => file.url);
+
+    setFileNameList(updatedFileNameList);
+    setFileURLList(updatedFileURLList);
+
+    // 부모 컴포넌트의 상태 업데이트
+    setUploadedProblemInAndOutFileUrls?.(updatedFileURLList);
   };
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  useEffect(() => {
+    if (!isInitialized) {
+      if (type === 'pdf' && initPdfUrl) {
+        // PDF 파일 이름 추출 및 초기화
+        const fileName = initPdfUrl.split('/').pop() || 'Unknown PDF';
+        const fileObject = {
+          name: fileName,
+          url: initPdfUrl,
+        };
+        setFileList([fileObject]);
+        setFileNameList([fileObject.name]);
+        setFileURLList([fileObject.url]);
+        setIsFileUploaded(true);
+      } else if (type === 'inOut' && initInAndOutFileUrls?.length > 0) {
+        // in/out 파일 이름 추출 및 초기화
+        const fileObjects = initInAndOutFileUrls.map((url) => {
+          const fileName = url.split('/').pop() || 'Unknown File';
+          return {
+            name: fileName,
+            url: url,
+          };
+        });
+        setFileList(fileObjects);
+        setFileNameList(fileObjects.map((file) => file.name));
+        setFileURLList(fileObjects.map((file) => file.url));
+        setIsFileUploaded(true);
+      }
+      setIsInitialized(true);
+    }
+  }, [
+    type,
+    initPdfUrl,
+    initInAndOutFileUrls,
+    isInitialized,
+    setIsFileUploaded,
+  ]);
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-full">

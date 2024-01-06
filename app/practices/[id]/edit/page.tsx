@@ -4,13 +4,36 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
-export default function RegisterPractice() {
-  const [practiceName, setPracticeName] = useState('');
-  const [maxExeTime, setMaxExeTime] = useState<number>();
-  const [maxMemCap, setMaxMemCap] = useState<number>();
-  const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
+interface DefaultProps {
+  params: {
+    id: string;
+  };
+}
+
+export default function EditPractice(props: DefaultProps) {
+  const practiceInfo = {
+    title: '2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선',
+    maxExeTime: 123,
+    maxMemCap: 456,
+    problemPdfFileUrl: 'http://localhost:3000/pdfs/test.pdf',
+    problemInAndOutFileUrls: [
+      'http://localhost:3000/in_and_out/1.in',
+      'http://localhost:3000/in_and_out/1.out',
+      'http://localhost:3000/in_and_out/2.in',
+      'http://localhost:3000/in_and_out/2.out',
+      'http://localhost:3000/in_and_out/3.in',
+      'http://localhost:3000/in_and_out/3.out',
+    ],
+  };
+
+  const [practiceName, setPracticeName] = useState(practiceInfo.title);
+  const [maxExeTime, setMaxExeTime] = useState<number>(practiceInfo.maxExeTime);
+  const [maxMemCap, setMaxMemCap] = useState<number>(practiceInfo.maxMemCap);
+  const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState(
+    practiceInfo.problemPdfFileUrl,
+  );
   const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
-    useState<string[]>();
+    useState<string[]>(practiceInfo.problemInAndOutFileUrls);
 
   const [isPracticeNameValidFail, setIsPracticeNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -45,14 +68,14 @@ export default function RegisterPractice() {
     setIsMaxMemCapValidFail(false);
   };
 
-  const handleCancelContestRegister = () => {
+  const handleCancelContestEdit = () => {
     const userResponse = confirm('연습문제 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
     router.push('/practices');
   };
 
-  const handleRegisterPractice = () => {
+  const handleEditPractice = () => {
     if (!practiceName) {
       alert('문제명을 입력해 주세요');
       window.scrollTo(0, 0);
@@ -219,7 +242,7 @@ export default function RegisterPractice() {
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsPracticeFileUploadingValidFail}
               isFileUploaded={isPracticeFileUploadingValidFail}
-              initPdfUrl={''}
+              initPdfUrl={practiceInfo.problemPdfFileUrl}
               initInAndOutFileUrls={[]}
               setUploadedPdfFileUrl={setUploadedPdfFileUrl}
               setUploadedProblemInAndOutFileUrls={
@@ -256,7 +279,7 @@ export default function RegisterPractice() {
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
                 initPdfUrl={''}
-                initInAndOutFileUrls={[]}
+                initInAndOutFileUrls={practiceInfo.problemInAndOutFileUrls}
                 setUploadedPdfFileUrl={setUploadedPdfFileUrl}
                 setUploadedProblemInAndOutFileUrls={
                   setUploadedProblemInAndOutFileUrls
@@ -267,16 +290,16 @@ export default function RegisterPractice() {
 
           <div className="mt-5 pb-2 flex justify-end gap-3">
             <button
-              onClick={handleCancelContestRegister}
+              onClick={handleCancelContestEdit}
               className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
             >
               취소
             </button>
             <button
-              onClick={handleRegisterPractice}
+              onClick={handleEditPractice}
               className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
             >
-              등록
+              수정
             </button>
           </div>
         </div>
