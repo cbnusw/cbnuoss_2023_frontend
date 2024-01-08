@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Participant from './components/Participant';
 import Loading from '@/app/loading';
 
@@ -26,14 +26,8 @@ export default function ExamDetail(props: DefaultProps) {
 
   const router = useRouter();
 
-  const handleApplyContest = () => {
-    const userResponse = confirm('대회 참가 신청을 하시겠습니까?');
-    if (!userResponse) return;
-
-    setIsApplyContest(true);
-    alert(
-      '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
-    );
+  const handleGoToContestRankList = () => {
+    router.push(`/contests/${cid}/ranklist`);
   };
 
   const handleCancelContest = () => {
@@ -58,6 +52,16 @@ export default function ExamDetail(props: DefaultProps) {
 
     alert('게시글을 삭제하였습니다.');
     router.push('/contests');
+  };
+
+  const handleApplyContest = () => {
+    const userResponse = confirm('대회 참가 신청을 하시겠습니까?');
+    if (!userResponse) return;
+
+    setIsApplyContest(true);
+    alert(
+      '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
+    );
   };
 
   useEffect(() => {
@@ -140,8 +144,8 @@ export default function ExamDetail(props: DefaultProps) {
           <div>
             <div className="flex gap-3 justify-end">
               <button
-                onClick={() => alert('개발 예정')}
-                className="flex gap-[0.375rem] items-center text-white bg-[#3870e0] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+                onClick={handleGoToContestRankList}
+                className="flex gap-[0.375rem] items-center text-white bg-[#0388ca] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#007eb9] hover:bg-[#007eb9] box-shadow"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -171,7 +175,7 @@ export default function ExamDetail(props: DefaultProps) {
               </button>
               <button
                 onClick={() => alert('개발 예정')}
-                className="flex gap-[0.375rem] items-center text-white bg-[#0388ca] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#007eb9] hover:bg-[#007eb9] box-shadow"
+                className="flex gap-[0.375rem] items-center text-white bg-[#3870e0] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -287,7 +291,7 @@ export default function ExamDetail(props: DefaultProps) {
             <p className="text-2xl font-semibold">참가자</p>
             <div className="flex mt-4 justify-between items-center">
               <span>
-                신청자 수: <span className="text-red-500">8명</span>
+                신청자 수: <span className="text-red-500">8</span>명
               </span>
               <div className="flex gap-3">
                 <button
