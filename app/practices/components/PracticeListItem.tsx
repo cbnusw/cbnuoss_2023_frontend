@@ -19,7 +19,7 @@ export default function PracticeListItem() {
       >
         1
       </th>
-      <td className="">기능개발</td>
+      <td className="hover:underline focus:underline">A+B</td>
       <td className="font-medium">신재혁</td>
       <td className="">3</td>
     </tr>

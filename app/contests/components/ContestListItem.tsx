@@ -19,7 +19,7 @@ export default function ContestListItem() {
       >
         1
       </th>
-      <td className="">
+      <td className="hover:underline focus:underline">
         2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
       </td>
       <td className="font-medium">~ 2023.06.26. 03:00</td>
