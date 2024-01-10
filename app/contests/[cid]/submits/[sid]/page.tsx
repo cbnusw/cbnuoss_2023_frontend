@@ -116,7 +116,7 @@ int main(int argc, const char* argv[]) {
                       2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
                     </th>
                     <td className="">A+B</td>
-                    <td className="">성열암</td>
+                    <td className="">홍길동</td>
                     <td className="text-blue-500 font-semibold">정답</td>
                     <td>
                       <span>1527 </span>

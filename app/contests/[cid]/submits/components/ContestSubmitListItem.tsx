@@ -24,7 +24,7 @@ export default function ContestSubmitListItem({
         1
       </th>
       <td className="">2020123123</td>
-      <td className="">성열암</td>
+      <td className="">홍길동</td>
       <td className="">A+B</td>
       <td className="text-blue-500 font-semibold">정답</td>
       <td>
