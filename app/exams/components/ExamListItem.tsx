@@ -19,7 +19,9 @@ export default function ExamListItem() {
       >
         1
       </th>
-      <td className="">2023-01-자료구조(소프트웨어학부 01반)</td>
+      <td className="hover:underline focus:underline">
+        2023-01-자료구조(소프트웨어학부 01반)
+      </td>
       <td className="font-medium">코딩테스트 3차</td>
       <td className="font-medium">노서영</td>
       <td className="font-medium">

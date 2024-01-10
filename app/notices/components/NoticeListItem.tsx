@@ -19,7 +19,9 @@ export default function NoticeListItem() {
       >
         1
       </th>
-      <td className="">시스템 이용 간 유의사항</td>
+      <td className="hover:underline focus:underline">
+        시스템 이용 간 유의사항
+      </td>
       <td className="font-medium">신재혁</td>
       <td className="font-medium">2023.06.26</td>
       <td className="font-medium">5</td>
