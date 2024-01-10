@@ -1,6 +1,6 @@
 import React from 'react';
-import Practice from './components/Practice';
 import Link from 'next/link';
+import PracticeList from './components/PracticeList';
 
 export default function Practices() {
   return (
@@ -75,18 +75,7 @@ export default function Practices() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                    <Practice />
-                  </tbody>
+                  <PracticeList />
                 </table>
               </div>
             </div>
