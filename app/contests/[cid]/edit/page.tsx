@@ -7,7 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
-    id: string;
+    cid: string;
   };
 }
 
@@ -92,7 +92,7 @@ export default function EditContest(props: DefaultProps) {
   const contestPwdRef = useRef<HTMLInputElement>(null);
   const contestProblemsPwdRef = useRef<HTMLInputElement>(null);
 
-  const cid = props.params.id;
+  const cid = props.params.cid;
 
   const router = useRouter();
 

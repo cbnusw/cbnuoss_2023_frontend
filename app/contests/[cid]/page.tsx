@@ -8,7 +8,7 @@ import Loading from '@/app/loading';
 
 interface DefaultProps {
   params: {
-    id: string;
+    cid: string;
   };
 }
 
@@ -17,17 +17,21 @@ const MarkdownPreview = dynamic(
   { ssr: false },
 );
 
-export default function ExamDetail(props: DefaultProps) {
+export default function ContestDetail(props: DefaultProps) {
   const [isContestPostReady, setIsContestPostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
   const [isApplyContest, setIsApplyContest] = useState(false);
 
-  const cid = props.params.id;
+  const cid = props.params.cid;
 
   const router = useRouter();
 
   const handleGoToContestRankList = () => {
     router.push(`/contests/${cid}/ranklist`);
+  };
+
+  const handleGoToContestSubmits = () => {
+    router.push(`/contests/${cid}/submits`);
   };
 
   const handleCancelContest = () => {
@@ -159,7 +163,7 @@ export default function ExamDetail(props: DefaultProps) {
                 대회 순위
               </button>
               <button
-                onClick={() => alert('개발 예정')}
+                onClick={handleGoToContestSubmits}
                 className="flex gap-[0.375rem] items-center text-white bg-[#6860ff] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#5951f0] hover:bg-[#5951f0] box-shadow"
               >
                 <svg
