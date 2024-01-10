@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 interface DefaultProps {
   params: {
-    id: string;
+    nid: string;
   };
 }
 
@@ -20,7 +20,7 @@ export default function NoticeDetail(props: DefaultProps) {
   const [isNoticePostReady, setIsNoticePostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
 
-  const nid = props.params.id;
+  const nid = props.params.nid;
 
   const router = useRouter();
 

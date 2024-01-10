@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
-    id: string;
+    nid: string;
   };
 }
 
@@ -81,7 +81,7 @@ export default function EditNotice(props: DefaultProps) {
   const noticeNameRef = useRef<HTMLInputElement>(null);
   const noticePwdRef = useRef<HTMLInputElement>(null);
 
-  const nid = props.params.id;
+  const nid = props.params.nid;
 
   const router = useRouter();
 
