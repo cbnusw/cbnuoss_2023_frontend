@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Contest from './Contest';
-import NoneContestParticipant from './NoneContestPostInfo';
+import ContestListItem from './ContestListItem';
+import NoneContestListItem from './NoneContestListItem';
 
 export default function ContestList() {
   const [isContestListReady, setIsContestListReady] = useState(false);
@@ -13,17 +13,18 @@ export default function ContestList() {
 
   return isContestListReady ? (
     <tbody>
-      <Contest />
-      <Contest />
-      <Contest />
-      <Contest />
-      <Contest />
-      <Contest />
-      <Contest />
-      <Contest />
-      <Contest />
-      <Contest />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
+      <ContestListItem />
     </tbody>
-  ) : null;
-  // <NoneContestParticipant />
+  ) : (
+    <NoneContestListItem />
+  );
 }

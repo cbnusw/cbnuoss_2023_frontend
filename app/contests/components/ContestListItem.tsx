@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function Contest() {
+export default function ContestListItem() {
   const router = useRouter();
 
   return (
@@ -20,7 +20,7 @@ export default function Contest() {
         1
       </th>
       <td className="">
-        제2회 충청북도 대학생 프로그래밍 경진대회 예선 [한국교통대학교 5/10]
+        2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
       </td>
       <td className="font-medium">~ 2023.06.26. 03:00</td>
       <td className="text-red-500 font-medium">~ 2023.06.26. 06:00</td>
