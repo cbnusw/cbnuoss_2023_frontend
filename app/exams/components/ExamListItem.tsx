@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function Exam() {
+export default function ExamListItem() {
   const router = useRouter();
 
   return (
