@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import ExamList from './components/ExamList';
 
-export default function exams() {
+export default function Exams() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">

@@ -6,7 +6,7 @@ export default function Contest() {
     <div className="relative flex flex-col gap-4 bg-[#f7f7f7] p-3 group">
       <p className="font-bold">
         <Link href="/" className="hover:underline">
-          제2회 충청북도 대학생 프로그래밍 경진대회 예선 [한국교통대학교 5/10]
+          2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
         </Link>
       </p>
       <div className="flex flex-col 3xs:inline-block">

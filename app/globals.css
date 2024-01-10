@@ -109,13 +109,47 @@ h4 {
 .markdown-preview blockquote {
   padding: 1rem 1.75rem !important;
   border-left: 0.25rem solid #2fc27b !important;
-  background-color: #fafcfe;
 }
 
 .markdown-preview img {
   display: block !important;
   margin-left: auto !important;
   margin-right: auto !important;
+}
+
+.markdown-preview .copied {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 2.05rem;
+  height: 2.15rem;
+  visibility: visible !important;
+  margin-top: 0.5rem;
+  margin-right: 0.25rem;
+  background-color: #f6f8fa !important;
+  border: 1px solid #d6d8db !important;
+  border-radius: 7px !important;
+  box-shadow: 0px 1px 1px 0px rgb(227, 229, 232) !important;
+}
+
+.markdown-preview .octicon-copy {
+  scale: 1.5;
+  margin-bottom: 0.05rem;
+  fill: rgb(102, 109, 117) !important;
+}
+
+.markdown-preview .octicon-check {
+  scale: 1.5;
+  margin-bottom: 0.05rem;
+  fill: rgb(60, 124, 58) !important;
+}
+
+.markdown-preview .copied:hover {
+  background-color: rgb(243, 244, 246) !important;
+}
+
+.markdown-preview .copied.active {
+  border: 1px solid rgb(60, 124, 58) !important;
 }
 
 /* --------------- */

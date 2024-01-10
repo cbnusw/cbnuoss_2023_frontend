@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Practice from './Practice';
-import NonePracticeParticipant from './NonePracticePostInfo';
+import PracticeListItem from './PracticeListItem';
+import NonePracticeListItem from './NonePracticeListItem';
 
 export default function PracticeList() {
   const [isPracticeListReady, setIsPracticeListReady] = useState(false);
@@ -13,17 +13,18 @@ export default function PracticeList() {
 
   return isPracticeListReady ? (
     <tbody>
-      <Practice />
-      <Practice />
-      <Practice />
-      <Practice />
-      <Practice />
-      <Practice />
-      <Practice />
-      <Practice />
-      <Practice />
-      <Practice />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
+      <PracticeListItem />
     </tbody>
-  ) : null;
-  //   <NonePracticeParticipant />;
+  ) : (
+    <NonePracticeListItem />
+  );
 }

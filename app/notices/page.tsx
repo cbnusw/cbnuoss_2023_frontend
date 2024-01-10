@@ -1,6 +1,6 @@
 import React from 'react';
-import Notice from './components/Notice';
 import Link from 'next/link';
+import NoticeList from './components/NoticeList';
 
 export default function Notices() {
   return (
@@ -78,18 +78,7 @@ export default function Notices() {
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                    <Notice />
-                  </tbody>
+                  <NoticeList />
                 </table>
               </div>
             </div>

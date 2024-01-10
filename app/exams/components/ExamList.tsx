@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Exam from './Exam';
-import NoneExamParticipant from './NoneExamPostInfo';
+import ExamListItem from './ExamListItem';
+import NoneExamListItem from './NoneExamListItem';
 
 export default function ExamList() {
   const [isExamListReady, setIsExamListReady] = useState(false);
@@ -13,17 +13,18 @@ export default function ExamList() {
 
   return isExamListReady ? (
     <tbody>
-      <Exam />
-      <Exam />
-      <Exam />
-      <Exam />
-      <Exam />
-      <Exam />
-      <Exam />
-      <Exam />
-      <Exam />
-      <Exam />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
+      <ExamListItem />
     </tbody>
-  ) : null;
-  // <NoneExamParticipant />
+  ) : (
+    <NoneExamListItem />
+  );
 }
