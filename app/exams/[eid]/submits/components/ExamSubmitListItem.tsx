@@ -1,20 +1,18 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-interface ContestSubmitListItemProps {
-  cid: string;
+interface ExamSubmitListItemProps {
+  eid: string;
 }
 
-export default function ContestSubmitListItem({
-  cid,
-}: ContestSubmitListItemProps) {
+export default function ExamSubmitListItem({ eid }: ExamSubmitListItemProps) {
   const router = useRouter();
 
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        router.push(`/contests/${cid}/submits/${'650af6fe9c2734584192d5fb'}`);
+        router.push(`/exams/${eid}/submits/${'650af6fe9c2734584192d5fb'}`);
       }}
     >
       <th
@@ -23,8 +21,6 @@ export default function ContestSubmitListItem({
       >
         1
       </th>
-      <td className="">충북대학교</td>
-      <td className="">소프트웨어학과</td>
       <td className="">2020123123</td>
       <td className="">홍길동</td>
       <td className="">A+B</td>

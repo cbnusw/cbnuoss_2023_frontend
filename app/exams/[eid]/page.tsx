@@ -25,6 +25,23 @@ export default function ExamDetail(props: DefaultProps) {
 
   const router = useRouter();
 
+  const handleGoToExamSubmits = () => {
+    router.push(`/exams/${eid}/submits`);
+  };
+
+  const handleEditExam = () => {
+    router.push(`/exams/${eid}/edit`);
+  };
+
+  const handleDeleteExam = () => {
+    const userResponse = confirm(
+      '현재 시험 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
+    );
+    if (!userResponse) return;
+    alert('게시글을 삭제하였습니다.');
+    router.push('/exams');
+  };
+
   const handleApplyExam = () => {
     const userResponse = confirm('시험에 응시하시겠습니까?');
     if (!userResponse) return;
@@ -43,19 +60,6 @@ export default function ExamDetail(props: DefaultProps) {
 
     setIsApplyExam(false);
     alert('시험 응시가 취소되었습니다.');
-  };
-
-  const handleEditExam = () => {
-    router.push(`/exams/${eid}/edit`);
-  };
-
-  const handleDeleteExam = () => {
-    const userResponse = confirm(
-      '현재 시험 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
-    );
-    if (!userResponse) return;
-    alert('게시글을 삭제하였습니다.');
-    router.push('/exams');
   };
 
   useEffect(() => {
@@ -134,7 +138,7 @@ export default function ExamDetail(props: DefaultProps) {
           <div>
             <div className="flex gap-3 justify-end">
               <button
-                onClick={() => alert('개발 예정')}
+                onClick={handleGoToExamSubmits}
                 className="flex gap-[0.375rem] items-center text-white bg-[#6860ff] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#5951f0] hover:bg-[#5951f0] box-shadow"
               >
                 <svg
