@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function Practice() {
+export default function PracticeListItem() {
   const router = useRouter();
 
   return (
