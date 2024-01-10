@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function Notice() {
+export default function NoticeListItem() {
   const router = useRouter();
 
   return (

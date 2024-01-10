@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NoneNoticePostInfo() {
+export default function NoneNoticeListItem() {
   return (
     <tr className="border-b dark:border-gray-700 text-xs text-center">
       <th

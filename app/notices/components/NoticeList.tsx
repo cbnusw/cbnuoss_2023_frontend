@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Notice from './Notice';
-import NoneNoticeParticipant from './NoneNoticePostInfo';
+import NoticeListItem from './NoticeListItem';
+import NoneNoticeListItem from './NoneNoticeListItem';
 
 export default function NoticeList() {
   const [isNoticeListReady, setIsNoticeListReady] = useState(false);
@@ -13,17 +13,18 @@ export default function NoticeList() {
 
   return isNoticeListReady ? (
     <tbody>
-      <Notice />
-      <Notice />
-      <Notice />
-      <Notice />
-      <Notice />
-      <Notice />
-      <Notice />
-      <Notice />
-      <Notice />
-      <Notice />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
+      <NoticeListItem />
     </tbody>
-  ) : null;
-  //   <NoneNoticeParticipant />;
+  ) : (
+    <NoneNoticeListItem />
+  );
 }
