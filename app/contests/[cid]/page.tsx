@@ -34,20 +34,6 @@ export default function ContestDetail(props: DefaultProps) {
     router.push(`/contests/${cid}/submits`);
   };
 
-  const handleCancelContest = () => {
-    const userResponse = confirm(
-      '대회 참가 신청을 취소하시겠습니까?\n참가신청 기간 이후에는 다시 신청할 수 없습니다.',
-    );
-    if (!userResponse) return;
-
-    setIsApplyContest(false);
-    alert('대회 참가 신청이 취소되었습니다.');
-  };
-
-  const handleEditContest = () => {
-    router.push(`/contests/${cid}/edit`);
-  };
-
   const handleDeleteExam = () => {
     const userResponse = confirm(
       '현재 대회 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
@@ -66,6 +52,20 @@ export default function ContestDetail(props: DefaultProps) {
     alert(
       '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
     );
+  };
+
+  const handleCancelContest = () => {
+    const userResponse = confirm(
+      '대회 참가 신청을 취소하시겠습니까?\n참가신청 기간 이후에는 다시 신청할 수 없습니다.',
+    );
+    if (!userResponse) return;
+
+    setIsApplyContest(false);
+    alert('대회 참가 신청이 취소되었습니다.');
+  };
+
+  const handleEditContest = () => {
+    router.push(`/contests/${cid}/edit`);
   };
 
   useEffect(() => {
