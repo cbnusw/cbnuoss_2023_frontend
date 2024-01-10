@@ -23,6 +23,8 @@ export default function ContestSubmitListItem({
       >
         1
       </th>
+      <td className="">충북대학교</td>
+      <td className="">소프트웨어학과</td>
       <td className="">2020123123</td>
       <td className="">홍길동</td>
       <td className="">A+B</td>

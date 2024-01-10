@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import UserScoreInfoList from './components/UserScoreInfoList';
 import NoneUserScoreInfoList from './components/NoneUserScoreInfoListItem';
+import Link from 'next/link';
 
 interface DefaultProps {
   params: {
@@ -28,11 +29,14 @@ export default function ContestRankList(props: DefaultProps) {
         <div className="flex flex-col">
           <div className="flex flex-col gap-8">
             <p className="text-2xl font-bold tracking-tight">
-              🏆{' '}
-              <span className="text-[#1048b8]">
-                2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
-              </span>{' '}
-              순위
+              <span className="mr-2">🏆</span>
+              대회 순위
+              <Link
+                href={`/contests/${cid}`}
+                className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+              >
+                (2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
+              </Link>
             </p>
             <div className="flex justify-between items-center pb-3 border-b border-gray-300">
               <div className="flex gap-3">

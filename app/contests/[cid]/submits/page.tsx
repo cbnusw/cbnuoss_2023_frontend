@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import ContestSubmitList from './components/ContestSubmitList';
 
 interface DefaultProps {
@@ -35,6 +36,12 @@ export default function ContestSubmits(props: DefaultProps) {
             <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
           </svg>
           코드 제출 목록
+          <Link
+            href={`/contests/${cid}`}
+            className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+          >
+            (대회: 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
+          </Link>
         </p>
         <div className="flex mt-5 mb-4">
           <div className="flex flex-col relative z-0 w-1/2 group">
@@ -97,6 +104,12 @@ export default function ContestSubmits(props: DefaultProps) {
                     <tr>
                       <th scope="col" className="px-4 py-2">
                         번호
+                      </th>
+                      <th scope="col" className="px-4 py-2">
+                        대학
+                      </th>
+                      <th scope="col" className="px-4 py-2">
+                        학과(부)
                       </th>
                       <th scope="col" className="px-4 py-2">
                         학번
