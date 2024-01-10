@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 interface DefaultProps {
   params: {
-    id: string;
+    eid: string;
   };
 }
 
@@ -21,7 +21,7 @@ export default function ExamDetail(props: DefaultProps) {
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
   const [isApplyExam, setIsApplyExam] = useState(false);
 
-  const eid = props.params.id;
+  const eid = props.params.eid;
 
   const router = useRouter();
 

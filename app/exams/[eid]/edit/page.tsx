@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
-    id: string;
+    eid: string;
   };
 }
 
@@ -81,7 +81,7 @@ export default function EditExam(props: DefaultProps) {
   const courseNameRef = useRef<HTMLInputElement>(null);
   const examPwdRef = useRef<HTMLInputElement>(null);
 
-  const eid = props.params.id;
+  const eid = props.params.eid;
 
   const router = useRouter();
 
