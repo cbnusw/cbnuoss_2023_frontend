@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
-    id: string;
+    pid: string;
   };
 }
 
@@ -51,7 +51,7 @@ export default function EditPractice(props: DefaultProps) {
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
 
-  const pid = props.params.id;
+  const pid = props.params.pid;
 
   const router = useRouter();
 

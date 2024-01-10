@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 interface DefaultProps {
   params: {
-    id: string;
+    pid: string;
   };
 }
 
@@ -19,7 +19,7 @@ export default function PracticeDetail(props: DefaultProps) {
   const [isPracticePostReady, setIsPracticePostReady] = useState(false);
   const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
 
-  const pid = props.params.id;
+  const pid = props.params.pid;
 
   const router = useRouter();
 
