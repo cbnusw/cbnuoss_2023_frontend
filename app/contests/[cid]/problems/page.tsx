@@ -36,16 +36,20 @@ export default function ContestProblems(props: DefaultProps) {
 
   const router = useRouter();
 
+  const handleGoToContestRankList = () => {
+    router.push(`/contests/${cid}/ranklist`);
+  };
+
+  const handleRegisterContestProblem = () => {
+    router.push(`/contests/${cid}/problems/register`);
+  };
+
   const handleChangeProblemOrder = () => {
     changingProblemOrderBtnRef.current?.blur();
     setIsChangingContestProblemOrderActivate((prev) => !prev);
     if (isChagingContestProblemOrderActivate) {
       alert('문제 순서를 변경하였습니다.');
     }
-  };
-
-  const handleRegisterContestProblem = () => {
-    router.push(`/contests/${cid}/problems/register`);
   };
 
   useEffect(() => {
@@ -70,7 +74,7 @@ export default function ContestProblems(props: DefaultProps) {
               {!isChagingContestProblemOrderActivate && (
                 <>
                   <button
-                    onClick={handleChangeProblemOrder}
+                    onClick={handleGoToContestRankList}
                     className="flex gap-[0.375rem] items-center text-white bg-[#0388ca] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#007eb9] hover:bg-[#007eb9] box-shadow"
                   >
                     <svg
