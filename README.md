@@ -1,10 +1,10 @@
 # SW Online Judge
 
 <p>
-  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-000?style=square&logo=next.js&logoColor=white"/>
-  <img alt="Zustand" src="https://img.shields.io/badge/🐻 Zustand-684e4b?style=square&logo=zustand&logoColor=white"/>
-  <img alt="React Query" src="https://img.shields.io/badge/React Query-FF4154?style=square&logo=reactquery&logoColor=white"/>
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=square&logo=tailwindcss&logoColor=white"/>
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-20232A?style=flat&logo=next.js&logoColor=fff&labelColor=grey&color=000"/>  
+  <img alt="Zustand" src="https://img.shields.io/badge/🐻ㅤZustand-684e4b?style=square&logo=zustand&logoColor=white"/>
+  <img alt="React Query" src="https://img.shields.io/badge/React Query-20232A?style=flat&logo=react&logoColor=fff&labelColor=grey&color=FF4154"/>
+  <img alt="Tailwind CSSS" src="https://img.shields.io/badge/Tailwind CSS-20232A?style=flat&logo=tailwindcss&logoColor=fff&labelColor=grey&color=06B6D4"/>
 </p>
 
 ## Getting Started
