@@ -24,7 +24,7 @@ export default function ExamSubmitListItem({ eid }: ExamSubmitListItemProps) {
       <td className="">2020123123</td>
       <td className="">홍길동</td>
       <td className="">A+B</td>
-      <td className="text-blue-500 font-semibold">정답</td>
+      <td className="text-[#0076C0] font-semibold">정답</td>
       <td>
         <span>1527 </span>
         <span className="ml-[-1px] text-red-500">KB</span>
