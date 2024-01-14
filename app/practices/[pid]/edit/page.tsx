@@ -12,9 +12,9 @@ interface DefaultProps {
 
 export default function EditPractice(props: DefaultProps) {
   const practiceInfo = {
-    title: '2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선',
-    maxExeTime: 123,
-    maxMemCap: 456,
+    title: 'A+B',
+    maxExeTime: 1000,
+    maxMemCap: 5,
     problemPdfFileUrl: 'http://localhost:3000/pdfs/test.pdf',
     problemInAndOutFileUrls: [
       'http://localhost:3000/in_and_out/1.in',
@@ -196,7 +196,7 @@ export default function EditPractice(props: DefaultProps) {
                     isMaxExeTimeValidFail ? 'red' : 'gray'
                   }-500 text-xs tracking-widest font-light mt-1`}
                 >
-                  테스트 당 최대 수행 시간을 ms 단위로 입력해주세요
+                  테스트 당 최대 수행 시간을 ms 단위로 입력해 주세요
                 </p>
               </div>
 
@@ -232,7 +232,7 @@ export default function EditPractice(props: DefaultProps) {
                     isMaxMemCapValidFail ? 'red' : 'gray'
                   }-500 text-xs tracking-widest font-light mt-1`}
                 >
-                  테스트 당 최대 사용 메모리를 MB 단위로 입력해주세요
+                  테스트 당 최대 사용 메모리를 MB 단위로 입력해 주세요
                 </p>
               </div>
             </div>
@@ -289,21 +289,21 @@ export default function EditPractice(props: DefaultProps) {
               />
             </div>
           </div>
+        </div>
 
-          <div className="mt-5 pb-2 flex justify-end gap-3">
-            <button
-              onClick={handleCancelContestEdit}
-              className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
-            >
-              취소
-            </button>
-            <button
-              onClick={handleEditPractice}
-              className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
-            >
-              수정
-            </button>
-          </div>
+        <div className="mt-14 pb-2 flex justify-end gap-3">
+          <button
+            onClick={handleCancelContestEdit}
+            className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+          >
+            취소
+          </button>
+          <button
+            onClick={handleEditPractice}
+            className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+          >
+            수정
+          </button>
         </div>
       </div>
     </div>

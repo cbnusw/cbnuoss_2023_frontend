@@ -15,10 +15,8 @@ export default function RegisterPractice() {
   const [isPracticeNameValidFail, setIsPracticeNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
   const [isMaxMemCapValidFail, setIsMaxMemCapValidFail] = useState(false);
-  const [
-    isPracticeFileUploadingValidFail,
-    setIsPracticeFileUploadingValidFail,
-  ] = useState(false);
+  const [isPdfFileUploadingValidFail, setIsPdfFileUploadingValidFail] =
+    useState(false);
   const [
     isInAndOutFileUploadingValidFail,
     setIsInAndOutFileUploadingValidFail,
@@ -77,7 +75,7 @@ export default function RegisterPractice() {
       return;
     }
 
-    if (!isPracticeFileUploadingValidFail) {
+    if (!isPdfFileUploadingValidFail) {
       alert('문제 파일(PDF)을 업로드해 주세요');
       window.scrollTo(0, 0);
       return;
@@ -171,7 +169,7 @@ export default function RegisterPractice() {
                     isMaxExeTimeValidFail ? 'red' : 'gray'
                   }-500 text-xs tracking-widest font-light mt-1`}
                 >
-                  테스트 당 최대 수행 시간을 ms 단위로 입력해주세요
+                  테스트 당 최대 수행 시간을 ms 단위로 입력해 주세요
                 </p>
               </div>
 
@@ -207,7 +205,7 @@ export default function RegisterPractice() {
                     isMaxMemCapValidFail ? 'red' : 'gray'
                   }-500 text-xs tracking-widest font-light mt-1`}
                 >
-                  테스트 당 최대 사용 메모리를 MB 단위로 입력해주세요
+                  테스트 당 최대 사용 메모리를 MB 단위로 입력해 주세요
                 </p>
               </div>
             </div>
@@ -217,8 +215,8 @@ export default function RegisterPractice() {
             <MyDropzone
               type="pdf"
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
-              setIsFileUploaded={setIsPracticeFileUploadingValidFail}
-              isFileUploaded={isPracticeFileUploadingValidFail}
+              setIsFileUploaded={setIsPdfFileUploadingValidFail}
+              isFileUploaded={isPdfFileUploadingValidFail}
               initPdfUrl={''}
               initInAndOutFileUrls={[]}
               setUploadedPdfFileUrl={setUploadedPdfFileUrl}
@@ -264,21 +262,21 @@ export default function RegisterPractice() {
               />
             </div>
           </div>
+        </div>
 
-          <div className="mt-5 pb-2 flex justify-end gap-3">
-            <button
-              onClick={handleCancelContestRegister}
-              className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
-            >
-              취소
-            </button>
-            <button
-              onClick={handleRegisterPractice}
-              className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
-            >
-              등록
-            </button>
-          </div>
+        <div className="mt-14 pb-2 flex justify-end gap-3">
+          <button
+            onClick={handleCancelContestRegister}
+            className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+          >
+            취소
+          </button>
+          <button
+            onClick={handleRegisterPractice}
+            className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+          >
+            등록
+          </button>
         </div>
       </div>
     </div>
