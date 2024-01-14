@@ -70,9 +70,6 @@ export default function Practices() {
                       <th scope="col" className="px-4 py-2">
                         작성자
                       </th>
-                      <th scope="col" className="px-4 py-2">
-                        난이도
-                      </th>
                     </tr>
                   </thead>
                   <PracticeList />

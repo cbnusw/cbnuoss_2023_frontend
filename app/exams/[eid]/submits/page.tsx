@@ -15,7 +15,7 @@ export default function ExamSubmits(props: DefaultProps) {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="flex items-center text-2xl font-semibold">
+        <p className="flex items-center text-2xl font-semibold tracking-tight">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="40"

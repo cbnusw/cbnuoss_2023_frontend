@@ -21,7 +21,6 @@ export default function PracticeListItem() {
       </th>
       <td className="hover:underline focus:underline">A+B</td>
       <td className="font-medium">신재혁</td>
-      <td className="">3</td>
     </tr>
   );
 }
