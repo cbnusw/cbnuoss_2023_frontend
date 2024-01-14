@@ -9,6 +9,7 @@ interface MyDropzoneProps {
   isFileUploaded: boolean;
   initPdfUrl: string;
   initInAndOutFileUrls: string[];
+  setUploadedCodeFileUrl?: (url: string) => void; // 소스 코드 파일 URL 업데이트 함수
   setUploadedPdfFileUrl?: (url: string) => void; // PDF 파일 URL 업데이트 함수
   setUploadedProblemInAndOutFileUrls?: (urls: string[]) => void; // in/out 파일 URL 업데이트 함수
 }
@@ -35,19 +36,23 @@ function MyDropzone(props: MyDropzoneProps) {
     isFileUploaded,
     initPdfUrl,
     initInAndOutFileUrls,
+    setUploadedCodeFileUrl,
     setUploadedPdfFileUrl,
     setUploadedProblemInAndOutFileUrls,
   } = props;
 
+  const [isDragEntered, setIsDragEntered] = useState(false);
+  const [isDragAndDropped, setIsDragAndDropped] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [fileList, setFileList] = useState<FileObject[]>([]);
   const [fileNameList, setFileNameList] = useState<string[]>([]);
   const [fileURLList, setFileURLList] = useState<string[]>([]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      const firstFile = acceptedFiles[0];
       switch (type) {
         case 'pdf':
-          const firstFile = acceptedFiles[0];
           if (firstFile) {
             const fileUrl = URL.createObjectURL(firstFile);
             setFileList([{ name: firstFile.name, url: fileUrl }]);
@@ -60,6 +65,8 @@ function MyDropzone(props: MyDropzoneProps) {
         case 'inOut':
           let newFilePairs: FileObject[] = [];
           let remainingFiles = [...acceptedFiles]; // Create a copy to manipulate while looping
+
+          newFilePairs = [...fileList];
 
           // Use a while loop since we'll be modifying the array during iteration
           while (remainingFiles.length > 0) {
@@ -101,30 +108,43 @@ function MyDropzone(props: MyDropzoneProps) {
             } else {
               // If extension is not 'in' or 'out', simply remove the current file from the list
               remainingFiles.splice(0, 1);
+              // if ()
             }
           }
 
-          setFileList((prevList) => [...prevList, ...newFilePairs]);
-          setFileNameList((prevList) => [
-            ...prevList,
-            ...newFilePairs.map((f) => f.name),
-          ]);
-          setFileURLList((prevList) => [
-            ...prevList,
-            ...newFilePairs.map((f) => f.url),
-          ]);
+          // Update state with both existing and new files
+          setFileList(newFilePairs);
+          setFileNameList(newFilePairs.map((f) => f.name));
+          setFileURLList(newFilePairs.map((f) => f.url));
 
           // Update in/out file URLs
           const inOutUrls = newFilePairs.map((f) => f.url);
           setUploadedProblemInAndOutFileUrls?.(inOutUrls);
 
-          // 파일 쌍 검사 및 상태 업데이트
+          // Check for valid pairs
           const hasValidPair = checkForValidPairs(newFilePairs);
           setIsFileUploaded(hasValidPair);
           break;
+        case 'code':
+          if (firstFile) {
+            const fileUrl = URL.createObjectURL(firstFile);
+            setFileList([{ name: firstFile.name, url: fileUrl }]);
+            setFileNameList([firstFile.name]);
+            setFileURLList([fileUrl]);
+            setIsFileUploaded(true);
+            setUploadedCodeFileUrl?.(fileUrl);
+          }
+          break;
       }
     },
-    [type, setIsFileUploaded, props],
+    [
+      type,
+      fileList,
+      setIsFileUploaded,
+      setUploadedCodeFileUrl,
+      setUploadedPdfFileUrl,
+      setUploadedProblemInAndOutFileUrls,
+    ],
   );
 
   const checkForValidPairs = (fileObjects: FileObject[]) => {
@@ -152,6 +172,10 @@ function MyDropzone(props: MyDropzoneProps) {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
+    onDragEnter: () => setIsDragEntered(true),
+    onDragLeave: () => setIsDragEntered(false),
+    onDropRejected: () => setIsDragEntered(false),
+    onDropAccepted: () => setIsDragAndDropped(true),
     accept: type === 'pdf' ? { 'application/pdf': [] } : undefined,
     multiple: type === 'pdf' ? false : true,
   });
@@ -183,7 +207,14 @@ function MyDropzone(props: MyDropzoneProps) {
     setUploadedProblemInAndOutFileUrls?.(updatedFileURLList);
   };
 
-  const [isInitialized, setIsInitialized] = useState(false);
+  // Dropzone 테두리 활성화/비활성화 로직
+  useEffect(() => {
+    if (isDragAndDropped) setIsDragEntered(false);
+  }, [isDragAndDropped, fileList.length, setIsFileUploaded]);
+
+  useEffect(() => {
+    if (!isFileUploaded) setIsDragAndDropped(false);
+  }, [isDragEntered, isFileUploaded, setIsDragAndDropped]);
 
   useEffect(() => {
     if (!isInitialized) {
@@ -227,23 +258,39 @@ function MyDropzone(props: MyDropzoneProps) {
       <label
         {...getRootProps()}
         htmlFor="dropzone-file"
-        className="flex flex-col items-center justify-center w-full h-40 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+        className={`flex flex-col items-center justify-center w-full h-40 duration-150 border-2 border-gray-${
+          isDragEntered ? '500' : isFileUploaded ? '500' : '300'
+        } border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600`}
       >
         <div className="flex flex-col items-center justify-center pt-5 pb-6">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="40"
-            viewBox="0 -960 960 960"
-            width="40"
-            fill="#6b7280"
-          >
-            <path d="M340.666-440.666h38v-82H424q16.149 0 27.074-10.925t10.925-27.075V-606q0-16.15-10.925-27.075T424-644h-83.334v203.334Zm38-120V-606H424v45.334h-45.334Zm126 120h82.667q15.667 0 26.833-10.925 11.167-10.925 11.167-27.075V-606q0-16.15-11.167-27.075Q603-644 587.333-644h-82.667v203.334Zm38-38V-606h44.667v127.334h-44.667Zm128.667 38h38v-82H756v-38h-46.667V-606H756v-38h-84.667v203.334ZM279.999-213.333q-27 0-46.833-19.833t-19.833-46.833v-533.335q0-27 19.833-46.833T279.999-880h533.335q27 0 46.833 19.833T880-813.334v533.335q0 27-19.833 46.833t-46.833 19.833H279.999Zm0-66.666h533.335v-533.335H279.999v533.335ZM146.666-80q-27 0-46.833-19.833T80-146.666v-600.001h66.666v600.001h600.001V-80H146.666Zm133.333-733.334v533.335-533.335Z" />
-          </svg>
+          {type === 'pdf' ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="40"
+              viewBox="0 -960 960 960"
+              width="40"
+              fill="#6b7280"
+            >
+              <path d="M340.666-440.666h38v-82H424q16.149 0 27.074-10.925t10.925-27.075V-606q0-16.15-10.925-27.075T424-644h-83.334v203.334Zm38-120V-606H424v45.334h-45.334Zm126 120h82.667q15.667 0 26.833-10.925 11.167-10.925 11.167-27.075V-606q0-16.15-11.167-27.075Q603-644 587.333-644h-82.667v203.334Zm38-38V-606h44.667v127.334h-44.667Zm128.667 38h38v-82H756v-38h-46.667V-606H756v-38h-84.667v203.334ZM279.999-213.333q-27 0-46.833-19.833t-19.833-46.833v-533.335q0-27 19.833-46.833T279.999-880h533.335q27 0 46.833 19.833T880-813.334v533.335q0 27-19.833 46.833t-46.833 19.833H279.999Zm0-66.666h533.335v-533.335H279.999v533.335ZM146.666-80q-27 0-46.833-19.833T80-146.666v-600.001h66.666v600.001h600.001V-80H146.666Zm133.333-733.334v533.335-533.335Z" />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="45"
+              viewBox="0 -960 960 960"
+              width="45"
+              fill="#6b7280"
+              className="relative top-1"
+            >
+              <path d="M450.001-402.003v147.387q0 12.768 8.615 21.384 8.615 8.615 21.384 8.615t21.384-8.615q8.615-8.616 8.615-21.384v-147.387l52.925 52.925q4.461 4.461 10.038 6.692t11.153 1.923q5.577-.308 11.039-2.538 5.461-2.231 9.922-6.693 8.693-9.307 9-21.076.308-11.769-9-21.076l-99.769-99.769q-5.615-5.616-11.846-7.923-6.23-2.308-13.461-2.308t-13.461 2.308q-6.231 2.307-11.846 7.923l-99.769 99.769q-8.923 8.922-8.808 20.884.115 11.961 9.423 21.268 9.307 8.693 21.076 9 11.769.308 21.077-9l52.309-52.309ZM252.309-100.001q-30.308 0-51.308-21t-21-51.308v-615.382q0-30.308 21-51.308t51.308-21h287.769q14.461 0 27.807 5.616 13.346 5.615 23.193 15.461l167.844 167.844q9.846 9.847 15.461 23.193 5.616 13.346 5.616 27.807v447.769q0 30.308-21 51.308t-51.308 21H252.309Zm287.692-556.154V-800H252.309q-4.616 0-8.463 3.846-3.846 3.847-3.846 8.463v615.382q0 4.616 3.846 8.463 3.847 3.846 8.463 3.846h455.382q4.616 0 8.463-3.846 3.846-3.847 3.846-8.463v-447.692H576.155q-15.461 0-25.807-10.347-10.347-10.346-10.347-25.807ZM240-800v179.999V-800v640V-800Z" />
+            </svg>
+          )}
+
           <p className="mt-5 mb-1 text-sm text-gray-500 dark:text-gray-400">
             <span className="font-semibold text-gray-500">{guideMsg}</span>
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">
-            {fileNameList[0] && type === 'pdf' ? (
+            {fileNameList[0] && (type === 'pdf' || type === 'code') ? (
               <p className="text-gray-500 flex">
                 선택된 파일:
                 <pre className="text-blue-500 font-bold">
@@ -270,7 +317,7 @@ function MyDropzone(props: MyDropzoneProps) {
           getInAndOutFilePairs().map((pair, index) => (
             <div
               key={index}
-              className="flex justify-between border border-gray-400 rounded-[0.25rem] w-full py-3 px-2"
+              className="flex justify-between border border-gray-400 rounded-[0.25rem] w-full px-2 py-2"
             >
               <div className="flex items-center gap-3">
                 <svg
