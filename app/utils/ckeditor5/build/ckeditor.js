@@ -411,7 +411,7 @@
     'Paragraph sign': '단락 기호',
     'Partial differential': '편미분',
     'Paste raw HTML here...': '원시 HTML을 여기에 붙여넣으세요...',
-    'Paste the media URL in the input.': '미디어 URL을 입력해주세요.',
+    'Paste the media URL in the input.': '미디어 URL을 입력해 주세요.',
     'Per mille sign': '퍼 마일 기호',
     'Per ten thousand sign': '만분율 기호',
     'Peseta sign': '페세타 기호',
@@ -37663,12 +37663,10 @@
         }
         _setupDropMarker() {
           const t = this.editor;
-          t.conversion
-            .for('editingDowncast')
-            .markerToHighlight({
-              model: 'drop-target',
-              view: { classes: ['ck-clipboard-drop-target-range'] },
-            });
+          t.conversion.for('editingDowncast').markerToHighlight({
+            model: 'drop-target',
+            view: { classes: ['ck-clipboard-drop-target-range'] },
+          });
           t.conversion.for('editingDowncast').markerToElement({
             model: 'drop-target',
             view: (e, { writer: n }) => {
@@ -37988,12 +37986,10 @@
         _setupDropMarker() {
           const t = this.editor;
           t.ui.view.body.add(this._dropTargetLineView);
-          t.conversion
-            .for('editingDowncast')
-            .markerToHighlight({
-              model: 'drop-target',
-              view: { classes: ['ck-clipboard-drop-target-range'] },
-            });
+          t.conversion.for('editingDowncast').markerToHighlight({
+            model: 'drop-target',
+            view: { classes: ['ck-clipboard-drop-target-range'] },
+          });
           t.conversion.for('editingDowncast').markerToElement({
             model: 'drop-target',
             view: (e, { writer: n }) => {
@@ -38653,18 +38649,16 @@
           if (!i || !i.closest('.ck-editor__editable')) {
             return;
           }
-          this.editor.editing.view
-            .getObserver(ClipboardObserver)
-            .onDomEvent({
-              ...t,
-              type: t.type,
-              dataTransfer: t.dataTransfer,
-              target: i,
-              clientX: e,
-              clientY: n,
-              preventDefault: () => t.preventDefault(),
-              stopPropagation: () => t.stopPropagation(),
-            });
+          this.editor.editing.view.getObserver(ClipboardObserver).onDomEvent({
+            ...t,
+            type: t.type,
+            dataTransfer: t.dataTransfer,
+            target: i,
+            clientX: e,
+            clientY: n,
+            preventDefault: () => t.preventDefault(),
+            stopPropagation: () => t.stopPropagation(),
+          });
         }
         _handleBlockDragEnd() {
           this._isBlockDragging = false;
@@ -44926,12 +44920,10 @@
             columns: 5,
           });
           t.data.addStyleProcessorRules(x_);
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              view: { name: 'span', styles: { 'background-color': /[\s\S]+/ } },
-              model: { key: bR, value: wR('background-color') },
-            });
+          t.conversion.for('upcast').elementToAttribute({
+            view: { name: 'span', styles: { 'background-color': /[\s\S]+/ } },
+            model: { key: bR, value: wR('background-color') },
+          });
           t.conversion
             .for('downcast')
             .attributeToElement({ model: bR, view: AR('background-color') });
@@ -45093,18 +45085,14 @@
             ],
             columns: 5,
           });
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              view: { name: 'span', styles: { color: /[\s\S]+/ } },
-              model: { key: pR, value: wR('color') },
-            });
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              view: { name: 'font', attributes: { color: /^#?\w+$/ } },
-              model: { key: pR, value: (t) => t.getAttribute('color') },
-            });
+          t.conversion.for('upcast').elementToAttribute({
+            view: { name: 'span', styles: { color: /[\s\S]+/ } },
+            model: { key: pR, value: wR('color') },
+          });
+          t.conversion.for('upcast').elementToAttribute({
+            view: { name: 'font', attributes: { color: /^#?\w+$/ } },
+            model: { key: pR, value: (t) => t.getAttribute('color') },
+          });
           t.conversion
             .for('downcast')
             .attributeToElement({ model: pR, view: AR('color') });
@@ -45219,32 +45207,26 @@
         }
         _prepareAnyValueConverters() {
           const t = this.editor;
-          t.conversion
-            .for('downcast')
-            .attributeToElement({
-              model: fR,
-              view: (t, { writer: e }) =>
-                e.createAttributeElement(
-                  'span',
-                  { style: 'font-family:' + t },
-                  { priority: 7 },
-                ),
-            });
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              model: { key: fR, value: (t) => t.getStyle('font-family') },
-              view: { name: 'span', styles: { 'font-family': /.*/ } },
-            });
+          t.conversion.for('downcast').attributeToElement({
+            model: fR,
+            view: (t, { writer: e }) =>
+              e.createAttributeElement(
+                'span',
+                { style: 'font-family:' + t },
+                { priority: 7 },
+              ),
+          });
+          t.conversion.for('upcast').elementToAttribute({
+            model: { key: fR, value: (t) => t.getStyle('font-family') },
+            view: { name: 'span', styles: { 'font-family': /.*/ } },
+          });
         }
         _prepareCompatibilityConverter() {
           const t = this.editor;
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              view: { name: 'font', attributes: { face: /.*/ } },
-              model: { key: fR, value: (t) => t.getAttribute('face') },
-            });
+          t.conversion.for('upcast').elementToAttribute({
+            view: { name: 'font', attributes: { face: /.*/ } },
+            model: { key: fR, value: (t) => t.getAttribute('face') },
+          });
         }
       }
       const FR =
@@ -45482,12 +45464,10 @@
               );
             },
           });
-          e.conversion
-            .for('upcast')
-            .elementToAttribute({
-              model: { key: mR, value: (t) => t.getStyle('font-size') },
-              view: { name: 'span', styles: { 'font-size': /.*/ } },
-            });
+          e.conversion.for('upcast').elementToAttribute({
+            model: { key: mR, value: (t) => t.getStyle('font-size') },
+            view: { name: 'span', styles: { 'font-size': /.*/ } },
+          });
         }
         _prepareCompatibilityConverter() {
           const t = this.editor;
@@ -46851,13 +46831,11 @@
           }
         }
         _addDefaultH1Conversion(t) {
-          t.conversion
-            .for('upcast')
-            .elementToElement({
-              model: 'heading1',
-              view: 'h1',
-              converterPriority: I.low + 1,
-            });
+          t.conversion.for('upcast').elementToElement({
+            model: 'heading1',
+            view: 'h1',
+            converterPriority: I.low + 1,
+          });
         }
       }
       function ZV(t) {
@@ -47608,15 +47586,13 @@
             name: 'div',
             classes: 'raw-html-embed',
           });
-          t.conversion
-            .for('upcast')
-            .elementToElement({
-              view: { name: 'div', classes: 'raw-html-embed' },
-              model: (t, { writer: e }) =>
-                e.createElement('rawHtml', {
-                  value: t.getCustomProperty('$rawContent'),
-                }),
-            });
+          t.conversion.for('upcast').elementToElement({
+            view: { name: 'div', classes: 'raw-html-embed' },
+            model: (t, { writer: e }) =>
+              e.createElement('rawHtml', {
+                value: t.getCustomProperty('$rawContent'),
+              }),
+          });
           t.conversion.for('dataDowncast').elementToElement({
             model: 'rawHtml',
             view: (t, { writer: e }) =>
@@ -48783,12 +48759,10 @@
           const n = t.plugins.get('ImageUtils');
           const i = t.plugins.get('ImageCaptionUtils');
           const o = t.t;
-          t.conversion
-            .for('upcast')
-            .elementToElement({
-              view: (t) => i.matchImageCaptionViewElement(t),
-              model: 'caption',
-            });
+          t.conversion.for('upcast').elementToElement({
+            view: (t) => i.matchImageCaptionViewElement(t),
+            model: 'caption',
+          });
           t.conversion.for('dataDowncast').elementToElement({
             model: 'caption',
             view: (t, { writer: e }) => {
@@ -49971,15 +49945,13 @@
               }
             }),
           );
-          e.conversion
-            .for('upcast')
-            .attributeToAttribute({
-              view: {
-                name: t === 'imageBlock' ? 'figure' : 'img',
-                styles: { width: /.+/ },
-              },
-              model: { key: 'width', value: (t) => t.getStyle('width') },
-            });
+          e.conversion.for('upcast').attributeToAttribute({
+            view: {
+              name: t === 'imageBlock' ? 'figure' : 'img',
+              styles: { width: /.+/ },
+            },
+            model: { key: 'width', value: (t) => t.getStyle('width') },
+          });
         }
       }
       const Tj = {
@@ -51368,18 +51340,14 @@
           t.conversion
             .for('dataDowncast')
             .attributeToElement({ model: 'linkHref', view: _M });
-          t.conversion
-            .for('editingDowncast')
-            .attributeToElement({
-              model: 'linkHref',
-              view: (t, e) => _M(vM(t), e),
-            });
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              view: { name: 'a', attributes: { href: true } },
-              model: { key: 'linkHref', value: (t) => t.getAttribute('href') },
-            });
+          t.conversion.for('editingDowncast').attributeToElement({
+            model: 'linkHref',
+            view: (t, e) => _M(vM(t), e),
+          });
+          t.conversion.for('upcast').elementToAttribute({
+            view: { name: 'a', attributes: { href: true } },
+            model: { key: 'linkHref', value: (t) => t.getAttribute('href') },
+          });
           t.commands.add('link', new OH(t));
           t.commands.add('unlink', new jH(t));
           const e = xM(t.t, EM(t.config.get('link.decorators')));
@@ -51444,12 +51412,10 @@
                 }
               },
             });
-            e.conversion
-              .for('upcast')
-              .elementToAttribute({
-                view: { name: 'a', ...n._createPattern() },
-                model: { key: n.id },
-              });
+            e.conversion.for('upcast').elementToAttribute({
+              view: { name: 'a', ...n._createPattern() },
+              model: { key: n.id },
+            });
           });
         }
         _enableLinkOpen() {
@@ -51957,24 +51923,20 @@
           this._balloon = t.plugins.get(KE);
           this._createToolbarLinkButton();
           this._enableBalloonActivators();
-          t.conversion
-            .for('editingDowncast')
-            .markerToHighlight({
-              model: mU,
-              view: { classes: ['ck-fake-link-selection'] },
-            });
-          t.conversion
-            .for('editingDowncast')
-            .markerToElement({
-              model: mU,
-              view: {
-                name: 'span',
-                classes: [
-                  'ck-fake-link-selection',
-                  'ck-fake-link-selection_collapsed',
-                ],
-              },
-            });
+          t.conversion.for('editingDowncast').markerToHighlight({
+            model: mU,
+            view: { classes: ['ck-fake-link-selection'] },
+          });
+          t.conversion.for('editingDowncast').markerToElement({
+            model: mU,
+            view: {
+              name: 'span',
+              classes: [
+                'ck-fake-link-selection',
+                'ck-fake-link-selection_collapsed',
+              ],
+            },
+          });
         }
         destroy() {
           super.destroy();
@@ -58656,12 +58618,10 @@
           const e = t.model;
           const n = e.document;
           e.schema.extend('$text', { allowAttributes: 'mention' });
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              view: { name: 'span', key: 'data-mention', classes: 'mention' },
-              model: { key: 'mention', value: (t) => eZ(t) },
-            });
+          t.conversion.for('upcast').elementToAttribute({
+            view: { name: 'span', key: 'data-mention', classes: 'mention' },
+            model: { key: 'mention', value: (t) => eZ(t) },
+          });
           t.conversion
             .for('downcast')
             .attributeToElement({ model: 'mention', view: iZ });
@@ -61499,12 +61459,10 @@
           t.model.schema.extend('$text', {
             allowAttributes: ['restrictedEditingException'],
           });
-          t.conversion
-            .for('upcast')
-            .elementToAttribute({
-              model: 'restrictedEditingException',
-              view: { name: 'span', classes: 'restricted-editing-exception' },
-            });
+          t.conversion.for('upcast').elementToAttribute({
+            model: 'restrictedEditingException',
+            view: { name: 'span', classes: 'restricted-editing-exception' },
+          });
           t.conversion.for('downcast').attributeToElement({
             model: 'restrictedEditingException',
             view: (t, { writer: e }) => {
