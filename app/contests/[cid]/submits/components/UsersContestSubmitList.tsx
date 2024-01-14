@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import ContestSubmitListItem from './ContestSubmitListItem';
-import NoneContestSubmitListItem from './NoneContestSubmitListItem';
+import UsersContestSubmitListItem from './UsersContestSubmitListItem';
+import NoneUsersContestSubmitListItem from './NoneUsersContestSubmitListItem';
 
 interface ContestSubmitListProps {
   cid: string;
 }
 
-export default function ContestSubmitList({ cid }: ContestSubmitListProps) {
+export default function UsersContestSubmitList({
+  cid,
+}: ContestSubmitListProps) {
   const [isSubmitListReady, setIsSumbitListReady] = useState(false);
 
   const numberOfItems = 10;
@@ -20,10 +22,10 @@ export default function ContestSubmitList({ cid }: ContestSubmitListProps) {
   return isSubmitListReady ? (
     <tbody>
       {Array.from({ length: numberOfItems }, (_, idx) => (
-        <ContestSubmitListItem key={idx} cid={cid} />
+        <UsersContestSubmitListItem key={idx} cid={cid} />
       ))}
     </tbody>
   ) : (
-    <NoneContestSubmitListItem />
+    <NoneUsersContestSubmitListItem />
   );
 }

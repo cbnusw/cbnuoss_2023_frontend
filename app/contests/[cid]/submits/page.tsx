@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import ContestSubmitList from './components/ContestSubmitList';
+import UsersContestSubmitList from './components/UsersContestSubmitList';
 
 interface DefaultProps {
   params: {
@@ -9,13 +9,13 @@ interface DefaultProps {
   };
 }
 
-export default function ContestSubmits(props: DefaultProps) {
+export default function UsersContestSubmits(props: DefaultProps) {
   const cid = props.params.cid;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="flex items-center text-2xl font-semibold">
+        <p className="flex items-center text-2xl font-semibold tracking-tight">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             height="40"
@@ -137,7 +137,7 @@ export default function ContestSubmits(props: DefaultProps) {
                       </th>
                     </tr>
                   </thead>
-                  <ContestSubmitList cid={cid} />
+                  <UsersContestSubmitList cid={cid} />
                 </table>
               </div>
             </div>
