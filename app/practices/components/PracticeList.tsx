@@ -3,15 +3,21 @@
 import React, { useEffect, useState } from 'react';
 import PracticeListItem from './PracticeListItem';
 import NonePracticeListItem from './NonePracticeListItem';
+import Loading from '@/app/loading';
 
 export default function PracticeList() {
-  const [isPracticeListReady, setIsPracticeListReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isPracticeListEmpty, setIsPracticeListEmpty] = useState(true);
 
   useEffect(() => {
-    setIsPracticeListReady(true);
+    setIsLoading(false);
+    setIsPracticeListEmpty(false);
   }, []);
 
-  return isPracticeListReady ? (
+  if (isLoading) return <Loading />;
+  if (isPracticeListEmpty) return <NonePracticeListItem />;
+
+  return (
     <tbody>
       <PracticeListItem />
       <PracticeListItem />
@@ -24,7 +30,5 @@ export default function PracticeList() {
       <PracticeListItem />
       <PracticeListItem />
     </tbody>
-  ) : (
-    <NonePracticeListItem />
   );
 }

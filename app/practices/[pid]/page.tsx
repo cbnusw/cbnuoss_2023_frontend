@@ -16,8 +16,7 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
 });
 
 export default function PracticeProblem(props: DefaultProps) {
-  const [isPracticePostReady, setIsPracticePostReady] = useState(false);
-  const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const pid = props.params.pid;
 
@@ -37,11 +36,12 @@ export default function PracticeProblem(props: DefaultProps) {
   };
 
   useEffect(() => {
-    setIsMarkdownPreviewReady(true);
-    setIsPracticePostReady(true);
+    setIsLoading(false);
   }, []);
 
-  return isPracticePostReady && isMarkdownPreviewReady ? (
+  if (isLoading) return <Loading />;
+
+  return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
@@ -143,7 +143,5 @@ export default function PracticeProblem(props: DefaultProps) {
         </div>
       </div>
     </div>
-  ) : (
-    <Loading />
   );
 }
