@@ -1,8 +1,9 @@
 'use client';
 
+import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
@@ -66,6 +67,7 @@ export default function EditNotice(props: DefaultProps) {
     noticePwd: 'owrejreoi12321',
   };
 
+  const [isLoading, setIsLoading] = useState(true);
   const [noticeName, setNoticeName] = useState(noticeInfo.title);
   const [editorContent, setEditorContent] = useState(noticeInfo.content);
   const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(
@@ -125,6 +127,12 @@ export default function EditNotice(props: DefaultProps) {
 
     alert('수정 기능 개발 예정');
   };
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
