@@ -1,13 +1,13 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-interface ContestSubmitListItemProps {
+interface UsersContestSubmitListItemProps {
   cid: string;
 }
 
 export default function UsersContestSubmitListItem({
   cid,
-}: ContestSubmitListItemProps) {
+}: UsersContestSubmitListItemProps) {
   const router = useRouter();
 
   return (

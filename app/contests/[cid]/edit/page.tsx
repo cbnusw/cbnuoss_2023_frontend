@@ -1,9 +1,8 @@
 'use client';
 
-import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
@@ -54,7 +53,6 @@ export default function EditContest(props: DefaultProps) {
     contestProblemsPwd: 'dfkjnfdhreiu5435',
   };
 
-  const [isEditorReady, setIsEditorReady] = useState(false);
   const [contestName, setContestName] = useState(contestInfo.title);
   const [editorContent, setEditorContent] = useState();
   const [contestStartDateTime, setContestStartDateTime] = useState(
@@ -172,10 +170,6 @@ export default function EditContest(props: DefaultProps) {
     alert('수정 기능 개발 예정');
   };
 
-  useEffect(() => {
-    setIsEditorReady(true);
-  }, []);
-
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
@@ -216,17 +210,12 @@ export default function EditContest(props: DefaultProps) {
           </p>
         </div>
 
-        {isEditorReady ? (
-          <div className="w-full mx-auto overflow-auto">
-            <DynamicEditor
-              isEditorReady={isEditorReady}
-              initEditorContent={contestInfo.content}
-              onEditorChange={setEditorContent}
-            />
-          </div>
-        ) : (
-          <Loading />
-        )}
+        <div className="w-full mx-auto overflow-auto">
+          <DynamicEditor
+            initEditorContent={contestInfo.content}
+            onEditorChange={setEditorContent}
+          />
+        </div>
 
         <div className="mt-8">
           <p>대회 시간</p>

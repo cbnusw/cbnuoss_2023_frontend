@@ -18,8 +18,7 @@ const MarkdownPreview = dynamic(
 );
 
 export default function ContestDetail(props: DefaultProps) {
-  const [isContestPostReady, setIsContestPostReady] = useState(false);
-  const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isApplyContest, setIsApplyContest] = useState(false);
 
   const cid = props.params.cid;
@@ -73,11 +72,12 @@ export default function ContestDetail(props: DefaultProps) {
   };
 
   useEffect(() => {
-    setIsContestPostReady(true);
-    setIsMarkdownPreviewReady(true);
+    setIsLoading(false);
   }, []);
 
-  return isContestPostReady && isMarkdownPreviewReady ? (
+  if (isLoading) return <Loading />;
+
+  return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
@@ -119,10 +119,9 @@ export default function ContestDetail(props: DefaultProps) {
         </div>
 
         <div className="border-b mt-8 mb-4 pb-5">
-          {isMarkdownPreviewReady ? (
-            <MarkdownPreview
-              className="markdown-preview"
-              source={`
+          <MarkdownPreview
+            className="markdown-preview"
+            source={`
 # 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
 
 본선: **7월 8일 (토) 14:00~16:00 (대면)**  
@@ -146,8 +145,7 @@ export default function ContestDetail(props: DefaultProps) {
 
 ![2](https://github.com/cbnusw/cbnuoss_2023_frontend/assets/56868605/639eb260-6567-472c-8c17-79d62e2e81fd)
 `}
-            />
-          ) : null}
+          />
         </div>
         <div>
           <div className="flex gap-3 justify-end">
@@ -360,7 +358,5 @@ export default function ContestDetail(props: DefaultProps) {
         </div>
       </div>
     </div>
-  ) : (
-    <Loading />
   );
 }

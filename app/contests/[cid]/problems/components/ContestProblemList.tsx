@@ -9,6 +9,7 @@ import {
   Droppable,
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/navigation';
+import Loading from '@/app/loading';
 
 interface ContestProblemListProps {
   cid: string;
@@ -19,9 +20,8 @@ export default function ContestProblemList({
   cid,
   isChagingContestProblemOrderActivate,
 }: ContestProblemListProps) {
-  const [isContestProblemListReady, setIsContestProblemListReady] =
-    useState(false);
-  const [winReady, setwinReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isProblemListEmpty, setIsProblemListEmpty] = useState(true);
 
   const [datas, setDatas] = useState([
     { id: '650ae1a19c2734584192d58e', idx: 'A', problemTitle: 'A+B' },
@@ -50,11 +50,14 @@ export default function ContestProblemList({
   };
 
   useEffect(() => {
-    setIsContestProblemListReady(true);
-    setwinReady(true);
+    setIsLoading(false);
+    setIsProblemListEmpty(false);
   }, []);
 
-  return isContestProblemListReady && winReady ? (
+  if (isLoading) return <Loading />;
+  if (isProblemListEmpty) return <NoneContestProblemListItem />;
+
+  return (
     <div className="mb-14">
       {/* 드래그 영역 */}
       <DragDropContext onDragEnd={handleChangeProblemOrder}>
@@ -117,7 +120,5 @@ export default function ContestProblemList({
         </Droppable>
       </DragDropContext>
     </div>
-  ) : (
-    <NoneContestProblemListItem />
   );
 }

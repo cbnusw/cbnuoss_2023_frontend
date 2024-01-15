@@ -14,8 +14,8 @@ interface DefaultProps {
 }
 
 export default function ContestRankList(props: DefaultProps) {
-  const [isContestRankListReady, setIsContestRankListReady] = useState(false);
-  const [isUserScoreInfoListReady, setIsUserScoreInfoListReady] =
+  const [isLoading, setIsLoading] = useState(true);
+  const [isUserScoreInfoListEmpty, setIsUserScoreInfoListEmpty] =
     useState(true);
 
   const cid = props.params.cid;
@@ -27,10 +27,13 @@ export default function ContestRankList(props: DefaultProps) {
   };
 
   useEffect(() => {
-    setIsContestRankListReady(true);
+    setIsLoading(false);
+    setIsUserScoreInfoListEmpty(false);
   }, []);
 
-  return isContestRankListReady ? (
+  if (isLoading) return <Loading />;
+
+  return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
@@ -86,7 +89,9 @@ export default function ContestRankList(props: DefaultProps) {
           </div>
         </div>
 
-        {isUserScoreInfoListReady ? (
+        {isUserScoreInfoListEmpty ? (
+          <NoneUserScoreInfoList />
+        ) : (
           <>
             <div className="flex mt-4 justify-between items-center">
               <span>
@@ -101,12 +106,8 @@ export default function ContestRankList(props: DefaultProps) {
               <UserScoreInfoList cid={cid} />
             </div>
           </>
-        ) : (
-          <NoneUserScoreInfoList />
         )}
       </div>
     </div>
-  ) : (
-    <Loading />
   );
 }

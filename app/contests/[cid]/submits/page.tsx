@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import UsersContestSubmitList from './components/UsersContestSubmitList';
+import { useEffect, useState } from 'react';
+import Loading from '@/app/loading';
 
 interface DefaultProps {
   params: {
@@ -10,6 +12,14 @@ interface DefaultProps {
 }
 
 export default function UsersContestSubmits(props: DefaultProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) return <Loading />;
+
   const cid = props.params.cid;
 
   return (

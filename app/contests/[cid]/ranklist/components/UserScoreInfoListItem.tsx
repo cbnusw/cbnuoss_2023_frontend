@@ -15,9 +15,8 @@ export default function UserScoreInfoListItem({
 }: UserScoreInfoListItemProps) {
   const router = useRouter();
 
-  const handleGoToTheProblem = (problemIdx: number) => {
-    alert('개발 예정');
-    // router.push(`/contests/${cid}/problems/${problemIdx}`);
+  const handleGoToTheProblem = (problemId: string) => {
+    router.push(`/contests/${cid}/problems/${problemId}`);
   };
 
   return (
@@ -51,7 +50,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-white text-[0.825rem] underline font-medium hover:text-[#eee] focus:text-[#eee]"
-              onClick={() => handleGoToTheProblem(1)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 1번
             </button>
@@ -73,7 +72,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-white text-[0.825rem] underline font-medium hover:text-[#eee] focus:text-[#eee]"
-              onClick={() => handleGoToTheProblem(2)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 2번
             </button>
@@ -95,7 +94,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem(3)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 3번
             </button>
@@ -117,7 +116,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-white text-[0.825rem] underline font-medium hover:text-[#eee] focus:text-[#eee]"
-              onClick={() => handleGoToTheProblem(4)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 4번
             </button>
@@ -139,7 +138,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem(5)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 5번
             </button>
@@ -161,7 +160,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem(6)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 6번
             </button>
@@ -183,7 +182,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem(7)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 7번
             </button>
@@ -205,7 +204,7 @@ export default function UserScoreInfoListItem({
             </div>
             <button
               className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem(7)}
+              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
             >
               문제 8번
             </button>
