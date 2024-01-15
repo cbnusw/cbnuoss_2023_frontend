@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import ExamSubmitList from './components/ExamSubmitList';
+import UsersExamSubmitList from './components/UsersExamSubmitList';
+import { useEffect, useState } from 'react';
+import Loading from '@/app/loading';
 
 interface DefaultProps {
   params: {
@@ -9,7 +11,15 @@ interface DefaultProps {
   };
 }
 
-export default function ExamSubmits(props: DefaultProps) {
+export default function UsersExamSubmits(props: DefaultProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) return <Loading />;
+
   const eid = props.params.eid;
 
   return (
@@ -131,7 +141,7 @@ export default function ExamSubmits(props: DefaultProps) {
                       </th>
                     </tr>
                   </thead>
-                  <ExamSubmitList eid={eid} />
+                  <UsersExamSubmitList eid={eid} />
                 </table>
               </div>
             </div>

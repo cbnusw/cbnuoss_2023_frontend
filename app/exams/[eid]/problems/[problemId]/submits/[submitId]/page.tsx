@@ -18,7 +18,7 @@ const MarkdownPreview = dynamic(
 );
 
 export default function UserExamSubmit(props: DefaultProps) {
-  const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const eid = props.params.eid;
   const problemId = props.params.problemId;
@@ -30,10 +30,12 @@ export default function UserExamSubmit(props: DefaultProps) {
   };
 
   useEffect(() => {
-    setIsMarkdownPreviewReady(true);
+    setIsLoading(false);
   }, []);
 
-  return isMarkdownPreviewReady ? (
+  if (isLoading) return <Loading />;
+
+  return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex justify-end items-center pb-3">
@@ -136,7 +138,5 @@ int main(int argc, const char* argv[]) {
         </div>
       </div>
     </div>
-  ) : (
-    <Loading />
   );
 }

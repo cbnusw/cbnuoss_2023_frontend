@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import UserExamSubmitList from './components/UserExamSubmitList';
+import { useEffect, useState } from 'react';
+import Loading from '@/app/loading';
 
 interface DefaultProps {
   params: {
@@ -11,8 +13,16 @@ interface DefaultProps {
 }
 
 export default function UserExamSubmits(props: DefaultProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
   const eid = props.params.eid;
   const problemId = props.params.problemId;
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

@@ -9,6 +9,7 @@ import {
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/navigation';
 import NoneExamProblemListItem from './NoneExamProblemListItem';
+import Loading from '@/app/loading';
 
 interface ExamProblemListProps {
   eid: string;
@@ -19,8 +20,8 @@ export default function ExamProblemList({
   eid,
   isChagingExamProblemOrderActivate,
 }: ExamProblemListProps) {
-  const [isProblemListReady, setIsProblemListReady] = useState(false);
-  const [winReady, setwinReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isProblemListEmpty, setIsProblemListEmpty] = useState(true);
 
   const [datas, setDatas] = useState([
     { id: '650ae1a19c2734584192d58e', idx: 'A', problemTitle: 'A+B' },
@@ -49,13 +50,14 @@ export default function ExamProblemList({
   };
 
   useEffect(() => {
-    setIsProblemListReady(true);
-    setwinReady(true);
+    setIsLoading(false);
+    setIsProblemListEmpty(false);
   }, []);
 
-  console.log(datas);
+  if (isLoading) return <Loading />;
+  if (isProblemListEmpty) return <NoneExamProblemListItem />;
 
-  return isProblemListReady && winReady ? (
+  return (
     <div className="mb-14">
       {/* 드래그 영역 */}
       <DragDropContext onDragEnd={handleChange}>
@@ -118,7 +120,5 @@ export default function ExamProblemList({
         </Droppable>
       </DragDropContext>
     </div>
-  ) : (
-    <NoneExamProblemListItem />
   );
 }

@@ -1,9 +1,8 @@
 'use client';
 
-import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
@@ -58,7 +57,6 @@ export default function EditExam(props: DefaultProps) {
     examPwd: 'owrejreoi12321',
   };
 
-  const [isEditorReady, setIsEditorReady] = useState(false);
   const [examName, setExamName] = useState(examInfo.examName);
   const [courseName, setCourseName] = useState(examInfo.courseName);
   const [editorContent, setEditorContent] = useState();
@@ -150,10 +148,6 @@ export default function EditExam(props: DefaultProps) {
     alert('수정 기능 개발 예정');
   };
 
-  useEffect(() => {
-    setIsEditorReady(true);
-  }, []);
-
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
@@ -233,17 +227,12 @@ export default function EditExam(props: DefaultProps) {
           </div>
         </div>
 
-        {isEditorReady ? (
-          <div className="w-full mx-auto overflow-auto">
-            <DynamicEditor
-              isEditorReady={isEditorReady}
-              initEditorContent={examInfo.content}
-              onEditorChange={setEditorContent}
-            />
-          </div>
-        ) : (
-          <Loading />
-        )}
+        <div className="w-full mx-auto overflow-auto">
+          <DynamicEditor
+            initEditorContent={examInfo.content}
+            onEditorChange={setEditorContent}
+          />
+        </div>
 
         <div className="mt-8">
           <p>제출 기한</p>
