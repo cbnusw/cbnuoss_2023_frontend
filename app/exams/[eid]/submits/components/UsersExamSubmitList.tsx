@@ -1,17 +1,15 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import UsersContestSubmitListItem from './UsersContestSubmitListItem';
-import NoneUsersContestSubmitListItem from './NoneUsersContestSubmitListItem';
+import UsersExamSubmitListItem from './UsersExamSubmitListItem';
+import NoneUsersExamSubmitListItem from './NoneUsersExamSubmitListItem';
 import Loading from '@/app/loading';
 
-interface UsersContestSubmitListProps {
-  cid: string;
+interface UsersExamSubmitListProps {
+  eid: string;
 }
 
-export default function UsersContestSubmitList({
-  cid,
-}: UsersContestSubmitListProps) {
+export default function UsersExamSubmitList({ eid }: UsersExamSubmitListProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitListEmpty, setIsSumbitListEmpty] = useState(true);
 
@@ -23,12 +21,12 @@ export default function UsersContestSubmitList({
   }, []);
 
   if (isLoading) return <Loading />;
-  if (isSubmitListEmpty) return <NoneUsersContestSubmitListItem />;
+  if (isSubmitListEmpty) return <NoneUsersExamSubmitListItem />;
 
   return (
     <tbody>
       {Array.from({ length: numberOfItems }, (_, idx) => (
-        <UsersContestSubmitListItem key={idx} cid={cid} />
+        <UsersExamSubmitListItem key={idx} eid={eid} />
       ))}
     </tbody>
   );

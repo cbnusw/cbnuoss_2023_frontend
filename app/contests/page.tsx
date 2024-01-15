@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import ContestList from './components/ContestList';
-import { useState } from 'react';
 
 export default function Contests() {
   return (

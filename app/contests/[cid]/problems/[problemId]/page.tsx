@@ -17,8 +17,7 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
 });
 
 export default function ContestProblem(props: DefaultProps) {
-  const [isProblemReady, setIsProblemReady] = useState(false);
-  const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const cid = props.params.cid;
   const problemId = props.params.problemId;
@@ -49,11 +48,12 @@ export default function ContestProblem(props: DefaultProps) {
   };
 
   useEffect(() => {
-    setIsMarkdownPreviewReady(true);
-    setIsProblemReady(true);
+    setIsLoading(false);
   }, []);
 
-  return isProblemReady && isMarkdownPreviewReady ? (
+  if (isLoading) return <Loading />;
+
+  return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
@@ -172,7 +172,5 @@ export default function ContestProblem(props: DefaultProps) {
         </div>
       </div>
     </div>
-  ) : (
-    <Loading />
   );
 }

@@ -1,9 +1,8 @@
 'use client';
 
-import Loading from '@/app/loading';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
@@ -13,7 +12,6 @@ const DynamicEditor = dynamic(
 );
 
 export default function RegisterExam() {
-  const [isEditorReady, setIsEditorReady] = useState(false);
   const [examName, setExamName] = useState('');
   const [courseName, setCourseName] = useState('');
   const [editorContent, setEditorContent] = useState('');
@@ -97,10 +95,6 @@ export default function RegisterExam() {
     alert('등록 기능 개발 예정');
   };
 
-  useEffect(() => {
-    setIsEditorReady(true);
-  }, []);
-
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
@@ -180,17 +174,12 @@ export default function RegisterExam() {
           </div>
         </div>
 
-        {isEditorReady ? (
-          <div className="w-full mx-auto overflow-auto">
-            <DynamicEditor
-              isEditorReady={isEditorReady}
-              initEditorContent={''}
-              onEditorChange={setEditorContent}
-            />
-          </div>
-        ) : (
-          <Loading />
-        )}
+        <div className="w-full mx-auto overflow-auto">
+          <DynamicEditor
+            initEditorContent={''}
+            onEditorChange={setEditorContent}
+          />
+        </div>
 
         <div className="mt-8">
           <p>제출 기한</p>

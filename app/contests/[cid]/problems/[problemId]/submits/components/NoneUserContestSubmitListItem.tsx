@@ -10,11 +10,6 @@ export default function NoneUserContestSubmitListItem() {
         1
       </th>
       <td className="text-sm">조회된 제출 정보가 없습니다</td>
-      <td className="font-medium">-</td>
-      <td className="font-medium">-</td>
-      <td className="font-medium">-</td>
-      <td className="font-medium">-</td>
-      <td className="font-medium">-</td>
     </tr>
   );
 }

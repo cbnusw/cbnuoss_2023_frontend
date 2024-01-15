@@ -10,10 +10,6 @@ export default function NoneContestListItem() {
         1
       </th>
       <td className="text-sm">등록된 대회 정보가 없습니다</td>
-      <td className="font-medium">-</td>
-      <td className="font-medium">-</td>
-      <td className="font-medium">-</td>
-      <td className="font-medium">-</td>
     </tr>
   );
 }

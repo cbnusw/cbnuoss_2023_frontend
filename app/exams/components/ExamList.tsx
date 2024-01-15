@@ -3,15 +3,21 @@
 import React, { useEffect, useState } from 'react';
 import ExamListItem from './ExamListItem';
 import NoneExamListItem from './NoneExamListItem';
+import Loading from '@/app/loading';
 
 export default function ExamList() {
-  const [isExamListReady, setIsExamListReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isExamListEmpty, setIsExamListEmpty] = useState(true);
 
   useEffect(() => {
-    setIsExamListReady(true);
+    setIsLoading(false);
+    setIsExamListEmpty(false);
   }, []);
 
-  return isExamListReady ? (
+  if (isLoading) return <Loading />;
+  if (isExamListEmpty) return <NoneExamListItem />;
+
+  return (
     <tbody>
       <ExamListItem />
       <ExamListItem />
@@ -24,7 +30,5 @@ export default function ExamList() {
       <ExamListItem />
       <ExamListItem />
     </tbody>
-  ) : (
-    <NoneExamListItem />
   );
 }

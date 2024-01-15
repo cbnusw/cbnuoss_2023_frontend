@@ -17,8 +17,7 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
 });
 
 export default function ExamProblem(props: DefaultProps) {
-  const [isExamProblemReady, setIsExamProblemReady] = useState(false);
-  const [isMarkdownPreviewReady, setIsMarkdownPreviewReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const eid = props.params.eid;
   const problemId = props.params.problemId;
@@ -49,11 +48,12 @@ export default function ExamProblem(props: DefaultProps) {
   };
 
   useEffect(() => {
-    setIsMarkdownPreviewReady(true);
-    setIsExamProblemReady(true);
+    setIsLoading(false);
   }, []);
 
-  return isExamProblemReady && isMarkdownPreviewReady ? (
+  if (isLoading) return <Loading />;
+
+  return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
@@ -161,7 +161,5 @@ export default function ExamProblem(props: DefaultProps) {
         </div>
       </div>
     </div>
-  ) : (
-    <Loading />
   );
 }

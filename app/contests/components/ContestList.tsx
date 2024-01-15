@@ -3,15 +3,21 @@
 import React, { useEffect, useState } from 'react';
 import ContestListItem from './ContestListItem';
 import NoneContestListItem from './NoneContestListItem';
+import Loading from '@/app/loading';
 
 export default function ContestList() {
-  const [isContestListReady, setIsContestListReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isContestListEmpty, setIsContestListEmpty] = useState(true);
 
   useEffect(() => {
-    setIsContestListReady(true);
+    setIsLoading(false);
+    setIsContestListEmpty(false);
   }, []);
 
-  return isContestListReady ? (
+  if (isLoading) return <Loading />;
+  if (isContestListEmpty) return <NoneContestListItem />;
+
+  return (
     <tbody>
       <ContestListItem />
       <ContestListItem />
@@ -24,7 +30,5 @@ export default function ContestList() {
       <ContestListItem />
       <ContestListItem />
     </tbody>
-  ) : (
-    <NoneContestListItem />
   );
 }

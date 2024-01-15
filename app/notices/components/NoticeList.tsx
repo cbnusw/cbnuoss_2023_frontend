@@ -3,15 +3,21 @@
 import React, { useEffect, useState } from 'react';
 import NoticeListItem from './NoticeListItem';
 import NoneNoticeListItem from './NoneNoticeListItem';
+import Loading from '@/app/loading';
 
 export default function NoticeList() {
-  const [isNoticeListReady, setIsNoticeListReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isNoticeListEmpty, setIsNoticeListEmpty] = useState(true);
 
   useEffect(() => {
-    setIsNoticeListReady(true);
+    setIsLoading(false);
+    setIsNoticeListEmpty(false);
   }, []);
 
-  return isNoticeListReady ? (
+  if (isLoading) return <Loading />;
+  if (isNoticeListEmpty) return <NoneNoticeListItem />;
+
+  return (
     <tbody>
       <NoticeListItem />
       <NoticeListItem />
@@ -24,7 +30,5 @@ export default function NoticeList() {
       <NoticeListItem />
       <NoticeListItem />
     </tbody>
-  ) : (
-    <NoneNoticeListItem />
   );
 }

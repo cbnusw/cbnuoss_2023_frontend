@@ -1,11 +1,13 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-interface ExamSubmitListItemProps {
+interface UsersExamSubmitListItemProps {
   eid: string;
 }
 
-export default function ExamSubmitListItem({ eid }: ExamSubmitListItemProps) {
+export default function UsersExamSubmitListItem({
+  eid,
+}: UsersExamSubmitListItemProps) {
   const router = useRouter();
 
   return (

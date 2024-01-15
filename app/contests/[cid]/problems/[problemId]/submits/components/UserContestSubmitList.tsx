@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import UserContestSubmitListItem from './UserContestSubmitListItem';
 import NoneUserContestSubmitListItem from './NoneUserContestSubmitListItem';
+import Loading from '@/app/loading';
 
 interface ContestSubmitListProps {
   cid: string;
@@ -13,21 +14,24 @@ export default function UserContestSubmitList({
   cid,
   problemId,
 }: ContestSubmitListProps) {
-  const [isSubmitListReady, setIsSumbitListReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitListEmpty, setIsSumbitListEmpty] = useState(true);
 
   const numberOfItems = 10;
 
   useEffect(() => {
-    setIsSumbitListReady(true);
+    setIsLoading(false);
+    setIsSumbitListEmpty(false);
   }, []);
 
-  return isSubmitListReady ? (
+  if (isLoading) return <Loading />;
+  if (isSubmitListEmpty) return <NoneUserContestSubmitListItem />;
+
+  return (
     <tbody>
       {Array.from({ length: numberOfItems }, (_, idx) => (
         <UserContestSubmitListItem key={idx} cid={cid} problemId={problemId} />
       ))}
     </tbody>
-  ) : (
-    <NoneUserContestSubmitListItem />
   );
 }
