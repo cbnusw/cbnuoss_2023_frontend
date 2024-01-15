@@ -1,8 +1,9 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
+import Loading from '@/app/loading';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
@@ -26,6 +27,7 @@ export default function EditPractice(props: DefaultProps) {
     ],
   };
 
+  const [isLoading, setIsLoading] = useState(true);
   const [practiceName, setPracticeName] = useState(practiceInfo.title);
   const [maxExeTime, setMaxExeTime] = useState<number>(practiceInfo.maxExeTime);
   const [maxMemCap, setMaxMemCap] = useState<number>(practiceInfo.maxMemCap);
@@ -119,6 +121,12 @@ export default function EditPractice(props: DefaultProps) {
     // console.log('PDF: ', uploadedProblemPdfFileUrl);
     // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
   };
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
