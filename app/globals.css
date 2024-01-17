@@ -13,11 +13,25 @@
   -o-animation: fadeIn 3s; /* Opera */
 }
 
+.fade-in-fast {
+  animation: fadeIn 0.75s;
+  -moz-animation: fadeIn 0.75s; /* Firefox */
+  -webkit-animation: fadeIn 0.75s; /* Safari and Chrome */
+  -o-animation: fadeIn 0.75s; /* Opera */
+}
+
 .bright-in {
   animation: brightIn 3s;
   -moz-animation: brightIn 3s; /* Firefox */
   -webkit-animation: brightIn 3s; /* Safari and Chrome */
   -o-animation: brightIn 3s; /* Opera */
+}
+
+.lift-up {
+  animation: liftUp 0.5s cubic-bezier(0, 0, 0.1, 1);
+  -moz-animation: liftUp 0.5s cubic-bezier(0, 0, 0.1, 1); /* Firefox */
+  -webkit-animation: liftUp 0.5s cubic-bezier(0, 0, 0.1, 1); /* Safari and Chrome */
+  -o-animation: liftUp 0.5s cubic-bezier(0, 0, 0.1, 1); /* Opera */
 }
 
 .box-shadow {
@@ -225,5 +239,168 @@ h4 {
   }
   to {
     filter: brightness(100%);
+  }
+}
+
+/* --------------- */
+
+@keyframes liftUp, {
+  from {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.9;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes liftUp {
+  /* Firefox */
+  from {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.9;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes liftUp {
+  /* Safari and Chrome */
+  from {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.9;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@-o-keyframes liftUp {
+  /* Opera */
+  from {
+    transform: translateY(25px);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 0.2;
+  }
+  30% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.9;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
