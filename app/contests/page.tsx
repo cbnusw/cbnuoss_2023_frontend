@@ -5,7 +5,15 @@ export default function Contests() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="text-2xl font-semibold">🏆 대회 목록</p>
+        <p className="flex items-center text-3xl font-semibold tracking-wide">
+          <img
+            src="/images/trophy.png"
+            alt="trophy"
+            style={{ width: '5rem' }}
+            className="ml-[-1rem] drop-shadow-md scale-90 fade-in-fast"
+          />
+          <span className="lift-up">대회 목록</span>
+        </p>
         <form className="mt-5 mb-4">
           <div className="flex">
             <div className="flex flex-col relative z-0 w-1/2 group">
@@ -23,7 +31,6 @@ export default function Contests() {
                   viewBox="0 -960 960 960"
                   width="21"
                   fill="#464646"
-                  className="scale-x-[-1]"
                 >
                   <path d="M785.269-141.629 530.501-396.501q-29.502 26.199-69.036 40.003-39.533 13.805-80.64 13.805-100.978 0-170.677-69.711-69.698-69.71-69.698-169.473 0-99.764 69.423-169.558 69.423-69.795 169.62-69.795 100.198 0 169.974 69.757 69.776 69.756 69.776 169.593 0 41.752-14.411 81.136-14.41 39.385-40.064 70.298L820.05-176.667l-34.781 35.038ZM380.256-390.577q79.907 0 135.505-55.536t55.598-135.91q0-80.375-55.598-135.849-55.598-55.475-135.767-55.475-80.511 0-136.086 55.537-55.575 55.536-55.575 135.91 0 80.375 55.619 135.849 55.618 55.474 136.304 55.474Z" />
                 </svg>
