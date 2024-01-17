@@ -1,19 +1,22 @@
 import React from 'react';
 import Link from 'next/link';
 import PracticeList from './components/PracticeList';
+import Image from 'next/image';
 
 export default function Practices() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
-          <img
+          <Image
             src="/images/practice.png"
-            alt="exam"
-            style={{ width: '4.5rem' }}
-            className="ml-[-1rem] drop-shadow-md scale-90 fade-in-fast"
+            alt="trophy"
+            width={70}
+            height={0}
+            quality={100}
+            className="ml-[-1rem] drop-shadow-md fade-in-fast"
           />
-          <span className="ml-3 lift-up">연습문제 목록</span>
+          <span className="ml-5 lift-up">연습문제 목록</span>
         </p>
         <form className="mt-5 mb-4">
           <div className="flex">

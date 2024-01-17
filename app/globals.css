@@ -244,7 +244,7 @@ h4 {
 
 /* --------------- */
 
-@keyframes liftUp, {
+@keyframes liftUp {
   from {
     transform: translateY(25px);
     opacity: 0;

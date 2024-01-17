@@ -1,18 +1,21 @@
 import Link from 'next/link';
 import ContestList from './components/ContestList';
+import Image from 'next/image';
 
 export default function Contests() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
-          <img
+        <p className="flex items-center text-3xl font-semibold tracking-wide">
+          <Image
             src="/images/trophy.png"
             alt="trophy"
-            style={{ width: '5rem' }}
-            className="ml-[-1rem] drop-shadow-md scale-90 fade-in-fast"
+            width={80}
+            height={0}
+            quality={100}
+            className="ml-[-1rem] drop-shadow-md fade-in-fast"
           />
-          <span className="lift-up">대회 목록</span>
+          <span className="ml-2 lift-up">대회 목록</span>
         </p>
         <form className="mt-5 mb-4">
           <div className="flex">
