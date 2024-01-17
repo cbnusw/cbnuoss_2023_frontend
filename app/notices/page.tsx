@@ -6,7 +6,7 @@ export default function Notices() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="flex items-center text-3xl font-semibold tracking-wide">
+        <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <img
             src="/images/notice.png"
             alt="exam"
