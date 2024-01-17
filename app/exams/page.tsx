@@ -6,7 +6,15 @@ export default function Exams() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="text-2xl font-semibold">📝 시험 목록</p>
+        <p className="flex items-center text-3xl font-semibold tracking-wide">
+          <img
+            src="/images/exam.png"
+            alt="exam"
+            style={{ width: '5rem' }}
+            className="ml-[-1rem] drop-shadow-md fade-in-fast"
+          />{' '}
+          <span className="ml-1 lift-up">시험 목록</span>
+        </p>
         <form className="mt-5 mb-4">
           <div className="flex">
             <div className="flex flex-col relative z-0 w-1/2 group">
