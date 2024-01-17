@@ -1,13 +1,25 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppDispatch, useAppSelector } from '../redux/store';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../redux/features/authSlice';
 import { useRouter } from 'next/navigation';
+import ChannelService from '../third-party/ChannelTalk';
 
 export default function Navbar() {
+  useEffect(() => {
+    const CT = new ChannelService();
+    CT.loadScript();
+    CT.boot({ pluginKey: process.env.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY! });
+
+    //for unmount
+    return () => {
+      CT.shutdown();
+    };
+  }, []);
+
   const [rightPos, setRightPos] = useState('-right-full');
 
   const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
@@ -75,7 +87,7 @@ export default function Navbar() {
             {isAuth ? (
               <>
                 <Link
-                  href="/login"
+                  href="/mypage"
                   className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
                 >
                   <span className="font-semibold">{username}</span>님
