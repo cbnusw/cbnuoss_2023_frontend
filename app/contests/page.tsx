@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import ContestList from './components/ContestList';
 import Image from 'next/image';
+import trophyImg from '@/public/images/trophy.png';
 
 export default function Contests() {
   return (
@@ -8,12 +9,12 @@ export default function Contests() {
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="flex items-center text-3xl font-semibold tracking-wide">
           <Image
-            src="/images/trophy.png"
+            src={trophyImg}
             alt="trophy"
             width={80}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-md fade-in-fast"
+            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
           />
           <span className="ml-2 lift-up">대회 목록</span>
         </p>
