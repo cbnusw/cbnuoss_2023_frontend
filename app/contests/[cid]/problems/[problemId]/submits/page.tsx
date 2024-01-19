@@ -33,7 +33,7 @@ export default function UserContestSubmits(props: DefaultProps) {
           <p className="flex items-center text-2xl font-semibold tracking-tight">
             <Image
               src={codeImg}
-              alt="trophy"
+              alt="code"
               width={70}
               height={0}
               quality={100}
@@ -45,7 +45,7 @@ export default function UserContestSubmits(props: DefaultProps) {
               </span>
               <Link
                 href={`/contests/${cid}/problems/${problemId}`}
-                className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+                className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
                 (A+B)
               </Link>

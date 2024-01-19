@@ -54,7 +54,7 @@ export default function ContestRankList(props: DefaultProps) {
               </span>
               <Link
                 href={`/contests/${cid}`}
-                className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+                className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
                 (2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
               </Link>
