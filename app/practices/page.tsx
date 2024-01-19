@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import PracticeList from './components/PracticeList';
 import Image from 'next/image';
+import pencilImg from '@/public/images/pencil.png';
 
 export default function Practices() {
   return (
@@ -9,14 +10,14 @@ export default function Practices() {
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <Image
-            src="/images/practice.png"
+            src={pencilImg}
             alt="trophy"
-            width={70}
+            width={72.5}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-md fade-in-fast"
+            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
           />
-          <span className="ml-5 lift-up">연습문제 목록</span>
+          <span className="lift-up">연습문제 목록</span>
         </p>
         <form className="mt-5 mb-4">
           <div className="flex">
