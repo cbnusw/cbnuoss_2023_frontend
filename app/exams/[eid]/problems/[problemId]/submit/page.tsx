@@ -70,7 +70,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
               width={70}
               height={0}
               quality={100}
-              className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+              className="ml-[-1rem fade-in-fast"
             />
             <div className="lift-up">
               <span className="ml-4 text-3xl font-semibold tracking-wide">
@@ -169,15 +169,15 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
         <div className="mt-5 pb-2 flex justify-end gap-3">
           <button
             onClick={handleGoToExamProblem}
-            className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+            className="px-4 py-[0.5rem] rounded-[6px] font-light"
           >
             취소
           </button>
           <button
             onClick={handleSubmitExamProblemCode}
-            className=" text-white bg-[#3870e0] px-3 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
-            제출하기
+            제출
           </button>
         </div>
       </div>

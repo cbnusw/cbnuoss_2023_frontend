@@ -14,11 +14,11 @@ export default function Contests() {
             width={80}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+            className="ml-[-1rem] fade-in-fast"
           />
           <span className="ml-2 lift-up">대회 목록</span>
         </p>
-        <form className="mt-5 mb-4">
+        <form className="mt-5 mb-5">
           <div className="flex">
             <div className="flex flex-col relative z-0 w-1/2 group">
               <input
@@ -54,7 +54,7 @@ export default function Contests() {
                 <div className="flex">
                   <Link
                     href="contests/register"
-                    className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+                    className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                   >
                     등록하기
                   </Link>
@@ -82,6 +82,9 @@ export default function Contests() {
                       </th>
                       <th scope="col" className="px-4 py-2">
                         대회시간
+                      </th>
+                      <th scope="col" className="px-4 py-2">
+                        참가자
                       </th>
                       <th scope="col" className="px-4 py-2">
                         작성자

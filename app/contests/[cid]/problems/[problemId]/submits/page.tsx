@@ -37,7 +37,7 @@ export default function UserContestSubmits(props: DefaultProps) {
               width={70}
               height={0}
               quality={100}
-              className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+              className="ml-[-1rem] fade-in-fast"
             />
             <div className="lift-up">
               <span className="ml-4 text-3xl font-semibold tracking-wide">

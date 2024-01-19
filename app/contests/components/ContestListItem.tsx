@@ -24,6 +24,7 @@ export default function ContestListItem() {
       </td>
       <td className="font-medium">~ 2023.06.26. 03:00</td>
       <td className="text-red-500 font-medium">~ 2023.06.26. 06:00</td>
+      <td className="font-medium">62명</td>
       <td className="font-medium">신재혁</td>
       <td className="">2023.05.09</td>
     </tr>

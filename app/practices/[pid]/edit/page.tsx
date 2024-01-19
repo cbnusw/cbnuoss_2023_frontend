@@ -302,13 +302,13 @@ export default function EditPractice(props: DefaultProps) {
         <div className="mt-14 pb-2 flex justify-end gap-3">
           <button
             onClick={handleCancelContestEdit}
-            className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+            className="px-4 py-[0.5rem] rounded-[6px] font-light"
           >
             취소
           </button>
           <button
             onClick={handleEditPractice}
-            className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
             수정
           </button>

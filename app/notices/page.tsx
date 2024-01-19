@@ -15,7 +15,7 @@ export default function Notices() {
             width={67.5}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+            className="ml-[-1rem] fade-in-fast"
           />
           <span className="ml-3 lift-up">공지사항</span>
         </p>
@@ -56,7 +56,7 @@ export default function Notices() {
                 <div className="flex">
                   <Link
                     href="notices/register"
-                    className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+                    className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                   >
                     등록하기
                   </Link>
