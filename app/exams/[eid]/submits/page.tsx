@@ -4,6 +4,8 @@ import Link from 'next/link';
 import UsersExamSubmitList from './components/UsersExamSubmitList';
 import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
+import Image from 'next/image';
+import codeImg from '@/public/images/code.png';
 
 interface DefaultProps {
   params: {
@@ -26,33 +28,27 @@ export default function UsersExamSubmits(props: DefaultProps) {
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="flex items-center text-2xl font-semibold tracking-tight">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="40"
-            viewBox="0 -960 960 960"
-            width="40"
-            fill="#3478c6"
-          >
-            <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="40"
-            viewBox="0 -960 960 960"
-            width="40"
-            className="ml-[-0.75rem]"
-            fill="#3478c6"
-          >
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-          </svg>
-          코드 제출 목록
-          <Link
-            href={`/exams/${eid}`}
-            className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
-          >
-            (시험: 23년 1학기말 코딩 테스트)
-          </Link>
+          <Image
+            src={codeImg}
+            alt="trophy"
+            width={70}
+            height={0}
+            quality={100}
+            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+          />
+          <div className="lift-up">
+            <span className="ml-4 lift-up text-3xl font-semibold tracking-wide">
+              코드 제출 목록
+            </span>
+            <Link
+              href={`/exams/${eid}`}
+              className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+            >
+              (시험: 23년 1학기말 코딩 테스트)
+            </Link>
+          </div>
         </p>
+
         <div className="flex mt-5 mb-4">
           <div className="flex flex-col relative z-0 w-1/2 group">
             <input

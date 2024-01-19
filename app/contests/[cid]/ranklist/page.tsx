@@ -6,6 +6,8 @@ import UserScoreInfoList from './components/UserScoreInfoList';
 import NoneUserScoreInfoList from './components/NoneUserScoreInfoListItem';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import trophyImg from '@/public/images/trophy.png';
 
 interface DefaultProps {
   params: {
@@ -34,18 +36,29 @@ export default function ContestRankList(props: DefaultProps) {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
+    <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
-          <p className="text-2xl font-bold tracking-tight">
-            <span className="mr-2">🏆</span>
-            대회 순위
-            <Link
-              href={`/contests/${cid}`}
-              className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
-            >
-              (2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
-            </Link>
+          <p className="flex items-center text-2xl font-bold tracking-tight">
+            <Image
+              src={trophyImg}
+              alt="trophy"
+              width={80}
+              height={0}
+              quality={100}
+              className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+            />
+            <div className="lift-up">
+              <span className="ml-2 text-3xl font-semibold tracking-wide">
+                대회 순위
+              </span>
+              <Link
+                href={`/contests/${cid}`}
+                className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+              >
+                (2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
+              </Link>
+            </div>
           </p>
           <div className="flex justify-between items-center pb-3 border-b border-gray-300">
             <div className="flex gap-3">
