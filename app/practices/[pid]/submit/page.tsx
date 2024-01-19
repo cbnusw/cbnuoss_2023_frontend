@@ -9,12 +9,12 @@ import codeImg from '@/public/images/code.png';
 
 interface DefaultProps {
   params: {
-    eid: string;
+    pid: string;
     problemId: string;
   };
 }
 
-export default function SubmitExamProblemCode(props: DefaultProps) {
+export default function SubmitPracticeProblemCode(props: DefaultProps) {
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
   const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
@@ -26,13 +26,13 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
   const [isCodeFileUploadingValidFail, setIsCodeFileUploadingValidFail] =
     useState(false);
 
-  const eid = props.params.eid;
-  const problemId = props.params.eid;
+  const pid = props.params.pid;
+  const problemId = props.params.pid;
 
   const router = useRouter();
 
-  const handleGoToExamProblem = () => {
-    router.push(`/exams/${eid}/problems/${problemId}`);
+  const handleGoToPracticeProblem = () => {
+    router.push(`/practices/${pid}`);
   };
 
   const handlSelectSubmitLanguage = (
@@ -42,7 +42,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
     setIsSelectedSubmitLanguageValidFail(false);
   };
 
-  const handleSubmitExamProblemCode = () => {
+  const handleSubmitPracticeProblemCode = () => {
     if (selectedSubmitLanguage === '언어 선택 *') {
       alert('제출 언어를 선택해 주세요');
       window.scrollTo(0, 0);
@@ -56,7 +56,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
       return;
     }
 
-    router.push(`/exams/${eid}/problems/${problemId}/submits`);
+    router.push(`/practices/${pid}/submits`);
   };
 
   return (
@@ -77,7 +77,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 코드 제출
               </span>
               <Link
-                href={`/exams/${eid}/problems/${problemId}`}
+                href={`/practices/${pid}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
                 (A+B)
@@ -99,14 +99,6 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 <span className="font-mono font-light">
                   {' '}
                   <span className="mr-1">5</span>MB
-                </span>
-              </span>
-            </div>
-            <div className="flex gap-3">
-              <span className="font-semibold">
-                시험:{' '}
-                <span className="font-light">
-                  2023-01-자료구조(소프트웨어학부 01반)
                 </span>
               </span>
             </div>
@@ -168,13 +160,13 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
 
         <div className="mt-5 pb-2 flex justify-end gap-3">
           <button
-            onClick={handleGoToExamProblem}
+            onClick={handleGoToPracticeProblem}
             className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
           >
             취소
           </button>
           <button
-            onClick={handleSubmitExamProblemCode}
+            onClick={handleSubmitPracticeProblemCode}
             className=" text-white bg-[#3870e0] px-3 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
           >
             제출하기

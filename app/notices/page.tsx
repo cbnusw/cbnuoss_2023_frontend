@@ -11,7 +11,7 @@ export default function Notices() {
         <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <Image
             src={bellImg}
-            alt="trophy"
+            alt="bell"
             width={67.5}
             height={0}
             quality={100}

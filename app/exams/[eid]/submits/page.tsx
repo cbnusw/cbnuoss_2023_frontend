@@ -37,12 +37,12 @@ export default function UsersExamSubmits(props: DefaultProps) {
             className="ml-[-1rem] drop-shadow-lg fade-in-fast"
           />
           <div className="lift-up">
-            <span className="ml-4 lift-up text-3xl font-semibold tracking-wide">
+            <span className="ml-4 text-3xl font-semibold tracking-wide">
               코드 제출 목록
             </span>
             <Link
               href={`/exams/${eid}`}
-              className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+              className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
             >
               (시험: 23년 1학기말 코딩 테스트)
             </Link>
