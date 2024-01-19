@@ -62,7 +62,7 @@ export default function ContestProblems(props: DefaultProps) {
               width={70}
               height={0}
               quality={100}
-              className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+              className="ml-[-1rem] fade-in-fast"
             />
             <div className="lift-up">
               <span className="ml-2 text-3xl font-semibold tracking-wide">
@@ -78,12 +78,12 @@ export default function ContestProblems(props: DefaultProps) {
           </p>
 
           <div className="flex justify-between items-center pb-3 border-b border-gray-300">
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               {!isChagingContestProblemOrderActivate && (
                 <>
                   <button
                     onClick={handleGoToContestRankList}
-                    className="flex gap-[0.375rem] items-center text-white bg-[#0388ca] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#007eb9] hover:bg-[#007eb9] box-shadow"
+                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#0388ca] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#007eb9] hover:bg-[#007eb9]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +98,7 @@ export default function ContestProblems(props: DefaultProps) {
                   </button>
                   <button
                     onClick={handleRegisterContestProblem}
-                    className="flex gap-[0.375rem] items-center text-white bg-green-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3e9368] hover:bg-[#3e9368] box-shadow"
+                    className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -117,7 +117,7 @@ export default function ContestProblems(props: DefaultProps) {
               <button
                 onClick={handleChangeProblemOrder}
                 ref={changingProblemOrderBtnRef}
-                className="flex gap-[0.375rem] items-center text-white bg-[#ff5fb1] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#f555a8] hover:bg-[#f555a8] box-shadow"
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#ff5fb1] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#f555a8] hover:bg-[#f555a8]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

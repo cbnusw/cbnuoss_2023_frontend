@@ -34,7 +34,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
             width={70}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+            className="ml-[-1rem] fade-in-fast"
           />
 
           <div className="lift-up">
@@ -84,7 +84,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
             <div className="flex justify-end mb-2">
               <button
                 onClick={() => alert('개발 예정')}
-                className="flex gap-[0.375rem] items-center text-white bg-[#4fa16a] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3b8d56] hover:bg-[#3b8d56] box-shadow"
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#4fa16a] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3b8d56] hover:bg-[#3b8d56]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

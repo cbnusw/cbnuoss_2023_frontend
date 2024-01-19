@@ -66,7 +66,7 @@ export default function ExamProblems(props: DefaultProps) {
               width={70}
               height={0}
               quality={100}
-              className="ml-[-1rem] drop-shadow-lg fade-in-fast"
+              className="ml-[-1rem] fade-in-fast"
             />
             <div className="lift-up">
               <span className="ml-2 text-3xl font-semibold tracking-wide">
@@ -82,12 +82,12 @@ export default function ExamProblems(props: DefaultProps) {
           </p>
 
           <div className="flex justify-between items-center pb-3 border-b border-gray-300">
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               {!isChagingExamProblemOrderActivate && (
                 <>
                   <button
                     onClick={handleRegisterExamProblem}
-                    className="flex gap-[0.375rem] items-center text-white bg-green-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3e9368] hover:bg-[#3e9368] box-shadow"
+                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,7 @@ export default function ExamProblems(props: DefaultProps) {
               <button
                 onClick={handleChangeProblemOrder}
                 ref={changingProblemOrderBtnRef}
-                className="flex gap-[0.375rem] items-center text-white bg-[#ff5fb1] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#f555a8] hover:bg-[#f555a8] box-shadow"
+                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#ff5fb1] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#f555a8] hover:bg-[#f555a8]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -148,16 +148,16 @@ export default function ContestDetail(props: DefaultProps) {
           />
         </div>
         <div>
-          <div className="flex gap-3 justify-end">
+          <div className="flex gap-2 justify-end">
             <button
               onClick={handleGoToContestRankList}
-              className="flex gap-[0.375rem] items-center text-white bg-[#0388ca] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#007eb9] hover:bg-[#007eb9] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#0388ca] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#007eb9] hover:bg-[#007eb9]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="23"
+                height="20"
                 viewBox="0 -960 960 960"
-                width="23"
+                width="20"
                 fill="white"
               >
                 <path d="M298-120v-60h152v-148q-54-11-96-46.5T296-463q-74-8-125-60t-51-125v-44q0-25 17.5-42.5T180-752h104v-88h392v88h104q25 0 42.5 17.5T840-692v44q0 73-51 125t-125 60q-16 53-58 88.5T510-328v148h152v60H298Zm-14-406v-166H180v44q0 45 29.5 78.5T284-526Zm392 0q45-10 74.5-43.5T780-648v-44H676v166Z" />
@@ -166,7 +166,7 @@ export default function ContestDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleGoToUsersContestSubmits}
-              className="flex gap-[0.375rem] items-center text-white bg-[#6860ff] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#5951f0] hover:bg-[#5951f0] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#5951f0] hover:bg-[#5951f0]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -181,7 +181,7 @@ export default function ContestDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleGoToContestProblems}
-              className="flex gap-[0.375rem] items-center text-white bg-green-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3e9368] hover:bg-[#3e9368] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -196,7 +196,7 @@ export default function ContestDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleEditContest}
-              className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +211,7 @@ export default function ContestDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleDeleteContest}
-              className="flex gap-[0.375rem] items-center text-white bg-red-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#e14343] hover:bg-[#e14343] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -227,7 +227,7 @@ export default function ContestDetail(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="mt-2">
+        <div className="mt-4">
           <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
           <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
             {isApplyContest ? (
@@ -263,7 +263,7 @@ export default function ContestDetail(props: DefaultProps) {
               <>
                 <button
                   onClick={handleApplyContest}
-                  className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow transition duration-75"
+                  className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] transition duration-75"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -302,7 +302,7 @@ export default function ContestDetail(props: DefaultProps) {
             <div className="flex gap-3">
               <button
                 onClick={() => alert('개발 예정')}
-                className="flex gap-[0.375rem] items-center text-white bg-[#4fa16a] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3b8d56] hover:bg-[#3b8d56] box-shadow"
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#4fa16a] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3b8d56] hover:bg-[#3b8d56]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

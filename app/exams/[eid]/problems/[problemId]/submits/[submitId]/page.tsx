@@ -41,7 +41,7 @@ export default function UserExamSubmit(props: DefaultProps) {
         <div className="flex justify-end items-center pb-3">
           <button
             onClick={handleGoToExamSubmits}
-            className="flex gap-[0.375rem] items-center text-white bg-[#717171] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#686868] hover:bg-[#686868] box-shadow"
+            className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#717171] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#686868] hover:bg-[#686868]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

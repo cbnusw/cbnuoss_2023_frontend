@@ -74,7 +74,7 @@ export default function Login() {
       return;
     }
 
-    if (userAccountInfo.pwd !== 'thwndeks123!') {
+    if (userAccountInfo.pwd !== '1234') {
       pwdInputRef.current?.focus();
       setPwdInputAnnouceMsg('잘못된 비밀번호입니다.');
       setPwdInputElementStyle(STR_WRONG_CASE_INPUT_ELEMENT_STYLE_CLASSNAME);
@@ -219,7 +219,7 @@ export default function Login() {
                 <button
                   type="submit"
                   onClick={handleSignIn}
-                  className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+                  className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                 >
                   로그인
                 </button>
