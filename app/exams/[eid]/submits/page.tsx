@@ -42,7 +42,7 @@ export default function UsersExamSubmits(props: DefaultProps) {
             </span>
             <Link
               href={`/exams/${eid}`}
-              className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+              className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
             >
               (시험: 23년 1학기말 코딩 테스트)
             </Link>

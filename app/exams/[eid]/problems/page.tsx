@@ -62,19 +62,19 @@ export default function ExamProblems(props: DefaultProps) {
           <p className="flex items-center text-2xl font-bold tracking-tight">
             <Image
               src={listImg}
-              alt="trophy"
+              alt="list"
               width={70}
               height={0}
               quality={100}
               className="ml-[-1rem] drop-shadow-lg fade-in-fast"
             />
             <div className="lift-up">
-              <span className="ml-2 lift-up text-3xl font-semibold tracking-wide">
+              <span className="ml-2 text-3xl font-semibold tracking-wide">
                 문제 목록
               </span>
               <Link
                 href={`/exams/${eid}`}
-                className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+                className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
                 (시험: 2023-01-자료구조(소프트웨어학부 01반))
               </Link>

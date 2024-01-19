@@ -11,7 +11,7 @@ export default function Exams() {
         <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <Image
             src={examImg}
-            alt="trophy"
+            alt="exam"
             width={80}
             height={0}
             quality={100}
