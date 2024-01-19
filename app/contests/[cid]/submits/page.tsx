@@ -38,7 +38,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
           />
 
           <div className="lift-up">
-            <span className="ml-4 lift-up text-3xl font-semibold tracking-wide">
+            <span className="ml-4 text-3xl font-semibold tracking-wide">
               문제 목록
             </span>
             <Link

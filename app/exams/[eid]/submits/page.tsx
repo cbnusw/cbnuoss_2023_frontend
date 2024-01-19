@@ -37,7 +37,7 @@ export default function UsersExamSubmits(props: DefaultProps) {
             className="ml-[-1rem] drop-shadow-lg fade-in-fast"
           />
           <div className="lift-up">
-            <span className="ml-4 lift-up text-3xl font-semibold tracking-wide">
+            <span className="ml-4 text-3xl font-semibold tracking-wide">
               코드 제출 목록
             </span>
             <Link
