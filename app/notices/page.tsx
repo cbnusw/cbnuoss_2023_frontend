@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import NoticeList from './components/NoticeList';
 import Image from 'next/image';
+import bellImg from '@/public/images/bell.png';
 
 export default function Notices() {
   return (
@@ -9,12 +10,12 @@ export default function Notices() {
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <Image
-            src="/images/notice.png"
+            src={bellImg}
             alt="trophy"
             width={67.5}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-md fade-in-fast"
+            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
           />
           <span className="ml-3 lift-up">공지사항</span>
         </p>
