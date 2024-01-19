@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import ExamList from './components/ExamList';
 import Image from 'next/image';
+import examImg from '@/public/images/exam.png';
 
 export default function Exams() {
   return (
@@ -9,12 +10,12 @@ export default function Exams() {
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <Image
-            src="/images/exam.png"
+            src={examImg}
             alt="trophy"
             width={80}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-md fade-in-fast"
+            className="ml-[-1rem] drop-shadow-lg fade-in-fast"
           />
           <span className="ml-2 lift-up">시험 목록</span>
         </p>
