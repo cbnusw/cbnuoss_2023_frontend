@@ -14,7 +14,7 @@ export default function ManagingMyPost() {
   };
 
   return (
-    <div>
+    <div className="mb-20">
       <div className="flex border-b font-medium text-[0.925rem] leading-[1.375rem] pb-[1.5px]">
         <div>
           <button
