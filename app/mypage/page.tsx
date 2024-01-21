@@ -6,7 +6,7 @@ import Loading from '../loading';
 import { useRouter } from 'next/navigation';
 import ProfileInformation from './components/ProfileInformation';
 import ParticipationHistory from './components/ParticipationHistory/ParticipationHistory';
-import ManagingPost from './components/ManagingPost/ManagingPost';
+import ManagingMyPost from './components/ManagingMyPost/ManagingMyPost';
 
 export default function Mypage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -54,9 +54,9 @@ export default function Mypage() {
                 참가 내역
               </button>
               <button
-                onClick={() => handleChangeTab('managingPost')}
+                onClick={() => handleChangeTab('managingMyPost')}
                 className={`${
-                  tab === 'managingPost'
+                  tab === 'managingMyPost'
                     ? 'text-[#242424] font-bold'
                     : 'text-[#6e6e6e] hover:text-[#3a8af9]'
                 } `}
@@ -72,7 +72,7 @@ export default function Mypage() {
             ) : tab === 'participationHistory' ? (
               <ParticipationHistory />
             ) : (
-              <ManagingPost />
+              <ManagingMyPost />
             )}
           </div>
         </div>
