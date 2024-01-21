@@ -56,7 +56,7 @@ export default function Home() {
                 </p>
                 <div>
                   <span className="text-xs font-semibold">
-                    진행 기간 :{' '}
+                    시험 시간 :{' '}
                     <span className="font-light">
                       2023.06.26. 03:00 ~ 2023.06.26. 03:00
                     </span>
