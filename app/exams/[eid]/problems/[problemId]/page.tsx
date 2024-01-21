@@ -78,7 +78,11 @@ export default function ExamProblem(props: DefaultProps) {
             </div>
             <div className="flex gap-3">
               <span className="font-semibold">
-                시험:{' '}
+                시험명: <span className="font-light">코딩테스트 1차</span>
+              </span>
+              <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
+              <span className="font-semibold">
+                수업명:{' '}
                 <span className="font-light">
                   2023-01-자료구조(소프트웨어학부 01반)
                 </span>

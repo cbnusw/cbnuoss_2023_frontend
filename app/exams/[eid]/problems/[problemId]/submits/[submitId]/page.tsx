@@ -88,6 +88,9 @@ int main(int argc, const char* argv[]) {
                     시험명
                   </th>
                   <th scope="col" className="px-4 py-2">
+                    수업명
+                  </th>
+                  <th scope="col" className="px-4 py-2">
                     문제명
                   </th>
                   <th scope="col" className="px-4 py-2">
@@ -113,8 +116,9 @@ int main(int argc, const char* argv[]) {
                     scope="row"
                     className="py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    2023-01-자료구조(소프트웨어학부 01반)
+                    코딩테스트 1차
                   </th>
+                  <td className="">2023-01-자료구조(소프트웨어학부 01반)</td>
                   <td className="">A+B</td>
                   <td className="text-[#0076C0] font-semibold">정답</td>
                   <td>

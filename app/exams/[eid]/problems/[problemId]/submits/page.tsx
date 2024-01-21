@@ -37,7 +37,7 @@ export default function UserExamSubmits(props: DefaultProps) {
               width={70}
               height={0}
               quality={100}
-              className="ml-[-1rem] fade-in-fast"
+              className="ml-[-1rem] fade-in-fast drop-shadow-lg"
             />
             <div className="lift-up">
               <span className="ml-4 text-3xl font-semibold tracking-wide">
@@ -55,7 +55,11 @@ export default function UserExamSubmits(props: DefaultProps) {
           <div className="flex justify-end pb-3 border-gray-300">
             <div className="flex gap-3">
               <span className="font-semibold">
-                시험:{' '}
+                시험명: <span className="font-light">코딩테스트 1차</span>
+              </span>
+              <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
+              <span className="font-semibold">
+                수업명:{' '}
                 <span className="font-light">
                   2023-01-자료구조(소프트웨어학부 01반)
                 </span>
