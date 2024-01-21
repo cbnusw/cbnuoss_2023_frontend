@@ -15,7 +15,7 @@ export default function Practices() {
             width={72.5}
             height={0}
             quality={100}
-            className="ml-[-1rem] fade-in-fast"
+            className="ml-[-1rem] fade-in-fast drop-shadow-lg"
           />
           <span className="lift-up">연습문제 목록</span>
         </p>
