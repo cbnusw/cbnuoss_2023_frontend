@@ -15,7 +15,7 @@ export default function Exams() {
             width={80}
             height={0}
             quality={100}
-            className="ml-[-1rem fade-in-fast"
+            className="ml-[-1rem fade-in-fast drop-shadow-lg"
           />
           <span className="ml-2 lift-up">시험 목록</span>
         </p>
@@ -77,16 +77,16 @@ export default function Exams() {
                         번호
                       </th>
                       <th scope="col" className="px-4 py-2">
-                        수업명
+                        시험명
                       </th>
                       <th scope="col" className="px-4 py-2">
-                        과제명
+                        수업명
                       </th>
                       <th scope="col" className="px-4 py-2">
                         교수명
                       </th>
                       <th scope="col" className="px-4 py-2">
-                        진행 기간
+                        시험 시간
                       </th>
                     </tr>
                   </thead>

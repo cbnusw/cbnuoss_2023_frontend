@@ -66,7 +66,7 @@ export default function ExamProblems(props: DefaultProps) {
               width={70}
               height={0}
               quality={100}
-              className="ml-[-1rem] fade-in-fast"
+              className="ml-[-1rem] fade-in-fast drop-shadow-lg"
             />
             <div className="lift-up">
               <span className="ml-2 text-3xl font-semibold tracking-wide">
@@ -76,7 +76,7 @@ export default function ExamProblems(props: DefaultProps) {
                 href={`/exams/${eid}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
-                (시험: 2023-01-자료구조(소프트웨어학부 01반))
+                (시험: 코딩테스트 1차, 2023-01-자료구조(소프트웨어학부 01반))
               </Link>
             </div>
           </p>

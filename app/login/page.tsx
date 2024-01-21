@@ -205,7 +205,7 @@ export default function Login() {
                 비밀번호를 잊으셨나요?
               </a>
               <div className="text-[0.8rem] text-gray-600">
-                내 컴퓨터가 아닌가요? 게스트 모드를 사용하여 비공개로
+                내 컴퓨터가 아닌가요? 시크릿 모드를 사용하여 비공개로
                 로그인하세요.
               </div>
               <div className="flex justify-between items-center">

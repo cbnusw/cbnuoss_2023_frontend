@@ -151,7 +151,7 @@ export default function Navbar() {
                 {isAuth ? (
                   <>
                     <Link
-                      href="/login"
+                      href="/mypage"
                       onClick={(e) => {
                         e.stopPropagation();
                         setRightPos('-right-full');

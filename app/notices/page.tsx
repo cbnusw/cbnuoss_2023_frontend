@@ -15,7 +15,7 @@ export default function Notices() {
             width={67.5}
             height={0}
             quality={100}
-            className="ml-[-1rem] fade-in-fast"
+            className="ml-[-1rem] fade-in-fast drop-shadow-lg"
           />
           <span className="ml-3 lift-up">공지사항</span>
         </p>

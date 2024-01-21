@@ -75,12 +75,10 @@ export default function ExamDetail(props: DefaultProps) {
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
-          <p className="text-2xl font-bold tracking-tight">
-            2023-01-자료구조(소프트웨어학부 01반)
-          </p>
+          <p className="text-2xl font-bold tracking-tight">코딩테스트 1차</p>
           <div className="flex justify-between pb-3 border-b border-gray-300">
             <span className="font-semibold">
-              제출 기간:
+              시험 시간:
               {/* <span className="text-red-500 font-bold"> 49분 45초 남음</span> */}
               <span className="font-light">
                 {' '}
@@ -93,7 +91,10 @@ export default function ExamDetail(props: DefaultProps) {
             </span>
             <div className="flex gap-3">
               <span className="font-semibold">
-                교과목명: <span className="font-light">자료구조</span>
+                수업명:{' '}
+                <span className="font-light">
+                  2023-01-자료구조(소프트웨어학부 01반)
+                </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
               <span className="font-semibold">

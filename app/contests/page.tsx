@@ -14,7 +14,7 @@ export default function Contests() {
             width={80}
             height={0}
             quality={100}
-            className="ml-[-1rem] fade-in-fast"
+            className="ml-[-1rem] fade-in-fast drop-shadow-lg"
           />
           <span className="ml-2 lift-up">대회 목록</span>
         </p>

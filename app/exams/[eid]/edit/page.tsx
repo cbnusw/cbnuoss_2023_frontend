@@ -120,7 +120,7 @@ export default function EditExam(props: DefaultProps) {
     }
 
     if (!courseName) {
-      alert('교과목명을 입력해 주세요');
+      alert('수업명을 입력해 주세요');
       window.scrollTo(0, 0);
       courseNameRef.current?.focus();
       setIsCourseNameValidFail(true);
@@ -134,7 +134,7 @@ export default function EditExam(props: DefaultProps) {
     }
 
     if (!examStartDateTime || !examEndDateTime) {
-      alert('제출 기간을 설정해 주세요');
+      alert('시험 시간을 설정해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       return;
     }
@@ -223,14 +223,14 @@ export default function EditExam(props: DefaultProps) {
                 isCourseNameValidFail ? 'red' : 'blue'
               }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
             >
-              교과목명
+              수업명
             </label>
             <p
               className={`text-${
                 isCourseNameValidFail ? 'red' : 'gray'
               }-500 text-xs tracking-widest font-light mt-1`}
             >
-              교과목명을 입력해 주세요
+              수업명을 입력해 주세요
             </p>
           </div>
         </div>
@@ -243,7 +243,7 @@ export default function EditExam(props: DefaultProps) {
         </div>
 
         <div className="mt-8">
-          <p>제출 기한</p>
+          <p>시험 시간</p>
           <div className="flex gap-5 items-center mt-2">
             <input
               type="datetime-local"
