@@ -1,7 +1,7 @@
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import './globals.css';
-import ReduxProvider from './redux/provider';
+import Providers from './utils/Providers';
 
 export const metadata = {
   title: 'SW Online Judge',
@@ -19,11 +19,11 @@ export default function RootLayout({
         <link rel="icon" href="/images/logo.png" />
       </head>
       <body className="text-sm">
-        <ReduxProvider>
+        <Providers>
           <Navbar />
           <main className="w-full mx-auto pt-20 mb-14">{children}</main>
           <Footer />
-        </ReduxProvider>
+        </Providers>
       </body>
     </html>
   );
