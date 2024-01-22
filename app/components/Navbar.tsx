@@ -2,9 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { AppDispatch, useAppSelector } from '../redux/store';
-import { useDispatch } from 'react-redux';
-import { signOut } from '../redux/features/authSlice';
 import { useRouter } from 'next/navigation';
 import ChannelService from '../third-party/ChannelTalk';
 
@@ -22,16 +19,13 @@ export default function Navbar() {
 
   const [rightPos, setRightPos] = useState('-right-full');
 
-  const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
-  const username = useAppSelector((state) => state.authReducer.value.username);
+  const isAuth = true;
+  const username = '홍길동';
 
   const router = useRouter();
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const handleSignOut = () => {
     router.push('/');
-    dispatch(signOut());
   };
 
   return (
@@ -118,11 +112,11 @@ export default function Navbar() {
             )}
           </div>
         </div>
-        <button
+        <div
           onClick={(e) => {
             setRightPos('right-0');
           }}
-          className={`block 2md:hidden px-[0.6rem] py-3 ml-auto mr-[0.1rem] rounded-full focus:outline-none`}
+          className={`block 2md:hidden px-[0.6rem] py-3 ml-auto mr-[0.1rem] rounded-full focus:outline-none text-center`}
         >
           <div className="w-[1.1rem] h-[2px] bg-[#262626] mb-[4px]"></div>
           <div className="w-[1.1rem] h-[2px] bg-[#262626] mb-[4px]"></div>
@@ -238,7 +232,7 @@ export default function Navbar() {
               </Link>
             </ul>
           </div>
-        </button>
+        </div>
       </div>
     </nav>
   );
