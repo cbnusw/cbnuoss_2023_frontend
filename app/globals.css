@@ -166,6 +166,19 @@ h4 {
   border: 1px solid rgb(60, 124, 58) !important;
 }
 
+/* ReactQueryDevtools Button CSS */
+.go3489369143 {
+  scale: 1.25;
+  left: 1.75rem !important;
+  bottom: 1.75rem !important;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25) !important;
+  transition: scale 0.15s ease-in-out;
+}
+
+.go3489369143:hover {
+  scale: 1.35;
+}
+
 /* --------------- */
 
 @keyframes fadeIn {
