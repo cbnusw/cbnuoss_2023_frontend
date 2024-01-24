@@ -2,37 +2,63 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { AppDispatch, useAppSelector } from '../redux/store';
-import { useDispatch } from 'react-redux';
-import { signOut } from '../redux/features/authSlice';
-import { useRouter } from 'next/navigation';
 import ChannelService from '../third-party/ChannelTalk';
+import { userInfoStore } from '../store/UserInfo';
+import axiosInstance from '../utils/axiosInstance';
+import { useMutation } from '@tanstack/react-query';
+import { getCurrentUserInfo } from '../login/page';
+
+// 로그아웃 API
+const logout = () => {
+  return axiosInstance.get(`${process.env.NEXT_PUBLIC_AUTH_URL}/logout`);
+};
 
 export default function Navbar() {
+  const getCurrentUserInfoMutation = useMutation({
+    mutationFn: getCurrentUserInfo,
+    onSuccess: (data) => {
+      const resData = data.data.data;
+      const { no, name, email, university, department, role } = resData;
+      updateUserInfo({
+        no,
+        name,
+        email,
+        university,
+        department,
+        role,
+        isAuth: true,
+      });
+    },
+  });
+
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSettled: () => {
+      removeUserInfo();
+      localStorage.removeItem('access-token');
+      localStorage.removeItem('refresh-token');
+    },
+  });
+
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+  const removeUserInfo = userInfoStore((state: any) => state.removeUserInfo);
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [rightPos, setRightPos] = useState('-right-full');
+
   useEffect(() => {
     const CT = new ChannelService();
     CT.loadScript();
     CT.boot({ pluginKey: process.env.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY! });
+
+    const accessToken = localStorage.getItem('access-token');
+    if (accessToken) getCurrentUserInfoMutation.mutate();
 
     //for unmount
     return () => {
       CT.shutdown();
     };
   }, []);
-
-  const [rightPos, setRightPos] = useState('-right-full');
-
-  const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
-  const username = useAppSelector((state) => state.authReducer.value.username);
-
-  const router = useRouter();
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  const handleSignOut = () => {
-    router.push('/');
-    dispatch(signOut());
-  };
 
   return (
     <nav
@@ -84,17 +110,17 @@ export default function Navbar() {
         </div>
         <div className="hidden w-[17.5rem] ml-auto 2md:flex">
           <div className="flex ml-auto gap-3">
-            {isAuth ? (
+            {userInfo.isAuth ? (
               <>
                 <Link
                   href="/mypage"
                   className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
                 >
-                  <span className="font-semibold">{username}</span>님
+                  <span className="font-semibold">{userInfo.name}</span>님
                 </Link>
                 <button
                   className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
-                  onClick={handleSignOut}
+                  onClick={() => logoutMutation.mutate()}
                 >
                   로그아웃
                 </button>
@@ -118,11 +144,11 @@ export default function Navbar() {
             )}
           </div>
         </div>
-        <button
+        <div
           onClick={(e) => {
             setRightPos('right-0');
           }}
-          className={`block 2md:hidden px-[0.6rem] py-3 ml-auto mr-[0.1rem] rounded-full focus:outline-none`}
+          className={`block 2md:hidden px-[0.6rem] py-3 ml-auto mr-[0.1rem] rounded-full focus:outline-none text-center`}
         >
           <div className="w-[1.1rem] h-[2px] bg-[#262626] mb-[4px]"></div>
           <div className="w-[1.1rem] h-[2px] bg-[#262626] mb-[4px]"></div>
@@ -148,7 +174,7 @@ export default function Navbar() {
             </div>
             <ul className="flex flex-col items-center w-full text-base cursor-pointer pt-4">
               <div className="flex flex-col w-full border-b-[0.75rem] text-sm">
-                {isAuth ? (
+                {userInfo.isAuth ? (
                   <>
                     <Link
                       href="/mypage"
@@ -158,14 +184,14 @@ export default function Navbar() {
                       }}
                       className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
                     >
-                      <span className="font-semibold">{username}</span>님
+                      <span className="font-semibold">{userInfo.name}</span>님
                     </Link>
                     <button
                       className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
                       onClick={(e) => {
                         e.stopPropagation();
                         setRightPos('-right-full');
-                        handleSignOut();
+                        logoutMutation.mutate();
                       }}
                     >
                       로그아웃
@@ -238,7 +264,7 @@ export default function Navbar() {
               </Link>
             </ul>
           </div>
-        </button>
+        </div>
       </div>
     </nav>
   );
