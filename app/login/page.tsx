@@ -1,10 +1,33 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { signIn } from '../redux/features/authSlice';
-import { AppDispatch, useAppSelector } from '../redux/store';
-import { useDispatch } from 'react-redux';
+import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import Image from 'next/image';
+import logoImg from '@/public/images/logo.png';
+import axiosInstance from '../utils/axiosInstance';
+import { userInfoStore } from '../store/UserInfo';
+import { AxiosError } from 'axios';
+
+interface UserLoginInfoType {
+  id: string;
+  pwd: string;
+}
+
+// 로그인 API
+const login = (userAccountInfo: UserLoginInfoType) => {
+  const { id, pwd } = userAccountInfo;
+  const reqBody = {
+    no: id,
+    password: pwd,
+  };
+  return axiosInstance.post('/auth/login', reqBody);
+};
+
+// (로그인 한) 사용자 정보 조회 API
+export const getCurrentUserInfo = () => {
+  return axiosInstance.get('/auth/me');
+};
 
 export default function Login() {
   const STR_RIGHT_CASE_INPUT_ELEMENT_STYLE_CLASSNAME =
@@ -16,7 +39,83 @@ export default function Login() {
   const STR_WRONG_CASE_LABEL_ELEMENT_STYLE_CLASSNAME =
     'absolute text-sm text-gray-500 dark:text-gray-400 duration-150 transform -translate-y-[1.07rem] scale-75 top-2 origin-[0] bg-white dark:bg-gray-900 px-1 peer-focus:px-1 peer-focus:text-[#c84031] peer-focus:dark:text-[#c84031] peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 left-2';
 
-  const [userAccountInfo, setUserAccountInfo] = useState({ id: '', pwd: '' });
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onMutate: () => {
+      setIsAdjustOpacity(true);
+    },
+    onError: (error: AxiosError) => {
+      const resData: any = error.response?.data;
+      switch (resData.status) {
+        case 400:
+          switch (resData.code) {
+            case 'REG_NUMBER_REQUIRED':
+              alert('Bad Request(400)...');
+              break;
+            case 'INVALID_PASSWORD':
+              pwdInputRef.current?.focus();
+              setPwdInputAnnouceMsg('잘못된 비밀번호입니다.');
+              setPwdInputElementStyle(
+                STR_WRONG_CASE_INPUT_ELEMENT_STYLE_CLASSNAME,
+              );
+              setPwdLabelElementStyle(
+                STR_WRONG_CASE_LABEL_ELEMENT_STYLE_CLASSNAME,
+              );
+              break;
+            default:
+              alert('정의되지 않은 http code입니다.');
+          }
+          break;
+        case 404:
+          idInputRef.current?.focus();
+          setIdInputAnnouceMsg('등록되지 않은 사용자입니다.');
+          setIdInputElementStyle(STR_WRONG_CASE_INPUT_ELEMENT_STYLE_CLASSNAME);
+          setIdLabelElementStyle(STR_WRONG_CASE_LABEL_ELEMENT_STYLE_CLASSNAME);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+    onSuccess: (data) => {
+      const resData = data.data.data;
+      const { accessToken, refreshToken } = resData;
+
+      localStorage.setItem('access-token', accessToken);
+      localStorage.setItem('refresh-token', refreshToken);
+
+      // 로그인 후 사용자 정보 조회
+      getCurrentUserInfoMutation.mutate();
+
+      router.push('/');
+    },
+    onSettled: () => {
+      setIsAdjustOpacity(false);
+    },
+  });
+
+  const getCurrentUserInfoMutation = useMutation({
+    mutationFn: getCurrentUserInfo,
+    onSuccess: (data) => {
+      const resData = data.data.data;
+      const { no, name, email, university, department, role } = resData;
+      updateUserInfo({
+        no,
+        name,
+        email,
+        university,
+        department,
+        role,
+        isAuth: true,
+      });
+    },
+  });
+
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [userAccountInfo, setUserAccountInfo] = useState({
+    id: '',
+    pwd: '',
+  });
   const [idInputAnnounceMsg, setIdInputAnnouceMsg] = useState('');
   const [pwdInputAnnounceMsg, setPwdInputAnnouceMsg] = useState('');
   const [idInputElementStyle, setIdInputElementStyle] = useState(
@@ -31,15 +130,12 @@ export default function Login() {
   const [pwdLabelElementStyle, setPwdLabelElementStyle] = useState(
     STR_RIGHT_CASE_LABEL_ELEMENT_STYLE_CLASSNAME,
   );
+  const [isAdjustOpacity, setIsAdjustOpacity] = useState(false);
 
   const idInputRef = useRef<HTMLInputElement>(null);
   const pwdInputRef = useRef<HTMLInputElement>(null);
 
-  const isAuth = useAppSelector((state) => state.authReducer.value.isAuth);
-
   const router = useRouter();
-
-  const dispatch = useDispatch<AppDispatch>();
 
   const handleSignIn = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -66,42 +162,31 @@ export default function Login() {
       return;
     }
 
-    if (userAccountInfo.id !== 'test') {
-      idInputRef.current?.focus();
-      setIdInputAnnouceMsg('등록되지 않은 사용자입니다.');
-      setIdInputElementStyle(STR_WRONG_CASE_INPUT_ELEMENT_STYLE_CLASSNAME);
-      setIdLabelElementStyle(STR_WRONG_CASE_LABEL_ELEMENT_STYLE_CLASSNAME);
-      return;
-    }
-
-    if (userAccountInfo.pwd !== '1234') {
-      pwdInputRef.current?.focus();
-      setPwdInputAnnouceMsg('잘못된 비밀번호입니다.');
-      setPwdInputElementStyle(STR_WRONG_CASE_INPUT_ELEMENT_STYLE_CLASSNAME);
-      setPwdLabelElementStyle(STR_WRONG_CASE_LABEL_ELEMENT_STYLE_CLASSNAME);
-      return;
-    }
-
-    router.push('/');
-    dispatch(signIn(userAccountInfo));
+    loginMutation.mutate(userAccountInfo);
   };
 
-  useEffect(() => {
-    if (isAuth) {
-      router.push('/');
-      return;
-    }
-  }, [isAuth, router]);
+  // useEffect(() => {
+  //   if (isAuth) {
+  //     router.push('/');
+  //     return;
+  //   }
+  // }, [isAuth, router]);
 
   return (
     <div className="mt-10 h-[39rem]">
-      <div className="w-fit 2md:w-96 p-4 mx-auto">
+      <div
+        className={`w-fit 2md:w-96 p-4 mx-auto ${
+          isAdjustOpacity && 'opacity-60'
+        }`}
+      >
         <div className="flex flex-col text-center border p-8 rounded-md border-[#d8d9dc] bg-[#fefefe] shadow-lg">
           <div className="flex flex-col gap-2 text-xl my-2">
-            <img
-              src="/images/logo.png"
-              alt="logo"
-              style={{ width: '2rem' }}
+            <Image
+              src={logoImg}
+              alt="list"
+              width={35}
+              height={0}
+              quality={100}
               className="mx-auto mb-1"
             />
             <p>로그인</p>
