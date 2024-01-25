@@ -6,11 +6,15 @@ import ChannelService from '../third-party/ChannelTalk';
 import { userInfoStore } from '../store/UserInfo';
 import axiosInstance from '../utils/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
-import { getCurrentUserInfo } from '../login/page';
 
 // 로그아웃 API
 const logout = () => {
   return axiosInstance.get(`${process.env.NEXT_PUBLIC_AUTH_URL}/logout`);
+};
+
+// (로그인 한) 사용자 정보 조회 API
+const getCurrentUserInfo = () => {
+  return axiosInstance.get('/auth/me');
 };
 
 export default function Navbar() {
