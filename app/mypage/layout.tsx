@@ -1,28 +1,22 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import Loading from '../loading';
-// import PostList from './PostList';
 import { useRouter } from 'next/navigation';
-import ProfileInformation from './components/ProfileInformation';
-import ParticipationHistory from './components/ParticipationHistory/ParticipationHistory';
-import ManagingMyPost from './components/ManagingMyPost/ManagingMyPost';
+import { mypageTabNameStore } from '../store/MypageTabName';
 
-export default function Mypage() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [tab, setTab] = useState('profileInformation');
+export default function MyPagelayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const mypageTabName = mypageTabNameStore((state: any) => state.tabName);
+  const updateTabName = mypageTabNameStore((state: any) => state.updateTabName);
 
   const router = useRouter();
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
   const handleChangeTab = (tabName: string) => {
-    setTab(tabName);
+    updateTabName(tabName);
+    router.push(`/mypage/${tabName}`);
   };
-
-  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-6 px-5 2lg:px-0 overflow-x-auto">
@@ -34,9 +28,9 @@ export default function Mypage() {
           <div className="w-52">
             <div className="flex flex-col items-start gap-[1.125rem] font-semibold tracking-wide">
               <button
-                onClick={() => handleChangeTab('profileInformation')}
+                onClick={() => handleChangeTab('profile')}
                 className={`${
-                  tab === 'profileInformation'
+                  mypageTabName === 'profile'
                     ? 'text-[#242424] font-bold'
                     : 'text-[#6e6e6e] hover:text-[#3a8af9]'
                 } `}
@@ -44,9 +38,9 @@ export default function Mypage() {
                 프로필 정보
               </button>
               <button
-                onClick={() => handleChangeTab('participationHistory')}
+                onClick={() => handleChangeTab('participation-history')}
                 className={`${
-                  tab === 'participationHistory'
+                  mypageTabName === 'participation-history'
                     ? 'text-[#242424] font-bold'
                     : 'text-[#6e6e6e] hover:text-[#3a8af9]'
                 } `}
@@ -54,9 +48,9 @@ export default function Mypage() {
                 참가 내역
               </button>
               <button
-                onClick={() => handleChangeTab('managingMyPost')}
+                onClick={() => handleChangeTab('managing-my-post')}
                 className={`${
-                  tab === 'managingMyPost'
+                  mypageTabName === 'managing-my-post'
                     ? 'text-[#242424] font-bold'
                     : 'text-[#6e6e6e] hover:text-[#3a8af9]'
                 } `}
@@ -65,16 +59,7 @@ export default function Mypage() {
               </button>
             </div>
           </div>
-
-          <div className="w-full mt-[-0.75rem]">
-            {tab === 'profileInformation' ? (
-              <ProfileInformation />
-            ) : tab === 'participationHistory' ? (
-              <ParticipationHistory />
-            ) : (
-              <ManagingMyPost />
-            )}
-          </div>
+          <div className="w-full mt-[-0.75rem]">{children}</div>
         </div>
       </div>
     </div>

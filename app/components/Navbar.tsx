@@ -18,7 +18,7 @@ export default function Navbar() {
     mutationFn: getCurrentUserInfo,
     onSuccess: (data) => {
       const resData = data.data.data;
-      const { no, name, email, university, department, role } = resData;
+      const { no, name, email, university, department, phone, role } = resData;
       updateUserInfo({
         no,
         name,
@@ -26,6 +26,7 @@ export default function Navbar() {
         university,
         department,
         role,
+        phone,
         isAuth: true,
       });
     },
@@ -113,7 +114,7 @@ export default function Navbar() {
             {userInfo.isAuth ? (
               <>
                 <Link
-                  href="/mypage"
+                  href="/mypage/profile"
                   className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
                 >
                   <span className="font-semibold">{userInfo.name}</span>님
@@ -177,7 +178,7 @@ export default function Navbar() {
                 {userInfo.isAuth ? (
                   <>
                     <Link
-                      href="/mypage"
+                      href="/mypage/profile"
                       onClick={(e) => {
                         e.stopPropagation();
                         setRightPos('-right-full');
