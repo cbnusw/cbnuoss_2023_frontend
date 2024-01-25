@@ -25,7 +25,7 @@ const login = (userAccountInfo: UserLoginInfoType) => {
 };
 
 // (로그인 한) 사용자 정보 조회 API
-export const getCurrentUserInfo = () => {
+const getCurrentUserInfo = () => {
   return axiosInstance.get('/auth/me');
 };
 
