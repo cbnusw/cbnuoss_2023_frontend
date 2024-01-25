@@ -97,13 +97,14 @@ export default function Login() {
     mutationFn: getCurrentUserInfo,
     onSuccess: (data) => {
       const resData = data.data.data;
-      const { no, name, email, university, department, role } = resData;
+      const { no, name, email, university, department, phone, role } = resData;
       updateUserInfo({
         no,
         name,
         email,
         university,
         department,
+        phone,
         role,
         isAuth: true,
       });
