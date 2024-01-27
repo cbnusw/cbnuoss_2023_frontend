@@ -13,13 +13,13 @@ const logout = () => {
 };
 
 // (로그인 한) 사용자 정보 조회 API
-const getCurrentUserInfo = () => {
+const fetchCurrentUserInfo = () => {
   return axiosInstance.get('/auth/me');
 };
 
 export default function Navbar() {
   const getCurrentUserInfoMutation = useMutation({
-    mutationFn: getCurrentUserInfo,
+    mutationFn: fetchCurrentUserInfo,
     onSuccess: (data) => {
       const resData = data.data.data;
       const { no, name, email, university, department, phone, role } = resData;
