@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ExamListItem from './ExamListItem';
 import NoneExamListItem from './NoneExamListItem';
 import Loading from '@/app/loading';
@@ -8,7 +8,7 @@ import axiosInstance from '@/app/utils/axiosInstance';
 import useDebounce from '@/app/hooks/useDebounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { ExamInfo } from '@/app/components/exams/ExamList';
+import { ExamInfo } from '@/app/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 interface ExamListProps {

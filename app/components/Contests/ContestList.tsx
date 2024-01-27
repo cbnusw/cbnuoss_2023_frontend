@@ -6,43 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import ContestListItem from './ContestListItem';
 import NoneContestListItem from './NoneContestListItem';
 import DummyContestListemItem from './DummyContestListemItem';
-
-export interface ContestInfo {
-  password: string | null;
-  isPassword: boolean;
-  problems: string[];
-  applyingPeriod: {
-    start: string;
-    end: string;
-  } | null;
-  contestants: string[];
-  _id: string;
-  title: string;
-  content: string;
-  testPeriod: {
-    start: string; // Date 타입으로 변환할 수도 있습니다.
-    end: string; // Date 타입으로 변환할 수도 있습니다.
-  };
-  writer: {
-    center?: any; // 'null'이거나 더 구체적인 타입이 필요할 수 있습니다.
-    permissions: string[];
-    _id: string;
-    no: string;
-    name: string;
-    email: string;
-    phone: string;
-    department: string;
-    university: string;
-    position: string;
-    role: string;
-    joinedAt: string; // Date 타입으로 변환할 수도 있습니다.
-    updatedAt: string; // Date 타입으로 변환할 수도 있습니다.
-    __v: number;
-  };
-  createdAt: string; // Date 타입으로 변환할 수도 있습니다.
-  updatedAt: string; // Date 타입으로 변환할 수도 있습니다.
-  __v: number;
-}
+import { ContestInfo } from '@/app/types/contest';
 
 const fetchProgressingContests = () => {
   return axiosInstance.get(

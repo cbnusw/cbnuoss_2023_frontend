@@ -48,7 +48,7 @@ export default function Notices() {
                 검색
               </label>
               <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
-                제목, 내용, 작성자로 검색
+                제목, 작성자명으로 검색
               </p>
             </div>
             <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
@@ -73,20 +73,17 @@ export default function Notices() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
                     <tr>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-[3.75rem] px-4 py-2">
                         번호
                       </th>
                       <th scope="col" className="px-4 py-2">
                         제목
                       </th>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-32 px-4 py-2">
                         작성자
                       </th>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-36 px-4 py-2">
                         작성일
-                      </th>
-                      <th scope="col" className="px-4 py-2">
-                        조회수
                       </th>
                     </tr>
                   </thead>

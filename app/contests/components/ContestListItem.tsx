@@ -1,6 +1,6 @@
 'use client';
 
-import { ContestInfo } from '@/app/components/Contests/ContestList';
+import { ContestInfo } from '@/app/types/contest';
 import {
   formatDateToYYMMDDHHMM,
   formatDateToYYMMDD,

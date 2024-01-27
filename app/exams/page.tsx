@@ -57,21 +57,23 @@ export default function Exams() {
                 검색
               </label>
               <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
-                시험명, 수업명, 작성자로 검색
+                시험명, 수업명, 작성자명으로 검색
               </p>
             </div>
-            <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
-              <div className="flex justify-end mb-2">
-                <div className="flex">
-                  <Link
-                    href="exams/register"
-                    className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
-                  >
-                    등록하기
-                  </Link>
+            {userInfo.role === 'operator' && (
+              <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
+                <div className="flex justify-end mb-2">
+                  <div className="flex">
+                    <Link
+                      href="exams/register"
+                      className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                    >
+                      등록하기
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </form>
 

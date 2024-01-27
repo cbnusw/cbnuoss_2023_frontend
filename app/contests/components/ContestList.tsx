@@ -5,9 +5,9 @@ import NoneContestListItem from './NoneContestListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '../../utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { ContestInfo } from '@/app/components/Contests/ContestList';
+import { ContestInfo } from '@/app/types/contest';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import useDebounce from '@/app/hooks/useDebounce';
 
@@ -16,7 +16,7 @@ interface ContestListProps {
 }
 
 // 대회 목록 반환 API (10개 게시글 단위로)
-const fetchExams = async (page: number, searchQuery: string) => {
+const fetchContests = async (page: number, searchQuery: string) => {
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/?page=${page}&limit=10&sort=-createdAt&q=title=${searchQuery}`,
   );
@@ -32,7 +32,7 @@ export default function ContestList({ searchQuery }: ContestListProps) {
 
   const { isPending, data } = useQuery({
     queryKey: ['contestList', page, debouncedSearchQuery],
-    queryFn: () => fetchExams(page, searchQuery),
+    queryFn: () => fetchContests(page, searchQuery),
   });
 
   const router = useRouter();
