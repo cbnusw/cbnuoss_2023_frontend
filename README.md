@@ -9,9 +9,6 @@
 
 ## Getting Started
 
-> [!note]
-> **Pre-deployment** **URL:** **https://cbnuoss-2023-frontend.vercel.app/**
-
 First, run the development server:
 
 ```bash
@@ -23,3 +20,6 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+> [!note]
+> **Pre-deployment** **URL:** **https://cbnuoss-2023-frontend.vercel.app/**
