@@ -8,14 +8,14 @@ import {
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-interface ContestProps {
+interface ContestListItemProps {
   contestInfo: ContestInfo;
   total: number;
   page: number;
   index: number;
 }
 
-export default function ContestListItem(props: ContestProps) {
+export default function ContestListItem(props: ContestListItemProps) {
   const { contestInfo, total, page, index } = props;
 
   const router = useRouter();
