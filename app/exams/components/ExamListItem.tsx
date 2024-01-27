@@ -1,7 +1,6 @@
 'use client';
 
-import { ContestInfo } from '@/app/components/Contests/ContestList';
-import { ExamInfo } from '@/app/components/exams/ExamList';
+import { ExamInfo } from '@/app/types/exam';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';
