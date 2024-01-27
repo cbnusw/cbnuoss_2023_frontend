@@ -1,9 +1,23 @@
 'use client';
 
+import { ContestInfo } from '@/app/components/Contests/ContestList';
+import {
+  formatDateToYYMMDDHHMM,
+  formatDateToYYMMDD,
+} from '@/app/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function ContestListItem() {
+interface ContestProps {
+  contestInfo: ContestInfo;
+  total: number;
+  page: number;
+  index: number;
+}
+
+export default function ContestListItem(props: ContestProps) {
+  const { contestInfo, total, page, index } = props;
+
   const router = useRouter();
 
   return (
@@ -15,18 +29,23 @@ export default function ContestListItem() {
     >
       <th
         scope="row"
-        className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+        className="px-4 py-3 font-normal text-gray-900 whitespace-nowrap dark:text-white"
       >
-        1
+        {total - (page - 1) * 10 - index}
       </th>
-      <td className="hover:underline focus:underline">
-        2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
+      <td className="hover:underline focus:underline">{contestInfo.title}</td>
+      <td className="font-medium">
+        {contestInfo.applyingPeriod ? (
+          <>~ {formatDateToYYMMDDHHMM(contestInfo.applyingPeriod.end)}</>
+        ) : (
+          <>~ {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)}</>
+        )}
       </td>
-      <td className="font-medium">~ 2023.06.26. 03:00</td>
-      <td className="text-red-500 font-medium">~ 2023.06.26. 06:00</td>
-      <td className="font-medium">62명</td>
-      <td className="font-medium">신재혁</td>
-      <td className="">2023.05.09</td>
+      <td className="text-red-500 font-medium">
+        {formatDateToYYMMDDHHMM(contestInfo.testPeriod?.start)} ~{' '}
+        {formatDateToYYMMDDHHMM(contestInfo.testPeriod?.end)}
+      </td>
+      <td className="">{formatDateToYYMMDD(contestInfo.createdAt)}</td>
     </tr>
   );
 }
