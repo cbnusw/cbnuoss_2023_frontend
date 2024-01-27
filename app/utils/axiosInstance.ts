@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const instance = axios.create({
+const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-instance.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('access-token');
     if (accessToken) config.headers['x-access-token'] = accessToken;
@@ -16,7 +16,7 @@ instance.interceptors.request.use(
   },
 );
 
-instance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (response) => {
     // 응답 데이터를 처리
     return response;
@@ -35,4 +35,4 @@ instance.interceptors.response.use(
   },
 );
 
-export default instance;
+export default axiosInstance;
