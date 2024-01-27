@@ -15,7 +15,7 @@ interface ContestListProps {
   searchQuery: string;
 }
 
-// 시험 목록 반환 API (10개 게시글 단위로)
+// 대회 목록 반환 API (10개 게시글 단위로)
 const fetchExams = async (page: number, searchQuery: string) => {
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/?page=${page}&limit=10&sort=-createdAt&q=title=${searchQuery}`,
@@ -31,7 +31,7 @@ export default function ContestList({ searchQuery }: ContestListProps) {
   const page = Number(params?.get('page')) || 1;
 
   const { isPending, data } = useQuery({
-    queryKey: ['examList', page, debouncedSearchQuery],
+    queryKey: ['contestList', page, debouncedSearchQuery],
     queryFn: () => fetchExams(page, searchQuery),
   });
 
