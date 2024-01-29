@@ -1,8 +1,12 @@
 'use client';
 
+import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
@@ -12,6 +16,9 @@ const DynamicEditor = dynamic(
 );
 
 export default function RegisterContest() {
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [isLoading, setIsLoading] = useState(true);
   const [contestName, setContestName] = useState('');
   const [editorContent, setEditorContent] = useState('');
   const [contestStartDateTime, setContestStartDateTime] = useState('');
@@ -116,6 +123,20 @@ export default function RegisterContest() {
 
     alert('등록 기능 개발 예정');
   };
+
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
+  useEffect(() => {
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

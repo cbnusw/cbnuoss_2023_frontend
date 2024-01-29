@@ -1,17 +1,39 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyContestPostList from './components/contestPost/MyContestPostList';
 import MyExamPostList from './components/examPost/MyExamPostList';
 import MyPracticePostList from './components/practicePost/MyPracticePostList';
 import MyNoticePostList from './components/noticePost/MyNoticePostList';
+import { mypageTabNameStore } from '@/app/store/MypageTabName';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { useRouter } from 'next/navigation';
 
 export default function ManagingMyPost() {
   const [category, setCategory] = useState('contest');
 
-  const handleChangeCategory = (category: string) => {
-    setCategory(category);
+  const router = useRouter();
+
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+  const updateTabName = mypageTabNameStore((state: any) => state.updateTabName);
+
+  const handleChangeCategory = (newCategory: string) => {
+    if (category !== newCategory) {
+      router.push(`/mypage/managing-my-post?page=1`);
+      setCategory(newCategory);
+    }
   };
+
+  useEffect(() => {
+    updateTabName('managing-my-post');
+  }, [updateTabName]);
+
+  // 비관리자 회원의 접근 시 로그인 페이지로 리다이렉트 수행
+  if (userInfo.role !== 'operator') {
+    alert('접근 권한이 없습니다.');
+    router.back();
+    return;
+  }
 
   return (
     <div className="mb-20">
@@ -78,115 +100,19 @@ export default function ManagingMyPost() {
       <div>
         {category === 'contest' ? (
           <section className="dark:bg-gray-900">
-            <div className="mx-auto mt-6 w-full">
-              <div className="border dark:bg-gray-800 relative overflow-hidden rounded-sm">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
-                      <tr>
-                        <th scope="col" className="px-4 py-2">
-                          번호
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          대회명
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          신청기간
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          대회시간
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          작성일
-                        </th>
-                      </tr>
-                    </thead>
-                    <MyContestPostList />
-                  </table>
-                </div>
-              </div>
-            </div>
+            <MyContestPostList />
           </section>
         ) : category === 'exam' ? (
           <section className="dark:bg-gray-900">
-            <div className="mx-auto mt-6 w-full">
-              <div className="border dark:bg-gray-800 relative overflow-hidden rounded-sm">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
-                      <tr>
-                        <th scope="col" className="px-4 py-2">
-                          번호
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          시험명
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          수업명
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          시험 시간
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          작성일
-                        </th>
-                      </tr>
-                    </thead>
-                    <MyExamPostList />
-                  </table>
-                </div>
-              </div>
-            </div>
+            <MyExamPostList />
           </section>
         ) : category === 'practice' ? (
           <section className="dark:bg-gray-900">
-            <div className="mx-auto mt-6 w-full">
-              <div className="border dark:bg-gray-800 relative overflow-hidden rounded-sm">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
-                      <tr>
-                        <th scope="col" className="px-4 py-2">
-                          번호
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          문제명
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          작성일
-                        </th>
-                      </tr>
-                    </thead>
-                    <MyPracticePostList />
-                  </table>
-                </div>
-              </div>
-            </div>
+            <MyPracticePostList />
           </section>
         ) : (
           <section className="dark:bg-gray-900">
-            <div className="mx-auto mt-6 w-full">
-              <div className="border dark:bg-gray-800 relative overflow-hidden rounded-sm">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
-                      <tr>
-                        <th scope="col" className="px-4 py-2">
-                          번호
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          제목
-                        </th>
-                        <th scope="col" className="px-4 py-2">
-                          작성일
-                        </th>
-                      </tr>
-                    </thead>
-                    <MyNoticePostList />
-                  </table>
-                </div>
-              </div>
-            </div>
+            <MyNoticePostList />
           </section>
         )}
       </div>

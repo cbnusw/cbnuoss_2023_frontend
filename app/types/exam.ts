@@ -30,3 +30,9 @@ export interface ExamInfo {
   updatedAt: string; // Date 타입으로 변환할 수도 있습니다.
   __v: number;
 }
+
+export interface ExamEnrolledInfo {
+  _id: string;
+  title: string;
+  course: string;
+}

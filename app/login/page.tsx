@@ -82,6 +82,7 @@ export default function Login() {
 
       localStorage.setItem('access-token', accessToken);
       localStorage.setItem('refresh-token', refreshToken);
+      localStorage.setItem('activeAuthorization', 'true');
 
       // 로그인 후 사용자 정보 조회
       getCurrentUserInfoMutation.mutate();
@@ -97,8 +98,10 @@ export default function Login() {
     mutationFn: fetchCurrentUserInfo,
     onSuccess: (data) => {
       const resData = data.data.data;
-      const { no, name, email, university, department, phone, role } = resData;
+      const { _id, no, name, email, university, department, phone, role } =
+        resData;
       updateUserInfo({
+        _id,
         no,
         name,
         email,
@@ -165,13 +168,6 @@ export default function Login() {
 
     loginMutation.mutate(userAccountInfo);
   };
-
-  // useEffect(() => {
-  //   if (isAuth) {
-  //     router.push('/');
-  //     return;
-  //   }
-  // }, [isAuth, router]);
 
   return (
     <div className="mt-10 h-[39rem]">

@@ -64,7 +64,7 @@ export default function PracticeList({ searchQuery }: PracticeListProps) {
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
               <tr>
-                <th scope="col" className="w-[3.75rem] px-4 py-2">
+                <th scope="col" className="w-16 px-4 py-2">
                   번호
                 </th>
                 <th scope="col" className="px-4 py-2">

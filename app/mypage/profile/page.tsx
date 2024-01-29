@@ -1,10 +1,16 @@
 'use client';
 
+import { mypageTabNameStore } from '@/app/store/MypageTabName';
 import { userInfoStore } from '@/app/store/UserInfo';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function Profile() {
   const userInfo = userInfoStore((state: any) => state.userInfo);
+  const updateTabName = mypageTabNameStore((state: any) => state.updateTabName);
+
+  useEffect(() => {
+    updateTabName('profile');
+  }, [updateTabName]);
 
   return (
     <div className="mb-20">

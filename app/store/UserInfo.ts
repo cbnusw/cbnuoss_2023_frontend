@@ -1,16 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-
-interface UserInfo {
-  no: string;
-  name: string;
-  email: string;
-  university: string;
-  department: string;
-  phone: string;
-  role: string;
-  isAuth: boolean;
-}
+import { UserInfo } from '../types/user';
 
 export interface StoreState {
   userInfo: UserInfo;
