@@ -6,47 +6,19 @@ import ChannelService from '../third-party/ChannelTalk';
 import { userInfoStore } from '../store/UserInfo';
 import axiosInstance from '../utils/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
+import { fetchCurrentUserInfo } from '../utils/fetchCurrentUserInfo';
 
 // 로그아웃 API
 const logout = () => {
   return axiosInstance.get(`${process.env.NEXT_PUBLIC_AUTH_URL}/logout`);
 };
 
-// (로그인 한) 사용자 정보 조회 API
-const fetchCurrentUserInfo = () => {
-  return axiosInstance.get('/auth/me');
-};
-
 export default function Navbar() {
-  const getCurrentUserInfoMutation = useMutation({
-    mutationFn: fetchCurrentUserInfo,
-    onSuccess: (data) => {
-      const resData = data.data.data;
-      const { no, name, email, university, department, phone, role } = resData;
-      updateUserInfo({
-        no,
-        name,
-        email,
-        university,
-        department,
-        role,
-        phone,
-        isAuth: true,
-      });
-    },
-  });
-
   const logoutMutation = useMutation({
     mutationFn: logout,
-    onSettled: () => {
-      removeUserInfo();
-      localStorage.removeItem('access-token');
-      localStorage.removeItem('refresh-token');
-    },
   });
 
   const userInfo = userInfoStore((state: any) => state.userInfo);
-  const removeUserInfo = userInfoStore((state: any) => state.removeUserInfo);
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [rightPos, setRightPos] = useState('-right-full');
@@ -56,14 +28,15 @@ export default function Navbar() {
     CT.loadScript();
     CT.boot({ pluginKey: process.env.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY! });
 
-    const accessToken = localStorage.getItem('access-token');
-    if (accessToken) getCurrentUserInfoMutation.mutate();
+    // (로그인 한) 사용자 정보 조회
+    const activeAuthorization = localStorage.getItem('activeAuthorization');
+    if (activeAuthorization) fetchCurrentUserInfo(updateUserInfo);
 
     //for unmount
     return () => {
       CT.shutdown();
     };
-  }, []);
+  }, [updateUserInfo]);
 
   return (
     <nav
