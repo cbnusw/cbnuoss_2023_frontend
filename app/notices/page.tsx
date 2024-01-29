@@ -36,7 +36,6 @@ export default function Notices() {
                   viewBox="0 -960 960 960"
                   width="21"
                   fill="#464646"
-                  className="scale-x-[-1]"
                 >
                   <path d="M785.269-141.629 530.501-396.501q-29.502 26.199-69.036 40.003-39.533 13.805-80.64 13.805-100.978 0-170.677-69.711-69.698-69.71-69.698-169.473 0-99.764 69.423-169.558 69.423-69.795 169.62-69.795 100.198 0 169.974 69.757 69.776 69.756 69.776 169.593 0 41.752-14.411 81.136-14.41 39.385-40.064 70.298L820.05-176.667l-34.781 35.038ZM380.256-390.577q79.907 0 135.505-55.536t55.598-135.91q0-80.375-55.598-135.849-55.598-55.475-135.767-55.475-80.511 0-136.086 55.537-55.575 55.536-55.575 135.91 0 80.375 55.619 135.849 55.618 55.474 136.304 55.474Z" />
                 </svg>
@@ -73,7 +72,7 @@ export default function Notices() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
                     <tr>
-                      <th scope="col" className="w-[3.75rem] px-4 py-2">
+                      <th scope="col" className="w-16 px-4 py-2">
                         번호
                       </th>
                       <th scope="col" className="px-4 py-2">
@@ -82,7 +81,7 @@ export default function Notices() {
                       <th scope="col" className="w-32 px-4 py-2">
                         작성자
                       </th>
-                      <th scope="col" className="w-36 px-4 py-2">
+                      <th scope="col" className="w-24 px-4 py-2">
                         작성일
                       </th>
                     </tr>
