@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NoneContestParticipantListItem() {
+export default function NoneContestEnrolledListItem() {
   return (
     <tr className="border-b dark:border-gray-700 text-xs text-center">
       <th
