@@ -26,10 +26,8 @@ axiosInstance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('access-token');
       localStorage.removeItem('refresh-token');
-
-      if (typeof window !== 'undefined') {
-        window.location.href = '/login';
-      }
+      localStorage.removeItem('activeAuthorization');
+      if (typeof window !== 'undefined') window.location.href = '/login';
     }
     return Promise.reject(error);
   },
