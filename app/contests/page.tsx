@@ -15,7 +15,7 @@ export default function Contests() {
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
-        <p className="flex items-center text-3xl font-semibold tracking-wide">
+        <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <Image
             src={trophyImg}
             alt="trophy"
@@ -26,7 +26,7 @@ export default function Contests() {
           />
           <span className="ml-2 lift-up">대회 목록</span>
         </p>
-        <form className="mt-5 mb-5">
+        <form className="mt-5 mb-4">
           <div className="flex">
             <div className="flex flex-col relative z-0 w-1/2 group">
               <input
