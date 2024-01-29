@@ -1,30 +1,43 @@
+import { ExamInfo } from '@/app/types/exam';
+import {
+  formatDateToYYMMDD,
+  formatDateToYYMMDDHHMM,
+} from '@/app/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface MyExamPostListItemProps {
-  eid: string;
+  examInfo: ExamInfo;
+  total: number;
+  page: number;
+  index: number;
 }
 
-export default function MyExamPostListItem({ eid }: MyExamPostListItemProps) {
+export default function MyExamPostListItem(props: MyExamPostListItemProps) {
+  const { examInfo, total, page, index } = props;
+
   const router = useRouter();
 
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        router.push(`/exams/${eid}`);
+        router.push(`/exams/${examInfo._id}`);
       }}
     >
       <th
         scope="row"
         className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
-        1
+        {total - (page - 1) * 10 - index}
       </th>
-      <td className="">코딩테스트 1차</td>
-      <td className="">2023-01-자료구조(소프트웨어학부 01반)</td>
-      <td className="">2023.07.13 15:00 ~ 2023.07.13 16:00</td>
-      <td className="">2023.07.18</td>
+      <td className="">{examInfo.title}</td>
+      <td className="">{examInfo.course}</td>
+      <td className="">
+        {formatDateToYYMMDDHHMM(examInfo.testPeriod.start)} ~{' '}
+        {formatDateToYYMMDDHHMM(examInfo.testPeriod.end)}
+      </td>
+      <td className="">{formatDateToYYMMDD(examInfo.createdAt)}</td>
     </tr>
   );
 }
