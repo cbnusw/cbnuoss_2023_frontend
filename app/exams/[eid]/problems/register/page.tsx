@@ -1,8 +1,12 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
+import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
@@ -11,6 +15,9 @@ interface DefaultProps {
 }
 
 export default function RegisterExamProblem(props: DefaultProps) {
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [isLoading, setIsLoading] = useState(true);
   const [problemName, setProblemName] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
@@ -100,6 +107,20 @@ export default function RegisterExamProblem(props: DefaultProps) {
     // console.log('PDF: ', uploadedProblemPdfFileUrl);
     // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
   };
+
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
+  useEffect(() => {
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

@@ -1,6 +1,9 @@
 'use client';
 
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -17,6 +20,8 @@ const MarkdownPreview = dynamic(
 );
 
 export default function UsersExamSubmit(props: DefaultProps) {
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const eid = props.params.eid;
@@ -27,9 +32,17 @@ export default function UsersExamSubmit(props: DefaultProps) {
     router.push(`/exams/${eid}/submits`);
   };
 
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
 
   if (isLoading) return <Loading />;
 

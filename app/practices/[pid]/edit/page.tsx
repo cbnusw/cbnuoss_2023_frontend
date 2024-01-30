@@ -2,6 +2,9 @@
 
 import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -26,6 +29,8 @@ export default function EditPractice(props: DefaultProps) {
       'http://localhost:3000/in_and_out/3.out',
     ],
   };
+
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
   const [practiceName, setPracticeName] = useState(practiceInfo.title);
@@ -122,9 +127,17 @@ export default function EditPractice(props: DefaultProps) {
     // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
   };
 
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
 
   if (isLoading) return <Loading />;
 
