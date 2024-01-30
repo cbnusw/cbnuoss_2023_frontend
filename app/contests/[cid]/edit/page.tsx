@@ -1,6 +1,9 @@
 'use client';
 
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
@@ -53,6 +56,8 @@ export default function EditContest(props: DefaultProps) {
     isCheckedUsingContestProblemsPwd: true,
     contestProblemsPwd: 'dfkjnfdhreiu5435',
   };
+
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
   const [contestName, setContestName] = useState(contestInfo.title);
@@ -172,9 +177,17 @@ export default function EditContest(props: DefaultProps) {
     alert('수정 기능 개발 예정');
   };
 
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
 
   if (isLoading) return <Loading />;
 
