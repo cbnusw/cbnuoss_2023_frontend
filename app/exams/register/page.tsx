@@ -1,8 +1,12 @@
 'use client';
 
+import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const DynamicEditor = dynamic(
   () => import('@/app/components/CKEditor/CKEditor'),
@@ -12,6 +16,9 @@ const DynamicEditor = dynamic(
 );
 
 export default function RegisterExam() {
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [isLoading, setIsLoading] = useState(true);
   const [examName, setExamName] = useState('');
   const [courseName, setCourseName] = useState('');
   const [editorContent, setEditorContent] = useState('');
@@ -94,6 +101,20 @@ export default function RegisterExam() {
 
     alert('등록 기능 개발 예정');
   };
+
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
+  useEffect(() => {
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
@@ -189,7 +210,7 @@ export default function RegisterExam() {
               id="start-date"
               name="start-date"
               value={examStartDateTime.slice(0, 16)}
-              min={new Date().toISOString().slice(0, 16)}
+              min={currentDate}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
               onChange={(e) => setExamStartDateTime(e.target.value)}
             />
@@ -199,7 +220,7 @@ export default function RegisterExam() {
               id="end-date"
               name="end-date"
               value={examEndDateTime.slice(0, 16)}
-              min={new Date().toISOString().slice(0, 16)}
+              min={currentDate}
               className="text-sm appearance-none border rounded shadow py-[0.375rem] px-2 text-gray-500"
               onChange={(e) => setExamEndDateTime(e.target.value)}
             />
