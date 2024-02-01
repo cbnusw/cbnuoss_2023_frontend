@@ -64,6 +64,10 @@
   letter-spacing: 0.005rem;
 }
 
+.ck strong {
+  color: inherit;
+}
+
 .ck h2,
 h3,
 h4 {
@@ -85,6 +89,13 @@ h4 {
   font-size: 1.25em;
 }
 
+.markdown-preview strong,
+s,
+u,
+i {
+  color: inherit;
+}
+
 .ck ul,
 ol {
   margin-left: 1.75rem;
@@ -98,7 +109,14 @@ ol {
 }
 
 .ck p {
-  margin: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.ck .text-huge,
+.text-big,
+.text-small,
+.text-tiny {
+  line-height: 1.5;
 }
 
 /* uiw markdown(Editor) CSS */
@@ -117,13 +135,46 @@ ol {
   letter-spacing: 0.04rem;
 }
 
+.markdown-preview p {
+  margin-bottom: 0 !important;
+}
+
+.markdown-preview strong,
+s,
+u,
+i {
+  color: inherit;
+}
+
+.markdown-preview .text-huge {
+  font-size: 1.8em;
+}
+
+.markdown-preview .text-big {
+  font-size: 1.4em;
+}
+
+.markdown-preview .text-small {
+  font-size: 0.85em;
+}
+
+.markdown-preview .text-tiny {
+  font-size: 0.7em;
+}
+
 .markdown-preview ul {
   list-style-type: disc;
 }
 
+.markdown-preview ol {
+  list-style-type: disc;
+}
+
 .markdown-preview blockquote {
+  font-style: normal !important;
   padding: 1rem 1.75rem !important;
   border-left: 0.25rem solid #2fc27b !important;
+  background-color: #fafcfe;
 }
 
 .markdown-preview img {
