@@ -14,12 +14,9 @@ interface DefaultProps {
   };
 }
 
-const DynamicEditor = dynamic(
-  () => import('@/app/components/CKEditor/CKEditor'),
-  {
-    ssr: false,
-  },
-);
+const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
+  ssr: false,
+});
 
 export default function EditContest(props: DefaultProps) {
   const contestInfo = {
@@ -232,8 +229,8 @@ export default function EditContest(props: DefaultProps) {
         </div>
 
         <div className="w-full mx-auto overflow-auto">
-          <DynamicEditor
-            initEditorContent={contestInfo.content}
+          <CustomCKEditor
+            initEditorContent={''}
             onEditorChange={setEditorContent}
           />
         </div>

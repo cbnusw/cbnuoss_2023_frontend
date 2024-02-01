@@ -8,12 +8,9 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
-const DynamicEditor = dynamic(
-  () => import('@/app/components/CKEditor/CKEditor'),
-  {
-    ssr: false,
-  },
-);
+const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
+  ssr: false,
+});
 
 export default function RegisterExam() {
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
@@ -196,7 +193,7 @@ export default function RegisterExam() {
         </div>
 
         <div className="w-full mx-auto overflow-auto">
-          <DynamicEditor
+          <CustomCKEditor
             initEditorContent={''}
             onEditorChange={setEditorContent}
           />
