@@ -133,8 +133,6 @@ export default function RegisterContest() {
     });
   }, [updateUserInfo, router]);
 
-  console.log(editorContent);
-
   if (isLoading) return <Loading />;
 
   return (
