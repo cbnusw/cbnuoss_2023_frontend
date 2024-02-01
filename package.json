@@ -11,8 +11,7 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-react": "^6.1.0",
-    "@ckeditor/ckeditor5-word-count": "^38.1.0",
+    "@ckeditor/ckeditor5-react": "^6.2.0",
     "@tanstack/react-query": "^5.17.19",
     "@tanstack/react-query-devtools": "^5.17.19",
     "@tanstack/react-query-next-experimental": "^5.17.19",
@@ -23,7 +22,7 @@
     "@uiw/react-md-editor": "3.6.0",
     "autoprefixer": "10.4.14",
     "axios": "^1.6.5",
-    "ckeditor5-custom-build": "./app/utils/ckeditor5",
+    "ckeditor5-custom-build": "file:./ckeditor5",
     "dayjs": "^1.11.8",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
