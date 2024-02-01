@@ -111,10 +111,10 @@ export default function NoticeDetail(props: DefaultProps) {
           />
         </div>
         <div>
-          <div className="flex gap-3 justify-end">
+          <div className="flex gap-2 justify-end">
             <button
               onClick={handleEditNotice}
-              className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shad/editow"
+              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +129,7 @@ export default function NoticeDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleDeleteNotice}
-              className="flex gap-[0.375rem] items-center text-white bg-red-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#e14343] hover:bg-[#e14343] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

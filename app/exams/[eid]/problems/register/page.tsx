@@ -1,8 +1,12 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
+import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface DefaultProps {
   params: {
@@ -11,6 +15,9 @@ interface DefaultProps {
 }
 
 export default function RegisterExamProblem(props: DefaultProps) {
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [isLoading, setIsLoading] = useState(true);
   const [problemName, setProblemName] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
@@ -100,6 +107,20 @@ export default function RegisterExamProblem(props: DefaultProps) {
     // console.log('PDF: ', uploadedProblemPdfFileUrl);
     // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
   };
+
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
+  useEffect(() => {
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
@@ -275,13 +296,13 @@ export default function RegisterExamProblem(props: DefaultProps) {
         <div className="mt-14 pb-2 flex justify-end gap-3">
           <button
             onClick={handleCancelProblemRegister}
-            className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+            className="px-4 py-[0.5rem] rounded-[6px] font-light"
           >
             취소
           </button>
           <button
             onClick={handleRegisterProblem}
-            className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
             등록
           </button>

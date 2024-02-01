@@ -75,12 +75,10 @@ export default function ExamDetail(props: DefaultProps) {
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
-          <p className="text-2xl font-bold tracking-tight">
-            2023-01-자료구조(소프트웨어학부 01반)
-          </p>
+          <p className="text-2xl font-bold tracking-tight">코딩테스트 1차</p>
           <div className="flex justify-between pb-3 border-b border-gray-300">
             <span className="font-semibold">
-              제출 기간:
+              시험 시간:
               {/* <span className="text-red-500 font-bold"> 49분 45초 남음</span> */}
               <span className="font-light">
                 {' '}
@@ -93,7 +91,10 @@ export default function ExamDetail(props: DefaultProps) {
             </span>
             <div className="flex gap-3">
               <span className="font-semibold">
-                교과목명: <span className="font-light">자료구조</span>
+                수업명:{' '}
+                <span className="font-light">
+                  2023-01-자료구조(소프트웨어학부 01반)
+                </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
               <span className="font-semibold">
@@ -139,10 +140,10 @@ export default function ExamDetail(props: DefaultProps) {
           />
         </div>
         <div>
-          <div className="flex gap-3 justify-end">
+          <div className="flex gap-2 justify-end">
             <button
               onClick={handleGoToExamSubmits}
-              className="flex gap-[0.375rem] items-center text-white bg-[#6860ff] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#5951f0] hover:bg-[#5951f0] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -157,7 +158,7 @@ export default function ExamDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleGoToExamProblems}
-              className="flex gap-[0.375rem] items-center text-white bg-green-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3e9368] hover:bg-[#3e9368] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +173,7 @@ export default function ExamDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleEditExam}
-              className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#dc9429] hover:bg-[#dc9429]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +188,7 @@ export default function ExamDetail(props: DefaultProps) {
             </button>
             <button
               onClick={handleDeleteExam}
-              className="flex gap-[0.375rem] items-center text-white bg-red-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#e14343] hover:bg-[#e14343] box-shadow"
+              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#e14343] hover:bg-[#e14343]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

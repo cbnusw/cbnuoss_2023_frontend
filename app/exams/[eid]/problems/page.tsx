@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import ExamProblemList from './components/ExamProblemList';
+import Image from 'next/image';
+import listImg from '@/public/images/list.png';
 
 interface DefaultProps {
   params: {
@@ -57,22 +59,35 @@ export default function ExamProblems(props: DefaultProps) {
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
-          <p className="text-2xl font-bold tracking-tight">
-            <span className="mr-1">📃</span> 문제 목록
-            <Link
-              href={`/exams/${eid}`}
-              className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
-            >
-              (시험: 2023-01-자료구조(소프트웨어학부 01반))
-            </Link>
+          <p className="flex items-center text-2xl font-bold tracking-tight">
+            <Image
+              src={listImg}
+              alt="list"
+              width={70}
+              height={0}
+              quality={100}
+              className="ml-[-1rem] fade-in-fast drop-shadow-lg"
+            />
+            <div className="lift-up">
+              <span className="ml-2 text-3xl font-semibold tracking-wide">
+                문제 목록
+              </span>
+              <Link
+                href={`/exams/${eid}`}
+                className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+              >
+                (시험: 코딩테스트 1차, 2023-01-자료구조(소프트웨어학부 01반))
+              </Link>
+            </div>
           </p>
+
           <div className="flex justify-between items-center pb-3 border-b border-gray-300">
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               {!isChagingExamProblemOrderActivate && (
                 <>
                   <button
                     onClick={handleRegisterExamProblem}
-                    className="flex gap-[0.375rem] items-center text-white bg-green-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3e9368] hover:bg-[#3e9368] box-shadow"
+                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +106,7 @@ export default function ExamProblems(props: DefaultProps) {
               <button
                 onClick={handleChangeProblemOrder}
                 ref={changingProblemOrderBtnRef}
-                className="flex gap-[0.375rem] items-center text-white bg-[#ff5fb1] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#f555a8] hover:bg-[#f555a8] box-shadow"
+                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#ff5fb1] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#f555a8] hover:bg-[#f555a8]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

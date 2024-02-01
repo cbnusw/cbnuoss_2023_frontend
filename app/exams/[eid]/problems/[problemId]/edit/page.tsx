@@ -2,6 +2,9 @@
 
 import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -28,6 +31,8 @@ export default function EditExamProblem(props: DefaultProps) {
       'http://localhost:3000/in_and_out/3.out',
     ],
   };
+
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
   const [problemName, setProblemName] = useState(problemInfo.title);
@@ -139,9 +144,17 @@ export default function EditExamProblem(props: DefaultProps) {
     // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
   };
 
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
 
   if (isLoading) return <Loading />;
 
@@ -355,13 +368,13 @@ export default function EditExamProblem(props: DefaultProps) {
         <div className="mt-14 pb-2 flex justify-end gap-3">
           <button
             onClick={handleCancelExamEdit}
-            className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+            className="px-4 py-[0.5rem] rounded-[6px] font-light"
           >
             취소
           </button>
           <button
             onClick={handleEditProblem}
-            className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
             수정
           </button>

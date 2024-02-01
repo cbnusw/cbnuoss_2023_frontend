@@ -4,6 +4,12 @@ import Link from 'next/link';
 import UsersContestSubmitList from './components/UsersContestSubmitList';
 import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
+import Image from 'next/image';
+import codeImg from '@/public/images/code.png';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { UserInfo } from '@/app/types/user';
+import { useRouter } from 'next/navigation';
 
 interface DefaultProps {
   params: {
@@ -12,46 +18,52 @@ interface DefaultProps {
 }
 
 export default function UsersContestSubmits(props: DefaultProps) {
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
-  if (isLoading) return <Loading />;
+  const router = useRouter();
 
   const cid = props.params.cid;
+
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
+  useEffect(() => {
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="flex items-center text-2xl font-semibold tracking-tight">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="40"
-            viewBox="0 -960 960 960"
-            width="40"
-            fill="#3478c6"
-          >
-            <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="40"
-            viewBox="0 -960 960 960"
-            width="40"
-            className="ml-[-0.75rem]"
-            fill="#3478c6"
-          >
-            <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-          </svg>
-          코드 제출 목록
-          <Link
-            href={`/contests/${cid}`}
-            className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
-          >
-            (대회: 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
-          </Link>
+          <Image
+            src={codeImg}
+            alt="trophy"
+            width={70}
+            height={0}
+            quality={100}
+            className="ml-[-1rem] fade-in-fast drop-shadow-lg"
+          />
+
+          <div className="lift-up">
+            <span className="ml-4 text-3xl font-semibold tracking-wide">
+              코드 제출 목록
+            </span>
+            <Link
+              href={`/contests/${cid}`}
+              className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+            >
+              (대회: 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
+            </Link>
+          </div>
         </p>
         <div className="flex mt-5 mb-4">
           <div className="flex flex-col relative z-0 w-1/2 group">
@@ -88,7 +100,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
             <div className="flex justify-end mb-2">
               <button
                 onClick={() => alert('개발 예정')}
-                className="flex gap-[0.375rem] items-center text-white bg-[#4fa16a] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3b8d56] hover:bg-[#3b8d56] box-shadow"
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#4fa16a] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3b8d56] hover:bg-[#3b8d56]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +124,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
                     <tr>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-16 px-4 py-2">
                         번호
                       </th>
                       <th scope="col" className="px-4 py-2">

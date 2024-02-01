@@ -1,9 +1,11 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import codeImg from '@/public/images/code.png';
 
 interface DefaultProps {
   params: {
@@ -62,33 +64,25 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="flex items-center text-2xl font-bold tracking-tight">
-            {' '}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="40"
-              viewBox="0 -960 960 960"
-              width="40"
-              fill="#3478c6"
-            >
-              <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="40"
-              viewBox="0 -960 960 960"
-              width="40"
-              className="ml-[-0.75rem]"
-              fill="#3478c6"
-            >
-              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-            </svg>
-            코드 제출
-            <Link
-              href={`/exams/${eid}/problems/${problemId}`}
-              className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
-            >
-              (A+B)
-            </Link>
+            <Image
+              src={codeImg}
+              alt="trophy"
+              width={70}
+              height={0}
+              quality={100}
+              className="ml-[-1rem fade-in-fast drop-shadow-lg"
+            />
+            <div className="lift-up">
+              <span className="ml-4 text-3xl font-semibold tracking-wide">
+                코드 제출
+              </span>
+              <Link
+                href={`/exams/${eid}/problems/${problemId}`}
+                className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+              >
+                (A+B)
+              </Link>
+            </div>
           </p>
           <div className="flex justify-between pb-3 border-b border-gray-300">
             <div className="flex gap-3">
@@ -110,7 +104,11 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
             </div>
             <div className="flex gap-3">
               <span className="font-semibold">
-                시험:{' '}
+                시험명: <span className="font-light">코딩테스트 1차</span>
+              </span>
+              <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
+              <span className="font-semibold">
+                수업명:{' '}
                 <span className="font-light">
                   2023-01-자료구조(소프트웨어학부 01반)
                 </span>
@@ -175,15 +173,15 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
         <div className="mt-5 pb-2 flex justify-end gap-3">
           <button
             onClick={handleGoToExamProblem}
-            className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+            className="px-4 py-[0.5rem] rounded-[6px] font-light"
           >
             취소
           </button>
           <button
             onClick={handleSubmitExamProblemCode}
-            className=" text-white bg-[#3870e0] px-3 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
-            제출하기
+            제출
           </button>
         </div>
       </div>

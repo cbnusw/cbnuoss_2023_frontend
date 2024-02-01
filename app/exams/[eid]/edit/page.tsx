@@ -1,6 +1,9 @@
 'use client';
 
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -11,12 +14,9 @@ interface DefaultProps {
   };
 }
 
-const DynamicEditor = dynamic(
-  () => import('@/app/components/CKEditor/CKEditor'),
-  {
-    ssr: false,
-  },
-);
+const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
+  ssr: false,
+});
 
 export default function EditExam(props: DefaultProps) {
   const examInfo = {
@@ -57,6 +57,8 @@ export default function EditExam(props: DefaultProps) {
     isCheckedUsingExamPwd: true,
     examPwd: 'owrejreoi12321',
   };
+
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
   const [examName, setExamName] = useState(examInfo.examName);
@@ -120,7 +122,7 @@ export default function EditExam(props: DefaultProps) {
     }
 
     if (!courseName) {
-      alert('교과목명을 입력해 주세요');
+      alert('수업명을 입력해 주세요');
       window.scrollTo(0, 0);
       courseNameRef.current?.focus();
       setIsCourseNameValidFail(true);
@@ -134,7 +136,7 @@ export default function EditExam(props: DefaultProps) {
     }
 
     if (!examStartDateTime || !examEndDateTime) {
-      alert('제출 기간을 설정해 주세요');
+      alert('시험 시간을 설정해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       return;
     }
@@ -150,9 +152,17 @@ export default function EditExam(props: DefaultProps) {
     alert('수정 기능 개발 예정');
   };
 
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
 
   if (isLoading) return <Loading />;
 
@@ -223,27 +233,27 @@ export default function EditExam(props: DefaultProps) {
                 isCourseNameValidFail ? 'red' : 'blue'
               }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
             >
-              교과목명
+              수업명
             </label>
             <p
               className={`text-${
                 isCourseNameValidFail ? 'red' : 'gray'
               }-500 text-xs tracking-widest font-light mt-1`}
             >
-              교과목명을 입력해 주세요
+              수업명을 입력해 주세요
             </p>
           </div>
         </div>
 
         <div className="w-full mx-auto overflow-auto">
-          <DynamicEditor
+          <CustomCKEditor
             initEditorContent={examInfo.content}
             onEditorChange={setEditorContent}
           />
         </div>
 
         <div className="mt-8">
-          <p>제출 기한</p>
+          <p>시험 시간</p>
           <div className="flex gap-5 items-center mt-2">
             <input
               type="datetime-local"
@@ -342,13 +352,13 @@ export default function EditExam(props: DefaultProps) {
           <div className="mt-14 pb-2 flex justify-end gap-3">
             <button
               onClick={handleCancelExamEdit}
-              className=" px-4 py-[0.4rem] rounded-[0.2rem] font-light"
+              className="px-4 py-[0.5rem] rounded-[6px] font-light"
             >
               취소
             </button>
             <button
               onClick={handleEditExam}
-              className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+              className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
             >
               수정
             </button>

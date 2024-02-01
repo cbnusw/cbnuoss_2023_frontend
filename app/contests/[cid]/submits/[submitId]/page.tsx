@@ -1,6 +1,9 @@
 'use client';
 
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { UserInfo } from '@/app/types/user';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -17,6 +20,8 @@ const MarkdownPreview = dynamic(
 );
 
 export default function UsersContestSubmit(props: DefaultProps) {
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const cid = props.params.cid;
@@ -27,9 +32,17 @@ export default function UsersContestSubmit(props: DefaultProps) {
     router.push(`/contests/${cid}/submits`);
   };
 
+  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
+      if (res.isAuth && res.role !== 'operator') {
+        alert('접근 권한이 없습니다.');
+        router.back();
+        return;
+      }
+      setIsLoading(false);
+    });
+  }, [updateUserInfo, router]);
 
   if (isLoading) return <Loading />;
 
@@ -39,7 +52,7 @@ export default function UsersContestSubmit(props: DefaultProps) {
         <div className="flex justify-end items-center pb-3">
           <button
             onClick={handleGoToContestSubmits}
-            className="flex gap-[0.375rem] items-center text-white bg-[#717171] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#686868] hover:bg-[#686868] box-shadow"
+            className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#717171] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#686868] hover:bg-[#686868]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

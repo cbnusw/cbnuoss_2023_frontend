@@ -48,7 +48,7 @@
 /* CKEDITOR5 CSS */
 .ck-editor__editable:not(.ck-editor__nested-editable) {
   min-height: 30rem;
-  padding: 0.4rem 0.75rem !important;
+  padding: 1rem 0.75rem !important;
   overflow: auto !important;
 }
 
@@ -67,30 +67,27 @@
 .ck h2,
 h3,
 h4 {
-  font-weight: 700;
-  margin-top: 0.5rem !important;
-  margin-bottom: 1rem;
-  border-bottom: 1px solid #e2e4e7;
+  font-weight: 600;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.5;
 }
 
 .ck h2 {
-  line-height: 1.25;
   font-size: 2em;
-  padding-bottom: 0.3em;
 }
 
 .ck h3 {
   font-size: 1.5em;
-  padding-bottom: 0.5rem;
 }
 
 .ck h4 {
   font-size: 1.25em;
-  padding-bottom: 0.375rem;
 }
 
-.ck ul {
-  margin-left: 1rem;
+.ck ul,
+ol {
+  margin-left: 1.75rem;
 }
 
 .ck blockquote {
@@ -98,6 +95,10 @@ h4 {
   padding: 1rem 1.75rem !important;
   border-left: 0.25rem solid #2fc27b !important;
   background-color: #fafcfe;
+}
+
+.ck p {
+  margin: 0 !important;
 }
 
 /* uiw markdown(Editor) CSS */
@@ -164,6 +165,19 @@ h4 {
 
 .markdown-preview .copied.active {
   border: 1px solid rgb(60, 124, 58) !important;
+}
+
+/* ReactQueryDevtools Button CSS */
+.go3489369143 {
+  scale: 1.25;
+  left: 1.75rem !important;
+  bottom: 1.75rem !important;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25) !important;
+  transition: scale 0.15s ease-in-out;
+}
+
+.go3489369143:hover {
+  scale: 1.35;
 }
 
 /* --------------- */

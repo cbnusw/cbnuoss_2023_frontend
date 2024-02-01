@@ -4,6 +4,8 @@ import Link from 'next/link';
 import UserContestSubmitList from './components/UserContestSubmitList';
 import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
+import Image from 'next/image';
+import codeImg from '@/public/images/code.png';
 
 interface DefaultProps {
   params: {
@@ -29,33 +31,27 @@ export default function UserContestSubmits(props: DefaultProps) {
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="flex items-center text-2xl font-semibold tracking-tight">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="40"
-              viewBox="0 -960 960 960"
-              width="40"
-              fill="#3478c6"
-            >
-              <path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z" />
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="40"
-              viewBox="0 -960 960 960"
-              width="40"
-              className="ml-[-0.75rem]"
-              fill="#3478c6"
-            >
-              <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
-            </svg>
-            내 제출 현황
-            <Link
-              href={`/contests/${cid}/problems/${problemId}`}
-              className="mt-1 ml-1 text-base font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
-            >
-              (A+B)
-            </Link>
+            <Image
+              src={codeImg}
+              alt="code"
+              width={70}
+              height={0}
+              quality={100}
+              className="ml-[-1rem] fade-in-fast drop-shadow-lg"
+            />
+            <div className="lift-up">
+              <span className="ml-4 text-3xl font-semibold tracking-wide">
+                내 제출 현황
+              </span>
+              <Link
+                href={`/contests/${cid}/problems/${problemId}`}
+                className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+              >
+                (A+B)
+              </Link>
+            </div>
           </p>
+
           <div className="flex justify-end pb-3 border-gray-300">
             <div className="flex gap-3">
               <span className="font-semibold">
@@ -75,7 +71,7 @@ export default function UserContestSubmits(props: DefaultProps) {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
                     <tr>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-16 px-4 py-2">
                         번호
                       </th>
                       <th scope="col" className="px-4 py-2">

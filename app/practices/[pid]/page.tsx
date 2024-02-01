@@ -22,6 +22,18 @@ export default function PracticeProblem(props: DefaultProps) {
 
   const router = useRouter();
 
+  const handleGoToPracticeProblems = () => {
+    router.push(`/practices`);
+  };
+
+  const handleGoToUserPracticeSubmits = () => {
+    router.push(`/practices/${pid}/submits`);
+  };
+
+  const handleGoToSubmitPracticeProblemCode = () => {
+    router.push(`/practices/${pid}/submit`);
+  };
+
   const handleEditPractice = () => {
     router.push(`/practices/${pid}/edit`);
   };
@@ -69,10 +81,10 @@ export default function PracticeProblem(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end mt-4">
+        <div className="flex gap-2 justify-end mt-4">
           <button
-            onClick={() => alert('개발 예정')}
-            className="flex gap-[0.375rem] items-center text-white bg-green-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3e9368] hover:bg-[#3e9368] box-shadow"
+            onClick={handleGoToPracticeProblems}
+            className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -86,8 +98,8 @@ export default function PracticeProblem(props: DefaultProps) {
             문제 목록
           </button>
           <button
-            onClick={() => alert('개발 예정')}
-            className="flex gap-[0.375rem] items-center text-white bg-[#6860ff] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#5951f0] hover:bg-[#5951f0] box-shadow"
+            onClick={handleGoToUserPracticeSubmits}
+            className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,14 +113,14 @@ export default function PracticeProblem(props: DefaultProps) {
             내 제출 현황
           </button>
           <button
-            onClick={() => alert('개발 예정')}
-            className="flex gap-[0.375rem] items-center text-white bg-[#3870e0] px-3 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+            onClick={handleGoToSubmitPracticeProblemCode}
+            className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#3a8af9] px-3 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
             제출하기
           </button>
           <button
             onClick={handleEditPractice}
-            className="flex gap-[0.375rem] items-center text-white bg-[#eba338] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#dc9429] hover:bg-[#dc9429] box-shadow"
+            className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +135,7 @@ export default function PracticeProblem(props: DefaultProps) {
           </button>
           <button
             onClick={handleDeletePractice}
-            className="flex gap-[0.375rem] items-center text-white bg-red-500 px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#e14343] hover:bg-[#e14343] box-shadow"
+            className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

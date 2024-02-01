@@ -41,7 +41,7 @@ export default function UserExamSubmit(props: DefaultProps) {
         <div className="flex justify-end items-center pb-3">
           <button
             onClick={handleGoToExamSubmits}
-            className="flex gap-[0.375rem] items-center text-white bg-[#717171] px-2 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#686868] hover:bg-[#686868] box-shadow"
+            className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#717171] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#686868] hover:bg-[#686868]"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -88,6 +88,9 @@ int main(int argc, const char* argv[]) {
                     시험명
                   </th>
                   <th scope="col" className="px-4 py-2">
+                    수업명
+                  </th>
+                  <th scope="col" className="px-4 py-2">
                     문제명
                   </th>
                   <th scope="col" className="px-4 py-2">
@@ -113,8 +116,9 @@ int main(int argc, const char* argv[]) {
                     scope="row"
                     className="py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    2023-01-자료구조(소프트웨어학부 01반)
+                    코딩테스트 1차
                   </th>
+                  <td className="">2023-01-자료구조(소프트웨어학부 01반)</td>
                   <td className="">A+B</td>
                   <td className="text-[#0076C0] font-semibold">정답</td>
                   <td>

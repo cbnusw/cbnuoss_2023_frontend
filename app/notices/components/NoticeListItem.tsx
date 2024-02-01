@@ -24,7 +24,6 @@ export default function NoticeListItem() {
       </td>
       <td className="font-medium">신재혁</td>
       <td className="font-medium">2023.06.26</td>
-      <td className="font-medium">5</td>
     </tr>
   );
 }

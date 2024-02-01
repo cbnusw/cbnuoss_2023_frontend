@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import NoticeList from './components/NoticeList';
 import Image from 'next/image';
+import bellImg from '@/public/images/bell.png';
 
 export default function Notices() {
   return (
@@ -9,12 +10,12 @@ export default function Notices() {
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="h-16 flex items-center text-3xl font-semibold tracking-wide">
           <Image
-            src="/images/notice.png"
-            alt="trophy"
+            src={bellImg}
+            alt="bell"
             width={67.5}
             height={0}
             quality={100}
-            className="ml-[-1rem] drop-shadow-md fade-in-fast"
+            className="ml-[-1rem] fade-in-fast drop-shadow-lg"
           />
           <span className="ml-3 lift-up">공지사항</span>
         </p>
@@ -35,7 +36,6 @@ export default function Notices() {
                   viewBox="0 -960 960 960"
                   width="21"
                   fill="#464646"
-                  className="scale-x-[-1]"
                 >
                   <path d="M785.269-141.629 530.501-396.501q-29.502 26.199-69.036 40.003-39.533 13.805-80.64 13.805-100.978 0-170.677-69.711-69.698-69.71-69.698-169.473 0-99.764 69.423-169.558 69.423-69.795 169.62-69.795 100.198 0 169.974 69.757 69.776 69.756 69.776 169.593 0 41.752-14.411 81.136-14.41 39.385-40.064 70.298L820.05-176.667l-34.781 35.038ZM380.256-390.577q79.907 0 135.505-55.536t55.598-135.91q0-80.375-55.598-135.849-55.598-55.475-135.767-55.475-80.511 0-136.086 55.537-55.575 55.536-55.575 135.91 0 80.375 55.619 135.849 55.618 55.474 136.304 55.474Z" />
                 </svg>
@@ -47,7 +47,7 @@ export default function Notices() {
                 검색
               </label>
               <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
-                제목, 내용, 작성자로 검색
+                제목, 작성자명으로 검색
               </p>
             </div>
             <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
@@ -55,7 +55,7 @@ export default function Notices() {
                 <div className="flex">
                   <Link
                     href="notices/register"
-                    className=" text-white bg-[#3870e0] px-4 py-[0.4rem] rounded-[0.2rem] font-light focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow"
+                    className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                   >
                     등록하기
                   </Link>
@@ -72,20 +72,17 @@ export default function Notices() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
                     <tr>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-16 px-4 py-2">
                         번호
                       </th>
                       <th scope="col" className="px-4 py-2">
                         제목
                       </th>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-32 px-4 py-2">
                         작성자
                       </th>
-                      <th scope="col" className="px-4 py-2">
+                      <th scope="col" className="w-24 px-4 py-2">
                         작성일
-                      </th>
-                      <th scope="col" className="px-4 py-2">
-                        조회수
                       </th>
                     </tr>
                   </thead>
