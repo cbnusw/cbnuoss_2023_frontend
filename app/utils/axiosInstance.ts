@@ -23,11 +23,22 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     // 응답 에러 처리
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem('access-token');
-      localStorage.removeItem('refresh-token');
-      localStorage.removeItem('activeAuthorization');
-      if (typeof window !== 'undefined') window.location.href = '/login';
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+          // 401 Unauthorized 에러 처리
+          localStorage.removeItem('access-token');
+          localStorage.removeItem('refresh-token');
+          localStorage.removeItem('activeAuthorization');
+          if (typeof window !== 'undefined') window.location.href = '/login';
+          break;
+        case 500:
+          // 500 Internal Server Error 에러 처리
+          alert('서버에 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
+          break;
+        default:
+          break;
+      }
     }
     return Promise.reject(error);
   },
