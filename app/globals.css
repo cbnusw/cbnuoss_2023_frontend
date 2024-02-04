@@ -13,13 +13,6 @@
   -o-animation: fadeIn 3s; /* Opera */
 }
 
-.fade-in-fast {
-  animation: fadeIn 0.75s;
-  -moz-animation: fadeIn 0.75s; /* Firefox */
-  -webkit-animation: fadeIn 0.75s; /* Safari and Chrome */
-  -o-animation: fadeIn 0.75s; /* Opera */
-}
-
 .bright-in {
   animation: brightIn 3s;
   -moz-animation: brightIn 3s; /* Firefox */
