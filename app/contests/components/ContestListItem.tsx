@@ -24,7 +24,7 @@ export default function ContestListItem(props: ContestListItemProps) {
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        router.push('contests/60a5294a8d3b55eac70912f1');
+        router.push(`contests/${contestInfo._id}`);
       }}
     >
       <th
