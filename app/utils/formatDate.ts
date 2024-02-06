@@ -31,3 +31,11 @@ export function formatDateToYYMMDD(dateString: string): string {
   // 'YY/MM/DD' 형식으로 문자열 구성
   return `${year}/${month}/${day}`;
 }
+
+export interface TimeDifference {
+  isPast: boolean;
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
