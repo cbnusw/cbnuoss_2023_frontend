@@ -2,9 +2,45 @@
 
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import Participant from './components/Participant';
+import { useCallback, useEffect, useState } from 'react';
 import Loading from '@/app/loading';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ContestInfo } from '@/app/types/contest';
+import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
+import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
+import { userInfoStore } from '@/app/store/UserInfo';
+import ContestContestContestantList from './components/ContestContestContestantList';
+import { AxiosError } from 'axios';
+import { OPERATOR_ROLES } from '@/app/constants/role';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+
+// 참가했던 대회 목록 반환 API
+const fetchContestDetailInfo = (cid: string) => {
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
+  );
+};
+
+// 대회 참가 신청 API
+const enrollContest = (cid: string) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}/enroll`,
+  );
+};
+
+// 대회 참가 신청 취소 API
+const unEnrollContest = (cid: string) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}/unenroll`,
+  );
+};
+
+const confirmContestConfirm = (cid: string, password: string) => {
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/confirm/${cid}?password=${password}`,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -18,12 +54,147 @@ const MarkdownPreview = dynamic(
 );
 
 export default function ContestDetail(props: DefaultProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isApplyContest, setIsApplyContest] = useState(false);
-
   const cid = props.params.cid;
+  const queryClient = useQueryClient();
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['contestDetailInfo', cid],
+    queryFn: () => fetchContestDetailInfo(cid),
+    retry: 0,
+  });
+
+  const enrollContestMutation = useMutation({
+    mutationFn: enrollContest,
+    onSuccess: () => {
+      setIsEnrollContest(true);
+      alert(
+        '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
+      );
+
+      // 쿼리 데이터 업데이트
+      const updatedContestants = [...contestInfo.contestants, userInfo];
+      queryClient.setQueryData(['contestDetailInfo', cid], {
+        ...data,
+        data: {
+          ...data?.data,
+          data: {
+            ...contestInfo,
+            contestants: updatedContestants,
+          },
+        },
+      });
+    },
+  });
+
+  const unErollContestMutation = useMutation({
+    mutationFn: unEnrollContest,
+    onSuccess: () => {
+      setIsEnrollContest(false);
+      alert('대회 참가 신청이 취소되었습니다.');
+      const updatedContestants = contestInfo.contestants.filter(
+        (contestant) => contestant._id !== userInfo._id,
+      );
+      queryClient.setQueryData(['contestDetailInfo', cid], {
+        ...data,
+        data: {
+          ...data?.data,
+          data: {
+            ...contestInfo,
+            contestants: updatedContestants,
+          },
+        },
+      });
+    },
+  });
+
+  const confirmContestConfirmMutation = useMutation({
+    mutationFn: (password: string) => confirmContestConfirm(cid, password),
+    onError: () => {
+      alert('비밀번호가 일치하지 않습니다.');
+      deleteCookie(cid);
+    },
+    onSuccess: () => {
+      setCookie(cid, password, { maxAge: 60 * 60 * 24 });
+      router.push(`/contests/${cid}/problems`);
+    },
+  });
+
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+
+  const resData = data?.data.data;
+  const contestInfo: ContestInfo = resData;
+
+  const [isEnrollContest, setIsEnrollContest] = useState(false);
+  const [loadingDots, setLoadingDots] = useState('');
+  const [password, setPassword] = useState('');
+
+  const timeUntilStart = useCountdownTimer(contestInfo?.testPeriod.start);
+  const timeUntilEnd = useCountdownTimer(contestInfo?.testPeriod.end);
+  const currentTime = new Date();
+  const contestStartTime = new Date(contestInfo?.testPeriod.start);
+  const contestEndTime = new Date(contestInfo?.testPeriod.end);
 
   const router = useRouter();
+
+  // 대회 시간 표시에 사용할 클래스를 결정하는 함수
+  const getTimeDisplayClass = () => {
+    if (currentTime < contestStartTime) {
+      // 대회 시작 전
+      return 'text-blue-500';
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 대회 진행 중
+      return 'text-red-500';
+    }
+  };
+
+  // 대회 시작까지 남은 시간 또는 대회 종료까지 남은 시간을 표시하는 함수
+  const renderRemainingTime = () => {
+    if (currentTime < contestStartTime) {
+      // 대회 시작 전: 대회 시작까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilStart.days > 0 &&
+            `(${timeUntilStart.days}일 ${timeUntilStart.hours}시간 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours > 0 &&
+            `(${timeUntilStart.hours}시간 ${timeUntilStart.minutes}분 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes > 0 &&
+            `(${timeUntilStart.minutes}분 ${timeUntilStart.seconds}초 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes === 0 &&
+            `(${timeUntilStart.seconds}초 남음)`}
+        </span>
+      );
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 대회 진행 중: 대회 종료까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilEnd.days > 0 &&
+            `(${timeUntilEnd.days}일 ${timeUntilEnd.hours}시간 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours > 0 &&
+            `(${timeUntilEnd.hours}시간 ${timeUntilEnd.minutes}분 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes > 0 &&
+            `(${timeUntilEnd.minutes}분 ${timeUntilEnd.seconds}초 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes === 0 &&
+            `(${timeUntilEnd.seconds}초 남음)`}
+        </span>
+      );
+    }
+  };
 
   const handleGoToContestRankList = () => {
     router.push(`/contests/${cid}/ranklist`);
@@ -33,8 +204,49 @@ export default function ContestDetail(props: DefaultProps) {
     router.push(`/contests/${cid}/submits`);
   };
 
+  // "문제 목록" 버튼의 렌더링 조건을 설정
+  const shouldShowProblemsButton = () => {
+    // 대회 게시글 작성자인 경우, 언제든지 버튼 보임
+    if (userInfo._id === contestInfo.writer._id) {
+      return true;
+    }
+
+    // 대회 신청자인 경우, 대회 시간 중에만 버튼 보임
+    if (
+      isUserContestant() &&
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   const handleGoToContestProblems = () => {
-    router.push(`/contests/${cid}/problems`);
+    // 대회 게시글 작성자인 경우, 언제든지 문제 목록에 접근 가능
+    if (userInfo._id === contestInfo.writer._id) {
+      router.push(`/contests/${cid}/problems`);
+      return;
+    }
+
+    // 그 외의 유저들은 대회 시간 중에만 문제 목록에 접근 가능
+    if (currentTime >= contestStartTime && currentTime <= contestEndTime) {
+      const contestPasswordCookie = getCookie(cid);
+      if (contestPasswordCookie) {
+        setPassword(contestPasswordCookie);
+        confirmContestConfirmMutation.mutate(contestPasswordCookie);
+        return;
+      }
+
+      const inputPassword = prompt('비밀번호를 입력해 주세요');
+      if (inputPassword !== null) {
+        setPassword(inputPassword);
+        confirmContestConfirmMutation.mutate(inputPassword);
+      }
+    } else {
+      alert('대회 시간 중에만 문제를 확인하실 수 있습니다.');
+    }
   };
 
   const handleEditContest = () => {
@@ -51,68 +263,173 @@ export default function ContestDetail(props: DefaultProps) {
     router.push('/contests');
   };
 
-  const handleApplyContest = () => {
+  // 대회 신청 여부 확인
+  const isUserContestant = useCallback(() => {
+    return contestInfo.contestants.some(
+      (contestant) => contestant._id === userInfo._id,
+    );
+  }, [contestInfo?.contestants, userInfo._id]);
+
+  useEffect(() => {
+    if (contestInfo && contestInfo.contestants && userInfo) {
+      setIsEnrollContest(isUserContestant());
+    }
+  }, [contestInfo, userInfo, isUserContestant]);
+
+  const handleEnrollContest = () => {
     const userResponse = confirm('대회 참가 신청을 하시겠습니까?');
     if (!userResponse) return;
 
-    setIsApplyContest(true);
-    alert(
-      '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
-    );
+    enrollContestMutation.mutate(cid);
   };
 
-  const handleCancelContest = () => {
+  const handleUnEnrollContest = () => {
     const userResponse = confirm(
       '대회 참가 신청을 취소하시겠습니까?\n참가신청 기간 이후에는 다시 신청할 수 없습니다.',
     );
     if (!userResponse) return;
 
-    setIsApplyContest(false);
-    alert('대회 참가 신청이 취소되었습니다.');
+    unErollContestMutation.mutate(cid);
+  };
+
+  // 대회 상태에 따른 버튼 렌더링
+  const renderContestActionButton = () => {
+    if (currentTime < contestStartTime) {
+      // 대회 시작 전
+      if (isEnrollContest) {
+        // 사용자가 대회에 이미 참가했다면 '대회 참가 취소하기' 버튼을 보여줍니다.
+        return (
+          <button
+            onClick={handleUnEnrollContest}
+            className="flex gap-[0.6rem] items-center w-fit h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] box-shadow transition duration-75"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="25"
+              viewBox="0 -960 960 960"
+              width="25"
+              fill="#3870e0"
+            >
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+            </svg>
+            대회 참가 취소하기
+          </button>
+        );
+      } else {
+        // 사용자가 대회에 참가하지 않았다면 '대회 참가 신청하기' 버튼을 보여줍니다.
+        return (
+          <button
+            onClick={handleEnrollContest}
+            className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] transition duration-75"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="25"
+              viewBox="0 -960 960 960"
+              width="25"
+              fill="white"
+            >
+              <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
+            </svg>
+            대회 참가 신청하기
+          </button>
+        );
+      }
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 대회 진행 중
+      return (
+        <div className="flex gap-[0.6rem] justify-center items-center w-[9rem] h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] py-[0.5rem] rounded-[3rem]">
+          대회 진행 중
+          <span className="w-1 ml-[-0.6rem] text-[#3870e0]">{loadingDots}</span>
+        </div>
+      );
+    } else {
+      // 대회 종료
+      return (
+        <div className="flex gap-[0.6rem] items-center w-fit h-11 text-red-500 text-lg font-medium border-[1.5px] border-red-500 px-4 py-[0.5rem] rounded-[3rem]">
+          대회 종료
+        </div>
+      );
+    }
   };
 
   useEffect(() => {
-    setIsLoading(false);
+    const interval = setInterval(() => {
+      setLoadingDots((prev) => (prev.length < 3 ? prev + '.' : ''));
+    }, 500);
+
+    return () => clearInterval(interval);
   }, []);
 
-  if (isLoading) return <Loading />;
+  if (isPending) return <Loading />;
+
+  // 에러가 발생했을 때의 처리
+  if (isError) {
+    const axiosError = error as AxiosError;
+    switch (axiosError.response?.status) {
+      case 404:
+      case 500:
+        switch (axiosError.code) {
+          case 'CONTEST_NOT_FOUND':
+          case 'ERR_BAD_RESPONSE':
+            alert('존재하지 않는 대회입니다.');
+            router.push('/');
+            break;
+          default:
+            alert('정의되지 않은 http code입니다.');
+        }
+        break;
+      default:
+        alert('정의되지 않은 http status code입니다');
+    }
+    return;
+  }
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="text-2xl font-bold tracking-tight">
-            2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
+            {contestInfo.title}
           </p>
           <div className="flex justify-between pb-3 border-b border-gray-300">
             <div className="flex gap-3">
               <span className="font-semibold">
-                참가신청 기간:
+                참가신청 기간:{' '}
                 <span className="font-light">
-                  {' '}
-                  2023.07.13 12:00 ~ 2023.07.13 13:00{' '}
+                  {contestInfo.applyingPeriod ? (
+                    <>
+                      {formatDateToYYMMDDHHMM(contestInfo.applyingPeriod.start)}{' '}
+                      ~ {formatDateToYYMMDDHHMM(contestInfo.applyingPeriod.end)}
+                    </>
+                  ) : (
+                    <>
+                      ~ {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)}
+                    </>
+                  )}
                 </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
               <span className="font-semibold">
-                대회 시간:
-                {/* <span className="text-red-500 font-bold">
-                  {' '}
-                  49분 45초 남음
-                </span> */}
+                대회 시간:{' '}
                 <span className="font-light">
-                  {' '}
-                  2023.07.13 17:00 ~ 2023.07.13 18:00{' '}
-                  <span className="text-blue-500 font-semibold">
-                    (41분 3초 전)
-                  </span>
+                  {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)} ~{' '}
+                  {formatDateToYYMMDDHHMM(contestInfo.testPeriod.end)}{' '}
+                  {timeUntilEnd?.isPast ? (
+                    <span className="text-red-500 font-bold">(종료)</span>
+                  ) : (
+                    renderRemainingTime()
+                  )}
                 </span>
-                {/* <span className="text-red-500 font-bold"> 종료</span> */}
               </span>
             </div>
             <div className="flex gap-3">
               <span className="font-semibold">
-                작성자: <span className="font-light">노서영</span>
+                작성자:{' '}
+                <span className="font-light">{contestInfo.writer.name}</span>
               </span>
             </div>
           </div>
@@ -121,30 +438,7 @@ export default function ContestDetail(props: DefaultProps) {
         <div className="border-b mt-8 mb-4 pb-5">
           <MarkdownPreview
             className="markdown-preview"
-            source={`
-# 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선
-
-본선: **7월 8일 (토) 14:00~16:00 (대면)**  
-장소: **충북대학교 학연산 241호, 271호**
-
-### 시상
-- 최우수상(1명) 충북도지사상, 상금 100만원
-- 우수상(2명) 충북AI·SW교육공유협의체장상, 상금 50만원
-- 장려상(7명) 충북대학교 SW중심대학사업단장상, 상금 20만원
-
-> 장려상의 인원 및 상금은 참가 대학교 수에 따라 변경될 수 있음
-> 협의체 미참여 대학은 합산하여 우수자 1명 수상
-> 최우수, 우수 1,2,3위가 모두 같은 학교일 경우 3위는 장려상 수상, 그 외의 학교 중 가장 높은 점수를 획득한 참여자가 우수상 수상.
-
-## 주최
-- 주최: 충북AI·SW교육공유협의체
-- 주관: 충북대학교 SW중심대학사업단
-- 공동주관: 건국대학교, 공군사관학교, 서원대학교, 청주대학교, 충북대학교, 한국교통대학교
-
-**후원: 충북도청**
-
-![2](https://github.com/cbnusw/cbnuoss_2023_frontend/assets/56868605/639eb260-6567-472c-8c17-79d62e2e81fd)
-`}
+            source={contestInfo.content}
           />
         </div>
         <div>
@@ -164,90 +458,84 @@ export default function ContestDetail(props: DefaultProps) {
               </svg>
               대회 순위
             </button>
-            <button
-              onClick={handleGoToUsersContestSubmits}
-              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#5951f0] hover:bg-[#5951f0]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
+            {OPERATOR_ROLES.includes(userInfo.role) && (
+              <button
+                onClick={handleGoToUsersContestSubmits}
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#5951f0] hover:bg-[#5951f0]"
               >
-                <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-              </svg>
-              코드 제출 목록
-            </button>
-            <button
-              onClick={handleGoToContestProblems}
-              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="white"
+                >
+                  <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
+                </svg>
+                코드 제출 목록
+              </button>
+            )}
+            {shouldShowProblemsButton() && (
+              <button
+                onClick={handleGoToContestProblems}
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
               >
-                <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
-              </svg>
-              문제 목록
-            </button>
-            <button
-              onClick={handleEditContest}
-              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
-              >
-                <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-              </svg>
-              게시글 수정
-            </button>
-            <button
-              onClick={handleDeleteContest}
-              className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
-              >
-                <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-              </svg>
-              게시글 삭제
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="white"
+                >
+                  <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
+                </svg>
+                문제 목록
+              </button>
+            )}
+            {OPERATOR_ROLES.includes(userInfo.role) &&
+              userInfo._id === contestInfo.writer._id && (
+                <>
+                  <button
+                    onClick={handleEditContest}
+                    className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20"
+                      viewBox="0 -960 960 960"
+                      width="20"
+                      fill="white"
+                    >
+                      <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
+                    </svg>
+                    게시글 수정
+                  </button>
+                  <button
+                    onClick={handleDeleteContest}
+                    className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20"
+                      viewBox="0 -960 960 960"
+                      width="20"
+                      fill="white"
+                    >
+                      <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
+                    </svg>
+                    게시글 삭제
+                  </button>
+                </>
+              )}
           </div>
         </div>
 
-        <div className="mt-4">
-          <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
-          <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
-            {isApplyContest ? (
-              <>
-                <button
-                  onClick={handleCancelContest}
-                  className="flex gap-[0.6rem] items-center w-fit h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] box-shadow transition duration-75"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="25"
-                    viewBox="0 -960 960 960"
-                    width="25"
-                    fill="#3870e0"
-                  >
-                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
-                  </svg>
-                  대회 참가 취소하기
-                </button>
-
+        {!OPERATOR_ROLES.includes(userInfo.role) && (
+          <div className="mt-4">
+            <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
+            <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
+              {renderContestActionButton()}
+              {isEnrollContest ? (
                 <div className="flex flex-col gap-1 text-center">
                   <div className="text-[#777] text-xs">
                     대회 시작 전까지만{' '}
@@ -258,25 +546,7 @@ export default function ContestDetail(props: DefaultProps) {
                     비정상적인 이력이 확인될 경우, 서비스 이용이 제한됩니다.
                   </div>
                 </div>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={handleApplyContest}
-                  className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] transition duration-75"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="25"
-                    viewBox="0 -960 960 960"
-                    width="25"
-                    fill="white"
-                  >
-                    <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
-                  </svg>
-                  대회 참가 신청하기
-                </button>
-
+              ) : (
                 <div className="flex flex-col gap-1 text-center">
                   <div className="text-[#777] text-xs">
                     대회 시작 후에는{' '}
@@ -288,16 +558,20 @@ export default function ContestDetail(props: DefaultProps) {
                     바랍니다.
                   </div>
                 </div>
-              </>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="mt-8 py-2">
           <p className="text-2xl font-semibold">참가자</p>
           <div className="flex mt-4 justify-between items-center">
             <span>
-              신청자 수: <span className="text-red-500">8</span>명
+              신청자 수:{' '}
+              <span className="text-red-500">
+                {contestInfo.contestants.length}
+              </span>
+              명
             </span>
             <div className="flex gap-3">
               <button
@@ -317,44 +591,10 @@ export default function ContestDetail(props: DefaultProps) {
               </button>
             </div>
           </div>
-          <div className="border mt-3 dark:bg-gray-800 relative overflow-hidden rounded-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
-                  <tr>
-                    <th scope="col" className="px-4 py-2">
-                      학번
-                    </th>
-                    <th scope="col" className="px-4 py-2">
-                      이름
-                    </th>
-                    <th scope="col" className="px-4 py-2">
-                      소속 대학
-                    </th>
-                    <th scope="col" className="px-4 py-2">
-                      소속 학과
-                    </th>
-                    <th scope="col" className="px-4 py-2">
-                      이메일
-                    </th>
-                    <th scope="col" className="px-4 py-2">
-                      연락처
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <Participant />
-                  <Participant />
-                  <Participant />
-                  <Participant />
-                  <Participant />
-                  <Participant />
-                  <Participant />
-                  <Participant />
-                </tbody>
-              </table>
-            </div>
-          </div>
+
+          <ContestContestContestantList
+            contestContestants={contestInfo.contestants}
+          />
         </div>
       </div>
     </div>
