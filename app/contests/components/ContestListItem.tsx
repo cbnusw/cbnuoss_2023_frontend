@@ -1,5 +1,3 @@
-'use client';
-
 import { ContestInfo } from '@/app/types/contest';
 import {
   formatDateToYYMMDDHHMM,
