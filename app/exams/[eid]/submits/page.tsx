@@ -10,6 +10,7 @@ import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useRouter } from 'next/navigation';
+import { OPERATOR_ROLES } from '@/app/constants/role';
 
 interface DefaultProps {
   params: {
@@ -29,7 +30,7 @@ export default function UsersExamSubmits(props: DefaultProps) {
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
-      if (res.isAuth && res.role !== 'operator') {
+      if (res.isAuth && !OPERATOR_ROLES.includes(res.role)) {
         alert('접근 권한이 없습니다.');
         router.back();
         return;
