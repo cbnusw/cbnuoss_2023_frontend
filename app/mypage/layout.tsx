@@ -6,6 +6,7 @@ import { userInfoStore } from '../store/UserInfo';
 import { useEffect, useState } from 'react';
 import { fetchCurrentUserInfo } from '../utils/fetchCurrentUserInfo';
 import Loading from '../loading';
+import { OPERATOR_ROLES } from '../constants/role';
 
 export default function MyPagelayout({
   children,
@@ -66,7 +67,7 @@ export default function MyPagelayout({
               >
                 참가 내역
               </button>
-              {userInfo.role === 'operator' && (
+              {OPERATOR_ROLES.includes(userInfo.role) && (
                 <button
                   onClick={() => handleChangeTab(tabNames[2])}
                   className={`${

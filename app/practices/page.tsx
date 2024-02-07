@@ -6,6 +6,7 @@ import PracticeList from './components/PracticeList';
 import Image from 'next/image';
 import pencilImg from '@/public/images/pencil.png';
 import { userInfoStore } from '../store/UserInfo';
+import { OPERATOR_ROLES } from '../constants/role';
 
 export default function Practices() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,7 +60,7 @@ export default function Practices() {
                 문제명, 작성자명으로 검색
               </p>
             </div>
-            {userInfo.role === 'operator' && (
+            {OPERATOR_ROLES.includes(userInfo.role) && (
               <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
                 <div className="flex justify-end mb-2">
                   <div className="flex">

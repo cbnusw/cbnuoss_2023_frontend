@@ -1,6 +1,7 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
+import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { UserInfo } from '@/app/types/user';
@@ -103,7 +104,7 @@ export default function RegisterPractice() {
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((res: UserInfo) => {
-      if (res.isAuth && res.role !== 'operator') {
+      if (res.isAuth && !OPERATOR_ROLES.includes(res.role)) {
         alert('접근 권한이 없습니다.');
         router.back();
         return;

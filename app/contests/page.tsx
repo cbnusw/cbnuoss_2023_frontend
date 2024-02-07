@@ -6,6 +6,7 @@ import Image from 'next/image';
 import trophyImg from '@/public/images/trophy.png';
 import { useState } from 'react';
 import { userInfoStore } from '../store/UserInfo';
+import { OPERATOR_ROLES } from '../constants/role';
 
 export default function Contests() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,7 +60,7 @@ export default function Contests() {
                 대회명으로 검색
               </p>
             </div>
-            {userInfo.role === 'operator' && (
+            {OPERATOR_ROLES.includes(userInfo.role) && (
               <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
                 <div className="flex justify-end mb-2">
                   <div className="flex">

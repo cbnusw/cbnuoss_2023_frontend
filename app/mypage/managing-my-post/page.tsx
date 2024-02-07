@@ -8,6 +8,7 @@ import MyNoticePostList from './components/noticePost/MyNoticePostList';
 import { mypageTabNameStore } from '@/app/store/MypageTabName';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useRouter } from 'next/navigation';
+import { OPERATOR_ROLES } from '@/app/constants/role';
 
 export default function ManagingMyPost() {
   const [category, setCategory] = useState('contest');
@@ -29,7 +30,7 @@ export default function ManagingMyPost() {
   }, [updateTabName]);
 
   // 비관리자 회원의 접근 시 로그인 페이지로 리다이렉트 수행
-  if (userInfo.role !== 'operator') {
+  if (!OPERATOR_ROLES.includes(userInfo.role)) {
     alert('접근 권한이 없습니다.');
     router.back();
     return;
