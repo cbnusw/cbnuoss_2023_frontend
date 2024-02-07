@@ -14,7 +14,7 @@ export default function ContestListItem(props: ContestProps) {
   return (
     <div className="relative flex flex-col gap-4 bg-[#f7f7f7] p-3 group">
       <p className="font-bold">
-        <Link href="/" className="hover:underline">
+        <Link href={`/contests/${contestInfo._id}`} className="hover:underline">
           {contestInfo.title}
         </Link>
       </p>
