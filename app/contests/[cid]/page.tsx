@@ -15,7 +15,7 @@ import { AxiosError } from 'axios';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
-// 참가했던 대회 목록 반환 API
+// 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = (cid: string) => {
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
@@ -213,7 +213,7 @@ export default function ContestDetail(props: DefaultProps) {
 
     // 대회 신청자인 경우, 대회 시간 중에만 버튼 보임
     if (
-      isUserContestant() &&
+      isEnrollContest &&
       currentTime >= contestStartTime &&
       currentTime <= contestEndTime
     ) {
@@ -268,12 +268,11 @@ export default function ContestDetail(props: DefaultProps) {
     return contestInfo.contestants.some(
       (contestant) => contestant._id === userInfo._id,
     );
-  }, [contestInfo?.contestants, userInfo._id]);
+  }, [contestInfo, userInfo]);
 
   useEffect(() => {
-    if (contestInfo && contestInfo.contestants && userInfo) {
+    if (contestInfo && contestInfo.contestants && userInfo)
       setIsEnrollContest(isUserContestant());
-    }
   }, [contestInfo, userInfo, isUserContestant]);
 
   const handleEnrollContest = () => {
@@ -364,8 +363,6 @@ export default function ContestDetail(props: DefaultProps) {
     return () => clearInterval(interval);
   }, []);
 
-  if (isPending) return <Loading />;
-
   // 에러가 발생했을 때의 처리
   if (isError) {
     const axiosError = error as AxiosError;
@@ -374,9 +371,8 @@ export default function ContestDetail(props: DefaultProps) {
       case 500:
         switch (axiosError.code) {
           case 'CONTEST_NOT_FOUND':
-          case 'ERR_BAD_RESPONSE':
+          case 'ERR_BAD_REQUEST':
             alert('존재하지 않는 대회입니다.');
-            router.push('/');
             break;
           default:
             alert('정의되지 않은 http code입니다.');
@@ -385,8 +381,11 @@ export default function ContestDetail(props: DefaultProps) {
       default:
         alert('정의되지 않은 http status code입니다');
     }
+    router.push('/');
     return;
   }
+
+  if (isPending) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
