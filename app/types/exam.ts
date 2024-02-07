@@ -1,6 +1,21 @@
 export interface ExamInfo {
   problems: string[];
-  students: string[];
+  students: {
+    center: null;
+    _id: string;
+    no: string;
+    name: string;
+    email: string;
+    phone: string;
+    department: string;
+    university: string;
+    position: null;
+    role: string;
+    joinedAt: string;
+    updatedAt: string;
+    __v: number;
+    image?: null; // 옵셔널 필드 (일부 객체에만 존재)
+  }[];
   _id: string;
   title: string;
   course: string;
