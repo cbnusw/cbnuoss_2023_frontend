@@ -1,9 +1,6 @@
-'use client';
-
 import { ExamInfo } from '@/app/types/exam';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
 import { useRouter } from 'next/navigation';
-import React from 'react';
 
 interface ExamListItemProps {
   examInfo: ExamInfo;
@@ -20,9 +17,7 @@ export default function ExamListItem(props: ExamListItemProps) {
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
-      onClick={() => {
-        router.push('exams/645f82d1dfc11e0020d07253');
-      }}
+      onClick={() => router.push(`exams/${examInfo._id}`)}
     >
       <th
         scope="row"

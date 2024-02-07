@@ -1,9 +1,40 @@
 'use client';
 
+import { OPERATOR_ROLES } from '@/app/constants/role';
+import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { ExamInfo } from '@/app/types/exam';
+import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
+// 시험 게시글 정보 조회 API
+const fetchExamDetailInfo = (eid: string) => {
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
+  );
+};
+
+// 시험 참가 신청 API
+const enrollExam = (eid: string) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}/enroll`,
+  );
+};
+
+// 시험 참가 신청 취소 API
+const unEnrollExam = (eid: string) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}/unenroll`,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -17,12 +48,109 @@ const MarkdownPreview = dynamic(
 );
 
 export default function ExamDetail(props: DefaultProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isApplyExam, setIsApplyExam] = useState(false);
-
   const eid = props.params.eid;
 
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['examDetailInfo', eid],
+    queryFn: () => fetchExamDetailInfo(eid),
+    retry: 0,
+  });
+
+  const enrollExamMutation = useMutation({
+    mutationFn: enrollExam,
+    onSuccess: () => {
+      setIsEnrollExam(true);
+      alert(
+        '시험 응시가 완료되었습니다.\n시험 시간을 확인한 후, 해당 시간에 시작해 주세요',
+      );
+    },
+  });
+
+  const unErollExamMutation = useMutation({
+    mutationFn: unEnrollExam,
+    onSuccess: () => {
+      setIsEnrollExam(false);
+      alert('시험 응시가 취소되었습니다.');
+    },
+  });
+
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const resData = data?.data.data;
+  const examInfo: ExamInfo = resData;
+
+  const [isEnrollExam, setIsEnrollExam] = useState(false);
+  const [loadingDots, setLoadingDots] = useState('');
+  const [isConfirmPassword, setIsConfirmPassword] = useState(false);
+
+  const timeUntilStart = useCountdownTimer(examInfo?.testPeriod.start);
+  const timeUntilEnd = useCountdownTimer(examInfo?.testPeriod.end);
+  const currentTime = new Date();
+  const contestStartTime = new Date(examInfo?.testPeriod.start);
+  const contestEndTime = new Date(examInfo?.testPeriod.end);
+
   const router = useRouter();
+
+  // 시험 시간 표시에 사용할 클래스를 결정하는 함수
+  const getTimeDisplayClass = () => {
+    if (currentTime < contestStartTime) {
+      // 시험 시작 전
+      return 'text-blue-500';
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 시험 진행 중
+      return 'text-red-500';
+    }
+  };
+
+  // 시험 시작까지 남은 시간 또는 시험 종료까지 남은 시간을 표시하는 함수
+  const renderRemainingTime = () => {
+    if (currentTime < contestStartTime) {
+      // 시험 시작 전: 시험 시작까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilStart.days > 0 &&
+            `(${timeUntilStart.days}일 ${timeUntilStart.hours}시간 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours > 0 &&
+            `(${timeUntilStart.hours}시간 ${timeUntilStart.minutes}분 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes > 0 &&
+            `(${timeUntilStart.minutes}분 ${timeUntilStart.seconds}초 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes === 0 &&
+            `(${timeUntilStart.seconds}초 남음)`}
+        </span>
+      );
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 시험 진행 중: 시험 종료까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilEnd.days > 0 &&
+            `(${timeUntilEnd.days}일 ${timeUntilEnd.hours}시간 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours > 0 &&
+            `(${timeUntilEnd.hours}시간 ${timeUntilEnd.minutes}분 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes > 0 &&
+            `(${timeUntilEnd.minutes}분 ${timeUntilEnd.seconds}초 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes === 0 &&
+            `(${timeUntilEnd.seconds}초 남음)`}
+        </span>
+      );
+    }
+  };
 
   const handleGoToExamSubmits = () => {
     router.push(`/exams/${eid}/submits`);
@@ -45,60 +173,184 @@ export default function ExamDetail(props: DefaultProps) {
     router.push('/exams');
   };
 
-  const handleApplyExam = () => {
+  const handleEnrollExam = () => {
     const userResponse = confirm('시험에 응시하시겠습니까?');
     if (!userResponse) return;
 
-    setIsApplyExam(true);
-    alert(
-      '시험 응시가 완료되었습니다.\n시험 시간을 확인한 후, 해당 시간에 시작해 주세요',
-    );
+    enrollExamMutation.mutate(eid);
   };
 
-  const handleCancelExam = () => {
+  // 시험 신청 여부 확인
+  const isUserContestant = useCallback(() => {
+    return examInfo.students.some(
+      (contestant) => contestant._id === userInfo._id,
+    );
+  }, [examInfo, userInfo]);
+
+  useEffect(() => {
+    if (examInfo && examInfo.students && userInfo)
+      setIsEnrollExam(isUserContestant());
+  }, [examInfo, userInfo, isUserContestant]);
+
+  const handleUnEnrollExam = () => {
     const userResponse = confirm(
       '시험 응시를 취소하시겠습니까?\n시험 시작 이후에는 다시 신청할 수 없습니다.',
     );
     if (!userResponse) return;
 
-    setIsApplyExam(false);
-    alert('시험 응시가 취소되었습니다.');
+    unErollExamMutation.mutate(eid);
+  };
+
+  // 시험 상태에 따른 버튼 렌더링
+  const renderExamActionButton = () => {
+    if (currentTime < contestStartTime) {
+      // 시험 시작 전
+      if (isEnrollExam) {
+        // 사용자가 시험에 이미 신청했다면 '시험 취소하기' 버튼을 보여줍니다.
+        return (
+          <button
+            onClick={handleUnEnrollExam}
+            className="flex gap-[0.6rem] items-center w-fit h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] box-shadow transition duration-75"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="25"
+              viewBox="0 -960 960 960"
+              width="25"
+              fill="#3870e0"
+            >
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+            </svg>
+            시험 취소하기
+          </button>
+        );
+      } else {
+        // 사용자가 시험을 신청하지 않았다면 '시험 응시하기' 버튼을 보여줍니다.
+        return (
+          <button
+            onClick={handleEnrollExam}
+            className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] transition duration-75"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="25"
+              viewBox="0 -960 960 960"
+              width="25"
+              fill="white"
+            >
+              <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
+            </svg>
+            시험 응시하기
+          </button>
+        );
+      }
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 시험 진행 중
+      return (
+        <div className="flex gap-[0.6rem] justify-center items-center w-[9rem] h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] py-[0.5rem] rounded-[3rem]">
+          시험 진행 중
+          <span className="w-1 ml-[-0.6rem] text-[#3870e0]">{loadingDots}</span>
+        </div>
+      );
+    } else {
+      // 시험 종료
+      return (
+        <div className="flex gap-[0.6rem] items-center w-fit h-11 text-red-500 text-lg font-medium border-[1.5px] border-red-500 px-4 py-[0.5rem] rounded-[3rem]">
+          시험 종료
+        </div>
+      );
+    }
   };
 
   useEffect(() => {
-    setIsLoading(false);
+    const interval = setInterval(() => {
+      setLoadingDots((prev) => (prev.length < 3 ? prev + '.' : ''));
+    }, 500);
+
+    return () => clearInterval(interval);
   }, []);
 
-  if (isLoading) return <Loading />;
+  useEffect(() => {
+    fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
+      if (examInfo) {
+        // 현재 사용자가 시험 작성자이거나 이미 시험에 등록된 참가자인지 확인
+        const isWriter = examInfo.writer._id === userInfo._id;
+        const isContestant = examInfo.students.some(
+          (student) => student._id === userInfo._id,
+        );
+
+        if (isWriter || isContestant) {
+          setIsConfirmPassword(true);
+          return;
+        }
+
+        const inputPassword = prompt('비밀번호를 입력해 주세요');
+        if (inputPassword !== null && examInfo.password === inputPassword) {
+          setIsConfirmPassword(true);
+          return;
+        }
+
+        alert('비밀번호가 일치하지 않습니다.');
+        router.back();
+      }
+    });
+  }, [updateUserInfo, router, examInfo]);
+
+  // 에러가 발생했을 때의 처리
+  if (isError) {
+    const axiosError = error as AxiosError;
+    console.log(axiosError.response?.status, axiosError.code);
+    switch (axiosError.response?.status) {
+      case 404:
+      case 500:
+        switch (axiosError.code) {
+          case 'ASSIGNMENT_NOT_FOUND':
+          case 'ERR_BAD_REQUEST':
+            alert('존재하지 않는 시험입니다.');
+            router.push('/');
+            break;
+          default:
+            alert('정의되지 않은 http code입니다.');
+        }
+        break;
+      default:
+        alert('정의되지 않은 http status code입니다');
+    }
+    router.push('/');
+    return;
+  }
+
+  if (!isConfirmPassword || isPending) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
-          <p className="text-2xl font-bold tracking-tight">코딩테스트 1차</p>
+          <p className="text-2xl font-bold tracking-tight">{examInfo.title}</p>
           <div className="flex justify-between pb-3 border-b border-gray-300">
             <span className="font-semibold">
-              시험 시간:
-              {/* <span className="text-red-500 font-bold"> 49분 45초 남음</span> */}
+              시험 시간:{' '}
               <span className="font-light">
-                {' '}
-                2023.07.13 15:00 ~ 2023.07.13 16:00{' '}
-                <span className="text-blue-500 font-semibold">
-                  (41분 3초 전)
-                </span>
+                {formatDateToYYMMDDHHMM(examInfo.testPeriod.start)} ~{' '}
+                {formatDateToYYMMDDHHMM(examInfo.testPeriod.end)}{' '}
+                {timeUntilEnd?.isPast ? (
+                  <span className="text-red-500 font-bold">(종료)</span>
+                ) : (
+                  renderRemainingTime()
+                )}
               </span>
-              {/* <span className="text-red-500 font-bold"> 종료</span> */}
             </span>
             <div className="flex gap-3">
               <span className="font-semibold">
-                수업명:{' '}
-                <span className="font-light">
-                  2023-01-자료구조(소프트웨어학부 01반)
-                </span>
+                수업명: <span className="font-light">{examInfo.course}</span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
               <span className="font-semibold">
-                작성자: <span className="font-light">노서영</span>
+                작성자:{' '}
+                <span className="font-light">{examInfo.writer.name}</span>
               </span>
             </div>
           </div>
@@ -106,37 +358,7 @@ export default function ExamDetail(props: DefaultProps) {
         <div className="border-b mt-8 mb-4 pb-5">
           <MarkdownPreview
             className="markdown-preview"
-            source={`
-# 자료구조 알고리즘 코딩 테스트 공지
-안녕하세요, 여러분.
-
-자료구조 과목에서 진행하는 **알고리즘 코딩 테스트**에 대해 공지합니다.
-
-## 테스트 일정
-- 날짜: 2023년 7월 13일 (목)
-- 시간: 오후 3시 ~ 4시
-
-## 테스트 방식
-- 온라인으로 진행
-- 개인 컴퓨터를 사용하여 코딩 테스트 진행
-- Google Classroom에 공지된 링크를 통해 테스트 사이트 접속
-
-## 테스트 범위
-- 이번 테스트는 다음의 자료구조와 관련된 알고리즘에 대한 문제를 다룹니다:
-            - 스택(Stack)과 큐(Queue)
-            - 링크드 리스트(Linked List)
-            - 트리(Tree)와 그래프(Graph)
-
-## 기타 유의사항
-- 본 테스트는 오픈 북 형태로 진행되나, 다른 사람과의 협업은 엄격히 금지합니다.
-- 시작 시간에 맞춰 준비하여 테스트에 참가하시기 바랍니다.
-- 테스트 중 문제가 발생하는 경우, 바로 저에게 연락해 주세요.
-
-코딩 테스트를 통해 여러분의 알고리즘 구현 능력을 키울 수 있는 좋은 기회가 되길 바랍니다. 
-모두 최선을 다해 보세요!
-
-감사합니다.
-`}
+            source={examInfo.content}
           />
         </div>
         <div>
@@ -204,71 +426,42 @@ export default function ExamDetail(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="mt-2">
-          <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
-          <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
-            {isApplyExam ? (
-              <>
-                <button
-                  onClick={handleCancelExam}
-                  className="flex gap-[0.6rem] items-center w-fit h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] box-shadow transition duration-75"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="25"
-                    viewBox="0 -960 960 960"
-                    width="25"
-                    fill="#3870e0"
-                  >
-                    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
-                  </svg>
-                  시험 취소하기
-                </button>
-
-                <div className="flex flex-col gap-1 text-center">
-                  <div className="text-[#777] text-xs">
-                    시험 시작 전까지만{' '}
-                    <span className="text-red-500">응시 취소가 가능</span>
-                    합니다.
+        {!OPERATOR_ROLES.includes(userInfo.role) && (
+          <div className="mt-4">
+            <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
+            <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
+              {renderExamActionButton()}
+              {isEnrollExam ? (
+                <>
+                  <div className="flex flex-col gap-1 text-center">
+                    <div className="text-[#777] text-xs">
+                      시험 시작 전까지만{' '}
+                      <span className="text-red-500">응시 취소가 가능</span>
+                      합니다.
+                    </div>
+                    <div className="text-[#777] text-xs">
+                      비정상적인 이력이 확인될 경우, 서비스 이용이 제한됩니다.
+                    </div>
                   </div>
-                  <div className="text-[#777] text-xs">
-                    비정상적인 이력이 확인될 경우, 서비스 이용이 제한됩니다.
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col gap-1 text-center">
+                    <div className="text-[#777] text-xs">
+                      시험 시작 후에는{' '}
+                      <span className="text-red-500">응시가 불가능</span>
+                      합니다.
+                    </div>
+                    <div className="text-[#777] text-xs">
+                      시험 응시 전에 반드시 시험 내용을 자세히 읽어주시기
+                      바랍니다.
+                    </div>
                   </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={handleApplyExam}
-                  className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] box-shadow transition duration-75"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="25"
-                    viewBox="0 -960 960 960"
-                    width="25"
-                    fill="white"
-                  >
-                    <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
-                  </svg>
-                  시험 응시하기
-                </button>
-
-                <div className="flex flex-col gap-1 text-center">
-                  <div className="text-[#777] text-xs">
-                    시험 시작 후에는{' '}
-                    <span className="text-red-500">응시가 불가능</span>
-                    합니다.
-                  </div>
-                  <div className="text-[#777] text-xs">
-                    시험 응시 전에 반드시 시험 내용을 자세히 읽어주시기
-                    바랍니다.
-                  </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
