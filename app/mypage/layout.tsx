@@ -31,8 +31,8 @@ export default function MyPagelayout({
 
   // (로그인 한) 사용자 정보 조회
   useEffect(() => {
-    fetchCurrentUserInfo(updateUserInfo).then((res) => {
-      if (res.isAuth) setIsLoading(false);
+    fetchCurrentUserInfo(updateUserInfo).then((userInfo) => {
+      if (userInfo.isAuth) setIsLoading(false);
     });
   }, [updateUserInfo]);
 
