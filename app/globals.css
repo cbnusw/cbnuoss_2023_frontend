@@ -13,6 +13,13 @@
   -o-animation: fadeIn 3s; /* Opera */
 }
 
+.fade-in-fast {
+  animation: fadeIn 0.75s;
+  -moz-animation: fadeIn 0.75s; /* Firefox */
+  -webkit-animation: fadeIn 0.75s; /* Safari and Chrome */
+  -o-animation: fadeIn 0.75s; /* Opera */
+}
+
 .bright-in {
   animation: brightIn 3s;
   -moz-animation: brightIn 3s; /* Firefox */
@@ -62,8 +69,8 @@
 }
 
 .ck h2,
-h3,
-h4 {
+.ck h3,
+.ck h4 {
   font-weight: 600;
   margin: 0 !important;
   padding: 0 !important;
@@ -83,15 +90,16 @@ h4 {
 }
 
 .markdown-preview strong,
-s,
-u,
-i {
+.markdown-preview s,
+.markdown-preview u,
+.markdown-preview i {
   color: inherit;
 }
 
 .ck ul,
-ol {
+.ck ol {
   margin-left: 1.75rem;
+  margin-top: 0.25rem !important;
 }
 
 .ck blockquote {
@@ -106,9 +114,9 @@ ol {
 }
 
 .ck .text-huge,
-.text-big,
-.text-small,
-.text-tiny {
+.ck .text-big,
+.ck .text-small,
+.ck .text-tiny {
   line-height: 1.5;
 }
 
@@ -133,9 +141,9 @@ ol {
 }
 
 .markdown-preview strong,
-s,
-u,
-i {
+.markdown-preview s,
+.markdown-preview u,
+.markdown-preview i {
   color: inherit;
 }
 
@@ -153,6 +161,11 @@ i {
 
 .markdown-preview .text-tiny {
   font-size: 0.7em;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-top: 0.25rem !important;
 }
 
 .markdown-preview ul {
