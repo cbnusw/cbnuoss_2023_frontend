@@ -1,10 +1,10 @@
-import { PracticeInfo } from '@/app/types/practice';
+import { ProblemInfo } from '@/app/types/problem';
 import { formatDateToYYMMDD } from '@/app/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface MyPracticePostListItemProps {
-  practiceInfo: PracticeInfo;
+  practiceInfo: ProblemInfo;
   total: number;
   page: number;
   index: number;

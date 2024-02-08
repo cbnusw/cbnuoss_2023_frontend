@@ -7,7 +7,7 @@ import MyPracticePostListItem from './MyPracticePostListItem';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { PracticeInfo } from '@/app/types/practice';
+import { ProblemInfo } from '@/app/types/problem';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import { userInfoStore } from '@/app/store/UserInfo';
 
@@ -39,7 +39,7 @@ export default function MyPracticePostList() {
   const totalPages = Math.ceil(resData?.total / 10);
 
   const practicePostList = resData?.documents.filter(
-    (practiceInfo: PracticeInfo) => practiceInfo.writer._id === userInfo._id,
+    (practiceInfo: ProblemInfo) => practiceInfo.writer._id === userInfo._id,
   );
 
   const handlePagination = (newPage: number) => {
@@ -77,7 +77,7 @@ export default function MyPracticePostList() {
             <tbody>
               {practicePostList.length === 0 && <NoneMyPracticePostListItem />}
               {practicePostList.map(
-                (practiceInfo: PracticeInfo, index: number) => (
+                (practiceInfo: ProblemInfo, index: number) => (
                   <MyPracticePostListItem
                     practiceInfo={practiceInfo}
                     total={practicePostList.length}

@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import PracticeListItem from './PracticeListItem';
-import { PracticeInfo } from '@/app/types/practice';
+import { ProblemInfo } from '@/app/types/problem';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 interface PracticeListProps {
@@ -81,7 +81,7 @@ export default function PracticeList({ searchQuery }: PracticeListProps) {
             <tbody>
               {resData?.documents.length === 0 && <NonePracticeListItem />}
               {resData?.documents.map(
-                (practiceInfo: PracticeInfo, index: number) => (
+                (practiceInfo: ProblemInfo, index: number) => (
                   <PracticeListItem
                     practiceInfo={practiceInfo}
                     total={resData.total}
