@@ -1,4 +1,4 @@
-export interface PracticeInfo {
+export interface ProblemInfo {
   parentId: null | string;
   parentType: string;
   published: null | boolean;

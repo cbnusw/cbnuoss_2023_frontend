@@ -1,11 +1,9 @@
-'use client';
-
-import { PracticeInfo } from '@/app/types/practice';
+import { ProblemInfo } from '@/app/types/problem';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface PracticeListItemProps {
-  practiceInfo: PracticeInfo;
+  practiceInfo: ProblemInfo;
   total: number;
   page: number;
   index: number;
@@ -19,9 +17,7 @@ export default function PracticeListItem(props: PracticeListItemProps) {
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
-      onClick={(e) => {
-        router.push('/practices/6461d43ec14a5a002b85e081');
-      }}
+      onClick={() => router.push(`practices/${practiceInfo._id}`)}
     >
       <th
         scope="row"

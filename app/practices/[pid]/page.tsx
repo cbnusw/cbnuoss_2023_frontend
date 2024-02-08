@@ -1,9 +1,21 @@
 'use client';
 
+import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { ProblemInfo } from '@/app/types/problem';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+
+// 연습문제 게시글 정보 조회 API
+const fetchPracticeDetailInfo = (eid: string) => {
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${eid}`,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -16,9 +28,18 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
 });
 
 export default function PracticeProblem(props: DefaultProps) {
-  const [isLoading, setIsLoading] = useState(true);
-
   const pid = props.params.pid;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['practiceDetailInfo', pid],
+    queryFn: () => fetchPracticeDetailInfo(pid),
+    retry: 0,
+  });
+
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+
+  const resData = data?.data.data;
+  const practiceInfo: ProblemInfo = resData;
 
   const router = useRouter();
 
@@ -47,35 +68,60 @@ export default function PracticeProblem(props: DefaultProps) {
     router.push('/practices');
   };
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
+  // 에러가 발생했을 때의 처리
+  if (isError) {
+    const axiosError = error as AxiosError;
+    console.log(axiosError.response?.status, axiosError.code);
+    switch (axiosError.response?.status) {
+      case 404:
+      case 500:
+        switch (axiosError.code) {
+          case 'PROBLEM_NOT_FOUND':
+          case 'ERR_BAD_REQUEST':
+            alert('존재하지 않는 문제입니다.');
+            router.push('/');
+            break;
+          default:
+            alert('정의되지 않은 http code입니다.');
+        }
+        break;
+      default:
+        alert('정의되지 않은 http status code입니다');
+    }
+    router.push('/');
+    return;
+  }
 
-  if (isLoading) return <Loading />;
+  if (isPending) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
-          <p className="text-2xl font-bold tracking-tight">A+B</p>
+          <p className="text-2xl font-bold tracking-tight">
+            {practiceInfo.title}
+          </p>
           <div className="flex justify-between pb-3 border-b border-gray-300">
             <div className="flex gap-3">
               <span className="font-semibold">
-                시간 제한:
-                <span className="font-mono font-light"> 1초</span>
+                시간 제한:{' '}
+                <span className="font-mono font-light">
+                  {practiceInfo.options.maxRealTime / 1000}초
+                </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
               <span className="font-semibold">
-                메모리 제한:
+                메모리 제한:{' '}
                 <span className="font-mono font-light">
-                  {' '}
-                  <span className="mr-1">5</span>MB
+                  <span className="mr-1">{practiceInfo.options.maxMemory}</span>
+                  MB
                 </span>
               </span>
             </div>
             <div className="flex gap-3">
               <span className="font-semibold">
-                작성자: <span className="font-light">노서영</span>
+                작성자:{' '}
+                <span className="font-light">{practiceInfo.writer.name}</span>
               </span>
             </div>
           </div>
@@ -97,61 +143,70 @@ export default function PracticeProblem(props: DefaultProps) {
             </svg>
             문제 목록
           </button>
-          <button
-            onClick={handleGoToUserPracticeSubmits}
-            className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="20"
-              viewBox="0 -960 960 960"
-              width="20"
-              fill="white"
-            >
-              <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-            </svg>
-            내 제출 현황
-          </button>
-          <button
-            onClick={handleGoToSubmitPracticeProblemCode}
-            className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#3a8af9] px-3 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
-          >
-            제출하기
-          </button>
-          <button
-            onClick={handleEditPractice}
-            className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="20"
-              viewBox="0 -960 960 960"
-              width="20"
-              fill="white"
-            >
-              <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-            </svg>
-            게시글 수정
-          </button>
-          <button
-            onClick={handleDeletePractice}
-            className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="20"
-              viewBox="0 -960 960 960"
-              width="20"
-              fill="white"
-            >
-              <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-            </svg>
-            게시글 삭제
-          </button>
+          {!OPERATOR_ROLES.includes(userInfo.role) && (
+            <>
+              <button
+                onClick={handleGoToUserPracticeSubmits}
+                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="white"
+                >
+                  <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
+                </svg>
+                내 제출 현황
+              </button>
+              <button
+                onClick={handleGoToSubmitPracticeProblemCode}
+                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#3a8af9] px-3 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+              >
+                제출하기
+              </button>
+            </>
+          )}
+
+          {OPERATOR_ROLES.includes(userInfo.role) && (
+            <>
+              <button
+                onClick={handleEditPractice}
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="white"
+                >
+                  <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
+                </svg>
+                게시글 수정
+              </button>
+              <button
+                onClick={handleDeletePractice}
+                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="white"
+                >
+                  <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
+                </svg>
+                게시글 삭제
+              </button>
+            </>
+          )}
         </div>
 
         <div className="gap-5 border-b mt-8 mb-4 pb-5">
-          <PDFViewer pdfFileURL={'/pdfs/test.pdf'} />
+          <PDFViewer pdfFileURL={practiceInfo.content} />
         </div>
       </div>
     </div>
