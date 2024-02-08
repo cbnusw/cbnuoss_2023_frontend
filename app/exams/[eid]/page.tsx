@@ -152,6 +152,25 @@ export default function ExamDetail(props: DefaultProps) {
     }
   };
 
+  // "문제 목록" 버튼의 렌더링 조건을 설정
+  const shouldShowProblemsButton = () => {
+    // 대회 게시글 작성자인 경우, 언제든지 버튼 보임
+    if (userInfo._id === examInfo.writer._id) {
+      return true;
+    }
+
+    // 대회 신청자인 경우, 대회 시간 중에만 버튼 보임
+    if (
+      isEnrollExam &&
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   const handleGoToExamSubmits = () => {
     router.push(`/exams/${eid}/submits`);
   };
@@ -363,66 +382,76 @@ export default function ExamDetail(props: DefaultProps) {
         </div>
         <div>
           <div className="flex gap-2 justify-end">
-            <button
-              onClick={handleGoToExamSubmits}
-              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
+            {OPERATOR_ROLES.includes(userInfo.role) && (
+              <button
+                onClick={handleGoToExamSubmits}
+                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
               >
-                <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-              </svg>
-              코드 제출 목록
-            </button>
-            <button
-              onClick={handleGoToExamProblems}
-              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="18"
-                viewBox="0 -960 960 960"
-                width="18"
-                fill="white"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="20"
+                  viewBox="0 -960 960 960"
+                  width="20"
+                  fill="white"
+                >
+                  <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
+                </svg>
+                코드 제출 목록
+              </button>
+            )}
+            {shouldShowProblemsButton() && (
+              <button
+                onClick={handleGoToExamProblems}
+                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
               >
-                <path d="M319-250h322v-60H319v60Zm0-170h322v-60H319v60ZM220-80q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h361l219 219v521q0 24-18 42t-42 18H220Zm331-554h189L551-820v186Z" />
-              </svg>
-              문제 목록
-            </button>
-            <button
-              onClick={handleEditExam}
-              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#dc9429] hover:bg-[#dc9429]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
-              >
-                <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-              </svg>
-              게시글 수정
-            </button>
-            <button
-              onClick={handleDeleteExam}
-              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#e14343] hover:bg-[#e14343]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
-              >
-                <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-              </svg>
-              게시글 삭제
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="18"
+                  viewBox="0 -960 960 960"
+                  width="18"
+                  fill="white"
+                >
+                  <path d="M319-250h322v-60H319v60Zm0-170h322v-60H319v60ZM220-80q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h361l219 219v521q0 24-18 42t-42 18H220Zm331-554h189L551-820v186Z" />
+                </svg>
+                문제 목록
+              </button>
+            )}
+
+            {OPERATOR_ROLES.includes(userInfo.role) &&
+              userInfo._id === examInfo.writer._id && (
+                <>
+                  <button
+                    onClick={handleEditExam}
+                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#dc9429] hover:bg-[#dc9429]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20"
+                      viewBox="0 -960 960 960"
+                      width="20"
+                      fill="white"
+                    >
+                      <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
+                    </svg>
+                    게시글 수정
+                  </button>
+                  <button
+                    onClick={handleDeleteExam}
+                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#e14343] hover:bg-[#e14343]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="20"
+                      viewBox="0 -960 960 960"
+                      width="20"
+                      fill="white"
+                    >
+                      <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
+                    </svg>
+                    게시글 삭제
+                  </button>
+                </>
+              )}
           </div>
         </div>
 

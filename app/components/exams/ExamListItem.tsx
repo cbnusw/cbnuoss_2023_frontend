@@ -14,7 +14,7 @@ export default function ExamListItem(props: ExamProps) {
   return (
     <div className="relative flex flex-col gap-4 bg-[#f7f7f7] p-3 group">
       <p className="font-bold">
-        <Link href="/" className="hover:underline">
+        <Link href={`/exams/${examInfo._id}`} className="hover:underline">
           {examInfo.title}
         </Link>
       </p>
