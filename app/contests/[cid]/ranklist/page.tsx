@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import UserScoreInfoList from './components/UserScoreInfoList';
 import NoneUserScoreInfoList from './components/NoneUserScoreInfoListItem';
@@ -8,6 +7,29 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import trophyImg from '@/public/images/trophy.png';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { useQueries } from '@tanstack/react-query';
+import { ContestInfo, ContestRankInfo } from '@/app/types/contest';
+import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
+import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
+import { useCallback, useEffect, useState } from 'react';
+import { userInfoStore } from '@/app/store/UserInfo';
+
+// 대회 게시글 정보 조회 API
+const fetchContestDetailInfo = ({ queryKey }: any) => {
+  const cid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
+  );
+};
+
+// 대회 순위 조회 API
+const fetchContestRankListInfo = ({ queryKey }: any) => {
+  const cid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/score/contest/${cid}`,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -16,24 +38,130 @@ interface DefaultProps {
 }
 
 export default function ContestRankList(props: DefaultProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isUserScoreInfoListEmpty, setIsUserScoreInfoListEmpty] =
-    useState(true);
-
   const cid = props.params.cid;
 
+  const results = useQueries({
+    queries: [
+      { queryKey: ['contestDetailInfo', cid], queryFn: fetchContestDetailInfo },
+      {
+        queryKey: ['contestRankListInfo', cid],
+        queryFn: fetchContestRankListInfo,
+      },
+    ],
+  });
+
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+
+  const contestInfo: ContestInfo = results[0].data?.data.data;
+  const contestRankListInfo: ContestRankInfo[] = results[1].data?.data.data;
+
+  const timeUntilStart = useCountdownTimer(contestInfo?.testPeriod.start);
+  const timeUntilEnd = useCountdownTimer(contestInfo?.testPeriod.end);
+  const currentTime = new Date();
+  const contestStartTime = new Date(contestInfo?.testPeriod.start);
+  const contestEndTime = new Date(contestInfo?.testPeriod.end);
+
+  const [isEnrollContest, setIsEnrollContest] = useState(false);
+
   const router = useRouter();
+
+  // 대회 신청 여부 확인
+  const isUserContestant = useCallback(() => {
+    return contestInfo.contestants.some(
+      (contestant) => contestant._id === userInfo._id,
+    );
+  }, [contestInfo, userInfo]);
+
+  useEffect(() => {
+    if (contestInfo && contestInfo.contestants && userInfo)
+      setIsEnrollContest(isUserContestant());
+  }, [contestInfo, userInfo, isUserContestant]);
+
+  // "문제 목록" 버튼의 렌더링 조건을 설정
+  const shouldShowProblemsButton = () => {
+    // 대회 게시글 작성자인 경우, 언제든지 버튼 보임
+    if (userInfo._id === contestInfo.writer._id) {
+      return true;
+    }
+
+    // 대회 신청자인 경우, 대회 시간 중에만 버튼 보임
+    if (
+      isEnrollContest &&
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  // 대회 시간 표시에 사용할 클래스를 결정하는 함수
+  const getTimeDisplayClass = () => {
+    if (currentTime < contestStartTime) {
+      // 대회 시작 전
+      return 'text-blue-500';
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 대회 진행 중
+      return 'text-red-500';
+    }
+  };
+
+  // 대회 시작까지 남은 시간 또는 대회 종료까지 남은 시간을 표시하는 함수
+  const renderRemainingTime = () => {
+    if (currentTime < contestStartTime) {
+      // 대회 시작 전: 대회 시작까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilStart.days > 0 &&
+            `(${timeUntilStart.days}일 ${timeUntilStart.hours}시간 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours > 0 &&
+            `(${timeUntilStart.hours}시간 ${timeUntilStart.minutes}분 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes > 0 &&
+            `(${timeUntilStart.minutes}분 ${timeUntilStart.seconds}초 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes === 0 &&
+            `(${timeUntilStart.seconds}초 남음)`}
+        </span>
+      );
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 대회 진행 중: 대회 종료까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilEnd.days > 0 &&
+            `(${timeUntilEnd.days}일 ${timeUntilEnd.hours}시간 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours > 0 &&
+            `(${timeUntilEnd.hours}시간 ${timeUntilEnd.minutes}분 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes > 0 &&
+            `(${timeUntilEnd.minutes}분 ${timeUntilEnd.seconds}초 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes === 0 &&
+            `(${timeUntilEnd.seconds}초 남음)`}
+        </span>
+      );
+    }
+  };
 
   const handleGoToContestProblems = () => {
     router.push(`/contests/${cid}/problems`);
   };
 
-  useEffect(() => {
-    setIsLoading(false);
-    setIsUserScoreInfoListEmpty(false);
-  }, []);
-
-  if (isLoading) return <Loading />;
+  const isAnyQueryPending = results.some((result) => result.isFetching);
+  if (isAnyQueryPending) return <Loading />;
 
   return (
     <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">
@@ -56,38 +184,48 @@ export default function ContestRankList(props: DefaultProps) {
                 href={`/contests/${cid}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
-                (2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
+                ({contestInfo.title})
               </Link>
             </div>
           </p>
           <div className="flex justify-between items-center pb-3 border-b border-gray-300">
             <div className="flex gap-2">
-              <button
-                onClick={handleGoToContestProblems}
-                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
+              {shouldShowProblemsButton() && (
+                <button
+                  onClick={handleGoToContestProblems}
+                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
                 >
-                  <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
-                </svg>
-                문제 목록
-              </button>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                    fill="white"
+                  >
+                    <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
+                  </svg>
+                  문제 목록
+                </button>
+              )}
             </div>
             <div className="mt-3">
               <span className="font-semibold">
                 대회 시간:{' '}
-                <span className="text-red-500 font-bold">41분 3초 후 종료</span>
+                <span className="font-light">
+                  {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)} ~{' '}
+                  {formatDateToYYMMDDHHMM(contestInfo.testPeriod.end)}{' '}
+                  {timeUntilEnd?.isPast ? (
+                    <span className="text-red-500 font-bold">(종료)</span>
+                  ) : (
+                    renderRemainingTime()
+                  )}
+                </span>
               </span>
             </div>
           </div>
         </div>
 
-        {isUserScoreInfoListEmpty ? (
+        {contestRankListInfo.length === 0 ? (
           <NoneUserScoreInfoList />
         ) : (
           <>
@@ -95,13 +233,19 @@ export default function ContestRankList(props: DefaultProps) {
               <span>
                 총:{' '}
                 <span>
-                  <span className="text-red-500">8</span>명
+                  <span className="text-red-500">
+                    {contestRankListInfo.length}
+                  </span>
+                  명
                 </span>
               </span>
             </div>
 
             <div className="mt-4 mb-4 pb-5">
-              <UserScoreInfoList cid={cid} />
+              <UserScoreInfoList
+                cid={cid}
+                contestRankListInfo={contestRankListInfo}
+              />
             </div>
           </>
         )}
