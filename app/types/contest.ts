@@ -54,3 +54,34 @@ export interface ContestEnrolledInfo {
   _id: string;
   title: string;
 }
+
+export interface ContestRankInfo {
+  _id: string;
+  contest: string;
+  user: {
+    center: null | string;
+    permissions: string[];
+    _id: string;
+    no: string;
+    name: string;
+    email: string;
+    phone: string;
+    department: string;
+    university: string;
+    position: null | string;
+    role: string;
+    joinedAt: string;
+    updatedAt: string;
+    __v: number;
+  };
+  scores: {
+    right: boolean;
+    tries: number;
+    time: number;
+    score: number;
+    problem: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
