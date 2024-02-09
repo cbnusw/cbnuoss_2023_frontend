@@ -1,5 +1,6 @@
 'use client';
 
+import { OPERATOR_ROLES } from '@/app/constants/role';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { ContestInfo } from '@/app/types/contest';
 import { maskEmail, maskString } from '@/app/utils/maskString';
@@ -21,14 +22,16 @@ export default function ContestContestantListItem(
         scope="row"
         className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
       >
-        {userInfo.no === contestantInfo.no ? (
+        {userInfo.no === contestantInfo.no ||
+        OPERATOR_ROLES.includes(userInfo.role) ? (
           <>{contestantInfo.no}</>
         ) : (
           <>{maskString(contestantInfo.no, 4, contestantInfo.no.length)}</>
         )}
       </th>
       <td className="font-medium">
-        {userInfo.no === contestantInfo.no ? (
+        {userInfo.no === contestantInfo.no ||
+        OPERATOR_ROLES.includes(userInfo.role) ? (
           <>{contestantInfo.name}</>
         ) : (
           <>{maskString(contestantInfo.name, 1, contestantInfo.name.length)}</>
@@ -37,7 +40,8 @@ export default function ContestContestantListItem(
       <td className="font-medium">{contestantInfo.university}</td>
       <td className="font-medium">{contestantInfo.department}</td>
       <td className="font-medium">
-        {userInfo.no === contestantInfo.no ? (
+        {userInfo.no === contestantInfo.no ||
+        OPERATOR_ROLES.includes(userInfo.role) ? (
           <>{contestantInfo.email}</>
         ) : (
           <>{maskEmail(contestantInfo.email)}</>
