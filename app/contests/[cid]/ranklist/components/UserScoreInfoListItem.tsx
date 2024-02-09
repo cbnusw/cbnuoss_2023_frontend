@@ -1,17 +1,22 @@
 'use client';
 
-import Link from 'next/link';
+import { ContestRankInfo } from '@/app/types/contest';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
 
 interface UserScoreInfoListItemProps {
   cid: string;
   ranking: number;
+  contestRankInfo: ContestRankInfo;
+  totalScore: number;
+  totalPenalty: number;
 }
 
 export default function UserScoreInfoListItem({
   cid,
   ranking,
+  contestRankInfo,
+  totalScore,
+  totalPenalty,
 }: UserScoreInfoListItemProps) {
   const router = useRouter();
 
@@ -29,188 +34,57 @@ export default function UserScoreInfoListItem({
             </span>
           </div>
           <div className="ml-2">
-            <span className="text-base">홍길동</span>{' '}
+            <span className="text-base">{contestRankInfo.user.name}</span>
             <span className="text-xs text-gray-600">
-              (충북대학교 소프트웨어학과)
+              ({contestRankInfo.user.department})
             </span>
           </div>
         </div>
         <div className="flex flex-wrap mt-5 gap-3">
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#3870e0] border border-[#3565c4] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
-              >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
-            </div>
-            <button
-              className="text-white text-[0.825rem] underline font-medium hover:text-[#eee] focus:text-[#eee]"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
+          {contestRankInfo.scores.map((score, index) => (
+            <div
+              key={index}
+              className={`relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] ${
+                score.right ? 'bg-[#3870e0]' : 'bg-[#e0e0e0]'
+              } border ${
+                score.right ? 'border-[#3565c4]' : 'border-[#d3d3d3]'
+              } hover:brightness-90 duration-150`}
             >
-              문제 1번
-            </button>
-            <span className="text-white text-[0.825rem]">시도: 1회</span>
-            <span className="text-white text-[0.825rem]">시간: 3분</span>
-          </div>
-
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#3870e0] border border-[#3565c4] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
+              <div className="absolute top-[0.175rem] left-[0.175rem]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="5"
+                  viewBox="0 -960 960 960"
+                  width="5"
+                  fill="white"
+                >
+                  <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
+                </svg>
+              </div>
+              <button
+                className={`${
+                  score.right ? 'text-white' : 'text-[#3f3f3f]'
+                } text-[0.825rem] underline font-medium hover:text-[#eee] focus:text-[#eee]`}
+                onClick={() => handleGoToTheProblem(score.problem)}
               >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
-            </div>
-            <button
-              className="text-white text-[0.825rem] underline font-medium hover:text-[#eee] focus:text-[#eee]"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
-            >
-              문제 2번
-            </button>
-            <span className="text-white text-[0.825rem]">시도: 1회</span>
-            <span className="text-white text-[0.825rem]">시간: 3분</span>
-          </div>
-
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#e0e0e0] border border-[#d3d3d3] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
+                문제 {index + 1}번
+              </button>
+              <span
+                className={`${
+                  score.right ? 'text-white' : 'text-[#3f3f3f]'
+                } text-[0.825rem]`}
               >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
-            </div>
-            <button
-              className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
-            >
-              문제 3번
-            </button>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시도: 1회</span>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시간: 3분</span>
-          </div>
-
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#3870e0] border border-[#3565c4] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
+                시도: {score.tries}회
+              </span>
+              <span
+                className={`${
+                  score.right ? 'text-white' : 'text-[#3f3f3f]'
+                } text-[0.825rem]`}
               >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
+                시간: {score.time}분
+              </span>
             </div>
-            <button
-              className="text-white text-[0.825rem] underline font-medium hover:text-[#eee] focus:text-[#eee]"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
-            >
-              문제 4번
-            </button>
-            <span className="text-white text-[0.825rem]">시도: 1회</span>
-            <span className="text-white text-[0.825rem]">시간: 3분</span>
-          </div>
-
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#e0e0e0] border border-[#d3d3d3] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
-              >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
-            </div>
-            <button
-              className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
-            >
-              문제 5번
-            </button>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시도: 1회</span>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시간: 3분</span>
-          </div>
-
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#e0e0e0] border border-[#d3d3d3] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
-              >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
-            </div>
-            <button
-              className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
-            >
-              문제 6번
-            </button>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시도: 1회</span>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시간: 3분</span>
-          </div>
-
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#e0e0e0] border border-[#d3d3d3] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
-              >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
-            </div>
-            <button
-              className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
-            >
-              문제 7번
-            </button>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시도: 1회</span>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시간: 3분</span>
-          </div>
-
-          <div className="relative flex flex-col justify-center items-center w-[5.5rem] h-[4.5rem] bg-[#e0e0e0] border border-[#d3d3d3] hover:brightness-90 duration-150">
-            <div className="absolute top-[0.175rem] left-[0.175rem]">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="5"
-                viewBox="0 -960 960 960"
-                width="5"
-                fill="white"
-              >
-                <path d="M480.238-137q-71.145 0-133.868-27.023t-109.12-73.348q-46.398-46.325-73.324-108.826Q137-408.699 137-479.762q0-71.145 27.023-133.868t73.348-109.12q46.325-46.398 108.826-73.324Q408.699-823 479.762-823q71.145 0 133.868 27.023t109.12 73.348q46.398 46.325 73.324 108.826Q823-551.301 823-480.238q0 71.145-27.023 133.868t-73.348 109.12q-46.325 46.398-108.826 73.324Q551.301-137 480.238-137Z" />
-              </svg>
-            </div>
-            <button
-              className="text-[#3f3f3f] text-[0.825rem] underline font-medium hover:text-black focus:text-black"
-              onClick={() => handleGoToTheProblem('6544673bc4fc3d9d4396aed7')}
-            >
-              문제 8번
-            </button>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시도: 1회</span>
-            <span className="text-[#3f3f3f] text-[0.825rem]">시간: 3분</span>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -220,7 +94,7 @@ export default function UserScoreInfoListItem({
             점수
           </div>
           <div className="flex justify-center items-center bg-white h-full">
-            10
+            {totalScore}
           </div>
         </div>
         <div className="flex flex-col w-full text-center bg-[#f7f7f7]">
@@ -228,7 +102,7 @@ export default function UserScoreInfoListItem({
             패널티
           </div>
           <div className="flex justify-center items-center bg-white h-full border-l text-red-600">
-            194
+            {totalPenalty}
           </div>
         </div>
       </div>
