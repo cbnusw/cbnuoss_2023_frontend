@@ -41,7 +41,7 @@ export default function MyContestPostList() {
   };
 
   useEffect(() => {
-    // page가 유효한 양의 정수가 아닌 경우, /mypage/managing-my-post?page=1로 리다이렉트
+    // page가 유효한 양의 정수가 아닌 경우, ?page=1로 리다이렉트
     if (!params?.has('page') || !Number.isInteger(page) || page < 1) {
       router.replace('/mypage/managing-my-post?page=1');
     }
