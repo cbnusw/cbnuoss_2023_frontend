@@ -12,14 +12,23 @@ import { UserInfo } from '@/app/types/user';
 import { useRouter } from 'next/navigation';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import axiosInstance from '@/app/utils/axiosInstance';
-import { useQuery } from '@tanstack/react-query';
-import { ContestInfo } from '@/app/types/contest';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ContestInfo, ContestSubmitInfo } from '@/app/types/contest';
+import * as XLSX from 'xlsx';
+import { getCodeSubmitResultTypeDescription } from '@/app/utils/getCodeSubmitResultTypeDescription';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
   const cid = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
+  );
+};
+
+// 대회 참가자 코드 제출 목록 정보 조회 API
+const fetchContestantSubmitsInfo = (cid: string) => {
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/contest/${cid}`,
   );
 };
 
@@ -35,6 +44,15 @@ export default function UsersContestSubmits(props: DefaultProps) {
   const { isPending, data } = useQuery({
     queryKey: ['contestDetailInfo', cid],
     queryFn: fetchContestDetailInfo,
+  });
+
+  const fetchContestantSubmitsInfoMutation = useMutation({
+    mutationFn: () => fetchContestantSubmitsInfo(cid),
+    onSuccess: (data) => {
+      const resData = data?.data.data;
+      const contestantSubmitsInfo: ContestSubmitInfo[] = resData.documents;
+      downloadSubmitsInfoListAsExcel(contestantSubmitsInfo, contestInfo.title);
+    },
   });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
@@ -62,6 +80,63 @@ export default function UsersContestSubmits(props: DefaultProps) {
       }
     });
   }, [updateUserInfo, contestInfo, router]);
+
+  const downloadSubmitsInfoListAsExcel = (
+    contestantSubmitsInfo: ContestSubmitInfo[],
+    contestTitle: string,
+  ) => {
+    // 엑셀 파일에 쓸 데이터 생성
+    const data = contestantSubmitsInfo.map((submitInfo, index) => ({
+      번호: index + 1,
+      대학: submitInfo.user.university,
+      '학부(과)': submitInfo.user.department,
+      학번: submitInfo.user.no,
+      이름: submitInfo.user.name,
+      문제명: submitInfo.problem.title,
+      결과: getCodeSubmitResultTypeDescription(submitInfo.result.type), // 결과 처리 로직 필요
+      메모리: `${(submitInfo.result.memory / 1048576).toFixed(2)} MB`, // 메모리 단위 변환
+      시간: `${submitInfo.result.time} ms`,
+      언어: submitInfo.language,
+      '제출 시간': new Date(submitInfo.createdAt).toLocaleString(), // 날짜 형식 변환
+    }));
+
+    // 워크시트 생성
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    // 칼럼 너비 설정
+    worksheet['!cols'] = [
+      { wch: 7.5 }, // 번호
+      { wch: 15 }, // 대학
+      { wch: 20 }, // 학부(과)
+      { wch: 12.5 }, // 학번
+      { wch: 10 }, // 이름
+      { wch: 20 }, // 문제명
+      { wch: 12.5 }, // 결과
+      { wch: 10 }, // 메모리
+      { wch: 10 }, // 시간
+      { wch: 10 }, // 언어
+      { wch: 20 }, // 제출 시간
+    ];
+
+    worksheet['!autofilter'] = {
+      ref: `A1:K${contestantSubmitsInfo.length + 1}`,
+    };
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, '대회 제출 목록');
+
+    // 엑셀 파일 생성 및 다운로드
+    const fileName = `${contestTitle}_제출목록.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+  };
+
+  const handleDownloadSubmitsInfoList = () => {
+    // 대회 참가자 정보와 대회명을 인자로 전달
+    const userResponse = confirm('명단을 다운로드 하시겠습니까?');
+    if (!userResponse) return;
+
+    fetchContestantSubmitsInfoMutation.mutate();
+  };
 
   if (isLoading || isPending) return <Loading />;
 
@@ -124,7 +199,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
           <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
             <div className="flex justify-end mb-2">
               <button
-                onClick={() => alert('개발 예정')}
+                onClick={handleDownloadSubmitsInfoList}
                 className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#4fa16a] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3b8d56] hover:bg-[#3b8d56]"
               >
                 <svg
@@ -136,7 +211,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
                 >
                   <path d="M 28.8125 0.03125 L 0.8125 5.34375 C 0.339844 5.433594 0 5.863281 0 6.34375 L 0 43.65625 C 0 44.136719 0.339844 44.566406 0.8125 44.65625 L 28.8125 49.96875 C 28.875 49.980469 28.9375 50 29 50 C 29.230469 50 29.445313 49.929688 29.625 49.78125 C 29.855469 49.589844 30 49.296875 30 49 L 30 1 C 30 0.703125 29.855469 0.410156 29.625 0.21875 C 29.394531 0.0273438 29.105469 -0.0234375 28.8125 0.03125 Z M 32 6 L 32 13 L 34 13 L 34 15 L 32 15 L 32 20 L 34 20 L 34 22 L 32 22 L 32 27 L 34 27 L 34 29 L 32 29 L 32 35 L 34 35 L 34 37 L 32 37 L 32 44 L 47 44 C 48.101563 44 49 43.101563 49 42 L 49 8 C 49 6.898438 48.101563 6 47 6 Z M 36 13 L 44 13 L 44 15 L 36 15 Z M 6.6875 15.6875 L 11.8125 15.6875 L 14.5 21.28125 C 14.710938 21.722656 14.898438 22.265625 15.0625 22.875 L 15.09375 22.875 C 15.199219 22.511719 15.402344 21.941406 15.6875 21.21875 L 18.65625 15.6875 L 23.34375 15.6875 L 17.75 24.9375 L 23.5 34.375 L 18.53125 34.375 L 15.28125 28.28125 C 15.160156 28.054688 15.035156 27.636719 14.90625 27.03125 L 14.875 27.03125 C 14.8125 27.316406 14.664063 27.761719 14.4375 28.34375 L 11.1875 34.375 L 6.1875 34.375 L 12.15625 25.03125 Z M 36 20 L 44 20 L 44 22 L 36 22 Z M 36 27 L 44 27 L 44 29 L 36 29 Z M 36 35 L 44 35 L 44 37 L 36 37 Z" />
                 </svg>
-                명단 다운로드
+                제출 목록 다운로드
               </button>
             </div>
           </div>
