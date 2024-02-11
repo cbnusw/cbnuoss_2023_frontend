@@ -6,6 +6,11 @@ export const RenderPaginationButtons = (
   let buttons: JSX.Element[] = [];
   let startPage, endPage;
 
+  // totalPages가 0인 경우에도 최소한 1 페이지를 가정
+  if (totalPages <= 1) {
+    totalPages = 1;
+  }
+
   if (totalPages <= 3) {
     startPage = 1;
     endPage = totalPages;
