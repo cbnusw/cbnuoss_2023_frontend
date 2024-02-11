@@ -85,3 +85,43 @@ export interface ContestRankInfo {
   updatedAt: string;
   __v: number;
 }
+
+export interface ContestSubmitInfo {
+  parentId: {
+    _id: string;
+    title: string;
+  };
+  parentType: string;
+  result: {
+    memory: number;
+    time: number;
+    type: string;
+  };
+  _id: string;
+  problem: {
+    _id: string;
+    title: string;
+  };
+  source: string;
+  language: string;
+  user: {
+    center: null;
+    permissions: string[];
+    _id: string;
+    image: null;
+    no: string;
+    name: string;
+    email: string;
+    phone: string;
+    department: string;
+    position: null;
+    joinedAt: string;
+    updatedAt: string;
+    role: string;
+    university: string;
+    __v: number;
+  };
+  createdAt: string;
+  __v: number;
+  code: string;
+}
