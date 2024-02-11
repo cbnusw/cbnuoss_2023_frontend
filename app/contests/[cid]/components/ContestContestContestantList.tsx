@@ -26,10 +26,10 @@ export default function ContestContestContestantList(
                 이름
               </th>
               <th scope="col" className="px-4 py-2">
-                소속 대학
+                대학교
               </th>
               <th scope="col" className="px-4 py-2">
-                소속 학과
+                학부(과)
               </th>
               <th scope="col" className="px-4 py-2">
                 이메일
