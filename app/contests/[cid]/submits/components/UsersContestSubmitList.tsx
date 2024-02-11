@@ -13,8 +13,9 @@ import { RenderPaginationButtons } from '@/app/components/RenderPaginationButton
 // 대회 코드 제출 목록 조회 API
 const fetchContestSubmitsInfo = ({ queryKey }: any) => {
   const cid = queryKey[1];
+  const page = queryKey[2];
   return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/contest/${cid}`,
+    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/contest/${cid}?page=${page}&limit=10&sort=-createdAt`,
   );
 };
 
@@ -30,7 +31,7 @@ export default function UsersContestSubmitList({
   const page = Number(params?.get('page')) || 1;
 
   const { isPending, data } = useQuery({
-    queryKey: ['contestSubmitsInfo', cid],
+    queryKey: ['contestSubmitsInfo', cid, page],
     queryFn: fetchContestSubmitsInfo,
     retry: 0,
   });
