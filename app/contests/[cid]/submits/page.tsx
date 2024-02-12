@@ -61,6 +61,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
   const contestInfo: ContestInfo = resData;
 
   const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const router = useRouter();
 
@@ -173,6 +174,10 @@ export default function UsersContestSubmits(props: DefaultProps) {
               className="block pl-7 pt-3 pb-[0.175rem] pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
               placeholder=" "
               required
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+              }}
             />
             <div className="absolute pt-[0.9rem] left-[-0.9rem] flex items-center pl-3 pointer-events-none">
               <svg
@@ -193,7 +198,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
               검색
             </label>
             <p className="text-gray-500 text-xs tracking-widest font-light mt-1">
-              이름, 학번으로 검색
+              이름, 학번, 언어로 검색
             </p>
           </div>
           <div className="relative ml-auto mt-auto bottom-[-0.75rem]">
@@ -218,7 +223,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
         </div>
 
         <section className="dark:bg-gray-900">
-          <UsersContestSubmitList cid={cid} />
+          <UsersContestSubmitList cid={cid} searchQuery={searchQuery} />
         </section>
       </div>
     </div>
