@@ -12,7 +12,8 @@ import { RenderPaginationButtons } from '@/app/components/RenderPaginationButton
 import { userInfoStore } from '@/app/store/UserInfo';
 
 // 본인이 작성한 대회 게시글 목록 반환 API (10개 게시글 단위로)
-const fetchMyPractices = async (page: number) => {
+const fetchMyPractices = async ({ queryKey }: any) => {
+  const page = queryKey[1];
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/practice/?page=${page}&limit=10&sort=-createdAt`,
   );
@@ -28,7 +29,7 @@ export default function MyPracticePostList() {
 
   const { isPending, data } = useQuery({
     queryKey: ['myPractices', page],
-    queryFn: () => fetchMyPractices(page),
+    queryFn: fetchMyPractices,
   });
 
   const router = useRouter();

@@ -16,7 +16,9 @@ interface ExamListProps {
 }
 
 // 시험 목록 반환 API (10개 게시글 단위로)
-const fetchExams = async (page: number, searchQuery: string) => {
+const fetchExams = async ({ queryKey }: any) => {
+  const page = queryKey[1];
+  const searchQuery = queryKey[2];
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/?page=${page}&limit=10&sort=-createdAt&q=title,course,writer=${searchQuery}`,
   );
@@ -32,7 +34,7 @@ export default function ExamList({ searchQuery }: ExamListProps) {
 
   const { isPending, data } = useQuery({
     queryKey: ['examList', page, debouncedSearchQuery],
-    queryFn: () => fetchExams(page, searchQuery),
+    queryFn: fetchExams,
   });
 
   const router = useRouter();

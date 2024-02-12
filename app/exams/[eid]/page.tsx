@@ -16,7 +16,8 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 // 시험 게시글 정보 조회 API
-const fetchExamDetailInfo = (eid: string) => {
+const fetchExamDetailInfo = ({ queryKey }: any) => {
+  const eid = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
   );
@@ -52,7 +53,7 @@ export default function ExamDetail(props: DefaultProps) {
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['examDetailInfo', eid],
-    queryFn: () => fetchExamDetailInfo(eid),
+    queryFn: fetchExamDetailInfo,
     retry: 0,
   });
 

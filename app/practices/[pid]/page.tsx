@@ -11,7 +11,8 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
 // 연습문제 게시글 정보 조회 API
-const fetchPracticeDetailInfo = (eid: string) => {
+const fetchPracticeDetailInfo = ({ queryKey }: any) => {
+  const eid = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${eid}`,
   );
@@ -32,7 +33,7 @@ export default function PracticeProblem(props: DefaultProps) {
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['practiceDetailInfo', pid],
-    queryFn: () => fetchPracticeDetailInfo(pid),
+    queryFn: fetchPracticeDetailInfo,
     retry: 0,
   });
 
