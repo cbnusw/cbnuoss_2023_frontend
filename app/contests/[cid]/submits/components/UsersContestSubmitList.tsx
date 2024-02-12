@@ -9,29 +9,35 @@ import { ContestSubmitInfo } from '@/app/types/contest';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
+import useDebounce from '@/app/hooks/useDebounce';
 
 // 대회 코드 제출 목록 조회 API
 const fetchContestSubmitsInfo = ({ queryKey }: any) => {
   const cid = queryKey[1];
   const page = queryKey[2];
+  const searchQuery = queryKey[3];
   return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/contest/${cid}?page=${page}&limit=10&sort=-createdAt`,
+    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/contest/${cid}?page=${page}&limit=10&sort=-createdAt&q=user,language=${searchQuery}`,
   );
 };
 
 interface UsersContestSubmitListProps {
   cid: string;
+  searchQuery: string;
 }
 
 export default function UsersContestSubmitList({
   cid,
+  searchQuery,
 }: UsersContestSubmitListProps) {
+  const debouncedSearchQuery = useDebounce(searchQuery, 400);
+
   const params = useSearchParams();
 
   const page = Number(params?.get('page')) || 1;
 
   const { isPending, data } = useQuery({
-    queryKey: ['contestSubmitsInfo', cid, page],
+    queryKey: ['contestSubmitsInfo', cid, page, debouncedSearchQuery],
     queryFn: fetchContestSubmitsInfo,
     retry: 0,
   });
