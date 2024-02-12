@@ -10,7 +10,8 @@ import { ExamInfo } from '@/app/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 // 본인이 작성한 시험 게시글 목록 반환 API (10개 게시글 단위로)
-const fetchMyExams = async (page: number) => {
+const fetchMyExams = async ({ queryKey }: any) => {
+  const page = queryKey[1];
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/me?page=${page}&limit=10&sort=-createdAt`,
   );
@@ -24,7 +25,7 @@ export default function MyExamPostList() {
 
   const { isPending, data } = useQuery({
     queryKey: ['myExams', page],
-    queryFn: () => fetchMyExams(page),
+    queryFn: fetchMyExams,
   });
 
   const router = useRouter();
