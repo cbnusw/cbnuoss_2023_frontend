@@ -113,7 +113,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
       { wch: 20 }, // 학부(과)
       { wch: 12.5 }, // 학번
       { wch: 10 }, // 이름
-      { wch: 20 }, // 문제명
+      { wch: 22.5 }, // 문제명
       { wch: 12.5 }, // 결과
       { wch: 10 }, // 메모리
       { wch: 10 }, // 시간
