@@ -70,14 +70,16 @@ export default function UsersContestSubmits(props: DefaultProps) {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (contestInfo) {
         if (
-          (userInfo.isAuth && !OPERATOR_ROLES.includes(userInfo.role)) ||
-          userInfo._id !== contestInfo.writer._id
+          userInfo.isAuth &&
+          (OPERATOR_ROLES.includes(userInfo.role) ||
+            userInfo._id === contestInfo.writer._id)
         ) {
-          alert('접근 권한이 없습니다.');
-          router.back();
+          setIsLoading(false);
           return;
         }
-        setIsLoading(false);
+
+        alert('접근 권한이 없습니다.');
+        router.back();
       }
     });
   }, [updateUserInfo, contestInfo, router]);
