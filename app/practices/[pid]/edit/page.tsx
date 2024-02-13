@@ -131,12 +131,13 @@ export default function EditPractice(props: DefaultProps) {
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (userInfo.isAuth && !OPERATOR_ROLES.includes(userInfo.role)) {
-        alert('접근 권한이 없습니다.');
-        router.back();
+      if (userInfo.isAuth && OPERATOR_ROLES.includes(userInfo.role)) {
+        setIsLoading(false);
         return;
       }
-      setIsLoading(false);
+
+      alert('접근 권한이 없습니다.');
+      router.back();
     });
   }, [updateUserInfo, router]);
 
