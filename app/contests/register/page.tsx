@@ -4,16 +4,55 @@ import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { useMutation } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 대회 등록 API 호출을 위한 인터페이스 정의
+interface RegisterContestParams {
+  title: string;
+  content: string;
+  testPeriod: {
+    start: string;
+    end: string;
+  };
+  applyingPeriod?: {
+    start: string;
+    end: string;
+  };
+  password: string;
+}
+
+// 대회 등록 API
+const registerContest = (params: RegisterContestParams) => {
+  const { title, content, testPeriod, applyingPeriod, password } = params;
+  const reqBody = {
+    title,
+    content,
+    testPeriod,
+    isPassword: true,
+    applyingPeriod,
+    password,
+  };
+
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest`,
+    reqBody,
+  );
+};
 
 const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
   ssr: false,
 });
 
 export default function RegisterContest() {
+  const registerContestMutation = useMutation({
+    mutationFn: registerContest,
+  });
+
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -148,7 +187,23 @@ export default function RegisterContest() {
       contestAppliedEndDateTime,
     );
 
-    alert('등록 기능 개발 예정');
+    const contestData = {
+      title: title,
+      content: editorContent,
+      testPeriod: {
+        start: contestStartDateTime,
+        end: contestEndDateTime,
+      },
+      applyingPeriod: isCheckedAppliedPeriod
+        ? {
+            start: contestAppliedStartDateTime,
+            end: contestAppliedEndDateTime,
+          }
+        : undefined, // Adjust based on your logic for handling applying period
+      password: contestPwd,
+    };
+
+    registerContestMutation.mutate(contestData);
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
