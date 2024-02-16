@@ -51,6 +51,12 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 export default function RegisterContest() {
   const registerContestMutation = useMutation({
     mutationFn: registerContest,
+    onSuccess: (response) => {
+      const resData = response?.data.data;
+      const cid = resData?._id;
+      alert('대회가 등록되었습니다.');
+      router.push(`/contests/${cid}`);
+    },
   });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
