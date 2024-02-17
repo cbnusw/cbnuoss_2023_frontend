@@ -69,30 +69,6 @@ export default function PracticeProblem(props: DefaultProps) {
     router.push('/practices');
   };
 
-  // 에러가 발생했을 때의 처리
-  if (isError) {
-    const axiosError = error as AxiosError;
-    console.log(axiosError.response?.status, axiosError.code);
-    switch (axiosError.response?.status) {
-      case 404:
-      case 500:
-        switch (axiosError.code) {
-          case 'PROBLEM_NOT_FOUND':
-          case 'ERR_BAD_REQUEST':
-            alert('존재하지 않는 문제입니다.');
-            router.push('/');
-            break;
-          default:
-            alert('정의되지 않은 http code입니다.');
-        }
-        break;
-      default:
-        alert('정의되지 않은 http status code입니다');
-    }
-    router.push('/');
-    return;
-  }
-
   if (isPending) return <Loading />;
 
   return (
