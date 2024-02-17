@@ -6,6 +6,7 @@ import { userInfoStore } from '@/app/store/UserInfo';
 import { UserInfo } from '@/app/types/user';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { toUTCString } from '@/app/utils/formatDate';
 import { useMutation } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -63,7 +64,7 @@ export default function RegisterContest() {
 
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState('');
-  const [editorContent, setEditorContent] = useState('');
+  const [content, setContent] = useState('');
   const [contestStartDateTime, setContestStartDateTime] = useState('');
   const [contestEndDateTime, setContestEndDateTime] = useState('');
   const [isCheckedAppliedPeriod, setIsCheckedAppliedPeriod] = useState(false);
@@ -123,7 +124,7 @@ export default function RegisterContest() {
       return;
     }
 
-    if (!editorContent) {
+    if (!content) {
       alert('본문을 입력해 주세요');
       window.scrollTo(0, 0);
       return;
@@ -185,7 +186,7 @@ export default function RegisterContest() {
 
     console.log(
       title,
-      editorContent,
+      content,
       contestStartDateTime,
       contestEndDateTime,
       contestProblemsPwd,
@@ -193,20 +194,20 @@ export default function RegisterContest() {
       contestAppliedEndDateTime,
     );
 
-    const contestData = {
-      title: title,
-      content: editorContent,
+    const contestData: RegisterContestParams = {
+      title,
+      content,
       testPeriod: {
-        start: contestStartDateTime,
-        end: contestEndDateTime,
+        start: toUTCString(contestStartDateTime),
+        end: toUTCString(contestEndDateTime),
       },
       applyingPeriod: isCheckedAppliedPeriod
         ? {
-            start: contestAppliedStartDateTime,
-            end: contestAppliedEndDateTime,
+            start: toUTCString(contestAppliedStartDateTime),
+            end: toUTCString(contestAppliedEndDateTime),
           }
-        : undefined, // Adjust based on your logic for handling applying period
-      password: contestPwd,
+        : undefined,
+      password: contestProblemsPwd,
     };
 
     registerContestMutation.mutate(contestData);
@@ -268,10 +269,7 @@ export default function RegisterContest() {
         </div>
 
         <div className="w-full mx-auto overflow-auto">
-          <CustomCKEditor
-            initEditorContent={''}
-            onEditorChange={setEditorContent}
-          />
+          <CustomCKEditor initEditorContent={''} onEditorChange={setContent} />
         </div>
 
         <div className="mt-8">
