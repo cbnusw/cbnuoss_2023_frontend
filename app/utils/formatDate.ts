@@ -62,3 +62,8 @@ export interface TimeDifference {
   minutes: number;
   seconds: number;
 }
+
+export const toUTCString = (localDateTime: string) => {
+  const localDate = new Date(localDateTime);
+  return localDate.toISOString();
+};
