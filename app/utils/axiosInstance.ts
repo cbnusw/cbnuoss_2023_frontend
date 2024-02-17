@@ -32,6 +32,17 @@ axiosInstance.interceptors.response.use(
           localStorage.removeItem('activeAuthorization');
           if (typeof window !== 'undefined') window.location.href = '/login';
           break;
+        case 404:
+          console.log(error.code);
+          switch (error.code) {
+            case 'CONTEST_NOT_FOUND':
+            case 'ASSIGNMENT_NOT_FOUND':
+            case 'PROBLEM_NOT_FOUND':
+            case 'ERR_BAD_REQUEST':
+              alert('존재하지 않는 게시글입니다.');
+              if (typeof window !== 'undefined') window.location.href = '/';
+              return;
+          }
         case 500:
           // 500 Internal Server Error 에러 처리
           alert('서버에 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
