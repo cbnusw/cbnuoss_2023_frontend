@@ -11,15 +11,21 @@ import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { userInfoStore } from '@/app/store/UserInfo';
 import ContestContestContestantList from './components/ContestContestContestantList';
-import { AxiosError } from 'axios';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import * as XLSX from 'xlsx';
+import { AxiosError } from 'axios';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
   const cid = queryKey[1];
   return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
+  );
+};
+
+const deleteContest = (cid: string) => {
+  return axiosInstance.delete(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
   );
 };
@@ -63,6 +69,30 @@ export default function ContestDetail(props: DefaultProps) {
     queryKey: ['contestDetailInfo', cid],
     queryFn: fetchContestDetailInfo,
     retry: 0,
+  });
+
+  const deleteContestMutation = useMutation({
+    mutationFn: deleteContest,
+    onSuccess: () => {
+      alert('대회가 삭제되었습니다.');
+      router.push('/contests');
+    },
+    onError: (error: AxiosError) => {
+      const resData: any = error.response?.data;
+      switch (resData.status) {
+        case 400:
+          switch (resData.code) {
+            case 'AFTER_TEST_START':
+              alert('대회 시작 시간 이후에는 대회를 삭제하실 수 없습니다.');
+              break;
+            default:
+              alert('정의되지 않은 http code입니다.');
+          }
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
   });
 
   const enrollContestMutation = useMutation({
@@ -111,9 +141,22 @@ export default function ContestDetail(props: DefaultProps) {
 
   const confirmContestConfirmMutation = useMutation({
     mutationFn: (password: string) => confirmContestConfirm(cid, password),
-    onError: () => {
-      alert('비밀번호가 일치하지 않습니다.');
-      deleteCookie(cid);
+    onError: (error: AxiosError) => {
+      const resData: any = error.response?.data;
+      switch (resData.status) {
+        case 400:
+          switch (resData.code) {
+            case 'CONTEST_PASSWORD_NOT_MATCH':
+              alert('비밀번호가 일치하지 않습니다.');
+              deleteCookie(cid);
+              break;
+            default:
+              alert('정의되지 않은 http code입니다.');
+          }
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
     onSuccess: () => {
       setCookie(cid, password, { maxAge: 60 * 60 * 24 });
@@ -257,12 +300,11 @@ export default function ContestDetail(props: DefaultProps) {
 
   const handleDeleteContest = () => {
     const userResponse = confirm(
-      '현재 대회 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
+      '대회를 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
     if (!userResponse) return;
 
-    alert('게시글을 삭제하였습니다.');
-    router.push('/contests');
+    deleteContestMutation.mutate(cid);
   };
 
   // 대회 신청 여부 확인
