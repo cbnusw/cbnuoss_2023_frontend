@@ -54,17 +54,17 @@ export default function RegisterContest() {
   const [contestStartDateTime, setContestStartDateTime] = useState('');
   const [contestEndDateTime, setContestEndDateTime] = useState('');
   const [isCheckedAppliedPeriod, setIsCheckedAppliedPeriod] = useState(false);
-  const [isCheckedUsingContestPwd, setIsCheckedUsingContestPwd] =
-    useState(false);
+  // const [isCheckedUsingContestPwd, setIsCheckedUsingContestPwd] =
+  //   useState(false);
   const [contestAppliedStartDateTime, setContestAppliedStartDateTime] =
     useState('');
   const [contestAppliedEndDateTime, setContestAppliedEndDateTime] =
     useState('');
-  const [contestPwd, setContestPwd] = useState('');
+  // const [contestPwd, setContestPwd] = useState('');
   const [contestProblemsPwd, setContestProblemsPwd] = useState('');
 
   const [isContestNameValidFail, setIsContestNameValidFail] = useState(false);
-  const [isContestPwdValidFail, setIsContestPwdValidFail] = useState(false);
+  // const [isContestPwdValidFail, setIsContestPwdValidFail] = useState(false);
   const [isContestProblemsPwdValidFail, setIsContestProblemsPwdValidFail] =
     useState(false);
 
@@ -82,10 +82,10 @@ export default function RegisterContest() {
     setIsContestNameValidFail(false);
   };
 
-  const handleContestPwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setContestPwd(e.target.value);
-    setIsContestPwdValidFail(false);
-  };
+  // const handleContestPwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setContestPwd(e.target.value);
+  //   setIsContestPwdValidFail(false);
+  // };
 
   const handleContestProblemsPwdChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -169,16 +169,6 @@ export default function RegisterContest() {
         return;
       }
     }
-
-    console.log(
-      title,
-      content,
-      contestStartDateTime,
-      contestEndDateTime,
-      contestProblemsPwd,
-      contestAppliedStartDateTime,
-      contestAppliedEndDateTime,
-    );
 
     const contestData: RegisterContestParams = {
       title,
