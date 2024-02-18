@@ -51,3 +51,15 @@ export interface ExamEnrolledInfo {
   title: string;
   course: string;
 }
+
+// 시험 등록/수정 API 호출을 위한 인터페이스 정의
+export interface RegisterExamParams {
+  title: string;
+  course: string;
+  content: string;
+  testPeriod: {
+    start: string;
+    end: string;
+  };
+  password: string;
+}

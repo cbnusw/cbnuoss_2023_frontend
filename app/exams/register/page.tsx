@@ -3,26 +3,56 @@
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { RegisterExamParams } from '@/app/types/exam';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { toUTCString } from '@/app/utils/formatDate';
+import { useMutation } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 시험 등록 API
+const registerExam = (params: RegisterExamParams) => {
+  const { title, course, content, testPeriod, password } = params;
+  const reqBody = {
+    title,
+    course,
+    content,
+    testPeriod,
+    password,
+  };
+
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment`,
+    reqBody,
+  );
+};
 
 const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
   ssr: false,
 });
 
 export default function RegisterExam() {
+  const registerExamMutation = useMutation({
+    mutationFn: registerExam,
+    onSuccess: (response) => {
+      const resData = response?.data.data;
+      const eid = resData?._id;
+      alert('시험이 등록되었습니다.');
+      router.push(`/exams/${eid}`);
+    },
+  });
+
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [examName, setExamName] = useState('');
+  const [title, setTitle] = useState('');
   const [courseName, setCourseName] = useState('');
-  const [editorContent, setEditorContent] = useState('');
+  const [content, setContent] = useState('');
   const [examStartDateTime, setExamStartDateTime] = useState('');
   const [examEndDateTime, setExamEndDateTime] = useState('');
-  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
   const [examPwd, setExamPwd] = useState('');
 
   const [isExamNameValidFail, setIsExamNameValidFail] = useState(false);
@@ -39,7 +69,7 @@ export default function RegisterExam() {
   // currentDate.setDate(currentDate.getDate() + 1);
 
   const handleExamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExamName(e.target.value);
+    setTitle(e.target.value);
     setIsExamNameValidFail(false);
   };
 
@@ -61,7 +91,7 @@ export default function RegisterExam() {
   };
 
   const handleRegisterExam = () => {
-    if (!examName) {
+    if (!title) {
       alert('시험명을 입력해 주세요');
       window.scrollTo(0, 0);
       examNameRef.current?.focus();
@@ -77,7 +107,7 @@ export default function RegisterExam() {
       return;
     }
 
-    if (!editorContent) {
+    if (!content) {
       alert('본문을 입력해 주세요');
       window.scrollTo(0, 0);
       return;
@@ -89,7 +119,7 @@ export default function RegisterExam() {
       return;
     }
 
-    if (isCheckedUsingPwd && !examPwd) {
+    if (!examPwd) {
       alert('비밀번호를 입력해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       examPwdRef.current?.focus();
@@ -97,7 +127,18 @@ export default function RegisterExam() {
       return;
     }
 
-    alert('등록 기능 개발 예정');
+    const examData: RegisterExamParams = {
+      title,
+      course: courseName,
+      content,
+      testPeriod: {
+        start: toUTCString(examStartDateTime),
+        end: toUTCString(examEndDateTime),
+      },
+      password: examPwd,
+    };
+
+    registerExamMutation.mutate(examData);
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
@@ -132,7 +173,7 @@ export default function RegisterExam() {
               }-500 focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
-              value={examName}
+              value={title}
               ref={examNameRef}
               onChange={handleExamNameChange}
             />
@@ -195,10 +236,7 @@ export default function RegisterExam() {
         </div>
 
         <div className="w-full mx-auto overflow-auto">
-          <CustomCKEditor
-            initEditorContent={''}
-            onEditorChange={setEditorContent}
-          />
+          <CustomCKEditor initEditorContent={''} onEditorChange={setContent} />
         </div>
 
         <div className="mt-8">
@@ -226,26 +264,10 @@ export default function RegisterExam() {
           </div>
 
           <div className="flex flex-col mt-10">
-            <div className="flex">
-              <div className="flex items-center h-5">
-                <input
-                  id="helper-checkbox"
-                  aria-describedby="helper-checkbox-text"
-                  type="checkbox"
-                  checked={isCheckedUsingPwd}
-                  onChange={() => setIsCheckedUsingPwd(!isCheckedUsingPwd)}
-                  className="w-4 h-4 text-blue-600 border-2 border-[#757575] rounded-[0.175rem] focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-              <div className="ml-2 text-sm">
-                <label
-                  htmlFor="helper-checkbox"
-                  className="font-medium text-gray-900 dark:text-gray-300"
-                >
-                  비밀번호 설정
-                </label>
-
-                <div className="flex mt-1">
+            <div className="flex flex-col">
+              <div className="flex flex-col">
+                <p>비밀번호 설정</p>
+                <div className="flex mt-1 ml-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="15"
@@ -260,14 +282,12 @@ export default function RegisterExam() {
                     id="helper-checkbox-text"
                     className="relative left-[-0.8rem] text-xs font-normal text-[#5762b3] dark:text-gray-300"
                   >
-                    비밀번호를 설정할 경우 게시글 열람 시 비밀번호 입력이
-                    필요합니다.
+                    게시글 확인 시 비밀번호 입력이 필요합니다.
                   </p>
                 </div>
               </div>
-            </div>
-            {isCheckedUsingPwd ? (
-              <div className="flex flex-col relative z-0 w-1/2 group mt-7">
+
+              <div className="flex flex-col relative z-0 w-1/2 group mt-4">
                 <input
                   type="text"
                   name="floating_first_name"
@@ -295,7 +315,7 @@ export default function RegisterExam() {
                   비밀번호
                 </label>
               </div>
-            ) : null}
+            </div>
           </div>
 
           <div className="mt-14 pb-2 flex justify-end gap-3">
