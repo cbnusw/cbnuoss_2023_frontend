@@ -125,3 +125,18 @@ export interface ContestSubmitInfo {
   __v: number;
   code: string;
 }
+
+// 대회 등록/수정 API 호출을 위한 인터페이스 정의
+export interface RegisterContestParams {
+  title: string;
+  content: string;
+  testPeriod: {
+    start: string;
+    end: string;
+  };
+  applyingPeriod?: {
+    start: string;
+    end: string;
+  };
+  password: string;
+}

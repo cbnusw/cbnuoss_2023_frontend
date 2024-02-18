@@ -3,6 +3,7 @@
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { RegisterContestParams } from '@/app/types/contest';
 import { UserInfo } from '@/app/types/user';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
@@ -11,21 +12,6 @@ import { useMutation } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-
-// 대회 등록 API 호출을 위한 인터페이스 정의
-interface RegisterContestParams {
-  title: string;
-  content: string;
-  testPeriod: {
-    start: string;
-    end: string;
-  };
-  applyingPeriod?: {
-    start: string;
-    end: string;
-  };
-  password: string;
-}
 
 // 대회 등록 API
 const registerContest = (params: RegisterContestParams) => {
@@ -153,13 +139,13 @@ export default function RegisterContest() {
       return;
     }
 
-    if (isCheckedUsingContestPwd && !contestPwd) {
-      alert('대회 비밀번호를 입력해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
-      contestPwdRef.current?.focus();
-      setIsContestPwdValidFail(true);
-      return;
-    }
+    // if (isCheckedUsingContestPwd && !contestPwd) {
+    //   alert('대회 비밀번호를 입력해 주세요');
+    //   window.scrollTo(0, document.body.scrollHeight);
+    //   contestPwdRef.current?.focus();
+    //   setIsContestPwdValidFail(true);
+    //   return;
+    // }
 
     // 대회 시작 시간과 종료 시간의 유효성 검사
     if (contestStartDateTime >= contestEndDateTime) {
