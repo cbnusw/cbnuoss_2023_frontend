@@ -10,7 +10,6 @@ import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -19,6 +18,13 @@ import { useCallback, useEffect, useState } from 'react';
 const fetchExamDetailInfo = ({ queryKey }: any) => {
   const eid = queryKey[1];
   return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
+  );
+};
+
+// 시험 삭제 API
+const deleteExam = (eid: string) => {
+  return axiosInstance.delete(
     `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
   );
 };
@@ -55,6 +61,14 @@ export default function ExamDetail(props: DefaultProps) {
     queryKey: ['examDetailInfo', eid],
     queryFn: fetchExamDetailInfo,
     retry: 0,
+  });
+
+  const deleteExamMutation = useMutation({
+    mutationFn: deleteExam,
+    onSuccess: () => {
+      alert('시험이 삭제되었습니다.');
+      router.push('/exams');
+    },
   });
 
   const enrollExamMutation = useMutation({
@@ -186,11 +200,11 @@ export default function ExamDetail(props: DefaultProps) {
 
   const handleDeleteExam = () => {
     const userResponse = confirm(
-      '현재 시험 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
+      '시험을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
     if (!userResponse) return;
-    alert('게시글을 삭제하였습니다.');
-    router.push('/exams');
+
+    deleteExamMutation.mutate(eid);
   };
 
   const handleEnrollExam = () => {
