@@ -24,6 +24,7 @@ const fetchContestDetailInfo = ({ queryKey }: any) => {
   );
 };
 
+// 대회 삭제 API
 const deleteContest = (cid: string) => {
   return axiosInstance.delete(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
@@ -83,7 +84,7 @@ export default function ContestDetail(props: DefaultProps) {
         case 400:
           switch (resData.code) {
             case 'AFTER_TEST_START':
-              alert('대회 시작 시간 이후에는 대회를 삭제하실 수 없습니다.');
+              alert('대회 시작 시간 이후에는 게시글을 삭제하실 수 없습니다.');
               break;
             default:
               alert('정의되지 않은 http code입니다.');
