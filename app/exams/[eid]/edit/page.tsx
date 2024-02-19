@@ -3,11 +3,48 @@
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { ExamInfo, RegisterExamParams } from '@/app/types/exam';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { convertUTCToLocalDateTime, toUTCString } from '@/app/utils/formatDate';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 시험 게시글 정보 조회 API
+const fetchExamDetailInfo = ({ queryKey }: any) => {
+  const eid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
+  );
+};
+
+// 시험 수정 API
+const editExam = ({
+  eid,
+  params,
+}: {
+  eid: string;
+  params: RegisterExamParams;
+}) => {
+  const { title, course, content, testPeriod, password } = params;
+  const reqBody = {
+    title,
+    course,
+    content,
+    testPeriod,
+    password,
+  };
+
+  console.log(eid);
+
+  return axiosInstance.put(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
+    reqBody,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -20,71 +57,55 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 });
 
 export default function EditExam(props: DefaultProps) {
-  const examInfo = {
-    examName: '2023-01-자료구조(소프트웨어학부 01반)',
-    courseName: '자료구조',
-    content: `
-# 자료구조 알고리즘 코딩 테스트 공지
-안녕하세요, 여러분.
+  const eid = props.params.eid;
 
-자료구조 과목에서 진행하는 **알고리즘 코딩 테스트**에 대해 공지합니다.
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['examDetailInfo', eid],
+    queryFn: fetchExamDetailInfo,
+    retry: 0,
+  });
 
-## 테스트 일정
-- 날짜: 2023년 7월 13일 (목)
-- 시간: 오후 3시 ~ 4시
-
-## 테스트 방식
-- 온라인으로 진행
-- 개인 컴퓨터를 사용하여 코딩 테스트 진행
-- Google Classroom에 공지된 링크를 통해 테스트 사이트 접속
-
-## 테스트 범위
-- 이번 테스트는 다음의 자료구조와 관련된 알고리즘에 대한 문제를 다룹니다:
-    - 스택(Stack)과 큐(Queue)
-    - 링크드 리스트(Linked List)
-    - 트리(Tree)와 그래프(Graph)
-
-## 기타 유의사항
-- 본 테스트는 오픈 북 형태로 진행되나, 다른 사람과의 협업은 엄격히 금지합니다.
-- 시작 시간에 맞춰 준비하여 테스트에 참가하시기 바랍니다.
-- 테스트 중 문제가 발생하는 경우, 바로 저에게 연락해 주세요.
-
-코딩 테스트를 통해 여러분의 알고리즘 구현 능력을 키울 수 있는 좋은 기회가 되길 바랍니다. 
-모두 최선을 다해 보세요!
-
-감사합니다.`,
-    examStartDateTime: '2023-07-13T10:00',
-    examEndDateTime: '2023-07-13T11:00',
-    isCheckedUsingExamPwd: true,
-    examPwd: 'owrejreoi12321',
-  };
+  const editExamMutation = useMutation({
+    mutationFn: editExam,
+    onSuccess: () => {
+      alert('시험 내용이 수정되었습니다.');
+      router.push(`/exams/${eid}`);
+    },
+  });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
+  const resData = data?.data.data;
+  const examInfo: ExamInfo = resData;
+
   const [isLoading, setIsLoading] = useState(true);
-  const [examName, setExamName] = useState(examInfo.examName);
-  const [courseName, setCourseName] = useState(examInfo.courseName);
-  const [editorContent, setEditorContent] = useState();
-  const [examStartDateTime, setExamStartDateTime] = useState(
-    examInfo.examStartDateTime,
-  );
-  const [examEndDateTime, setExamEndDateTime] = useState(
-    examInfo.examEndDateTime,
-  );
-  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(
-    examInfo.isCheckedUsingExamPwd,
-  );
-  const [examPwd, setExamPwd] = useState(examInfo.examPwd);
+  const [title, setTitle] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [content, setContent] = useState('');
+  const [examStartDateTime, setExamStartDateTime] = useState('');
+  const [examEndDateTime, setExamEndDateTime] = useState('');
+  const [examPwd, setExamPwd] = useState('');
 
   const [isExamNameValidFail, setIsExamNameValidFail] = useState(false);
   const [isCourseNameValidFail, setIsCourseNameValidFail] = useState(false);
   const [isExamPwdValidFail, setIsExamPwdValidFail] = useState(false);
 
+  useEffect(() => {
+    if (examInfo) {
+      setTitle(examInfo.title);
+      setCourseName(examInfo.course);
+      setContent(examInfo.content);
+      setExamStartDateTime(
+        convertUTCToLocalDateTime(examInfo.testPeriod.start),
+      );
+      setExamEndDateTime(convertUTCToLocalDateTime(examInfo.testPeriod.end));
+      setExamPwd(examInfo.password);
+    }
+  }, [examInfo]);
+
   const examNameRef = useRef<HTMLInputElement>(null);
   const courseNameRef = useRef<HTMLInputElement>(null);
   const examPwdRef = useRef<HTMLInputElement>(null);
-
-  const eid = props.params.eid;
 
   const router = useRouter();
 
@@ -92,7 +113,7 @@ export default function EditExam(props: DefaultProps) {
   // currentDate.setDate(currentDate.getDate() + 1);
 
   const handleExamNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExamName(e.target.value);
+    setTitle(e.target.value);
     setIsExamNameValidFail(false);
   };
 
@@ -114,7 +135,7 @@ export default function EditExam(props: DefaultProps) {
   };
 
   const handleEditExam = () => {
-    if (!examName) {
+    if (!title) {
       alert('시험명을 입력해 주세요');
       window.scrollTo(0, 0);
       examNameRef.current?.focus();
@@ -130,7 +151,7 @@ export default function EditExam(props: DefaultProps) {
       return;
     }
 
-    if (!editorContent) {
+    if (!content) {
       alert('본문을 입력해 주세요');
       window.scrollTo(0, 0);
       return;
@@ -142,7 +163,7 @@ export default function EditExam(props: DefaultProps) {
       return;
     }
 
-    if (isCheckedUsingPwd && !examPwd) {
+    if (!examPwd) {
       alert('비밀번호를 입력해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       examPwdRef.current?.focus();
@@ -150,7 +171,18 @@ export default function EditExam(props: DefaultProps) {
       return;
     }
 
-    alert('수정 기능 개발 예정');
+    const examData: RegisterExamParams = {
+      title,
+      course: courseName,
+      content,
+      testPeriod: {
+        start: toUTCString(examStartDateTime),
+        end: toUTCString(examEndDateTime),
+      },
+      password: examPwd,
+    };
+
+    editExamMutation.mutate({ eid, params: examData });
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
@@ -172,7 +204,6 @@ export default function EditExam(props: DefaultProps) {
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <p className="text-2xl font-semibold">시험 등록</p>
-
         <div className="flex gap-5 mt-5 mb-8">
           <div className="flex flex-col relative z-0 w-2/5 group">
             <input
@@ -185,7 +216,7 @@ export default function EditExam(props: DefaultProps) {
               }-500 focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
-              value={examName}
+              value={title}
               ref={examNameRef}
               onChange={handleExamNameChange}
             />
@@ -246,14 +277,12 @@ export default function EditExam(props: DefaultProps) {
             </p>
           </div>
         </div>
-
         <div className="w-full mx-auto overflow-auto">
           <CustomCKEditor
-            initEditorContent={examInfo.content}
-            onEditorChange={setEditorContent}
+            initEditorContent={content}
+            onEditorChange={setContent}
           />
         </div>
-
         <div className="mt-8">
           <p>시험 시간</p>
           <div className="flex gap-5 items-center mt-2">
@@ -279,26 +308,10 @@ export default function EditExam(props: DefaultProps) {
           </div>
 
           <div className="flex flex-col mt-10">
-            <div className="flex">
-              <div className="flex items-center h-5">
-                <input
-                  id="helper-checkbox"
-                  aria-describedby="helper-checkbox-text"
-                  type="checkbox"
-                  checked={isCheckedUsingPwd}
-                  onChange={() => setIsCheckedUsingPwd(!isCheckedUsingPwd)}
-                  className="w-4 h-4 text-blue-600 border-2 border-[#757575] rounded-[0.175rem] focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
-              </div>
-              <div className="ml-2 text-sm">
-                <label
-                  htmlFor="helper-checkbox"
-                  className="font-medium text-gray-900 dark:text-gray-300"
-                >
-                  비밀번호 설정
-                </label>
-
-                <div className="flex mt-1">
+            <div className="flex flex-col">
+              <div className="flex flex-col">
+                <p>비밀번호 설정</p>
+                <div className="flex mt-1 ml-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     height="15"
@@ -313,14 +326,12 @@ export default function EditExam(props: DefaultProps) {
                     id="helper-checkbox-text"
                     className="relative left-[-0.8rem] text-xs font-normal text-[#5762b3] dark:text-gray-300"
                   >
-                    비밀번호를 설정할 경우 게시글 열람 시 비밀번호 입력이
-                    필요합니다.
+                    게시글 확인 시 비밀번호 입력이 필요합니다.
                   </p>
                 </div>
               </div>
-            </div>
-            {isCheckedUsingPwd ? (
-              <div className="flex flex-col relative z-0 w-1/2 group mt-7">
+
+              <div className="flex flex-col relative z-0 w-1/2 group mt-4">
                 <input
                   type="text"
                   name="floating_first_name"
@@ -348,7 +359,7 @@ export default function EditExam(props: DefaultProps) {
                   비밀번호
                 </label>
               </div>
-            ) : null}
+            </div>
           </div>
 
           <div className="mt-14 pb-2 flex justify-end gap-3">
