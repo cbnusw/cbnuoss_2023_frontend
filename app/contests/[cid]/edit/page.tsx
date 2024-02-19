@@ -21,6 +21,7 @@ const fetchContestDetailInfo = ({ queryKey }: any) => {
   );
 };
 
+// 대회 수정 API
 const editContest = ({
   cid,
   params,
@@ -128,7 +129,7 @@ export default function EditContest(props: DefaultProps) {
   }, [contestInfo]);
 
   const contestNameRef = useRef<HTMLInputElement>(null);
-  const contestPwdRef = useRef<HTMLInputElement>(null);
+  // const contestPwdRef = useRef<HTMLInputElement>(null);
   const contestProblemsPwdRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
