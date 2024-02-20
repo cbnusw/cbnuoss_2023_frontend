@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import dynamic from 'next/dynamic';
+import { UploadService } from '@/components/utils/uploadService';
+import { IoSetItem, UploadedFileInfo } from '../types/problem';
 
 interface MyDropzoneProps {
   type: string;
@@ -12,17 +14,10 @@ interface MyDropzoneProps {
   setUploadedCodeFileUrl?: (url: string) => void; // 소스 코드 파일 URL 업데이트 함수
   setUploadedPdfFileUrl?: (url: string) => void; // PDF 파일 URL 업데이트 함수
   setUploadedProblemInAndOutFileUrls?: (urls: string[]) => void; // in/out 파일 URL 업데이트 함수
+  setIoSetData?: (
+    ioSetData: IoSetItem[] | ((prevIoSetData: IoSetItem[]) => IoSetItem[]),
+  ) => void;
 }
-
-type FileObject = {
-  name: string;
-  url: string;
-};
-
-type Pair = {
-  in: FileObject;
-  out: FileObject;
-};
 
 const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
@@ -39,135 +34,133 @@ function MyDropzone(props: MyDropzoneProps) {
     setUploadedCodeFileUrl,
     setUploadedPdfFileUrl,
     setUploadedProblemInAndOutFileUrls,
+    setIoSetData,
   } = props;
 
   const [isDragEntered, setIsDragEntered] = useState(false);
   const [isDragAndDropped, setIsDragAndDropped] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
-  const [fileList, setFileList] = useState<FileObject[]>([]);
+  const [fileList, setFileList] = useState<UploadedFileInfo[]>([]);
   const [fileNameList, setFileNameList] = useState<string[]>([]);
-  const [fileURLList, setFileURLList] = useState<string[]>([]);
+
+  const [uploadService] = useState(new UploadService()); // UploadService 인스턴스 생성
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      const firstFile = acceptedFiles[0];
-      switch (type) {
-        case 'pdf':
-          if (firstFile) {
-            const fileUrl = URL.createObjectURL(firstFile);
-            setFileList([{ name: firstFile.name, url: fileUrl }]);
-            setFileNameList([firstFile.name]);
-            setFileURLList([fileUrl]);
-            setIsFileUploaded(true);
-            setUploadedPdfFileUrl?.(fileUrl); // 업로드된 PDF 파일 URL을 부모 컴포넌트에 전달
-          }
-          break;
-        case 'inOut':
-          let newFilePairs: FileObject[] = [];
-          let remainingFiles = [...acceptedFiles]; // Create a copy to manipulate while looping
+      if (type === 'inOut') {
+        // .in과 .out 파일들을 분류
+        const inFiles = acceptedFiles.filter((file) =>
+          file.name.endsWith('.in'),
+        );
+        const outFiles = acceptedFiles.filter((file) =>
+          file.name.endsWith('.out'),
+        );
 
-          newFilePairs = [...fileList];
+        // 쌍을 찾기
+        const pairs = inFiles.flatMap((inFile) => {
+          const baseName = inFile.name.replace('.in', '');
+          const outFile = outFiles.find(
+            (outFile) => outFile.name === `${baseName}.out`,
+          );
+          return outFile ? [[inFile, outFile]] : [];
+        });
 
-          // Use a while loop since we'll be modifying the array during iteration
-          while (remainingFiles.length > 0) {
-            const file = remainingFiles[0]; // Always check the first file in the array
-            const splitName = file.name.split('.');
-            const baseName = splitName.slice(0, -1).join('.'); // Remove extension
-            const extension = splitName.pop()?.toLowerCase();
+        pairs.forEach(([inFile, outFile]) => {
+          Promise.all([
+            uploadService.upload(inFile),
+            uploadService.upload(outFile),
+          ])
+            .then(([inResponse, outResponse]) => {
+              // 업로드된 파일 정보를 기반으로 IoSetItem 객체 생성
+              const newIoSetItem: IoSetItem = {
+                inFile: { ...inResponse.data, filename: inFile.name }, // inFile 정보 추가
+                outFile: { ...outResponse.data, filename: outFile.name }, // outFile 정보 추가
+              };
 
-            if (extension && ['in', 'out'].includes(extension)) {
-              const counterpartExtension = extension === 'in' ? 'out' : 'in';
-              const counterpartFileName = `${baseName}.${counterpartExtension}`;
-
-              const counterpartFileIndex = remainingFiles.findIndex(
-                (f: File) => f.name === counterpartFileName,
-              );
-
-              // If we find a matching .in / .out file
-              if (counterpartFileIndex !== -1) {
-                const counterpartFile = remainingFiles[counterpartFileIndex];
-                const fileObj1 = {
-                  name: file.name,
-                  url: URL.createObjectURL(file),
-                };
-                const fileObj2 = {
-                  name: counterpartFile.name,
-                  url: URL.createObjectURL(counterpartFile),
-                };
-
-                // Add both files to the pairs list
-                newFilePairs.push(fileObj1, fileObj2);
-
-                // Remove the matched files from our remaining files list
-                remainingFiles.splice(counterpartFileIndex, 1); // remove counterpart file first
-                remainingFiles.splice(0, 1); // then remove the current file
-              } else {
-                // If no counterpart file is found, simply remove the current file from the list
-                remainingFiles.splice(0, 1);
+              // setIoSetData 함수를 사용하여 IoSetItem[] 상태 업데이트
+              if (setIoSetData) {
+                setIoSetData((prevIoSetData) => [
+                  ...prevIoSetData,
+                  newIoSetItem,
+                ]);
               }
-            } else {
-              // If extension is not 'in' or 'out', simply remove the current file from the list
-              remainingFiles.splice(0, 1);
-              // if ()
-            }
-          }
 
-          // Update state with both existing and new files
-          setFileList(newFilePairs);
-          setFileNameList(newFilePairs.map((f) => f.name));
-          setFileURLList(newFilePairs.map((f) => f.url));
-
-          // Update in/out file URLs
-          const inOutUrls = newFilePairs.map((f) => f.url);
-          setUploadedProblemInAndOutFileUrls?.(inOutUrls);
-
-          // Check for valid pairs
-          const hasValidPair = checkForValidPairs(newFilePairs);
-          setIsFileUploaded(hasValidPair);
-          break;
-        case 'code':
-          if (firstFile) {
-            const fileUrl = URL.createObjectURL(firstFile);
-            setFileList([{ name: firstFile.name, url: fileUrl }]);
-            setFileNameList([firstFile.name]);
-            setFileURLList([fileUrl]);
-            setIsFileUploaded(true);
-            setUploadedCodeFileUrl?.(fileUrl);
-          }
-          break;
+              // 업로드된 파일 정보를 기반으로 fileList 업데이트
+              setFileList((prevList) => [
+                ...prevList,
+                { ...inResponse.data, filename: inFile.name }, // inFile 정보 추가
+                { ...outResponse.data, filename: outFile.name }, // outFile 정보 추가
+              ]);
+            })
+            .catch((error) => {
+              console.error('File upload error:', error);
+            });
+        });
+      } else {
+        // 다른 타입('pdf' 또는 'code')의 파일 처리 로직
+        acceptedFiles.forEach((file) => {
+          uploadService
+            .upload(file)
+            .then((response) => {
+              const newFile = response.data; // 서버로부터 받은 파일 정보
+              setFileList((prevList) => [...prevList, newFile]);
+              if (type === 'pdf') {
+                setUploadedPdfFileUrl?.(newFile.url);
+              } else if (type === 'code') {
+                setUploadedCodeFileUrl?.(newFile.url);
+              }
+              setFileNameList([newFile.filename]);
+              setIsFileUploaded(true);
+            })
+            .catch((error) => {
+              console.error('File upload error:', error);
+            });
+        });
       }
     },
     [
+      uploadService,
       type,
-      fileList,
       setIsFileUploaded,
-      setUploadedCodeFileUrl,
       setUploadedPdfFileUrl,
-      setUploadedProblemInAndOutFileUrls,
+      setUploadedCodeFileUrl,
+      setIoSetData,
     ],
   );
 
-  const checkForValidPairs = (fileObjects: FileObject[]) => {
-    const inFiles = fileObjects.filter((file) => file.name.endsWith('.in'));
-    const outFiles = fileObjects.filter((file) => file.name.endsWith('.out'));
+  useEffect(() => {
+    if (type === 'inOut') {
+      const hasValidPair = checkForValidPairs(fileList);
+      setIsFileUploaded(hasValidPair);
+    }
+  }, [type, fileList, setIsFileUploaded]);
+
+  const checkForValidPairs = (fileObjects: UploadedFileInfo[]) => {
+    const inFiles = fileObjects.filter((file) => file.filename.endsWith('.in'));
+    const outFiles = fileObjects.filter((file) =>
+      file.filename.endsWith('.out'),
+    );
 
     return inFiles.some((inFile) => {
-      const outFileName = inFile.name.replace('.in', '.out');
-      return outFiles.some((outFile) => outFile.name === outFileName);
+      const outFileName = inFile.filename.replace('.in', '.out');
+      return outFiles.some((outFile) => outFile.filename === outFileName);
     });
   };
 
-  const getInAndOutFilePairs = (): Pair[] => {
-    const inFiles = fileList.filter((file) => file.name.endsWith('.in'));
-    const outFiles = fileList.filter((file) => file.name.endsWith('.out'));
+  const getInAndOutFilePairs = (fileList: UploadedFileInfo[]): IoSetItem[] => {
+    const inFiles = fileList.filter((file) => file.filename.endsWith('.in'));
+    const outFiles = fileList.filter((file) => file.filename.endsWith('.out'));
 
     return inFiles
       .map((inFile) => {
-        const outFileName = inFile.name.replace('.in', '.out');
-        const outFile = outFiles.find((file) => file.name === outFileName);
-        return outFile ? { in: inFile, out: outFile } : null;
+        const outFileName = inFile.filename.replace('.in', '.out');
+        const outFile = outFiles.find((file) => file.filename === outFileName);
+        if (outFile) {
+          return { inFile, outFile }; // IoSetItem 타입 반환
+        }
+        return null;
       })
-      .filter((pair): pair is Pair => pair !== null); // 필터링하여 null이 아닌 쌍만 반환
+      .filter((item): item is IoSetItem => item !== null); // null이 아닌 항목만 필터링
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -182,29 +175,31 @@ function MyDropzone(props: MyDropzoneProps) {
 
   const handleDeletePair = (
     e: React.MouseEvent<HTMLButtonElement>,
-    pair: Pair,
+    pair: IoSetItem,
   ) => {
     e.preventDefault();
-    deletePair(pair);
-    setIsFileUploaded(fileList.length > 2);
-  };
-
-  const deletePair = (pair: Pair) => {
+    // fileList에서 선택된 파일 쌍 제거
     const updatedFileList = fileList.filter(
-      (file) => file.url !== pair.in.url && file.url !== pair.out.url,
+      (file) => file.url !== pair.inFile.url && file.url !== pair.outFile.url,
     );
 
     setFileList(updatedFileList);
 
     // fileNameList와 fileURLList도 업데이트
-    const updatedFileNameList = updatedFileList.map((file) => file.name);
+    const updatedFileNameList = updatedFileList.map((file) => file.filename);
     const updatedFileURLList = updatedFileList.map((file) => file.url);
 
     setFileNameList(updatedFileNameList);
-    setFileURLList(updatedFileURLList);
 
     // 부모 컴포넌트의 상태 업데이트
     setUploadedProblemInAndOutFileUrls?.(updatedFileURLList);
+
+    // setIoSetData를 사용하여 상위 컴포넌트의 IoSetItem[] 상태도 업데이트
+    if (setIoSetData) {
+      // 새로운 IoSetItem[] 배열 생성
+      const newIoSetData = getInAndOutFilePairs(updatedFileList); // 수정된 fileList를 기반으로 새 IoSetItem[] 생성
+      setIoSetData(newIoSetData);
+    }
   };
 
   // Dropzone 테두리 활성화/비활성화 로직
@@ -219,15 +214,6 @@ function MyDropzone(props: MyDropzoneProps) {
   useEffect(() => {
     if (!isInitialized) {
       if (type === 'pdf' && initPdfUrl) {
-        // PDF 파일 이름 추출 및 초기화
-        const fileName = initPdfUrl.split('/').pop() || 'Unknown PDF';
-        const fileObject = {
-          name: fileName,
-          url: initPdfUrl,
-        };
-        setFileList([fileObject]);
-        setFileNameList([fileObject.name]);
-        setFileURLList([fileObject.url]);
         setIsFileUploaded(true);
       } else if (type === 'inOut' && initInAndOutFileUrls?.length > 0) {
         // in/out 파일 이름 추출 및 초기화
@@ -238,9 +224,7 @@ function MyDropzone(props: MyDropzoneProps) {
             url: url,
           };
         });
-        setFileList(fileObjects);
         setFileNameList(fileObjects.map((file) => file.name));
-        setFileURLList(fileObjects.map((file) => file.url));
         setIsFileUploaded(true);
       }
       setIsInitialized(true);
@@ -312,9 +296,9 @@ function MyDropzone(props: MyDropzoneProps) {
 
       {isFileUploaded ? (
         type === 'pdf' ? (
-          <PDFViewer pdfFileURL={fileURLList[0]} />
+          <PDFViewer pdfFileURL={fileList[0]?.url} />
         ) : (
-          getInAndOutFilePairs().map((pair, index) => (
+          getInAndOutFilePairs(fileList).map((pair, index) => (
             <div
               key={index}
               className="flex justify-between border border-gray-400 rounded-[0.25rem] w-full px-2 py-2"
@@ -330,8 +314,8 @@ function MyDropzone(props: MyDropzoneProps) {
                   <path d="M226.666-80q-27 0-46.833-19.833T160-146.666v-666.668q0-27 19.833-46.833T226.666-880H574l226 226v507.334q0 27-19.833 46.833T733.334-80H226.666Zm314.001-542.667v-190.667H226.666v666.668h506.668v-476.001H540.667ZM226.666-813.334v190.667-190.667 666.668-666.668Z" />
                 </svg>
                 <div className="flex flex-col">
-                  <span className="text-gray-600">{pair.in.name}</span>
-                  <span className="text-gray-600">{pair.out.name}</span>
+                  <span className="text-gray-600">{pair.inFile.filename}</span>
+                  <span className="text-gray-600">{pair.outFile.filename}</span>
                 </div>
               </div>
               <button
