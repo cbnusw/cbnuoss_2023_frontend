@@ -4,18 +4,40 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { IoSetItem, RegisterProblemParams } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
+// 연습문제 등록 API
+const registerPractice = (params: RegisterProblemParams) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice`,
+    params,
+  );
+};
+
 export default function RegisterPractice() {
+  const registerPracticeMutation = useMutation({
+    mutationFn: registerPractice,
+    onSuccess: (response) => {
+      const resData = response?.data.data;
+      const pid = resData?._id;
+      alert('연습문제가 등록되었습니다.');
+      router.push(`/practices/${pid}`);
+    },
+  });
+
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
   const [practiceName, setPracticeName] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
+  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
   const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
     useState<string[]>();
@@ -61,44 +83,48 @@ export default function RegisterPractice() {
   const handleRegisterPractice = () => {
     if (!practiceName) {
       alert('문제명을 입력해 주세요');
-      window.scrollTo(0, 0);
       practiceNameRef.current?.focus();
       setIsPracticeNameValidFail(true);
       return;
     }
 
-    if (!maxExeTime) {
-      alert('최대 실행 시간을 입력해 주세요');
-      window.scrollTo(0, 0);
+    if (!maxExeTime || maxExeTime <= 0) {
+      alert('최대 실행 시간을 올바르게 입력해 주세요');
       maxExeTimeRef.current?.focus();
       setIsMaxExeTimeValidFail(true);
       return;
     }
 
-    if (!maxMemCap) {
-      alert('최대 메모리 사용량을 입력해 주세요');
-      window.scrollTo(0, 0);
+    if (!maxMemCap || maxMemCap <= 0) {
+      alert('최대 메모리 사용량을 올바르게 입력해 주세요');
       maxMemCapRef.current?.focus();
       setIsMaxMemCapValidFail(true);
       return;
     }
 
-    if (!isPdfFileUploadingValidFail) {
+    if (!uploadedProblemPdfFileUrl) {
       alert('문제 파일(PDF)을 업로드해 주세요');
-      window.scrollTo(0, 0);
       return;
     }
 
-    if (!isInAndOutFileUploadingValidFail) {
+    if (!ioSetData) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
-    alert('등록 기능 개발 예정');
+    const practiceData = {
+      title: practiceName,
+      content: uploadedProblemPdfFileUrl,
+      published: null,
+      ioSet: ioSetData,
+      options: {
+        maxRealTime: maxExeTime,
+        maxMemory: maxMemCap,
+      },
+      score: 1, // 점수는 예제에서 1로 설정
+    };
 
-    // console.log('PDF: ', uploadedProblemPdfFileUrl);
-    // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
+    registerPracticeMutation.mutate(practiceData);
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
@@ -246,6 +272,7 @@ export default function RegisterPractice() {
               setUploadedProblemInAndOutFileUrls={
                 setUploadedProblemInAndOutFileUrls
               }
+              setIoSetData={setIoSetData}
             />
           </div>
 
@@ -282,6 +309,7 @@ export default function RegisterPractice() {
                 setUploadedProblemInAndOutFileUrls={
                   setUploadedProblemInAndOutFileUrls
                 }
+                setIoSetData={setIoSetData}
               />
             </div>
           </div>
