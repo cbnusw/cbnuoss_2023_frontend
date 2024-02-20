@@ -6,7 +6,6 @@ import { userInfoStore } from '@/app/store/UserInfo';
 import { ProblemInfo } from '@/app/types/problem';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
@@ -62,7 +61,7 @@ export default function PracticeProblem(props: DefaultProps) {
 
   const handleDeletePractice = () => {
     const userResponse = confirm(
-      '현재 연습문제 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
+      '연습문제를 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
     if (!userResponse) return;
     alert('게시글을 삭제하였습니다.');
