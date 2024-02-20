@@ -11,7 +11,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
 // 연습문제 게시글 정보 조회 API
-const fetchPracticeDetailInfo = ({ queryKey }: any) => {
+export const fetchPracticeDetailInfo = ({ queryKey }: any) => {
   const eid = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${eid}`,
