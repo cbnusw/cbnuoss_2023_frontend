@@ -4,10 +4,39 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import {
+  IoSetItem,
+  ProblemInfo,
+  RegisterProblemParams,
+} from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+
+// 연습문제 게시글 정보 조회 API
+const fetchPracticeDetailInfo = ({ queryKey }: any) => {
+  const eid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${eid}`,
+  );
+};
+
+// 연습문제 수정 API
+const editPractice = ({
+  pid,
+  params,
+}: {
+  pid: string;
+  params: RegisterProblemParams;
+}) => {
+  return axiosInstance.patch(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${pid}`,
+    params,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -16,56 +45,69 @@ interface DefaultProps {
 }
 
 export default function EditPractice(props: DefaultProps) {
-  const practiceInfo = {
-    title: 'A+B',
-    maxExeTime: 1000,
-    maxMemCap: 5,
-    problemPdfFileUrl: 'http://localhost:3000/pdfs/test.pdf',
-    problemInAndOutFileUrls: [
-      'http://localhost:3000/in_and_out/1.in',
-      'http://localhost:3000/in_and_out/1.out',
-      'http://localhost:3000/in_and_out/2.in',
-      'http://localhost:3000/in_and_out/2.out',
-      'http://localhost:3000/in_and_out/3.in',
-      'http://localhost:3000/in_and_out/3.out',
-    ],
-  };
+  const pid = props.params.pid;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['practiceDetailInfo', pid],
+    queryFn: fetchPracticeDetailInfo,
+    retry: 0,
+  });
+
+  const editPracticeMutation = useMutation({
+    mutationFn: editPractice,
+    onSuccess: () => {
+      alert('연습문제 내용이 수정되었습니다.');
+      router.push(`/practices/${pid}`);
+    },
+  });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [practiceName, setPracticeName] = useState(practiceInfo.title);
-  const [maxExeTime, setMaxExeTime] = useState<number>(practiceInfo.maxExeTime);
-  const [maxMemCap, setMaxMemCap] = useState<number>(practiceInfo.maxMemCap);
-  const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState(
-    practiceInfo.problemPdfFileUrl,
-  );
-  const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
-    useState<string[]>(practiceInfo.problemInAndOutFileUrls);
+  const resData = data?.data.data;
+  const practiceInfo: ProblemInfo = resData;
 
-  const [isPracticeNameValidFail, setIsPracticeNameValidFail] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [title, setTitle] = useState('');
+  const [maxExeTime, setMaxExeTime] = useState<number>();
+  const [maxMemCap, setMaxMemCap] = useState<number>();
+  const [uploadedProblemPdfFileUrl, setUploadedProblemPdfFileUrl] =
+    useState('');
+  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
+  const [isIoSetDataEmpty, setIsIoSetDataEmpty] = useState<boolean>(true);
+
+  const [isTitleValidFail, setIsTitleValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
   const [isMaxMemCapValidFail, setIsMaxMemCapValidFail] = useState(false);
-  const [
-    isPracticeFileUploadingValidFail,
-    setIsPracticeFileUploadingValidFail,
-  ] = useState(false);
+  const [isPdfFileUploadingValidFail, setIsPdfFileUploadingValidFail] =
+    useState(false);
   const [
     isInAndOutFileUploadingValidFail,
     setIsInAndOutFileUploadingValidFail,
   ] = useState(false);
 
+  useEffect(() => {
+    if (practiceInfo) {
+      setTitle(practiceInfo.title);
+      setMaxExeTime(practiceInfo.options.maxRealTime);
+      setMaxMemCap(practiceInfo.options.maxMemory);
+      setUploadedProblemPdfFileUrl(practiceInfo.content);
+      setIoSetData(practiceInfo.ioSet);
+    }
+  }, [practiceInfo]);
+
+  useEffect(() => {
+    if (ioSetData.length !== 0) setIsIoSetDataEmpty(false);
+  }, [ioSetData]);
+
   const practiceNameRef = useRef<HTMLInputElement>(null);
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
 
-  const pid = props.params.pid;
-
   const router = useRouter();
 
   const handlePracticeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPracticeName(e.target.value);
-    setIsPracticeNameValidFail(false);
+    setTitle(e.target.value);
+    setIsTitleValidFail(false);
   };
 
   const handleMaxExeTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,46 +128,55 @@ export default function EditPractice(props: DefaultProps) {
   };
 
   const handleEditPractice = () => {
-    if (!practiceName) {
+    if (!title) {
       alert('문제명을 입력해 주세요');
       window.scrollTo(0, 0);
       practiceNameRef.current?.focus();
-      setIsPracticeNameValidFail(true);
+      setIsTitleValidFail(true);
       return;
     }
 
-    if (!maxExeTime) {
-      alert('최대 실행 시간을 입력해 주세요');
+    if (!maxExeTime || maxExeTime <= 0) {
+      alert('최대 실행 시간을 올바르게 입력해 주세요');
       window.scrollTo(0, 0);
       maxExeTimeRef.current?.focus();
       setIsMaxExeTimeValidFail(true);
       return;
     }
 
-    if (!maxMemCap) {
-      alert('최대 메모리 사용량을 입력해 주세요');
+    if (!maxMemCap || maxMemCap <= 0) {
+      alert('최대 메모리 사용량을 올바르게 입력해 주세요');
       window.scrollTo(0, 0);
       maxMemCapRef.current?.focus();
       setIsMaxMemCapValidFail(true);
       return;
     }
 
-    if (!isPracticeFileUploadingValidFail) {
+    if (!uploadedProblemPdfFileUrl) {
       alert('문제 파일(PDF)을 업로드해 주세요');
       window.scrollTo(0, 0);
       return;
     }
 
-    if (!isInAndOutFileUploadingValidFail) {
+    if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
-    alert('수정 기능 개발 예정');
+    const practiceData = {
+      title: title,
+      content: uploadedProblemPdfFileUrl,
+      published: null,
+      ioSet: ioSetData,
+      options: {
+        maxRealTime: maxExeTime,
+        maxMemory: maxMemCap,
+      },
+      score: 1, // 점수는 예제에서 1로 설정
+    };
 
-    // console.log('PDF: ', uploadedProblemPdfFileUrl);
-    // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
+    editPracticeMutation.mutate({ pid, params: practiceData });
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
@@ -141,7 +192,7 @@ export default function EditPractice(props: DefaultProps) {
     });
   }, [updateUserInfo, router]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isPending) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
@@ -155,31 +206,31 @@ export default function EditPractice(props: DefaultProps) {
                 type="text"
                 name="floating_first_name"
                 className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
-                  isPracticeNameValidFail ? 'pink' : 'blue'
+                  isTitleValidFail ? 'pink' : 'blue'
                 }-500 focus:border-${
-                  isPracticeNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-500 focus:outline-none focus:ring-0 peer`}
                 placeholder=" "
                 required
-                value={practiceName}
+                value={title}
                 ref={practiceNameRef}
                 onChange={handlePracticeNameChange}
               />
               <label
                 htmlFor="floating_first_name"
                 className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
-                  isPracticeNameValidFail ? 'red' : 'gray'
+                  isTitleValidFail ? 'red' : 'gray'
                 }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
-                  isPracticeNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-600 peer-focus:dark:text-${
-                  isPracticeNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
               >
                 문제명
               </label>
               <p
                 className={`text-${
-                  isPracticeNameValidFail ? 'red' : 'gray'
+                  isTitleValidFail ? 'red' : 'gray'
                 }-500 text-xs tracking-widest font-light mt-1`}
               >
                 문제명을 입력해 주세요
@@ -262,18 +313,18 @@ export default function EditPractice(props: DefaultProps) {
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-lg">문제 파일</p>
-            <MyDropzone
-              type="pdf"
-              guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
-              setIsFileUploaded={setIsPracticeFileUploadingValidFail}
-              isFileUploaded={isPracticeFileUploadingValidFail}
-              initPdfUrl={practiceInfo.problemPdfFileUrl}
-              initInAndOutFileUrls={[]}
-              setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-              setUploadedProblemInAndOutFileUrls={
-                setUploadedProblemInAndOutFileUrls
-              }
-            />
+            {uploadedProblemPdfFileUrl && (
+              <MyDropzone
+                type="pdf"
+                guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
+                setIsFileUploaded={setIsPdfFileUploadingValidFail}
+                isFileUploaded={isPdfFileUploadingValidFail}
+                initPdfUrl={uploadedProblemPdfFileUrl}
+                initInAndOutFiles={[]}
+                setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
+                setIoSetData={setIoSetData}
+              />
+            )}
           </div>
 
           <div className="flex flex-col gap-1 mt-9">
@@ -298,18 +349,18 @@ export default function EditPractice(props: DefaultProps) {
                   하나의 입/출력 세트로 묶입니다.
                 </p>
               </div>
-              <MyDropzone
-                type="inOut"
-                guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
-                setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
-                isFileUploaded={isInAndOutFileUploadingValidFail}
-                initPdfUrl={''}
-                initInAndOutFileUrls={practiceInfo.problemInAndOutFileUrls}
-                setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-                setUploadedProblemInAndOutFileUrls={
-                  setUploadedProblemInAndOutFileUrls
-                }
-              />
+              {!isIoSetDataEmpty && (
+                <MyDropzone
+                  type="inOut"
+                  guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
+                  setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
+                  isFileUploaded={isInAndOutFileUploadingValidFail}
+                  initPdfUrl={''}
+                  initInAndOutFiles={ioSetData}
+                  setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
+                  setIoSetData={setIoSetData}
+                />
+              )}
             </div>
           </div>
         </div>
