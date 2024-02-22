@@ -5,15 +5,22 @@ import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { ProblemInfo } from '@/app/types/problem';
 import axiosInstance from '@/app/utils/axiosInstance';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
-  const eid = queryKey[1];
+  const pid = queryKey[1];
   return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${eid}`,
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${pid}`,
+  );
+};
+
+// 연습문제 삭제 API
+const deletePractice = (pid: string) => {
+  return axiosInstance.delete(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${pid}`,
   );
 };
 
@@ -34,6 +41,14 @@ export default function PracticeProblem(props: DefaultProps) {
     queryKey: ['practiceDetailInfo', pid],
     queryFn: fetchPracticeDetailInfo,
     retry: 0,
+  });
+
+  const deletePracticeMutation = useMutation({
+    mutationFn: deletePractice,
+    onSuccess: () => {
+      alert('연습문제가 삭제되었습니다.');
+      router.push('/practices');
+    },
   });
 
   const userInfo = userInfoStore((state: any) => state.userInfo);
@@ -64,8 +79,8 @@ export default function PracticeProblem(props: DefaultProps) {
       '연습문제를 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
     if (!userResponse) return;
-    alert('게시글을 삭제하였습니다.');
-    router.push('/practices');
+
+    deletePracticeMutation.mutate(pid);
   };
 
   if (isPending) return <Loading />;
