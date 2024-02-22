@@ -253,7 +253,7 @@ export default function EditContest(props: DefaultProps) {
     });
   }, [updateUserInfo, router]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isPending) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
