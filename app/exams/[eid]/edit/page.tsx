@@ -12,7 +12,14 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { fetchExamDetailInfo } from '../page';
+
+// 시험 게시글 정보 조회 API
+const fetchExamDetailInfo = ({ queryKey }: any) => {
+  const eid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
+  );
+};
 
 // 시험 수정 API
 const editExam = ({
@@ -30,8 +37,6 @@ const editExam = ({
     testPeriod,
     password,
   };
-
-  console.log(eid);
 
   return axiosInstance.put(
     `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
