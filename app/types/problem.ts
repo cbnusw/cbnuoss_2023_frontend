@@ -6,10 +6,7 @@ export interface ProblemInfo {
   _id: string;
   title: string;
   content: string;
-  ioSet: {
-    inFile: string;
-    outFile: string;
-  }[];
+  ioSet: IoSetItem[];
   options: {
     maxRealTime: number;
     maxMemory: number;
