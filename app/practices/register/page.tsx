@@ -34,15 +34,13 @@ export default function RegisterPractice() {
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [practiceName, setPracticeName] = useState('');
+  const [title, setTitle] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
-  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
-  const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
-    useState<string[]>();
+  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
 
-  const [isPracticeNameValidFail, setIsPracticeNameValidFail] = useState(false);
+  const [isTitleValidFail, setIsTitleValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
   const [isMaxMemCapValidFail, setIsMaxMemCapValidFail] = useState(false);
   const [isPdfFileUploadingValidFail, setIsPdfFileUploadingValidFail] =
@@ -59,8 +57,8 @@ export default function RegisterPractice() {
   const router = useRouter();
 
   const handlePracticeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPracticeName(e.target.value);
-    setIsPracticeNameValidFail(false);
+    setTitle(e.target.value);
+    setIsTitleValidFail(false);
   };
 
   const handleMaxExeTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,10 +79,10 @@ export default function RegisterPractice() {
   };
 
   const handleRegisterPractice = () => {
-    if (!practiceName) {
+    if (!title) {
       alert('문제명을 입력해 주세요');
       practiceNameRef.current?.focus();
-      setIsPracticeNameValidFail(true);
+      setIsTitleValidFail(true);
       return;
     }
 
@@ -107,13 +105,13 @@ export default function RegisterPractice() {
       return;
     }
 
-    if (!ioSetData) {
+    if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
       return;
     }
 
     const practiceData = {
-      title: practiceName,
+      title: title,
       content: uploadedProblemPdfFileUrl,
       published: null,
       ioSet: ioSetData,
@@ -154,31 +152,31 @@ export default function RegisterPractice() {
                 type="text"
                 name="floating_first_name"
                 className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
-                  isPracticeNameValidFail ? 'pink' : 'blue'
+                  isTitleValidFail ? 'pink' : 'blue'
                 }-500 focus:border-${
-                  isPracticeNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-500 focus:outline-none focus:ring-0 peer`}
                 placeholder=" "
                 required
-                value={practiceName}
+                value={title}
                 ref={practiceNameRef}
                 onChange={handlePracticeNameChange}
               />
               <label
                 htmlFor="floating_first_name"
                 className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
-                  isPracticeNameValidFail ? 'red' : 'gray'
+                  isTitleValidFail ? 'red' : 'gray'
                 }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
-                  isPracticeNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-600 peer-focus:dark:text-${
-                  isPracticeNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
               >
                 문제명
               </label>
               <p
                 className={`text-${
-                  isPracticeNameValidFail ? 'red' : 'gray'
+                  isTitleValidFail ? 'red' : 'gray'
                 }-500 text-xs tracking-widest font-light mt-1`}
               >
                 문제명을 입력해 주세요
@@ -267,11 +265,8 @@ export default function RegisterPractice() {
               setIsFileUploaded={setIsPdfFileUploadingValidFail}
               isFileUploaded={isPdfFileUploadingValidFail}
               initPdfUrl={''}
-              initInAndOutFileUrls={[]}
+              initInAndOutFiles={[]}
               setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-              setUploadedProblemInAndOutFileUrls={
-                setUploadedProblemInAndOutFileUrls
-              }
               setIoSetData={setIoSetData}
             />
           </div>
@@ -304,11 +299,8 @@ export default function RegisterPractice() {
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
                 initPdfUrl={''}
-                initInAndOutFileUrls={[]}
+                initInAndOutFiles={[]}
                 setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-                setUploadedProblemInAndOutFileUrls={
-                  setUploadedProblemInAndOutFileUrls
-                }
                 setIoSetData={setIoSetData}
               />
             </div>

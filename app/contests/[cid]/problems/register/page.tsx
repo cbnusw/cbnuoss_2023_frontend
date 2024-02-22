@@ -4,6 +4,7 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { IoSetItem } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
@@ -19,19 +20,18 @@ export default function RegisterContestProblem(props: DefaultProps) {
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [problemName, setProblemName] = useState('');
+  const [title, setTitle] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
   const [score, setScore] = useState<number>(1);
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
-  const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
-    useState<string[]>();
+  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
 
-  const [isProblemNameValidFail, setIsProblemNameValidFail] = useState(false);
+  const [isTitleValidFail, setIsTitleValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
   const [isMaxMemCapValidFail, setIsMaxMemCapValidFail] = useState(false);
   const [isScoreValidFail, setIsScoreCapValidFail] = useState(false);
-  const [isProblemFileUploadingValidFail, setIsProblemFileUploadingValidFail] =
+  const [isPdfFileUploadingValidFail, setIsPdfFileUploadingValidFail] =
     useState(false);
   const [
     isInAndOutFileUploadingValidFail,
@@ -48,8 +48,8 @@ export default function RegisterContestProblem(props: DefaultProps) {
   const router = useRouter();
 
   const handleProblemNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProblemName(e.target.value);
-    setIsProblemNameValidFail(false);
+    setTitle(e.target.value);
+    setIsTitleValidFail(false);
   };
 
   const handleMaxExeTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,11 +75,11 @@ export default function RegisterContestProblem(props: DefaultProps) {
   };
 
   const handleRegisterProblem = () => {
-    if (!problemName) {
+    if (!title) {
       alert('문제명을 입력해 주세요');
       window.scrollTo(0, 0);
       problemNameRef.current?.focus();
-      setIsProblemNameValidFail(true);
+      setIsTitleValidFail(true);
       return;
     }
 
@@ -107,7 +107,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
       return;
     }
 
-    if (!isProblemFileUploadingValidFail) {
+    if (!uploadedProblemPdfFileUrl) {
       alert('문제 파일(PDF)을 업로드해 주세요');
       window.scrollTo(0, 0);
       return;
@@ -152,31 +152,31 @@ export default function RegisterContestProblem(props: DefaultProps) {
                 type="text"
                 name="floating_first_name"
                 className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
-                  isProblemNameValidFail ? 'pink' : 'blue'
+                  isTitleValidFail ? 'pink' : 'blue'
                 }-500 focus:border-${
-                  isProblemNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-500 focus:outline-none focus:ring-0 peer`}
                 placeholder=" "
                 required
-                value={problemName}
+                value={title}
                 ref={problemNameRef}
                 onChange={handleProblemNameChange}
               />
               <label
                 htmlFor="floating_first_name"
                 className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
-                  isProblemNameValidFail ? 'red' : 'gray'
+                  isTitleValidFail ? 'red' : 'gray'
                 }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
-                  isProblemNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-600 peer-focus:dark:text-${
-                  isProblemNameValidFail ? 'red' : 'blue'
+                  isTitleValidFail ? 'red' : 'blue'
                 }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
               >
                 문제명
               </label>
               <p
                 className={`text-${
-                  isProblemNameValidFail ? 'red' : 'gray'
+                  isTitleValidFail ? 'red' : 'gray'
                 }-500 text-xs tracking-widest font-light mt-1`}
               >
                 문제명을 입력해 주세요
@@ -298,14 +298,12 @@ export default function RegisterContestProblem(props: DefaultProps) {
             <MyDropzone
               type="pdf"
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
-              setIsFileUploaded={setIsProblemFileUploadingValidFail}
-              isFileUploaded={isProblemFileUploadingValidFail}
+              setIsFileUploaded={setIsPdfFileUploadingValidFail}
+              isFileUploaded={isPdfFileUploadingValidFail}
               initPdfUrl={''}
-              initInAndOutFileUrls={[]}
+              initInAndOutFiles={[]}
               setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-              setUploadedProblemInAndOutFileUrls={
-                setUploadedProblemInAndOutFileUrls
-              }
+              setIoSetData={setIoSetData}
             />
           </div>
 
@@ -337,11 +335,9 @@ export default function RegisterContestProblem(props: DefaultProps) {
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
                 initPdfUrl={''}
-                initInAndOutFileUrls={[]}
+                initInAndOutFiles={[]}
                 setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-                setUploadedProblemInAndOutFileUrls={
-                  setUploadedProblemInAndOutFileUrls
-                }
+                setIoSetData={setIoSetData}
               />
             </div>
           </div>

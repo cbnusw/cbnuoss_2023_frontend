@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import codeImg from '@/public/images/code.png';
+import { IoSetItem } from '@/app/types/problem';
 
 interface DefaultProps {
   params: {
@@ -18,6 +19,9 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
   const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
+  const [uploadedProblemPdfFileUrl, setUploadedProblemPdfFileUrl] =
+    useState('');
+  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
 
   const [
     isSelectedSubmitLanguageValidFail,
@@ -158,14 +162,14 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
 
           <div className="flex flex-col gap-1 mt-5">
             <p className="text-lg">소스 코드 파일</p>
+
             <MyDropzone
               type="code"
               guideMsg="코드 파일을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsCodeFileUploadingValidFail}
               isFileUploaded={isCodeFileUploadingValidFail}
               initPdfUrl={''}
-              initInAndOutFileUrls={[]}
-              setUploadedCodeFileUrl={setUploadedCodeFileUrl}
+              initInAndOutFiles={[]}
             />
           </div>
         </div>
