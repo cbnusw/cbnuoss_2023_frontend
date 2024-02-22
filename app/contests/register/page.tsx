@@ -183,6 +183,7 @@ export default function RegisterContest() {
             end: toUTCString(contestAppliedEndDateTime),
           }
         : undefined,
+      isPassword: true,
       password: contestProblemsPwd,
     };
 

@@ -4,6 +4,7 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { IoSetItem } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
@@ -39,17 +40,14 @@ export default function EditExamProblem(props: DefaultProps) {
   const [problemName, setProblemName] = useState(problemInfo.title);
   const [maxExeTime, setMaxExeTime] = useState<number>(problemInfo.maxExeTime);
   const [maxMemCap, setMaxMemCap] = useState<number>(problemInfo.maxMemCap);
-  const [score, setScore] = useState<number>(1);
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState(
     problemInfo.problemPdfFileUrl,
   );
-  const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
-    useState<string[]>(problemInfo.problemInAndOutFileUrls);
+  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
 
   const [isProblemNameValidFail, setIsProblemNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
   const [isMaxMemCapValidFail, setIsMaxMemCapValidFail] = useState(false);
-  const [isScoreValidFail, setIsScoreCapValidFail] = useState(false);
   const [isProblemFileUploadingValidFail, setIsProblemFileUploadingValidFail] =
     useState(false);
   const [
@@ -60,7 +58,6 @@ export default function EditExamProblem(props: DefaultProps) {
   const problemNameRef = useRef<HTMLInputElement>(null);
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
-  const scoreRef = useRef<HTMLInputElement>(null);
 
   const eid = props.params.eid;
   const problemId = props.params.problemId;
@@ -80,11 +77,6 @@ export default function EditExamProblem(props: DefaultProps) {
   const handleMaxMemCapChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxMemCap(parseInt(e.target.value));
     setIsMaxMemCapValidFail(false);
-  };
-
-  const handleScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setScore(parseInt(e.target.value));
-    setIsScoreCapValidFail(false);
   };
 
   const handleCancelExamEdit = () => {
@@ -116,14 +108,6 @@ export default function EditExamProblem(props: DefaultProps) {
       window.scrollTo(0, 0);
       maxMemCapRef.current?.focus();
       setIsMaxMemCapValidFail(true);
-      return;
-    }
-
-    if (!score) {
-      alert('문제 점수를 입력해 주세요');
-      window.scrollTo(0, 0);
-      scoreRef.current?.focus();
-      setIsScoreCapValidFail(true);
       return;
     }
 
@@ -275,42 +259,6 @@ export default function EditExamProblem(props: DefaultProps) {
                   테스트 당 최대 사용 메모리를 MB 단위로 입력해 주세요
                 </p>
               </div>
-
-              <div className="flex flex-col relative z-0 w-1/3 group">
-                <input
-                  type="number"
-                  name="floating_first_name"
-                  className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
-                    isScoreValidFail ? 'pink' : 'blue'
-                  }-500 focus:border-${
-                    isScoreValidFail ? 'red' : 'blue'
-                  }-500 focus:outline-none focus:ring-0 peer`}
-                  placeholder=" "
-                  required
-                  value={score}
-                  ref={scoreRef}
-                  onChange={handleScoreChange}
-                />
-                <label
-                  htmlFor="floating_first_name"
-                  className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
-                    isScoreValidFail ? 'red' : 'gray'
-                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
-                    isScoreValidFail ? 'red' : 'blue'
-                  }-600 peer-focus:dark:text-${
-                    isScoreValidFail ? 'red' : 'blue'
-                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
-                >
-                  점수
-                </label>
-                <p
-                  className={`text-${
-                    isScoreValidFail ? 'red' : 'gray'
-                  }-500 text-xs tracking-widest font-light mt-1`}
-                >
-                  문제의 점수를 입력해 주세요
-                </p>
-              </div>
             </div>
           </div>
           <div className="flex flex-col gap-1">
@@ -321,11 +269,9 @@ export default function EditExamProblem(props: DefaultProps) {
               setIsFileUploaded={setIsProblemFileUploadingValidFail}
               isFileUploaded={isProblemFileUploadingValidFail}
               initPdfUrl={problemInfo.problemPdfFileUrl}
-              initInAndOutFileUrls={[]}
+              initInAndOutFiles={[]}
               setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-              setUploadedProblemInAndOutFileUrls={
-                setUploadedProblemInAndOutFileUrls
-              }
+              setIoSetData={setIoSetData}
             />
           </div>
 
@@ -357,11 +303,9 @@ export default function EditExamProblem(props: DefaultProps) {
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
                 initPdfUrl={''}
-                initInAndOutFileUrls={problemInfo.problemInAndOutFileUrls}
+                initInAndOutFiles={ioSetData}
                 setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-                setUploadedProblemInAndOutFileUrls={
-                  setUploadedProblemInAndOutFileUrls
-                }
+                setIoSetData={setIoSetData}
               />
             </div>
           </div>

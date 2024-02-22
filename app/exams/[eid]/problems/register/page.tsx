@@ -4,6 +4,7 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { IoSetItem } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
@@ -23,8 +24,7 @@ export default function RegisterExamProblem(props: DefaultProps) {
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
-  const [uploadedProblemInAndOutFileUrls, setUploadedProblemInAndOutFileUrls] =
-    useState<string[]>();
+  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
 
   const [isProblemNameValidFail, setIsProblemNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -247,11 +247,9 @@ export default function RegisterExamProblem(props: DefaultProps) {
               setIsFileUploaded={setIsProblemFileUploadingValidFail}
               isFileUploaded={isProblemFileUploadingValidFail}
               initPdfUrl={''}
-              initInAndOutFileUrls={[]}
+              initInAndOutFiles={[]}
               setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-              setUploadedProblemInAndOutFileUrls={
-                setUploadedProblemInAndOutFileUrls
-              }
+              setIoSetData={setIoSetData}
             />
           </div>
 
@@ -283,11 +281,9 @@ export default function RegisterExamProblem(props: DefaultProps) {
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
                 initPdfUrl={''}
-                initInAndOutFileUrls={[]}
+                initInAndOutFiles={[]}
                 setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-                setUploadedProblemInAndOutFileUrls={
-                  setUploadedProblemInAndOutFileUrls
-                }
+                setIoSetData={setIoSetData}
               />
             </div>
           </div>

@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
 // 시험 게시글 정보 조회 API
-export const fetchExamDetailInfo = ({ queryKey }: any) => {
+const fetchExamDetailInfo = ({ queryKey }: any) => {
   const eid = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,

@@ -138,5 +138,6 @@ export interface RegisterContestParams {
     start: string;
     end: string;
   };
+  isPassword: boolean;
   password: string;
 }

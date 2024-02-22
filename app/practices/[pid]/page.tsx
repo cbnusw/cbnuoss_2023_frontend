@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
 // 연습문제 게시글 정보 조회 API
-export const fetchPracticeDetailInfo = ({ queryKey }: any) => {
+const fetchPracticeDetailInfo = ({ queryKey }: any) => {
   const eid = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${eid}`,
@@ -145,40 +145,41 @@ export default function PracticeProblem(props: DefaultProps) {
             </>
           )}
 
-          {OPERATOR_ROLES.includes(userInfo.role) && (
-            <>
-              <button
-                onClick={handleEditPractice}
-                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
+          {OPERATOR_ROLES.includes(userInfo.role) &&
+            userInfo._id === practiceInfo.writer._id && (
+              <>
+                <button
+                  onClick={handleEditPractice}
+                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
                 >
-                  <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-                </svg>
-                게시글 수정
-              </button>
-              <button
-                onClick={handleDeletePractice}
-                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                    fill="white"
+                  >
+                    <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
+                  </svg>
+                  게시글 수정
+                </button>
+                <button
+                  onClick={handleDeletePractice}
+                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
                 >
-                  <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-                </svg>
-                게시글 삭제
-              </button>
-            </>
-          )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                    fill="white"
+                  >
+                    <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
+                  </svg>
+                  게시글 삭제
+                </button>
+              </>
+            )}
         </div>
 
         <div className="gap-5 border-b mt-8 mb-4 pb-5">

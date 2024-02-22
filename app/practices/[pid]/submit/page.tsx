@@ -17,7 +17,7 @@ interface DefaultProps {
 export default function SubmitPracticeProblemCode(props: DefaultProps) {
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
-  const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
+  const [uploadedCodeFileUrl, setUploadedPdfFileUrl] = useState('');
 
   const [
     isSelectedSubmitLanguageValidFail,
@@ -152,8 +152,7 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
               setIsFileUploaded={setIsCodeFileUploadingValidFail}
               isFileUploaded={isCodeFileUploadingValidFail}
               initPdfUrl={''}
-              initInAndOutFileUrls={[]}
-              setUploadedCodeFileUrl={setUploadedCodeFileUrl}
+              initInAndOutFiles={[]}
             />
           </div>
         </div>

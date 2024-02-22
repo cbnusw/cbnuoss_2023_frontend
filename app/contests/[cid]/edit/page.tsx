@@ -29,19 +29,9 @@ const editContest = ({
   cid: string;
   params: RegisterContestParams;
 }) => {
-  const { title, content, testPeriod, applyingPeriod, password } = params;
-  const reqBody = {
-    title,
-    content,
-    testPeriod,
-    isPassword: true,
-    applyingPeriod,
-    password,
-  };
-
   return axiosInstance.put(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
-    reqBody,
+    params,
   );
 };
 
@@ -243,6 +233,7 @@ export default function EditContest(props: DefaultProps) {
             end: toUTCString(contestAppliedEndDateTime),
           }
         : (null as any),
+      isPassword: true,
       password: contestProblemsPwd,
     };
 

@@ -10,10 +10,8 @@ interface MyDropzoneProps {
   setIsFileUploaded: (isUploaded: boolean) => void;
   isFileUploaded: boolean;
   initPdfUrl: string;
-  initInAndOutFileUrls: string[];
-  setUploadedCodeFileUrl?: (url: string) => void; // 소스 코드 파일 URL 업데이트 함수
+  initInAndOutFiles: IoSetItem[];
   setUploadedPdfFileUrl?: (url: string) => void; // PDF 파일 URL 업데이트 함수
-  setUploadedProblemInAndOutFileUrls?: (urls: string[]) => void; // in/out 파일 URL 업데이트 함수
   setIoSetData?: (
     ioSetData: IoSetItem[] | ((prevIoSetData: IoSetItem[]) => IoSetItem[]),
   ) => void;
@@ -30,10 +28,8 @@ function MyDropzone(props: MyDropzoneProps) {
     setIsFileUploaded,
     isFileUploaded,
     initPdfUrl,
-    initInAndOutFileUrls,
-    setUploadedCodeFileUrl,
+    initInAndOutFiles,
     setUploadedPdfFileUrl,
-    setUploadedProblemInAndOutFileUrls,
     setIoSetData,
   } = props;
 
@@ -103,12 +99,8 @@ function MyDropzone(props: MyDropzoneProps) {
             .upload(file)
             .then((response) => {
               const newFile = response.data; // 서버로부터 받은 파일 정보
-              setFileList((prevList) => [...prevList, newFile]);
-              if (type === 'pdf') {
-                setUploadedPdfFileUrl?.(newFile.url);
-              } else if (type === 'code') {
-                setUploadedCodeFileUrl?.(newFile.url);
-              }
+              setFileList([newFile]);
+              if (type === 'pdf') setUploadedPdfFileUrl?.(newFile.url);
               setFileNameList([newFile.filename]);
               setIsFileUploaded(true);
             })
@@ -123,7 +115,6 @@ function MyDropzone(props: MyDropzoneProps) {
       type,
       setIsFileUploaded,
       setUploadedPdfFileUrl,
-      setUploadedCodeFileUrl,
       setIoSetData,
     ],
   );
@@ -187,12 +178,8 @@ function MyDropzone(props: MyDropzoneProps) {
 
     // fileNameList와 fileURLList도 업데이트
     const updatedFileNameList = updatedFileList.map((file) => file.filename);
-    const updatedFileURLList = updatedFileList.map((file) => file.url);
 
     setFileNameList(updatedFileNameList);
-
-    // 부모 컴포넌트의 상태 업데이트
-    setUploadedProblemInAndOutFileUrls?.(updatedFileURLList);
 
     // setIoSetData를 사용하여 상위 컴포넌트의 IoSetItem[] 상태도 업데이트
     if (setIoSetData) {
@@ -214,28 +201,38 @@ function MyDropzone(props: MyDropzoneProps) {
   useEffect(() => {
     if (!isInitialized) {
       if (type === 'pdf' && initPdfUrl) {
+        // PDF 파일 초기화 로직
+        const newFile = {
+          ref: null,
+          refModel: null,
+          _id: '',
+          url: initPdfUrl,
+          filename: '',
+          mimetype: '',
+          size: 0,
+          uploader: '',
+          uploadedAt: '',
+          __v: 0,
+        };
+        setFileList([newFile]);
         setIsFileUploaded(true);
-      } else if (type === 'inOut' && initInAndOutFileUrls?.length > 0) {
-        // in/out 파일 이름 추출 및 초기화
-        const fileObjects = initInAndOutFileUrls.map((url) => {
-          const fileName = url.split('/').pop() || 'Unknown File';
-          return {
-            name: fileName,
-            url: url,
-          };
-        });
-        setFileNameList(fileObjects.map((file) => file.name));
-        setIsFileUploaded(true);
+      } else if (type === 'inOut' && initInAndOutFiles.length > 0) {
+        // In/Out 파일 초기화 로직
+        const files: UploadedFileInfo[] = initInAndOutFiles.reduce(
+          (acc: UploadedFileInfo[], ioSetItem: IoSetItem) => {
+            // inFile과 outFile을 배열에 추가합니다.
+            acc.push(ioSetItem.inFile, ioSetItem.outFile);
+            return acc;
+          },
+          [] as UploadedFileInfo[],
+        );
+
+        setFileList(files); // fileList 상태를 업데이트합니다.
+        setIsFileUploaded(true); // 파일이 업로드된 것으로 표시합니다.
       }
       setIsInitialized(true);
     }
-  }, [
-    type,
-    initPdfUrl,
-    initInAndOutFileUrls,
-    isInitialized,
-    setIsFileUploaded,
-  ]);
+  }, [type, initPdfUrl, initInAndOutFiles, isInitialized, setIsFileUploaded]);
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-full">
