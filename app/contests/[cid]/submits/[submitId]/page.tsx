@@ -78,7 +78,7 @@ export default function UsersContestSubmit(props: DefaultProps) {
     });
   }, [updateUserInfo, submitInfo, router]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isPending) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
