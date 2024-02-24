@@ -2,10 +2,60 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ContestProblemList from './components/ContestProblemList';
 import Image from 'next/image';
 import listImg from '@/public/images/list.png';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { ProblemInfo, ProblemsInfo } from '@/app/types/problem';
+import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
+import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { OPERATOR_ROLES } from '@/app/constants/role';
+import Loading from '@/app/loading';
+import { UserInfo } from '@/app/types/user';
+import { AxiosError } from 'axios';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+
+// 대회 문제 열람 비밀번호 확인 API
+const confirmContestConfirm = ({
+  cid,
+  password,
+}: {
+  cid: string;
+  password: string;
+}) => {
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/confirm/${cid}?password=${password}`,
+  );
+};
+
+// 대회에 등록된 문제 목록 정보 조회 API
+const fetchContestProblemsDetailInfo = ({ queryKey }: any) => {
+  const cid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}/problems`,
+  );
+};
+
+// 대회에 등록된 문제 순서 변경 API
+const contestProblemReorder = ({
+  cid,
+  params,
+}: {
+  cid: string;
+  params: ProblemInfo[];
+}) => {
+  const requestBody = {
+    problems: params,
+  };
+  return axiosInstance.patch(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}/problem/reorder`,
+    requestBody,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -14,26 +64,133 @@ interface DefaultProps {
 }
 
 export default function ContestProblems(props: DefaultProps) {
+  const cid = props.params.cid;
+
+  const confirmContestConfirmMutation = useMutation({
+    mutationFn: confirmContestConfirm,
+    onError: (error: AxiosError) => {
+      const resData: any = error.response?.data;
+      switch (resData.status) {
+        case 400:
+          switch (resData.code) {
+            case 'CONTEST_PASSWORD_NOT_MATCH':
+              alert('비밀번호가 일치하지 않습니다.');
+              deleteCookie(cid);
+              router.back();
+              break;
+            default:
+              alert('정의되지 않은 http code입니다.');
+          }
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+    onSuccess: () => {
+      setCookie(cid, password, { maxAge: 60 * 60 * 24 });
+      setIsPasswordChecked(true);
+    },
+  });
+
+  const [password, setPassword] = useState('');
+  const [isPasswordChecked, setIsPasswordChecked] = useState(false);
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['contestProblemsDetailInfo', cid],
+    queryFn: fetchContestProblemsDetailInfo,
+    retry: 0,
+  });
+
+  const contestProblemReorderMutation = useMutation({
+    mutationFn: contestProblemReorder,
+    onSuccess: () => {
+      alert('문제 순서가 변경되었습니다.');
+    },
+  });
+
+  const resData = data?.data.data;
+  const contestProblemsInfo: ProblemsInfo = resData;
+
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [title, setTitle] = useState('');
+  const [problemsInfo, setProblemsInfo] = useState<ProblemInfo[]>([]);
+
+  const timeUntilStart = useCountdownTimer(
+    contestProblemsInfo?.testPeriod.start,
+  );
+  const timeUntilEnd = useCountdownTimer(contestProblemsInfo?.testPeriod.end);
+  const currentTime = new Date();
+  const contestStartTime = new Date(contestProblemsInfo?.testPeriod.start);
+  const contestEndTime = new Date(contestProblemsInfo?.testPeriod.end);
+
   const [
     isChagingContestProblemOrderActivate,
     setIsChangingContestProblemOrderActivate,
   ] = useState(false);
 
+  const router = useRouter();
+
   const changingProblemOrderBtnRef = useRef<HTMLButtonElement>(null);
 
-  const cid = props.params.cid;
+  useEffect(() => {
+    if (contestProblemsInfo) {
+      setTitle(contestProblemsInfo.title);
+      setProblemsInfo(contestProblemsInfo.problems);
+    }
+  }, [contestProblemsInfo]);
 
-  const [todos, setTodos] = useState([
-    { id: '650ae1a19c2734584192d58e', problemTitle: 'A+B' },
-    { id: '650af3809c2734584192d5b2', problemTitle: 'A-B' },
-    { id: '650af7209c2734584192d603', problemTitle: '삼각형' },
-    { id: '650af7379c2734584192d612', problemTitle: '피보나치 수' },
-    { id: '650ce0110b8de0052a8cb971', problemTitle: '순열의 개수' },
-    { id: '650ce0110b8de0052a8cb925', problemTitle: '가방 정리' },
-    { id: '650ce0110b8de0052a1cb976', problemTitle: '카드 색칠' },
-  ]);
+  useEffect(() => {
+    // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
+    fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
+      if (contestProblemsInfo) {
+        const isContestant = contestProblemsInfo.contestants.some(
+          (contestant_id) => contestant_id === userInfo._id,
+        );
 
-  const router = useRouter();
+        if (userInfo.isAuth && isContestant) {
+          setIsLoading(false);
+          const contestPasswordCookie = getCookie(cid);
+          if (contestPasswordCookie) {
+            setPassword(contestPasswordCookie);
+            confirmContestConfirmMutation.mutate({
+              cid,
+              password: contestPasswordCookie,
+            });
+            return;
+          }
+
+          const inputPassword = prompt('비밀번호를 입력해 주세요');
+          if (inputPassword !== null && inputPassword.trim() !== '') {
+            setPassword(inputPassword);
+            confirmContestConfirmMutation.mutate({
+              cid,
+              password: inputPassword,
+            });
+            return;
+          }
+
+          router.back();
+          return;
+        }
+
+        if (
+          userInfo.isAuth &&
+          (OPERATOR_ROLES.includes(userInfo.role) ||
+            userInfo._id === contestProblemsInfo.writer._id)
+        ) {
+          setIsLoading(false);
+          setIsPasswordChecked(true);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
+    });
+  }, [updateUserInfo, contestProblemsInfo, cid, router]);
 
   const handleGoToContestRankList = () => {
     router.push(`/contests/${cid}/ranklist`);
@@ -43,13 +200,75 @@ export default function ContestProblems(props: DefaultProps) {
     router.push(`/contests/${cid}/problems/register`);
   };
 
+  // 대회 시간 표시에 사용할 클래스를 결정하는 함수
+  const getTimeDisplayClass = () => {
+    if (currentTime < contestStartTime) {
+      // 대회 시작 전
+      return 'text-blue-500';
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 대회 진행 중
+      return 'text-red-500';
+    }
+  };
+
+  // 대회 시작까지 남은 시간 또는 대회 종료까지 남은 시간을 표시하는 함수
+  const renderRemainingTime = () => {
+    if (currentTime < contestStartTime) {
+      // 대회 시작 전: 대회 시작까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilStart.days > 0 &&
+            `(${timeUntilStart.days}일 ${timeUntilStart.hours}시간 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours > 0 &&
+            `(${timeUntilStart.hours}시간 ${timeUntilStart.minutes}분 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes > 0 &&
+            `(${timeUntilStart.minutes}분 ${timeUntilStart.seconds}초 남음)`}
+          {timeUntilStart.days === 0 &&
+            timeUntilStart.hours === 0 &&
+            timeUntilStart.minutes === 0 &&
+            `(${timeUntilStart.seconds}초 남음)`}
+        </span>
+      );
+    } else if (
+      currentTime >= contestStartTime &&
+      currentTime <= contestEndTime
+    ) {
+      // 대회 진행 중: 대회 종료까지 남은 시간 표시
+      return (
+        <span className={`font-semibold ${getTimeDisplayClass()}`}>
+          {timeUntilEnd.days > 0 &&
+            `(${timeUntilEnd.days}일 ${timeUntilEnd.hours}시간 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours > 0 &&
+            `(${timeUntilEnd.hours}시간 ${timeUntilEnd.minutes}분 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes > 0 &&
+            `(${timeUntilEnd.minutes}분 ${timeUntilEnd.seconds}초 남음)`}
+          {timeUntilEnd.days === 0 &&
+            timeUntilEnd.hours === 0 &&
+            timeUntilEnd.minutes === 0 &&
+            `(${timeUntilEnd.seconds}초 남음)`}
+        </span>
+      );
+    }
+  };
+
   const handleChangeProblemOrder = () => {
     changingProblemOrderBtnRef.current?.blur();
     setIsChangingContestProblemOrderActivate((prev) => !prev);
     if (isChagingContestProblemOrderActivate) {
-      alert('문제 순서를 변경하였습니다.');
+      contestProblemReorderMutation.mutate({ cid, params: problemsInfo });
     }
   };
+
+  if (isLoading || !isPasswordChecked) return <Loading />;
 
   return (
     <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">
@@ -72,7 +291,7 @@ export default function ContestProblems(props: DefaultProps) {
                 href={`/contests/${cid}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
-                (대회: 2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선)
+                (대회: {title})
               </Link>
             </div>
           </p>
@@ -96,49 +315,63 @@ export default function ContestProblems(props: DefaultProps) {
                     </svg>
                     대회 순위
                   </button>
-                  <button
-                    onClick={handleRegisterContestProblem}
-                    className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 -960 960 960"
-                      width="20"
-                      fill="white"
-                    >
-                      <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
-                    </svg>
-                    문제 등록
-                  </button>
+                  {OPERATOR_ROLES.includes(userInfo.role) &&
+                    userInfo._id === contestProblemsInfo.writer._id && (
+                      <button
+                        onClick={handleRegisterContestProblem}
+                        className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="20"
+                          viewBox="0 -960 960 960"
+                          width="20"
+                          fill="white"
+                        >
+                          <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
+                        </svg>
+                        문제 등록
+                      </button>
+                    )}
                 </>
               )}
 
-              <button
-                onClick={handleChangeProblemOrder}
-                ref={changingProblemOrderBtnRef}
-                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#ff5fb1] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#f555a8] hover:bg-[#f555a8]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="23"
-                  viewBox="0 -960 960 960"
-                  width="23"
-                  fill="white"
-                >
-                  <path d="M241.5-478.5q0 44.5 16.75 87T311-313l13 13v-61.5q0-15.5 11-26.5t26.5-11q15.5 0 26.5 11t11 26.5v157q0 15.5-11 26.5t-26.5 11h-157q-15.5 0-26.5-11t-11-26.5q0-15.5 11-26.5t26.5-11H277l-18-17q-49.5-46.5-71-103.75T166.5-478.5q0-91.5 47-167t126.5-115q13.5-7 27.5-.5t19 21.5q5 14.5-.25 28.25T367.5-690q-58 31.5-92 87.75t-34 123.75Zm477-3q0-44.5-16.75-87T649-647l-13-13v61.5q0 15.5-11 26.5t-26.5 11q-15.5 0-26.5-11t-11-26.5v-157q0-15.5 11-26.5t26.5-11h157q15.5 0 26.5 11t11 26.5q0 15.5-11 26.5t-26.5 11H683l18 17q48 48 70.25 104.5t22.25 115q0 91.5-47 166.5t-126 115q-13.5 7-27.75.75T573.5-220.5q-5-14.5.25-28.25T592.5-270q58-31.5 92-87.75t34-123.75Z" />
-                </svg>
-                {isChagingContestProblemOrderActivate ? (
-                  <>저장하기</>
-                ) : (
-                  <>순서 변경</>
+              {OPERATOR_ROLES.includes(userInfo.role) &&
+                userInfo._id === contestProblemsInfo.writer._id && (
+                  <button
+                    onClick={handleChangeProblemOrder}
+                    ref={changingProblemOrderBtnRef}
+                    className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#ff5fb1] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#f555a8] hover:bg-[#f555a8]"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="23"
+                      viewBox="0 -960 960 960"
+                      width="23"
+                      fill="white"
+                    >
+                      <path d="M241.5-478.5q0 44.5 16.75 87T311-313l13 13v-61.5q0-15.5 11-26.5t26.5-11q15.5 0 26.5 11t11 26.5v157q0 15.5-11 26.5t-26.5 11h-157q-15.5 0-26.5-11t-11-26.5q0-15.5 11-26.5t26.5-11H277l-18-17q-49.5-46.5-71-103.75T166.5-478.5q0-91.5 47-167t126.5-115q13.5-7 27.5-.5t19 21.5q5 14.5-.25 28.25T367.5-690q-58 31.5-92 87.75t-34 123.75Zm477-3q0-44.5-16.75-87T649-647l-13-13v61.5q0 15.5-11 26.5t-26.5 11q-15.5 0-26.5-11t-11-26.5v-157q0-15.5 11-26.5t26.5-11h157q15.5 0 26.5 11t11 26.5q0 15.5-11 26.5t-26.5 11H683l18 17q48 48 70.25 104.5t22.25 115q0 91.5-47 166.5t-126 115q-13.5 7-27.75.75T573.5-220.5q-5-14.5.25-28.25T592.5-270q58-31.5 92-87.75t34-123.75Z" />
+                    </svg>
+                    {isChagingContestProblemOrderActivate ? (
+                      <>저장하기</>
+                    ) : (
+                      <>순서 변경</>
+                    )}
+                  </button>
                 )}
-              </button>
             </div>
             <div className="mt-3">
               <span className="font-semibold">
                 대회 시간:{' '}
-                <span className="text-red-500 font-bold">41분 3초 후 종료</span>
+                <span className="font-light">
+                  {formatDateToYYMMDDHHMM(contestProblemsInfo.testPeriod.start)}{' '}
+                  ~ {formatDateToYYMMDDHHMM(contestProblemsInfo.testPeriod.end)}{' '}
+                  {timeUntilEnd?.isPast ? (
+                    <span className="text-red-500 font-bold">(종료)</span>
+                  ) : (
+                    renderRemainingTime()
+                  )}
+                </span>
               </span>
             </div>
           </div>
@@ -152,6 +385,8 @@ export default function ContestProblems(props: DefaultProps) {
                     isChagingContestProblemOrderActivate={
                       isChagingContestProblemOrderActivate
                     }
+                    problemsInfo={problemsInfo}
+                    setProblemsInfo={setProblemsInfo}
                   />
                 </div>
               </div>

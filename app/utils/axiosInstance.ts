@@ -25,6 +25,18 @@ axiosInstance.interceptors.response.use(
     // 응답 에러 처리
     if (error.response) {
       switch (error.response.status) {
+        case 400:
+          switch (error.response.data.code) {
+            case 'IS_NOT_CONTESTANT':
+              alert('대회 참가자가 아닙니다.');
+              if (typeof window !== 'undefined') window.history.back();
+              return;
+            case 'IS_NOT_TEST_PERIOD':
+              alert('대회 시간이 아닙니다.');
+              if (typeof window !== 'undefined') window.history.back();
+              return;
+          }
+          break;
         case 401:
           // 401 Unauthorized 에러 처리
           localStorage.removeItem('access-token');
@@ -33,22 +45,21 @@ axiosInstance.interceptors.response.use(
           if (typeof window !== 'undefined') window.location.href = '/login';
           break;
         case 404:
-          console.log(error.code);
-          switch (error.code) {
+          switch (error.response.data.code) {
             case 'CONTEST_NOT_FOUND':
             case 'ASSIGNMENT_NOT_FOUND':
             case 'PROBLEM_NOT_FOUND':
             case 'ERR_BAD_REQUEST':
               alert('존재하지 않는 게시글입니다.');
-              if (typeof window !== 'undefined') window.location.href = '/';
+              if (typeof window !== 'undefined') window.history.back();
               return;
           }
+          break;
         case 500:
           // 500 Internal Server Error 에러 처리
           alert('서버에 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
           break;
         default:
-          break;
       }
     }
     return Promise.reject(error);
