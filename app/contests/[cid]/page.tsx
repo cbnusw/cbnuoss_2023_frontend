@@ -12,7 +12,6 @@ import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { userInfoStore } from '@/app/store/UserInfo';
 import ContestContestContestantList from './components/ContestContestContestantList';
 import { OPERATOR_ROLES } from '@/app/constants/role';
-import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import * as XLSX from 'xlsx';
 import { AxiosError } from 'axios';
 
@@ -42,12 +41,6 @@ const enrollContest = (cid: string) => {
 const unEnrollContest = (cid: string) => {
   return axiosInstance.post(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}/unenroll`,
-  );
-};
-
-const confirmContestConfirm = (cid: string, password: string) => {
-  return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/confirm/${cid}?password=${password}`,
   );
 };
 
@@ -140,31 +133,6 @@ export default function ContestDetail(props: DefaultProps) {
     },
   });
 
-  const confirmContestConfirmMutation = useMutation({
-    mutationFn: (password: string) => confirmContestConfirm(cid, password),
-    onError: (error: AxiosError) => {
-      const resData: any = error.response?.data;
-      switch (resData.status) {
-        case 400:
-          switch (resData.code) {
-            case 'CONTEST_PASSWORD_NOT_MATCH':
-              alert('비밀번호가 일치하지 않습니다.');
-              deleteCookie(cid);
-              break;
-            default:
-              alert('정의되지 않은 http code입니다.');
-          }
-          break;
-        default:
-          alert('정의되지 않은 http status code입니다');
-      }
-    },
-    onSuccess: () => {
-      setCookie(cid, password, { maxAge: 60 * 60 * 24 });
-      router.push(`/contests/${cid}/problems`);
-    },
-  });
-
   const userInfo = userInfoStore((state: any) => state.userInfo);
 
   const resData = data?.data.data;
@@ -172,7 +140,6 @@ export default function ContestDetail(props: DefaultProps) {
 
   const [isEnrollContest, setIsEnrollContest] = useState(false);
   const [loadingDots, setLoadingDots] = useState('');
-  const [password, setPassword] = useState('');
 
   const timeUntilStart = useCountdownTimer(contestInfo?.testPeriod.start);
   const timeUntilEnd = useCountdownTimer(contestInfo?.testPeriod.end);
@@ -270,29 +237,7 @@ export default function ContestDetail(props: DefaultProps) {
   };
 
   const handleGoToContestProblems = () => {
-    // 대회 게시글 작성자인 경우, 언제든지 문제 목록에 접근 가능
-    if (userInfo._id === contestInfo.writer._id) {
-      router.push(`/contests/${cid}/problems`);
-      return;
-    }
-
-    // 그 외의 유저들은 대회 시간 중에만 문제 목록에 접근 가능
-    if (currentTime >= contestStartTime && currentTime <= contestEndTime) {
-      const contestPasswordCookie = getCookie(cid);
-      if (contestPasswordCookie) {
-        setPassword(contestPasswordCookie);
-        confirmContestConfirmMutation.mutate(contestPasswordCookie);
-        return;
-      }
-
-      const inputPassword = prompt('비밀번호를 입력해 주세요');
-      if (inputPassword !== null) {
-        setPassword(inputPassword);
-        confirmContestConfirmMutation.mutate(inputPassword);
-      }
-    } else {
-      alert('대회 시간 중에만 문제를 확인하실 수 있습니다.');
-    }
+    router.push(`/contests/${cid}/problems`);
   };
 
   const handleEditContest = () => {
