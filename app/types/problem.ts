@@ -61,6 +61,7 @@ export interface ProblemsInfo {
     end: string;
   };
   contestants: string[];
+  students: string[];
   _id: string;
   title: string;
   content: string;

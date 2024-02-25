@@ -101,15 +101,15 @@ export default function ContestProblems(props: DefaultProps) {
     retry: 0,
   });
 
+  const resData = data?.data.data;
+  const contestProblemsInfo: ProblemsInfo = resData;
+
   const contestProblemReorderMutation = useMutation({
     mutationFn: contestProblemReorder,
     onSuccess: () => {
       alert('문제 순서가 변경되었습니다.');
     },
   });
-
-  const resData = data?.data.data;
-  const contestProblemsInfo: ProblemsInfo = resData;
 
   const userInfo = userInfoStore((state: any) => state.userInfo);
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
@@ -131,9 +131,9 @@ export default function ContestProblems(props: DefaultProps) {
     setIsChangingContestProblemOrderActivate,
   ] = useState(false);
 
-  const router = useRouter();
-
   const changingProblemOrderBtnRef = useRef<HTMLButtonElement>(null);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (contestProblemsInfo) {
@@ -146,11 +146,12 @@ export default function ContestProblems(props: DefaultProps) {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (contestProblemsInfo) {
+        const isWriter = contestProblemsInfo.writer._id === userInfo._id;
         const isContestant = contestProblemsInfo.contestants.some(
           (contestant_id) => contestant_id === userInfo._id,
         );
 
-        if (userInfo.isAuth && isContestant) {
+        if (isContestant) {
           setIsLoading(false);
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
@@ -176,11 +177,7 @@ export default function ContestProblems(props: DefaultProps) {
           return;
         }
 
-        if (
-          userInfo.isAuth &&
-          (OPERATOR_ROLES.includes(userInfo.role) ||
-            userInfo._id === contestProblemsInfo.writer._id)
-        ) {
+        if (isWriter) {
           setIsLoading(false);
           setIsPasswordChecked(true);
           return;
@@ -360,6 +357,7 @@ export default function ContestProblems(props: DefaultProps) {
                   </button>
                 )}
             </div>
+
             <div className="mt-3">
               <span className="font-semibold">
                 대회 시간:{' '}

@@ -161,6 +161,13 @@ export default function EditExam(props: DefaultProps) {
       return;
     }
 
+    // 시험 시작 시간과 종료 시간의 유효성 검사
+    if (examStartDateTime >= examEndDateTime) {
+      alert('시험 종료 시간은 시작 시간 이후로 설정해야 합니다.');
+      window.scrollTo(0, document.body.scrollHeight);
+      return;
+    }
+
     if (!examPwd) {
       alert('비밀번호를 입력해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
