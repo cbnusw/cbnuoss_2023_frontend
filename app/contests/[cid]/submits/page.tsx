@@ -69,11 +69,9 @@ export default function UsersContestSubmits(props: DefaultProps) {
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (contestInfo) {
-        if (
-          userInfo.isAuth &&
-          (OPERATOR_ROLES.includes(userInfo.role) ||
-            userInfo._id === contestInfo.writer._id)
-        ) {
+        const isWriter = contestInfo.writer._id === userInfo._id;
+
+        if (isWriter) {
           setIsLoading(false);
           return;
         }
