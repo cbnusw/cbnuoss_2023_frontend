@@ -10,52 +10,37 @@ import {
 import { useRouter } from 'next/navigation';
 import NoneExamProblemListItem from './NoneExamProblemListItem';
 import Loading from '@/app/loading';
+import { ProblemInfo } from '@/app/types/problem';
 
 interface ExamProblemListProps {
   eid: string;
   isChagingExamProblemOrderActivate: boolean;
+  problemsInfo: ProblemInfo[];
+  setProblemsInfo: (problemsInfo: ProblemInfo[]) => void;
 }
 
 export default function ExamProblemList({
   eid,
   isChagingExamProblemOrderActivate,
+  problemsInfo,
+  setProblemsInfo,
 }: ExamProblemListProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isProblemListEmpty, setIsProblemListEmpty] = useState(true);
-
-  const [datas, setDatas] = useState([
-    { id: '650ae1a19c2734584192d58e', idx: 'A', problemTitle: 'A+B' },
-    { id: '650af3809c2734584192d5b2', idx: 'B', problemTitle: 'A-B' },
-    { id: '650af7209c2734584192d603', idx: 'C', problemTitle: '삼각형' },
-    { id: '650af7379c2734584192d612', idx: 'D', problemTitle: '피보나치 수' },
-    { id: '650ce0110b8de0052a8cb971', idx: 'E', problemTitle: '순열의 개수' },
-    { id: '650ce0110b8de0052a8cb925', idx: 'F', problemTitle: '가방 정리' },
-    { id: '650ce0110b8de0052a1cb976', idx: 'G', problemTitle: '카드 색칠' },
-  ]);
-
   const router = useRouter();
 
   const handleChange = (result: DropResult) => {
     if (!result.destination) return;
-    console.log(result);
-    const items = [...datas];
+    const items = [...problemsInfo];
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    setDatas(items);
+    setProblemsInfo(items);
   };
 
   const handleGoToExamProblem = (id: string) => {
     router.push(`/exams/${eid}/problems/${id}`);
   };
 
-  useEffect(() => {
-    setIsLoading(false);
-    setIsProblemListEmpty(false);
-  }, []);
-
-  if (isLoading) return <Loading />;
-  if (isProblemListEmpty) return <NoneExamProblemListItem />;
+  if (problemsInfo.length === 0) return <NoneExamProblemListItem />;
 
   return (
     <div className="mb-14">
@@ -71,10 +56,10 @@ export default function ExamProblemList({
               ref={provided.innerRef}
               className="flex flex-col gap-4 pl-3"
             >
-              {datas.map((data, idx) => (
-                <div key={data.id} className="flex items-center gap-3">
+              {problemsInfo.map((problem, idx) => (
+                <div key={problem._id} className="flex items-center gap-3">
                   <div className="w-full">
-                    <Draggable draggableId={data.id} index={idx}>
+                    <Draggable draggableId={problem._id} index={idx}>
                       {(provided, snapshot) => (
                         <div
                           ref={
@@ -86,7 +71,7 @@ export default function ExamProblemList({
                           {...provided.dragHandleProps}
                         >
                           <div
-                            onClick={() => handleGoToExamProblem(data.id)}
+                            onClick={() => handleGoToExamProblem(problem._id)}
                             className="flex items-center gap-2 w-full border p-2 cursor-pointer hover:bg-gray-50 focus:bg-gray-50 rounded-sm shadow-sm"
                           >
                             {!isChagingExamProblemOrderActivate ? (
@@ -106,7 +91,7 @@ export default function ExamProblemList({
                               </svg>
                             )}
                             <span className="ml-1 text-[#0076C0] hover:underline focus:underline">
-                              {data.problemTitle}
+                              {problem.title}
                             </span>
                           </div>
                         </div>
