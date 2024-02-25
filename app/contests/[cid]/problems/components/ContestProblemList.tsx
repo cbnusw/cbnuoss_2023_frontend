@@ -25,13 +25,10 @@ export default function ContestProblemList({
   problemsInfo,
   setProblemsInfo,
 }: ContestProblemListProps) {
-  const [isLoading, setIsLoading] = useState(true);
-
   const router = useRouter();
 
   const handleChangeProblemOrder = (result: DropResult) => {
     if (!result.destination) return;
-    console.log(result);
     const items = [...problemsInfo];
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
@@ -43,11 +40,6 @@ export default function ContestProblemList({
     router.push(`/contests/${cid}/problems/${id}`);
   };
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, []);
-
-  if (isLoading) return <Loading />;
   if (problemsInfo.length === 0) return <NoneContestProblemListItem />;
 
   return (
