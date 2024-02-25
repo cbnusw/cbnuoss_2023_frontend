@@ -471,23 +471,24 @@ export default function ContestDetail(props: DefaultProps) {
               </svg>
               대회 순위
             </button>
-            {OPERATOR_ROLES.includes(userInfo.role) && (
-              <button
-                onClick={handleGoToUsersContestSubmits}
-                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#5951f0] hover:bg-[#5951f0]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
+            {OPERATOR_ROLES.includes(userInfo.role) &&
+              userInfo._id === contestInfo.writer._id && (
+                <button
+                  onClick={handleGoToUsersContestSubmits}
+                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#5951f0] hover:bg-[#5951f0]"
                 >
-                  <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-                </svg>
-                코드 제출 목록
-              </button>
-            )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                    fill="white"
+                  >
+                    <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
+                  </svg>
+                  코드 제출 목록
+                </button>
+              )}
             {shouldShowProblemsButton() && (
               <button
                 onClick={handleGoToContestProblems}
