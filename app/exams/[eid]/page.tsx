@@ -102,20 +102,17 @@ export default function ExamDetail(props: DefaultProps) {
   const timeUntilStart = useCountdownTimer(examInfo?.testPeriod.start);
   const timeUntilEnd = useCountdownTimer(examInfo?.testPeriod.end);
   const currentTime = new Date();
-  const contestStartTime = new Date(examInfo?.testPeriod.start);
-  const contestEndTime = new Date(examInfo?.testPeriod.end);
+  const examStartTime = new Date(examInfo?.testPeriod.start);
+  const examEndTime = new Date(examInfo?.testPeriod.end);
 
   const router = useRouter();
 
   // 시험 시간 표시에 사용할 클래스를 결정하는 함수
   const getTimeDisplayClass = () => {
-    if (currentTime < contestStartTime) {
+    if (currentTime < examStartTime) {
       // 시험 시작 전
       return 'text-blue-500';
-    } else if (
-      currentTime >= contestStartTime &&
-      currentTime <= contestEndTime
-    ) {
+    } else if (currentTime >= examStartTime && currentTime <= examEndTime) {
       // 시험 진행 중
       return 'text-red-500';
     }
@@ -123,7 +120,7 @@ export default function ExamDetail(props: DefaultProps) {
 
   // 시험 시작까지 남은 시간 또는 시험 종료까지 남은 시간을 표시하는 함수
   const renderRemainingTime = () => {
-    if (currentTime < contestStartTime) {
+    if (currentTime < examStartTime) {
       // 시험 시작 전: 시험 시작까지 남은 시간 표시
       return (
         <span className={`font-semibold ${getTimeDisplayClass()}`}>
@@ -142,10 +139,7 @@ export default function ExamDetail(props: DefaultProps) {
             `(${timeUntilStart.seconds}초 남음)`}
         </span>
       );
-    } else if (
-      currentTime >= contestStartTime &&
-      currentTime <= contestEndTime
-    ) {
+    } else if (currentTime >= examStartTime && currentTime <= examEndTime) {
       // 시험 진행 중: 시험 종료까지 남은 시간 표시
       return (
         <span className={`font-semibold ${getTimeDisplayClass()}`}>
@@ -174,11 +168,16 @@ export default function ExamDetail(props: DefaultProps) {
       return true;
     }
 
+    // 관리자 사용자의 경우, 대회 종료 시간 이후에만 버튼 보임
+    if (OPERATOR_ROLES.includes(userInfo.role) && currentTime > examEndTime) {
+      return true;
+    }
+
     // 대회 신청자인 경우, 대회 시간 중에만 버튼 보임
     if (
       isEnrollExam &&
-      currentTime >= contestStartTime &&
-      currentTime <= contestEndTime
+      currentTime >= examStartTime &&
+      currentTime <= examEndTime
     ) {
       return true;
     }
@@ -237,7 +236,7 @@ export default function ExamDetail(props: DefaultProps) {
 
   // 시험 상태에 따른 버튼 렌더링
   const renderExamActionButton = () => {
-    if (currentTime < contestStartTime) {
+    if (currentTime < examStartTime) {
       // 시험 시작 전
       if (isEnrollExam) {
         // 사용자가 시험에 이미 신청했다면 '시험 취소하기' 버튼을 보여줍니다.
@@ -258,36 +257,56 @@ export default function ExamDetail(props: DefaultProps) {
             시험 취소하기
           </button>
         );
-      } else {
-        // 사용자가 시험을 신청하지 않았다면 '시험 응시하기' 버튼을 보여줍니다.
-        return (
-          <button
-            onClick={handleEnrollExam}
-            className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] transition duration-75"
+      }
+
+      // 사용자가 시험을 신청하지 않았다면 '시험 응시하기' 버튼을 보여줍니다.
+      return (
+        <button
+          onClick={handleEnrollExam}
+          className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] transition duration-75"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="25"
+            viewBox="0 -960 960 960"
+            width="25"
+            fill="white"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              height="25"
-              viewBox="0 -960 960 960"
-              width="25"
-              fill="white"
-            >
-              <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
-            </svg>
-            시험 응시하기
-          </button>
+            <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
+          </svg>
+          시험 응시하기
+        </button>
+      );
+    } else if (currentTime >= examStartTime && currentTime <= examEndTime) {
+      // 시험 진행 중
+      if (isEnrollExam) {
+        return (
+          <div className="flex gap-[0.6rem] justify-center items-center w-[9rem] h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] py-[0.5rem] rounded-[3rem]">
+            시험 진행 중
+            <span className="w-1 ml-[-0.6rem] text-[#3870e0]">
+              {loadingDots}
+            </span>
+          </div>
         );
       }
-    } else if (
-      currentTime >= contestStartTime &&
-      currentTime <= contestEndTime
-    ) {
-      // 시험 진행 중
+
+      // 사용자가 시험을 신청하지 않았다면 '시험 응시하기' 버튼을 보여줍니다.
       return (
-        <div className="flex gap-[0.6rem] justify-center items-center w-[9rem] h-11 text-[#3870e0] text-lg font-medium border-[1.5px] border-[#3870e0] py-[0.5rem] rounded-[3rem]">
-          시험 진행 중
-          <span className="w-1 ml-[-0.6rem] text-[#3870e0]">{loadingDots}</span>
-        </div>
+        <button
+          onClick={handleEnrollExam}
+          className="flex gap-[0.6rem] items-center w-fit h-11 text-white text-lg font-medium bg-[#3870e0] px-4 py-[0.5rem] rounded-[3rem] focus:bg-[#3464c2] hover:bg-[#3464c2] transition duration-75"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="25"
+            viewBox="0 -960 960 960"
+            width="25"
+            fill="white"
+          >
+            <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
+          </svg>
+          시험 응시하기
+        </button>
       );
     } else {
       // 시험 종료
@@ -312,11 +331,12 @@ export default function ExamDetail(props: DefaultProps) {
       if (examInfo) {
         // 현재 사용자가 시험 작성자이거나 이미 시험에 등록된 참가자인지 확인
         const isWriter = examInfo.writer._id === userInfo._id;
+        const isOperator = OPERATOR_ROLES.includes(userInfo.role);
         const isContestant = examInfo.students.some(
           (student) => student._id === userInfo._id,
         );
 
-        if (isWriter || isContestant) {
+        if (isWriter || isOperator || isContestant) {
           setIsConfirmPassword(true);
           return;
         }
@@ -468,8 +488,8 @@ export default function ExamDetail(props: DefaultProps) {
                 <>
                   <div className="flex flex-col gap-1 text-center">
                     <div className="text-[#777] text-xs">
-                      시험 시작 후에는{' '}
-                      <span className="text-red-500">응시가 불가능</span>
+                      시험 시작 후에도{' '}
+                      <span className="text-blue-500">응시가 가능</span>
                       합니다.
                     </div>
                     <div className="text-[#777] text-xs">
