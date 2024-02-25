@@ -61,12 +61,12 @@ export default function UsersContestSubmit(props: DefaultProps) {
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (submitInfo) {
-        if (
-          userInfo.isAuth &&
-          ((OPERATOR_ROLES.includes(userInfo.role) &&
-            userInfo._id === submitInfo.parentId.writer._id) ||
-            submitInfo.parentId.contestants[0] === userInfo._id)
-        ) {
+        const isWriter = submitInfo.parentId.writer._id === userInfo._id;
+        const isContestant = submitInfo.parentId.contestants.some(
+          (contestant_id) => contestant_id === userInfo._id,
+        );
+
+        if (isWriter || isContestant) {
           setIsLoading(false);
           return;
         }

@@ -10,7 +10,6 @@ import { userInfoStore } from '@/app/store/UserInfo';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
 import { useRouter } from 'next/navigation';
-import { OPERATOR_ROLES } from '@/app/constants/role';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ContestInfo, ContestSubmitInfo } from '@/app/types/contest';

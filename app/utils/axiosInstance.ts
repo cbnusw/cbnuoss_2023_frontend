@@ -56,6 +56,7 @@ axiosInstance.interceptors.response.use(
           switch (error.response.data.code) {
             case 'FORBIDDEN':
               alert('권한이 없는 요청입니다.');
+              if (typeof window !== 'undefined') window.history.back();
               return;
           }
           break;

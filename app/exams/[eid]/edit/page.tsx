@@ -193,15 +193,19 @@ export default function EditExam(props: DefaultProps) {
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (userInfo.isAuth && OPERATOR_ROLES.includes(userInfo.role)) {
-        setIsLoading(false);
-        return;
-      }
+      if (examInfo) {
+        const isWriter = examInfo.writer._id === userInfo._id;
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+        if (isWriter) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, examInfo, router]);
 
   if (isLoading || isPending) return <Loading />;
 
