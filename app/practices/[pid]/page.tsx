@@ -45,9 +45,18 @@ export default function PracticeProblem(props: DefaultProps) {
 
   const deletePracticeMutation = useMutation({
     mutationFn: deletePractice,
-    onSuccess: () => {
-      alert('연습문제가 삭제되었습니다.');
-      router.push('/practices');
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('연습문제가 삭제되었습니다.');
+          router.push('/practices');
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

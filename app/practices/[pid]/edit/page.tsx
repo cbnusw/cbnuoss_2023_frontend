@@ -55,9 +55,18 @@ export default function EditPractice(props: DefaultProps) {
 
   const editPracticeMutation = useMutation({
     mutationFn: editPractice,
-    onSuccess: () => {
-      alert('연습문제 내용이 수정되었습니다.');
-      router.push(`/practices/${pid}`);
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('연습문제 내용이 수정되었습니다.');
+          router.push(`/practices/${pid}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

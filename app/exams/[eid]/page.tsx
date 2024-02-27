@@ -65,27 +65,54 @@ export default function ExamDetail(props: DefaultProps) {
 
   const deleteExamMutation = useMutation({
     mutationFn: deleteExam,
-    onSuccess: () => {
-      alert('시험이 삭제되었습니다.');
-      router.push('/exams');
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('시험이 삭제되었습니다.');
+          router.push('/exams');
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 
   const enrollExamMutation = useMutation({
     mutationFn: enrollExam,
-    onSuccess: () => {
-      setIsEnrollExam(true);
-      alert(
-        '시험 응시가 완료되었습니다.\n시험 시간을 확인한 후, 해당 시간에 시작해 주세요',
-      );
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          setIsEnrollExam(true);
+          alert(
+            '시험 응시가 완료되었습니다.\n시험 시간을 확인한 후, 해당 시간에 시작해 주세요',
+          );
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 
   const unErollExamMutation = useMutation({
     mutationFn: unEnrollExam,
-    onSuccess: () => {
-      setIsEnrollExam(false);
-      alert('시험 응시가 취소되었습니다.');
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          setIsEnrollExam(false);
+          alert('시험 응시가 취소되었습니다.');
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

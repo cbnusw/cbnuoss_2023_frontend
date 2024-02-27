@@ -23,11 +23,19 @@ const registerPractice = (params: RegisterProblemParams) => {
 export default function RegisterPractice() {
   const registerPracticeMutation = useMutation({
     mutationFn: registerPractice,
-    onSuccess: (response) => {
-      const resData = response?.data.data;
-      const pid = resData?._id;
-      alert('연습문제가 등록되었습니다.');
-      router.push(`/practices/${pid}`);
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          const pid = resData?.data._id;
+          alert('연습문제가 등록되었습니다.');
+          router.push(`/practices/${pid}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 
