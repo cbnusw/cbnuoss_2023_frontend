@@ -38,11 +38,19 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 export default function RegisterContest() {
   const registerContestMutation = useMutation({
     mutationFn: registerContest,
-    onSuccess: (response) => {
-      const resData = response?.data.data;
-      const cid = resData?._id;
-      alert('대회가 등록되었습니다.');
-      router.push(`/contests/${cid}`);
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          const cid = resData?.data._id;
+          alert('대회가 등록되었습니다.');
+          router.push(`/contests/${cid}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

@@ -37,11 +37,19 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 export default function RegisterExam() {
   const registerExamMutation = useMutation({
     mutationFn: registerExam,
-    onSuccess: (response) => {
-      const resData = response?.data.data;
-      const eid = resData?._id;
-      alert('시험이 등록되었습니다.');
-      router.push(`/exams/${eid}`);
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          const eid = resData?.data._id;
+          alert('시험이 등록되었습니다.');
+          router.push(`/exams/${eid}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

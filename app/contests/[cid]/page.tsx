@@ -67,9 +67,18 @@ export default function ContestDetail(props: DefaultProps) {
 
   const deleteContestMutation = useMutation({
     mutationFn: deleteContest,
-    onSuccess: () => {
-      alert('대회가 삭제되었습니다.');
-      router.push('/contests');
+    onSuccess: (data) => {
+      const resData = data.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('대회가 삭제되었습니다.');
+          router.push('/contests');
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
     onError: (error: AxiosError) => {
       const resData: any = error.response?.data;
@@ -91,45 +100,65 @@ export default function ContestDetail(props: DefaultProps) {
 
   const enrollContestMutation = useMutation({
     mutationFn: enrollContest,
-    onSuccess: () => {
-      setIsEnrollContest(true);
-      alert(
-        '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
-      );
+    onSuccess: (data) => {
+      const resData = data.data;
+      const httpStatusCode = resData.status;
 
-      // 쿼리 데이터 업데이트
-      const updatedContestants = [...contestInfo.contestants, userInfo];
-      queryClient.setQueryData(['contestDetailInfo', cid], {
-        ...data,
-        data: {
-          ...data?.data,
-          data: {
-            ...contestInfo,
-            contestants: updatedContestants,
-          },
-        },
-      });
+      switch (httpStatusCode) {
+        case 200:
+          setIsEnrollContest(true);
+          alert(
+            '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
+          );
+
+          // 쿼리 데이터 업데이트
+          const updatedContestants = [...contestInfo.contestants, userInfo];
+          queryClient.setQueryData(['contestDetailInfo', cid], {
+            ...data,
+            data: {
+              ...data?.data,
+              data: {
+                ...contestInfo,
+                contestants: updatedContestants,
+              },
+            },
+          });
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 
   const unErollContestMutation = useMutation({
     mutationFn: unEnrollContest,
-    onSuccess: () => {
-      setIsEnrollContest(false);
-      alert('대회 참가 신청이 취소되었습니다.');
-      const updatedContestants = contestInfo.contestants.filter(
-        (contestant) => contestant._id !== userInfo._id,
-      );
-      queryClient.setQueryData(['contestDetailInfo', cid], {
-        ...data,
-        data: {
-          ...data?.data,
-          data: {
-            ...contestInfo,
-            contestants: updatedContestants,
-          },
-        },
-      });
+    onSuccess: (data) => {
+      const resData = data.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          setIsEnrollContest(false);
+          alert('대회 참가 신청이 취소되었습니다.');
+          const updatedContestants = contestInfo.contestants.filter(
+            (contestant) => contestant._id !== userInfo._id,
+          );
+
+          // 쿼리 데이터 업데이트
+          queryClient.setQueryData(['contestDetailInfo', cid], {
+            ...data,
+            data: {
+              ...data?.data,
+              data: {
+                ...contestInfo,
+                contestants: updatedContestants,
+              },
+            },
+          });
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

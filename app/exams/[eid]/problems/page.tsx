@@ -62,8 +62,17 @@ export default function ExamProblems(props: DefaultProps) {
 
   const examProblemReorderMutation = useMutation({
     mutationFn: examProblemReorder,
-    onSuccess: () => {
-      alert('문제 순서가 변경되었습니다.');
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('문제 순서가 변경되었습니다.');
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

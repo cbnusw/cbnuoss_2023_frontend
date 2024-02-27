@@ -56,9 +56,18 @@ export default function EditContest(props: DefaultProps) {
 
   const editContestMutation = useMutation({
     mutationFn: editContest,
-    onSuccess: () => {
-      alert('대회 내용이 수정되었습니다.');
-      router.push(`/contests/${cid}`);
+    onSuccess: (data) => {
+      const resData = data.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('대회 내용이 수정되었습니다.');
+          router.push(`/contests/${cid}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 

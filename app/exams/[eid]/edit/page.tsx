@@ -65,9 +65,18 @@ export default function EditExam(props: DefaultProps) {
 
   const editExamMutation = useMutation({
     mutationFn: editExam,
-    onSuccess: () => {
-      alert('시험 내용이 수정되었습니다.');
-      router.push(`/exams/${eid}`);
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('시험 내용이 수정되었습니다.');
+          router.push(`/exams/${eid}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
     },
   });
 
