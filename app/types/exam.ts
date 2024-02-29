@@ -52,6 +52,46 @@ export interface ExamEnrolledInfo {
   course: string;
 }
 
+export interface ExamSubmitInfo {
+  parentId: {
+    _id: string;
+    title: string;
+  };
+  parentType: string;
+  result: {
+    memory: number;
+    time: number;
+    type: string;
+  };
+  _id: string;
+  problem: {
+    _id: string;
+    title: string;
+  };
+  source: string;
+  language: string;
+  user: {
+    center: null;
+    permissions: string[];
+    _id: string;
+    image: null;
+    no: string;
+    name: string;
+    email: string;
+    phone: string;
+    department: string;
+    position: null;
+    joinedAt: string;
+    updatedAt: string;
+    role: string;
+    university: string;
+    __v: number;
+  };
+  createdAt: string;
+  __v: number;
+  code: string;
+}
+
 // 시험 등록/수정 API 호출을 위한 인터페이스 정의
 export interface RegisterExamParams {
   title: string;
