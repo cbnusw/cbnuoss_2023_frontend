@@ -1,6 +1,5 @@
 'use client';
 
-import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { SubmitInfo } from '@/app/types/submit';
