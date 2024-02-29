@@ -1,14 +1,32 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
-import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { IoSetItem } from '@/app/types/problem';
+import { ContestInfo } from '@/app/types/contest';
+import { IoSetItem, RegisterProblemParams } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 대회 게시글 정보 조회 API
+const fetchContestDetailInfo = ({ queryKey }: any) => {
+  const cid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
+  );
+};
+
+// 대회 문제 등록 API
+const registerContestProblem = (params: RegisterProblemParams) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem`,
+    params,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -17,7 +35,36 @@ interface DefaultProps {
 }
 
 export default function RegisterContestProblem(props: DefaultProps) {
+  const cid = props.params.cid;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['contestDetailInfo', cid],
+    queryFn: fetchContestDetailInfo,
+    retry: 0,
+  });
+
+  const registerContestProblemMutation = useMutation({
+    mutationFn: registerContestProblem,
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          const problemId = resData?.data._id;
+          alert('문제가 등록되었습니다.');
+          router.push(`/contests/${cid}/problems/${problemId}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
+
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const resData = data?.data.data;
+  const contestInfo: ContestInfo = resData;
 
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState('');
@@ -42,8 +89,6 @@ export default function RegisterContestProblem(props: DefaultProps) {
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
   const scoreRef = useRef<HTMLInputElement>(null);
-
-  const cid = props.params.cid;
 
   const router = useRouter();
 
@@ -83,7 +128,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
       return;
     }
 
-    if (!maxExeTime) {
+    if (!maxExeTime || maxExeTime <= 0) {
       alert('최대 실행 시간을 입력해 주세요');
       window.scrollTo(0, 0);
       maxExeTimeRef.current?.focus();
@@ -91,7 +136,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
       return;
     }
 
-    if (!maxMemCap) {
+    if (!maxMemCap || maxMemCap <= 0) {
       alert('최대 메모리 사용량을 입력해 주세요');
       window.scrollTo(0, 0);
       maxMemCapRef.current?.focus();
@@ -113,30 +158,44 @@ export default function RegisterContestProblem(props: DefaultProps) {
       return;
     }
 
-    if (!isInAndOutFileUploadingValidFail) {
+    if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
-    alert('등록 기능 개발 예정');
+    const contestProblemData = {
+      title,
+      content: uploadedProblemPdfFileUrl,
+      published: null,
+      ioSet: ioSetData,
+      options: {
+        maxRealTime: maxExeTime,
+        maxMemory: maxMemCap,
+      },
+      score,
+      parentType: 'Contest',
+      parentId: cid,
+    };
 
-    // console.log('PDF: ', uploadedProblemPdfFileUrl);
-    // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
+    registerContestProblemMutation.mutate(contestProblemData);
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (userInfo.isAuth && OPERATOR_ROLES.includes(userInfo.role)) {
-        setIsLoading(false);
-        return;
-      }
+      if (contestInfo) {
+        const isWriter = contestInfo.writer._id === userInfo._id;
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+        if (isWriter) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, contestInfo, router]);
 
   if (isLoading) return <Loading />;
 
