@@ -110,7 +110,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
       { wch: 20 }, // 학부(과)
       { wch: 12.5 }, // 학번
       { wch: 10 }, // 이름
-      { wch: 22.5 }, // 문제명
+      { wch: 55 }, // 문제명
       { wch: 12.5 }, // 결과
       { wch: 10 }, // 메모리
       { wch: 10 }, // 시간
@@ -161,7 +161,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
               href={`/contests/${cid}`}
               className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
             >
-              ({contestInfo.title})
+              (대회: {contestInfo.title})
             </Link>
           </div>
         </p>

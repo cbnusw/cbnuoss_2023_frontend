@@ -4,6 +4,7 @@ export interface SubmitInfo {
     problems: string[];
     applyingPeriod: null;
     contestants: string[];
+    students: string[];
     _id: string;
     title: string;
     content: string;

@@ -3,15 +3,30 @@
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { SubmitInfo } from '@/app/types/submit';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { formatDateToYYMMDDHHMMSS } from '@/app/utils/formatDate';
+import { getCodeSubmitResultTypeDescription } from '@/app/utils/getCodeSubmitResultTypeDescription';
+import { getLanguageCode } from '@/app/utils/getLanguageCode';
+import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
+// 코드 제출 정보 조회 API
+const fetchSubmitInfo = ({ queryKey }: any) => {
+  const submitId = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/${submitId}`,
+  );
+};
+
 interface DefaultProps {
   params: {
     eid: string;
+    submitId: string;
   };
 }
 
@@ -21,11 +36,20 @@ const MarkdownPreview = dynamic(
 );
 
 export default function UsersExamSubmit(props: DefaultProps) {
+  const eid = props.params.eid;
+  const submitId = props.params.submitId;
+
+  const { isPending, data } = useQuery({
+    queryKey: ['submitInfo', submitId],
+    queryFn: fetchSubmitInfo,
+  });
+
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const resData = data?.data.data;
+  const submitInfo: SubmitInfo = resData;
 
-  const eid = props.params.eid;
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
@@ -33,20 +57,27 @@ export default function UsersExamSubmit(props: DefaultProps) {
     router.push(`/exams/${eid}/submits`);
   };
 
-  // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
+  // 페이지 접근 권한 설정
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (userInfo.isAuth && OPERATOR_ROLES.includes(userInfo.role)) {
-        setIsLoading(false);
-        return;
+      if (submitInfo) {
+        const isOperator = OPERATOR_ROLES.includes(userInfo.role);
+        const isContestant = submitInfo.parentId.students.some(
+          (contestant_id) => contestant_id === userInfo._id,
+        );
+
+        if (isOperator || isContestant) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
       }
-
-      alert('접근 권한이 없습니다.');
-      router.back();
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, submitInfo, router]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isPending) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
@@ -72,23 +103,8 @@ export default function UsersExamSubmit(props: DefaultProps) {
           <MarkdownPreview
             className="markdown-preview"
             source={`
-\`\`\`cpp
-#include <iostream>
-
-using namespace std;
-
-int main(int argc, const char* argv[]) {
-  ios_base::sync_with_stdio(false);
-  cin.tie(0);
-
-  int a, b;
-  cin >> a >> b;
-  cout << a + b;
-
-  return 0;
-}
-\`\`\`
-`}
+\`\`\`${getLanguageCode(submitInfo.language)}
+${submitInfo.code}`}
           />
         </div>
 
@@ -129,21 +145,33 @@ int main(int argc, const char* argv[]) {
                     scope="row"
                     className="py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    23년 1학기말 코딩 테스트
+                    {submitInfo.parentId.title}
                   </th>
-                  <td className="">A+B</td>
-                  <td className="">홍길동</td>
-                  <td className="text-[#0076C0] font-semibold">정답</td>
+                  <td className="">{submitInfo.problem.title}</td>
+                  <td className="">{submitInfo.user.name}</td>
+                  <td
+                    className={`${
+                      submitInfo.result.type === 'done'
+                        ? 'text-[#0076C0]'
+                        : 'text-red-500'
+                    } font-semibold`}
+                  >
+                    {getCodeSubmitResultTypeDescription(submitInfo.result.type)}
+                  </td>
                   <td>
-                    <span>1527 </span>
+                    <span>
+                      {(submitInfo.result.memory / 1048576).toFixed(2)}{' '}
+                    </span>
                     <span className="ml-[-1px] text-red-500">KB</span>
                   </td>
                   <td className="">
-                    <span>64 </span>{' '}
+                    <span>{submitInfo.result.time} </span>{' '}
                     <span className="ml-[-1px] text-red-500">ms</span>
                   </td>
-                  <td className="">C++17</td>
-                  <td className="">2023.09.26 07:00:00</td>
+                  <td className="">{submitInfo.language}</td>
+                  <td className="">
+                    {formatDateToYYMMDDHHMMSS(submitInfo.createdAt)}
+                  </td>
                 </tr>
               </tbody>
             </table>
