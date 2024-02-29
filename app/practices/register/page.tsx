@@ -89,6 +89,7 @@ export default function RegisterPractice() {
   const handleRegisterPractice = () => {
     if (!title) {
       alert('문제명을 입력해 주세요');
+      window.scrollTo(0, 0);
       practiceNameRef.current?.focus();
       setIsTitleValidFail(true);
       return;
@@ -96,6 +97,7 @@ export default function RegisterPractice() {
 
     if (!maxExeTime || maxExeTime <= 0) {
       alert('최대 실행 시간을 올바르게 입력해 주세요');
+      window.scrollTo(0, 0);
       maxExeTimeRef.current?.focus();
       setIsMaxExeTimeValidFail(true);
       return;
@@ -103,6 +105,7 @@ export default function RegisterPractice() {
 
     if (!maxMemCap || maxMemCap <= 0) {
       alert('최대 메모리 사용량을 올바르게 입력해 주세요');
+      window.scrollTo(0, 0);
       maxMemCapRef.current?.focus();
       setIsMaxMemCapValidFail(true);
       return;
@@ -110,6 +113,7 @@ export default function RegisterPractice() {
 
     if (!uploadedProblemPdfFileUrl) {
       alert('문제 파일(PDF)을 업로드해 주세요');
+      window.scrollTo(0, 0);
       return;
     }
 
@@ -119,7 +123,7 @@ export default function RegisterPractice() {
     }
 
     const practiceData = {
-      title: title,
+      title,
       content: uploadedProblemPdfFileUrl,
       published: null,
       ioSet: ioSetData,
