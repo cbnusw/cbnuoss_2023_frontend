@@ -26,21 +26,13 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 400:
-          const url = error.request.responseURL;
-          const regex =
-            /https:\/\/swjudgeapi\.cbnu\.ac\.kr\/v1\/(.*?)\/[0-9a-fA-F]{24}\/problems/;
-          const category = url.match(regex);
           switch (error.response.data.code) {
             case 'IS_NOT_CONTESTANT':
-              if (category[1] === 'contest') alert('대회 참가자가 아닙니다.');
-              else if (category[1] === 'assignment')
-                alert('시험 신청자가 아닙니다.');
+              alert('대상자가 아닙니다.');
               if (typeof window !== 'undefined') window.history.back();
               return;
             case 'IS_NOT_TEST_PERIOD':
-              if (category[1] === 'contest') alert('대회 시간이 아닙니다.');
-              else if (category[1] === 'assignment')
-                alert('시험 시간이 아닙니다.');
+              alert('진행 시간이 아닙니다.');
               if (typeof window !== 'undefined') window.history.back();
               return;
           }
