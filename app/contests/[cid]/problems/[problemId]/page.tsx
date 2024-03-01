@@ -158,7 +158,7 @@ export default function ContestProblem(props: DefaultProps) {
   useEffect(() => {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (contestProblemInfo) {
+      if (contestInfo && contestProblemInfo) {
         const isWriter = contestProblemInfo.writer._id === userInfo._id;
         const isContestant = contestInfo.contestants.some(
           (contestant) => contestant._id === userInfo._id,
@@ -200,7 +200,7 @@ export default function ContestProblem(props: DefaultProps) {
         router.back();
       }
     });
-  }, [updateUserInfo, contestProblemInfo, cid, router]);
+  }, [updateUserInfo, contestInfo, contestProblemInfo, cid, router]);
 
   if (isLoading || !isPasswordChecked) return <Loading />;
 
@@ -228,7 +228,7 @@ export default function ContestProblem(props: DefaultProps) {
                 시간 제한:
                 <span className="font-mono font-light">
                   {' '}
-                  <span>{contestProblemInfo.options.maxRealTime}</span>초
+                  <span>{contestProblemInfo.options.maxRealTime / 1000}</span>초
                 </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
