@@ -119,6 +119,7 @@ export default function RegisterPractice() {
 
     if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
