@@ -144,7 +144,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
       return;
     }
 
-    if (!score) {
+    if (!score || score <= 0) {
       alert('문제 점수를 입력해 주세요');
       window.scrollTo(0, 0);
       scoreRef.current?.focus();
@@ -160,6 +160,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
 
     if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
+      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
