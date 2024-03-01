@@ -94,6 +94,12 @@ export default function EditPractice(props: DefaultProps) {
     setIsInAndOutFileUploadingValidFail,
   ] = useState(false);
 
+  const practiceNameRef = useRef<HTMLInputElement>(null);
+  const maxExeTimeRef = useRef<HTMLInputElement>(null);
+  const maxMemCapRef = useRef<HTMLInputElement>(null);
+
+  const router = useRouter();
+
   useEffect(() => {
     if (practiceInfo) {
       setTitle(practiceInfo.title);
@@ -107,12 +113,6 @@ export default function EditPractice(props: DefaultProps) {
   useEffect(() => {
     if (ioSetData.length !== 0) setIsIoSetDataEmpty(false);
   }, [ioSetData]);
-
-  const practiceNameRef = useRef<HTMLInputElement>(null);
-  const maxExeTimeRef = useRef<HTMLInputElement>(null);
-  const maxMemCapRef = useRef<HTMLInputElement>(null);
-
-  const router = useRouter();
 
   const handlePracticeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -205,7 +205,7 @@ export default function EditPractice(props: DefaultProps) {
     });
   }, [updateUserInfo, practiceInfo, router]);
 
-  if (isLoading || isPending) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

@@ -4,11 +4,39 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { IoSetItem } from '@/app/types/problem';
+import {
+  IoSetItem,
+  ProblemInfo,
+  RegisterProblemParams,
+} from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 문제 정보 조회 API
+const fetchContestProblemDetailInfo = ({ queryKey }: any) => {
+  const problemId = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
+  );
+};
+
+// 대회 문제 수정 API
+const editContestProblem = ({
+  problemId,
+  params,
+}: {
+  problemId: string;
+  params: RegisterProblemParams;
+}) => {
+  return axiosInstance.put(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
+    params,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -18,28 +46,42 @@ interface DefaultProps {
 }
 
 export default function EditContestProblem(props: DefaultProps) {
-  const problemInfo = {
-    title: '2023년 제2회 충청북도 대학생 프로그래밍 경진대회 본선',
-    maxExeTime: 1000,
-    maxMemCap: 5,
-    score: 1,
-    problemPdfFileUrl: 'http://localhost:3000/pdfs/test.pdf',
-    problemInAndOutFileUrls: [
-      'http://localhost:3000/in_and_out/1.in',
-      'http://localhost:3000/in_and_out/1.out',
-      'http://localhost:3000/in_and_out/2.in',
-      'http://localhost:3000/in_and_out/2.out',
-      'http://localhost:3000/in_and_out/3.in',
-      'http://localhost:3000/in_and_out/3.out',
-    ],
-  };
+  const cid = props.params.cid;
+  const problemId = props.params.problemId;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['contestProblemDetailInfo', problemId],
+    queryFn: fetchContestProblemDetailInfo,
+    retry: 0,
+  });
+
+  const editContestProblemeMutation = useMutation({
+    mutationFn: editContestProblem,
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('문제 내용이 수정되었습니다.');
+          router.push(`/contests/${cid}/problems/${problemId}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
+  const resData = data?.data.data;
+  const contestProblemInfo: ProblemInfo = resData;
+
   const [isLoading, setIsLoading] = useState(true);
-  const [title, setTitle] = useState(problemInfo.title);
-  const [maxExeTime, setMaxExeTime] = useState<number>(problemInfo.maxExeTime);
-  const [maxMemCap, setMaxMemCap] = useState<number>(problemInfo.maxMemCap);
+  const [title, setTitle] = useState('');
+  const [maxExeTime, setMaxExeTime] = useState<number>();
+  const [maxMemCap, setMaxMemCap] = useState<number>();
+  const [score, setScore] = useState<number>(1);
   const [uploadedProblemPdfFileUrl, setUploadedProblemPdfFileUrl] =
     useState('');
   const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
@@ -48,6 +90,7 @@ export default function EditContestProblem(props: DefaultProps) {
   const [isTitleValidFail, setIsTitleValidFaild] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
   const [isMaxMemCapValidFail, setIsMaxMemCapValidFail] = useState(false);
+  const [isScoreValidFail, setIsScoreCapValidFail] = useState(false);
   const [isPdfFileUploadingValidFail, setIsPdfFileUploadingValidFail] =
     useState(false);
   const [
@@ -60,10 +103,22 @@ export default function EditContestProblem(props: DefaultProps) {
   const maxMemCapRef = useRef<HTMLInputElement>(null);
   const scoreRef = useRef<HTMLInputElement>(null);
 
-  const cid = props.params.cid;
-  const problemId = props.params.problemId;
-
   const router = useRouter();
+
+  useEffect(() => {
+    if (contestProblemInfo) {
+      setTitle(contestProblemInfo.title);
+      setMaxExeTime(contestProblemInfo.options.maxRealTime);
+      setMaxMemCap(contestProblemInfo.options.maxMemory);
+      setScore(contestProblemInfo.score);
+      setUploadedProblemPdfFileUrl(contestProblemInfo.content);
+      setIoSetData(contestProblemInfo.ioSet);
+    }
+  }, [contestProblemInfo]);
+
+  useEffect(() => {
+    if (ioSetData.length !== 0) setIsIoSetDataEmpty(false);
+  }, [ioSetData]);
 
   const handleProblemNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -78,6 +133,11 @@ export default function EditContestProblem(props: DefaultProps) {
   const handleMaxMemCapChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxMemCap(parseInt(e.target.value));
     setIsMaxMemCapValidFail(false);
+  };
+
+  const handleScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setScore(parseInt(e.target.value));
+    setIsScoreCapValidFail(false);
   };
 
   const handleCancelContestEdit = () => {
@@ -112,6 +172,14 @@ export default function EditContestProblem(props: DefaultProps) {
       return;
     }
 
+    if (!score || score <= 0) {
+      alert('문제 점수를 입력해 주세요');
+      window.scrollTo(0, 0);
+      scoreRef.current?.focus();
+      setIsScoreCapValidFail(true);
+      return;
+    }
+
     if (!uploadedProblemPdfFileUrl) {
       alert('문제 파일(PDF)을 업로드해 주세요');
       window.scrollTo(0, 0);
@@ -124,10 +192,24 @@ export default function EditContestProblem(props: DefaultProps) {
       return;
     }
 
-    alert('수정 기능 개발 예정');
+    const contestProblemData = {
+      title,
+      content: uploadedProblemPdfFileUrl,
+      published: null,
+      ioSet: ioSetData,
+      options: {
+        maxRealTime: maxExeTime,
+        maxMemory: maxMemCap,
+      },
+      score,
+      parentType: 'Contest',
+      parentId: cid,
+    };
 
-    // console.log('PDF: ', uploadedProblemPdfFileUrl);
-    // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
+    editContestProblemeMutation.mutate({
+      problemId,
+      params: contestProblemData,
+    });
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
@@ -260,20 +342,58 @@ export default function EditContestProblem(props: DefaultProps) {
                   테스트 당 최대 사용 메모리를 MB 단위로 입력해 주세요
                 </p>
               </div>
+
+              <div className="flex flex-col relative z-0 w-1/3 group">
+                <input
+                  type="number"
+                  name="floating_first_name"
+                  className={`block pt-3 pb-[0.175rem] pl-0 pr-0 w-full font-normal text-gray-900 bg-transparent border-0 border-b border-gray-400 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-${
+                    isScoreValidFail ? 'pink' : 'blue'
+                  }-500 focus:border-${
+                    isScoreValidFail ? 'red' : 'blue'
+                  }-500 focus:outline-none focus:ring-0 peer`}
+                  placeholder=" "
+                  required
+                  value={score}
+                  ref={scoreRef}
+                  onChange={handleScoreChange}
+                />
+                <label
+                  htmlFor="floating_first_name"
+                  className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
+                    isScoreValidFail ? 'red' : 'gray'
+                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                    isScoreValidFail ? 'red' : 'blue'
+                  }-600 peer-focus:dark:text-${
+                    isScoreValidFail ? 'red' : 'blue'
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                >
+                  점수
+                </label>
+                <p
+                  className={`text-${
+                    isScoreValidFail ? 'red' : 'gray'
+                  }-500 text-xs tracking-widest font-light mt-1`}
+                >
+                  문제의 점수를 입력해 주세요
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-lg">문제 파일</p>
-            <MyDropzone
-              type="pdf"
-              guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
-              setIsFileUploaded={setIsPdfFileUploadingValidFail}
-              isFileUploaded={isPdfFileUploadingValidFail}
-              initPdfUrl={uploadedProblemPdfFileUrl}
-              initInAndOutFiles={[]}
-              setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
-              setIoSetData={setIoSetData}
-            />
+            {uploadedProblemPdfFileUrl && (
+              <MyDropzone
+                type="pdf"
+                guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
+                setIsFileUploaded={setIsPdfFileUploadingValidFail}
+                isFileUploaded={isPdfFileUploadingValidFail}
+                initPdfUrl={uploadedProblemPdfFileUrl}
+                initInAndOutFiles={[]}
+                setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
+                setIoSetData={setIoSetData}
+              />
+            )}
           </div>
 
           <div className="flex flex-col gap-1 mt-9">
@@ -298,16 +418,18 @@ export default function EditContestProblem(props: DefaultProps) {
                   하나의 입/출력 세트로 묶입니다.
                 </p>
               </div>
-              <MyDropzone
-                type="inOut"
-                guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
-                setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
-                isFileUploaded={isInAndOutFileUploadingValidFail}
-                initPdfUrl={''}
-                initInAndOutFiles={ioSetData}
-                setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
-                setIoSetData={setIoSetData}
-              />
+              {!isIoSetDataEmpty && (
+                <MyDropzone
+                  type="inOut"
+                  guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
+                  setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
+                  isFileUploaded={isInAndOutFileUploadingValidFail}
+                  initPdfUrl={''}
+                  initInAndOutFiles={ioSetData}
+                  setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
+                  setIoSetData={setIoSetData}
+                />
+              )}
             </div>
           </div>
         </div>
