@@ -5,9 +5,11 @@ import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { ProblemInfo } from '@/app/types/problem';
 import axiosInstance from '@/app/utils/axiosInstance';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -61,9 +63,12 @@ export default function PracticeProblem(props: DefaultProps) {
   });
 
   const userInfo = userInfoStore((state: any) => state.userInfo);
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const resData = data?.data.data;
   const practiceInfo: ProblemInfo = resData;
+
+  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
@@ -92,7 +97,16 @@ export default function PracticeProblem(props: DefaultProps) {
     deletePracticeMutation.mutate(pid);
   };
 
-  if (isPending) return <Loading />;
+  // (로그인 한) 사용자 정보 조회
+  useEffect(() => {
+    fetchCurrentUserInfo(updateUserInfo).then((userInfo) => {
+      if (practiceInfo) {
+        if (userInfo.isAuth) setIsLoading(false);
+      }
+    });
+  }, [updateUserInfo, practiceInfo]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
