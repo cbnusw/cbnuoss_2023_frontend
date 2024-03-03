@@ -43,6 +43,13 @@ const fetchContestDetailInfo = ({ queryKey }: any) => {
   );
 };
 
+// 대회 문제 삭제 API
+const deleteContestProblem = (problemId: string) => {
+  return axiosInstance.delete(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
+  );
+};
+
 interface DefaultProps {
   params: {
     cid: string;
@@ -106,6 +113,23 @@ export default function ContestProblem(props: DefaultProps) {
     ],
   });
 
+  const deleteContestMutation = useMutation({
+    mutationFn: deleteContestProblem,
+    onSuccess: (data) => {
+      const resData = data.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('문제가 삭제되었습니다.');
+          router.push(`/contests/${cid}/problems`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
+
   const contestInfo: ContestInfo = results[0].data?.data.data;
   const contestProblemInfo: ProblemInfo = results[1].data?.data.data;
 
@@ -114,6 +138,9 @@ export default function ContestProblem(props: DefaultProps) {
 
   const [isLoading, setIsLoading] = useState(true);
   const [isEnrollContest, setIsEnrollContest] = useState(false);
+
+  const currentTime = new Date();
+  const contestEndTime = new Date(contestInfo?.testPeriod.end);
 
   const router = useRouter();
 
@@ -136,8 +163,8 @@ export default function ContestProblem(props: DefaultProps) {
   const handleDeleteProblem = () => {
     const userResponse = confirm('문제를 삭제하시겠습니까?');
     if (!userResponse) return;
-    alert('문제를 삭제하였습니다.');
-    router.push(`/contests/${cid}/problems`);
+
+    deleteContestMutation.mutate(problemId);
   };
 
   // 대회 신청 여부 확인
@@ -267,7 +294,7 @@ export default function ContestProblem(props: DefaultProps) {
             </svg>
             문제 목록
           </button>
-          {isUserContestant() && (
+          {isEnrollContest && (
             <>
               <button
                 onClick={handleGoToUserContestSubmits}
@@ -293,40 +320,41 @@ export default function ContestProblem(props: DefaultProps) {
             </>
           )}
 
-          {userInfo._id === contestInfo.writer._id && (
-            <>
-              <button
-                onClick={handleEditProblem}
-                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#dc9429] hover:bg-[#dc9429]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
+          {currentTime < contestEndTime &&
+            userInfo._id === contestInfo.writer._id && (
+              <>
+                <button
+                  onClick={handleEditProblem}
+                  className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#dc9429] hover:bg-[#dc9429]"
                 >
-                  <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-                </svg>
-                문제 수정
-              </button>
-              <button
-                onClick={handleDeleteProblem}
-                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#e14343] hover:bg-[#e14343]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                    fill="white"
+                  >
+                    <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
+                  </svg>
+                  문제 수정
+                </button>
+                <button
+                  onClick={handleDeleteProblem}
+                  className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#e14343] hover:bg-[#e14343]"
                 >
-                  <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-                </svg>
-                문제 삭제
-              </button>
-            </>
-          )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                    fill="white"
+                  >
+                    <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
+                  </svg>
+                  문제 삭제
+                </button>
+              </>
+            )}
         </div>
 
         <div className="gap-5 border-b mt-8 mb-4 pb-5">
