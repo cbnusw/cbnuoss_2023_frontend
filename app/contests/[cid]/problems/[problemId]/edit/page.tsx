@@ -1,9 +1,9 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
-import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { ContestInfo } from '@/app/types/contest';
 import {
   IoSetItem,
   ProblemInfo,
@@ -12,7 +12,7 @@ import {
 import { UserInfo } from '@/app/types/user';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQueries } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -21,6 +21,14 @@ const fetchContestProblemDetailInfo = ({ queryKey }: any) => {
   const problemId = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
+  );
+};
+
+// 대회 게시글 정보 조회 API
+const fetchContestDetailInfo = ({ queryKey }: any) => {
+  const cid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
   );
 };
 
@@ -49,10 +57,17 @@ export default function EditContestProblem(props: DefaultProps) {
   const cid = props.params.cid;
   const problemId = props.params.problemId;
 
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: ['contestProblemDetailInfo', problemId],
-    queryFn: fetchContestProblemDetailInfo,
-    retry: 0,
+  const results = useQueries({
+    queries: [
+      {
+        queryKey: ['contestDetailInfo', cid],
+        queryFn: fetchContestDetailInfo,
+      },
+      {
+        queryKey: ['contestProblemDetailInfo', problemId],
+        queryFn: fetchContestProblemDetailInfo,
+      },
+    ],
   });
 
   const editContestProblemeMutation = useMutation({
@@ -74,8 +89,8 @@ export default function EditContestProblem(props: DefaultProps) {
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
-  const resData = data?.data.data;
-  const contestProblemInfo: ProblemInfo = resData;
+  const contestInfo: ContestInfo = results[0].data?.data.data;
+  const contestProblemInfo: ProblemInfo = results[1].data?.data.data;
 
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState('');
@@ -102,6 +117,9 @@ export default function EditContestProblem(props: DefaultProps) {
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
   const scoreRef = useRef<HTMLInputElement>(null);
+
+  const currentTime = new Date();
+  const contestEndTime = new Date(contestInfo?.testPeriod.end);
 
   const router = useRouter();
 
@@ -215,15 +233,19 @@ export default function EditContestProblem(props: DefaultProps) {
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (userInfo.isAuth && OPERATOR_ROLES.includes(userInfo.role)) {
-        setIsLoading(false);
-        return;
-      }
+      if (contestInfo) {
+        const isWriter = contestInfo.writer._id === userInfo._id;
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+        if (isWriter && currentTime < contestEndTime) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, contestInfo, router]);
 
   if (isLoading) return <Loading />;
 
