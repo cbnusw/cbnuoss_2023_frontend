@@ -222,7 +222,7 @@ export default function ContestProblems(props: DefaultProps) {
       return 'text-blue-500';
     } else if (
       currentTime >= contestStartTime &&
-      currentTime <= contestEndTime
+      currentTime < contestEndTime
     ) {
       // 대회 진행 중
       return 'text-red-500';
@@ -252,7 +252,7 @@ export default function ContestProblems(props: DefaultProps) {
       );
     } else if (
       currentTime >= contestStartTime &&
-      currentTime <= contestEndTime
+      currentTime < contestEndTime
     ) {
       // 대회 진행 중: 대회 종료까지 남은 시간 표시
       return (

@@ -136,7 +136,7 @@ export default function ExamProblems(props: DefaultProps) {
     if (currentTime < examStartTime) {
       // 시험 시작 전
       return 'text-blue-500';
-    } else if (currentTime >= examStartTime && currentTime <= examEndTime) {
+    } else if (currentTime >= examStartTime && currentTime < examEndTime) {
       // 시험 진행 중
       return 'text-red-500';
     }
@@ -163,7 +163,7 @@ export default function ExamProblems(props: DefaultProps) {
             `(${timeUntilStart.seconds}초 남음)`}
         </span>
       );
-    } else if (currentTime >= examStartTime && currentTime <= examEndTime) {
+    } else if (currentTime >= examStartTime && currentTime < examEndTime) {
       // 시험 진행 중: 시험 종료까지 남은 시간 표시
       return (
         <span className={`font-semibold ${getTimeDisplayClass()}`}>
