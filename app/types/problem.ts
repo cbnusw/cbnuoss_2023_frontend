@@ -1,5 +1,25 @@
 export interface ProblemInfo {
-  parentId: null | string;
+  parentId: {
+    isPassword: boolean;
+    problems: string[];
+    applyingPeriod: null;
+    contestants: string[];
+    students: string[];
+    _id: string;
+    title: string;
+    content: string;
+    testPeriod: {
+      start: string;
+      end: string;
+    };
+    writer: {
+      _id: string;
+      name: string;
+    };
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+  };
   parentType: string;
   published: null | boolean;
   score: number;
@@ -12,8 +32,20 @@ export interface ProblemInfo {
     maxMemory: number;
   };
   writer: {
+    center: null;
+    permissions: string[];
     _id: string;
+    no: string;
     name: string;
+    email: string;
+    phone: string;
+    department: string;
+    university: string;
+    position: null;
+    role: string;
+    joinedAt: string;
+    updatedAt: string;
+    __v: number;
   };
   createdAt: string; // Date 타입으로 변환할 수도 있습니다.
   updatedAt: string; // Date 타입으로 변환할 수도 있습니다.
