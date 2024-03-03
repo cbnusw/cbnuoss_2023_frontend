@@ -331,7 +331,8 @@ export default function ContestProblems(props: DefaultProps) {
                     대회 순위
                   </button>
                   {OPERATOR_ROLES.includes(userInfo.role) &&
-                    userInfo._id === contestProblemsInfo.writer._id && (
+                    userInfo._id === contestProblemsInfo.writer._id &&
+                    currentTime < contestEndTime && (
                       <button
                         onClick={handleRegisterContestProblem}
                         className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
@@ -352,7 +353,8 @@ export default function ContestProblems(props: DefaultProps) {
               )}
 
               {OPERATOR_ROLES.includes(userInfo.role) &&
-                userInfo._id === contestProblemsInfo.writer._id && (
+                userInfo._id === contestProblemsInfo.writer._id &&
+                currentTime < contestEndTime && (
                   <button
                     onClick={handleChangeProblemOrder}
                     ref={changingProblemOrderBtnRef}
