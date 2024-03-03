@@ -90,6 +90,9 @@ export default function RegisterContestProblem(props: DefaultProps) {
   const maxMemCapRef = useRef<HTMLInputElement>(null);
   const scoreRef = useRef<HTMLInputElement>(null);
 
+  const currentTime = new Date();
+  const contestEndTime = new Date(contestInfo?.testPeriod.end);
+
   const router = useRouter();
 
   const handleProblemNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,7 +190,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
       if (contestInfo) {
         const isWriter = contestInfo.writer._id === userInfo._id;
 
-        if (isWriter) {
+        if (isWriter && currentTime < contestEndTime) {
           setIsLoading(false);
           return;
         }
