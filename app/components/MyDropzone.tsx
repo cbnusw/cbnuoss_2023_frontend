@@ -9,9 +9,9 @@ interface MyDropzoneProps {
   guideMsg: string;
   setIsFileUploaded: (isUploaded: boolean) => void;
   isFileUploaded: boolean;
-  initPdfUrl: string;
-  initInAndOutFiles: IoSetItem[];
-  setUploadedPdfFileUrl?: (url: string) => void; // PDF 파일 URL 업데이트 함수
+  initUrl?: string;
+  initInAndOutFiles?: IoSetItem[];
+  setUploadedFileUrl?: (url: string) => void;
   setIoSetData?: (
     ioSetData: IoSetItem[] | ((prevIoSetData: IoSetItem[]) => IoSetItem[]),
   ) => void;
@@ -27,9 +27,9 @@ function MyDropzone(props: MyDropzoneProps) {
     guideMsg,
     setIsFileUploaded,
     isFileUploaded,
-    initPdfUrl,
+    initUrl,
     initInAndOutFiles,
-    setUploadedPdfFileUrl,
+    setUploadedFileUrl,
     setIoSetData,
   } = props;
 
@@ -100,7 +100,8 @@ function MyDropzone(props: MyDropzoneProps) {
             .then((response) => {
               const newFile = response.data; // 서버로부터 받은 파일 정보
               setFileList([newFile]);
-              if (type === 'pdf') setUploadedPdfFileUrl?.(newFile.url);
+              if (type === 'pdf' || type === 'code')
+                setUploadedFileUrl?.(newFile.url);
               setFileNameList([newFile.filename]);
               setIsFileUploaded(true);
             })
@@ -110,13 +111,7 @@ function MyDropzone(props: MyDropzoneProps) {
         });
       }
     },
-    [
-      uploadService,
-      type,
-      setIsFileUploaded,
-      setUploadedPdfFileUrl,
-      setIoSetData,
-    ],
+    [uploadService, type, setIsFileUploaded, setUploadedFileUrl, setIoSetData],
   );
 
   useEffect(() => {
@@ -200,13 +195,13 @@ function MyDropzone(props: MyDropzoneProps) {
 
   useEffect(() => {
     if (!isInitialized) {
-      if (type === 'pdf' && initPdfUrl) {
+      if (type === 'pdf' && initUrl) {
         // PDF 파일 초기화 로직
         const newFile = {
           ref: null,
           refModel: null,
           _id: '',
-          url: initPdfUrl,
+          url: initUrl,
           filename: '',
           mimetype: '',
           size: 0,
@@ -216,7 +211,11 @@ function MyDropzone(props: MyDropzoneProps) {
         };
         setFileList([newFile]);
         setIsFileUploaded(true);
-      } else if (type === 'inOut' && initInAndOutFiles.length > 0) {
+      } else if (
+        type === 'inOut' &&
+        initInAndOutFiles &&
+        initInAndOutFiles.length > 0
+      ) {
         // In/Out 파일 초기화 로직
         const files: UploadedFileInfo[] = initInAndOutFiles.reduce(
           (acc: UploadedFileInfo[], ioSetItem: IoSetItem) => {
@@ -232,7 +231,7 @@ function MyDropzone(props: MyDropzoneProps) {
       }
       setIsInitialized(true);
     }
-  }, [type, initPdfUrl, initInAndOutFiles, isInitialized, setIsFileUploaded]);
+  }, [type, initUrl, initInAndOutFiles, isInitialized, setIsFileUploaded]);
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-full">
