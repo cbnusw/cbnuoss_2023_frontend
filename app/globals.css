@@ -132,6 +132,10 @@
 }
 
 /* uiw markdown(Preview) CSS */
+.code-highlight {
+  padding-bottom: 1.75rem !important;
+}
+
 .markdown-preview {
   letter-spacing: 0.04rem;
 }
