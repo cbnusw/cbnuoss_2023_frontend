@@ -268,10 +268,8 @@ export default function EditExamProblem(props: DefaultProps) {
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsProblemFileUploadingValidFail}
               isFileUploaded={isProblemFileUploadingValidFail}
-              initPdfUrl={problemInfo.problemPdfFileUrl}
-              initInAndOutFiles={[]}
-              setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-              setIoSetData={setIoSetData}
+              initUrl={problemInfo.problemPdfFileUrl}
+              setUploadedFileUrl={setUploadedPdfFileUrl}
             />
           </div>
 
@@ -302,9 +300,7 @@ export default function EditExamProblem(props: DefaultProps) {
                 guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
-                initPdfUrl={''}
                 initInAndOutFiles={ioSetData}
-                setUploadedPdfFileUrl={setUploadedPdfFileUrl}
                 setIoSetData={setIoSetData}
               />
             </div>

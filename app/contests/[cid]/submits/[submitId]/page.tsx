@@ -161,7 +161,7 @@ ${submitInfo.code}`}
                     <span>
                       {(submitInfo.result.memory / 1048576).toFixed(2)}{' '}
                     </span>
-                    <span className="ml-[-1px] text-red-500">KB</span>
+                    <span className="ml-[-1px] text-red-500">MB</span>
                   </td>
                   <td className="">
                     <span>{submitInfo.result.time} </span>{' '}

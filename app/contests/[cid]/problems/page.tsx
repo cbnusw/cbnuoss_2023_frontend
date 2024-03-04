@@ -133,7 +133,6 @@ export default function ContestProblems(props: DefaultProps) {
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [title, setTitle] = useState('');
   const [problemsInfo, setProblemsInfo] = useState<ProblemInfo[]>([]);
 
   const timeUntilStart = useCountdownTimer(
@@ -155,7 +154,6 @@ export default function ContestProblems(props: DefaultProps) {
 
   useEffect(() => {
     if (contestProblemsInfo) {
-      setTitle(contestProblemsInfo.title);
       setProblemsInfo(contestProblemsInfo.problems);
     }
   }, [contestProblemsInfo]);
@@ -169,7 +167,7 @@ export default function ContestProblems(props: DefaultProps) {
           (contestant_id) => contestant_id === userInfo._id,
         );
 
-        if (isContestant) {
+        if (isContestant && currentTime < contestEndTime) {
           setIsLoading(false);
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
@@ -306,7 +304,7 @@ export default function ContestProblems(props: DefaultProps) {
                 href={`/contests/${cid}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
-                (대회: {title})
+                (대회: {contestProblemsInfo.title})
               </Link>
             </div>
           </p>

@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import NoneContestProblemListItem from './NoneContestProblemListItem';
 import {
   DragDropContext,
@@ -9,7 +8,6 @@ import {
   Droppable,
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/navigation';
-import Loading from '@/app/loading';
 import { ProblemInfo } from '@/app/types/problem';
 
 interface ContestProblemListProps {

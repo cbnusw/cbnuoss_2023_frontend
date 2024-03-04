@@ -71,3 +71,11 @@ export interface SubmitInfo {
   __v: number;
   code: string;
 }
+
+export interface SubmitCode {
+  parentId: string;
+  parentType: string;
+  problem: string;
+  source: string;
+  language: string;
+}

@@ -2,12 +2,11 @@
 
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { ContestInfo } from '@/app/types/contest';
 import { ProblemInfo } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
-import { useMutation, useQueries } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
@@ -32,14 +31,6 @@ const fetchContestProblemDetailInfo = ({ queryKey }: any) => {
   const problemId = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
-  );
-};
-
-// 대회 게시글 정보 조회 API
-const fetchContestDetailInfo = ({ queryKey }: any) => {
-  const cid = queryKey[1];
-  return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
   );
 };
 
@@ -100,17 +91,10 @@ export default function ContestProblem(props: DefaultProps) {
     },
   });
 
-  const results = useQueries({
-    queries: [
-      {
-        queryKey: ['contestDetailInfo', cid],
-        queryFn: fetchContestDetailInfo,
-      },
-      {
-        queryKey: ['contestProblemDetailInfo', problemId],
-        queryFn: fetchContestProblemDetailInfo,
-      },
-    ],
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['contestProblemDetailInfo', problemId],
+    queryFn: fetchContestProblemDetailInfo,
+    retry: 0,
   });
 
   const deleteContestMutation = useMutation({
@@ -130,8 +114,8 @@ export default function ContestProblem(props: DefaultProps) {
     },
   });
 
-  const contestInfo: ContestInfo = results[0].data?.data.data;
-  const contestProblemInfo: ProblemInfo = results[1].data?.data.data;
+  const resData = data?.data.data;
+  const contestProblemInfo: ProblemInfo = resData;
 
   const userInfo = userInfoStore((state: any) => state.userInfo);
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
@@ -140,7 +124,7 @@ export default function ContestProblem(props: DefaultProps) {
   const [isEnrollContest, setIsEnrollContest] = useState(false);
 
   const currentTime = new Date();
-  const contestEndTime = new Date(contestInfo?.testPeriod.end);
+  const contestEndTime = new Date(contestProblemInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
 
@@ -169,15 +153,19 @@ export default function ContestProblem(props: DefaultProps) {
 
   // 대회 신청 여부 확인
   const isUserContestant = useCallback(() => {
-    return contestInfo.contestants.some(
-      (contestant) => contestant._id === userInfo._id,
+    return contestProblemInfo.parentId.contestants.some(
+      (contestant_id) => contestant_id === userInfo._id,
     );
-  }, [contestInfo, userInfo]);
+  }, [contestProblemInfo, userInfo]);
 
   useEffect(() => {
-    if (contestInfo && contestInfo.contestants && userInfo)
+    if (
+      contestProblemInfo &&
+      contestProblemInfo.parentId.contestants &&
+      userInfo
+    )
       setIsEnrollContest(isUserContestant());
-  }, [contestInfo, userInfo, isUserContestant]);
+  }, [contestProblemInfo, userInfo, isUserContestant]);
 
   const [password, setPassword] = useState('');
   const [isPasswordChecked, setIsPasswordChecked] = useState(false);
@@ -185,13 +173,13 @@ export default function ContestProblem(props: DefaultProps) {
   useEffect(() => {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (contestInfo && contestProblemInfo) {
+      if (contestProblemInfo) {
         const isWriter = contestProblemInfo.writer._id === userInfo._id;
-        const isContestant = contestInfo.contestants.some(
-          (contestant) => contestant._id === userInfo._id,
+        const isContestant = contestProblemInfo.parentId.contestants.some(
+          (contestant_id) => contestant_id === userInfo._id,
         );
 
-        if (isContestant) {
+        if (isContestant && currentTime < contestEndTime) {
           setIsLoading(false);
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
@@ -227,7 +215,7 @@ export default function ContestProblem(props: DefaultProps) {
         router.back();
       }
     });
-  }, [updateUserInfo, contestInfo, contestProblemInfo, cid, router]);
+  }, [updateUserInfo, contestProblemInfo, cid, router]);
 
   if (isLoading || !isPasswordChecked) return <Loading />;
 
@@ -272,7 +260,10 @@ export default function ContestProblem(props: DefaultProps) {
             </div>
             <div className="flex gap-3">
               <span className="font-semibold">
-                대회: <span className="font-light">{contestInfo.title}</span>
+                대회:{' '}
+                <span className="font-light">
+                  {contestProblemInfo.parentId.title}
+                </span>
               </span>
             </div>
           </div>
@@ -321,7 +312,7 @@ export default function ContestProblem(props: DefaultProps) {
           )}
 
           {currentTime < contestEndTime &&
-            userInfo._id === contestInfo.writer._id && (
+            userInfo._id === contestProblemInfo.writer && (
               <>
                 <button
                   onClick={handleEditProblem}

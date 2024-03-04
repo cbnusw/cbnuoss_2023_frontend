@@ -363,10 +363,8 @@ export default function RegisterContestProblem(props: DefaultProps) {
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsPdfFileUploadingValidFail}
               isFileUploaded={isPdfFileUploadingValidFail}
-              initPdfUrl={''}
-              initInAndOutFiles={[]}
-              setUploadedPdfFileUrl={setUploadedPdfFileUrl}
-              setIoSetData={setIoSetData}
+              initUrl={''}
+              setUploadedFileUrl={setUploadedPdfFileUrl}
             />
           </div>
 
@@ -397,9 +395,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
                 guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
-                initPdfUrl={''}
                 initInAndOutFiles={[]}
-                setUploadedPdfFileUrl={setUploadedPdfFileUrl}
                 setIoSetData={setIoSetData}
               />
             </div>

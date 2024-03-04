@@ -31,7 +31,7 @@ export default function UserExamSubmitListItem({
       <td className="text-[#0076C0] font-semibold">정답</td>
       <td>
         <span>1527 </span>
-        <span className="ml-[-1px] text-red-500">KB</span>
+        <span className="ml-[-1px] text-red-500">MB</span>
       </td>
       <td className="">
         <span>64 </span> <span className="ml-[-1px] text-red-500">ms</span>
