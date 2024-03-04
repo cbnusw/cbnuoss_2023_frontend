@@ -12,7 +12,7 @@ import {
 import { UserInfo } from '@/app/types/user';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
-import { useMutation, useQueries } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -21,14 +21,6 @@ const fetchContestProblemDetailInfo = ({ queryKey }: any) => {
   const problemId = queryKey[1];
   return axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
-  );
-};
-
-// 대회 게시글 정보 조회 API
-const fetchContestDetailInfo = ({ queryKey }: any) => {
-  const cid = queryKey[1];
-  return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/${cid}`,
   );
 };
 
@@ -57,17 +49,10 @@ export default function EditContestProblem(props: DefaultProps) {
   const cid = props.params.cid;
   const problemId = props.params.problemId;
 
-  const results = useQueries({
-    queries: [
-      {
-        queryKey: ['contestDetailInfo', cid],
-        queryFn: fetchContestDetailInfo,
-      },
-      {
-        queryKey: ['contestProblemDetailInfo', problemId],
-        queryFn: fetchContestProblemDetailInfo,
-      },
-    ],
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['contestProblemDetailInfo', problemId],
+    queryFn: fetchContestProblemDetailInfo,
+    retry: 0,
   });
 
   const editContestProblemeMutation = useMutation({
@@ -89,8 +74,8 @@ export default function EditContestProblem(props: DefaultProps) {
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
-  const contestInfo: ContestInfo = results[0].data?.data.data;
-  const contestProblemInfo: ProblemInfo = results[1].data?.data.data;
+  const resData = data?.data.data;
+  const contestProblemInfo: ProblemInfo = resData;
 
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState('');
@@ -119,7 +104,7 @@ export default function EditContestProblem(props: DefaultProps) {
   const scoreRef = useRef<HTMLInputElement>(null);
 
   const currentTime = new Date();
-  const contestEndTime = new Date(contestInfo?.testPeriod.end);
+  const contestEndTime = new Date(contestProblemInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
 
@@ -233,8 +218,9 @@ export default function EditContestProblem(props: DefaultProps) {
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (contestInfo) {
-        const isWriter = contestInfo.writer._id === userInfo._id;
+      if (contestProblemInfo) {
+        const isWriter =
+          contestProblemInfo.parentId.writer._id === userInfo._id;
 
         if (isWriter && currentTime < contestEndTime) {
           setIsLoading(false);
@@ -245,7 +231,7 @@ export default function EditContestProblem(props: DefaultProps) {
         router.back();
       }
     });
-  }, [updateUserInfo, contestInfo, router]);
+  }, [updateUserInfo, contestProblemInfo, router]);
 
   if (isLoading) return <Loading />;
 
@@ -410,10 +396,8 @@ export default function EditContestProblem(props: DefaultProps) {
                 guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
                 setIsFileUploaded={setIsPdfFileUploadingValidFail}
                 isFileUploaded={isPdfFileUploadingValidFail}
-                initPdfUrl={uploadedProblemPdfFileUrl}
-                initInAndOutFiles={[]}
-                setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
-                setIoSetData={setIoSetData}
+                initUrl={uploadedProblemPdfFileUrl}
+                setUploadedFileUrl={setUploadedProblemPdfFileUrl}
               />
             )}
           </div>
@@ -446,9 +430,7 @@ export default function EditContestProblem(props: DefaultProps) {
                   guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
                   setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                   isFileUploaded={isInAndOutFileUploadingValidFail}
-                  initPdfUrl={''}
                   initInAndOutFiles={ioSetData}
-                  setUploadedPdfFileUrl={setUploadedProblemPdfFileUrl}
                   setIoSetData={setIoSetData}
                 />
               )}
