@@ -4,9 +4,38 @@ import MyDropzone from '@/app/components/MyDropzone';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import codeImg from '@/public/images/code.png';
-import { IoSetItem } from '@/app/types/problem';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { SubmitCode } from '@/app/types/submit';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { ProblemInfo } from '@/app/types/problem';
+import { userInfoStore } from '@/app/store/UserInfo';
+import Loading from '@/app/loading';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { UserInfo } from '@/app/types/user';
+
+// 문제 정보 조회 API
+const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
+  const problemId = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
+  );
+};
+
+// 코드 제출 API
+const submitCode = ({
+  problemId,
+  params,
+}: {
+  problemId: string;
+  params: SubmitCode;
+}) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}/submit`,
+    params,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -16,6 +45,38 @@ interface DefaultProps {
 }
 
 export default function SubmitExamProblemCode(props: DefaultProps) {
+  const eid = props.params.eid;
+  const problemId = props.params.problemId;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['examProblemDetailInfo', problemId],
+    queryFn: fetchExamProblemDetailInfo,
+    retry: 0,
+  });
+
+  const submitCodeMutation = useMutation({
+    mutationFn: submitCode,
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('소스코드가 제출되었습니다.');
+          router.push(`/exams/${eid}/problems/${problemId}/submits`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
+
+  const resData = data?.data.data;
+  const examProblemInfo: ProblemInfo = resData;
+
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
   const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
@@ -27,8 +88,9 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
   const [isCodeFileUploadingValidFail, setIsCodeFileUploadingValidFail] =
     useState(false);
 
-  const eid = props.params.eid;
-  const problemId = props.params.eid;
+  const currentTime = new Date();
+  const examStartTime = new Date(examProblemInfo?.parentId.testPeriod.start);
+  const examEndTime = new Date(examProblemInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
 
@@ -57,8 +119,41 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
       return;
     }
 
-    router.push(`/exams/${eid}/problems/${problemId}/submits`);
+    const submitCodeData = {
+      parentId: eid,
+      parentType: 'Assignment',
+      problem: problemId,
+      source: uploadedCodeFileUrl,
+      language: selectedSubmitLanguage.toLowerCase(),
+    };
+
+    submitCodeMutation.mutate({ problemId, params: submitCodeData });
   };
+
+  useEffect(() => {
+    // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
+    fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
+      if (examProblemInfo) {
+        const isContestant = examProblemInfo.parentId.students.some(
+          (student_id) => student_id === userInfo._id,
+        );
+
+        if (
+          isContestant &&
+          examStartTime <= currentTime &&
+          currentTime < examEndTime
+        ) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
+    });
+  }, [updateUserInfo, examProblemInfo, eid, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
@@ -81,7 +176,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 href={`/exams/${eid}/problems/${problemId}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
-                (A+B)
+                ({examProblemInfo.title})
               </Link>
             </div>
           </p>
@@ -91,7 +186,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 시간 제한:
                 <span className="font-mono font-light">
                   {' '}
-                  <span>1</span>초
+                  <span>{examProblemInfo.options.maxRealTime / 1000}</span>초
                 </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
@@ -99,19 +194,23 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 메모리 제한:
                 <span className="font-mono font-light">
                   {' '}
-                  <span className="mr-1">5</span>MB
+                  {examProblemInfo.options.maxMemory}
                 </span>
+                MB
               </span>
             </div>
             <div className="flex gap-3">
               <span className="font-semibold">
-                시험명: <span className="font-light">코딩테스트 1차</span>
+                시험명:{' '}
+                <span className="font-light">
+                  {examProblemInfo.parentId.title}
+                </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
               <span className="font-semibold">
                 수업명:{' '}
                 <span className="font-light">
-                  2023-01-자료구조(소프트웨어학부 01반)
+                  {examProblemInfo.parentId.course}
                 </span>
               </span>
             </div>
@@ -124,10 +223,9 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
               name="languages"
               id="lang"
               className={`text-sm w-full pl-0 py-1 ${
-                selectedSubmitLanguage === '언어 선택 *' &&
                 isSelectedSubmitLanguageValidFail
                   ? 'text-red-500'
-                  : 'text-gray-500'
+                  : selectedSubmitLanguage === '언어 선택 *' && 'text-gray-500'
               }   bg-transparent border-0 border-b border-${
                 isSelectedSubmitLanguageValidFail ? 'red-500' : 'gray-400'
               }  gray-400 appearance-none focus:outline-none focus:ring-0 focus:border-${

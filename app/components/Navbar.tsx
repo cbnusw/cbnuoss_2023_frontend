@@ -16,10 +16,18 @@ const logout = () => {
 export default function Navbar() {
   const logoutMutation = useMutation({
     mutationFn: logout,
+    onSettled: () => {
+      localStorage.removeItem('access-token');
+      localStorage.removeItem('refresh-token');
+      localStorage.removeItem('activeAuthorization');
+      if (typeof window !== 'undefined') window.location.href = '/login';
+      removeUserInfo.mutate();
+    },
   });
 
   const userInfo = userInfoStore((state: any) => state.userInfo);
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+  const removeUserInfo = userInfoStore((state: any) => state.removeUserInfo);
 
   const [rightPos, setRightPos] = useState('-right-full');
 

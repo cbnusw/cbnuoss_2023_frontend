@@ -100,6 +100,9 @@ export default function UserContestSubmits(props: DefaultProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   const currentTime = new Date();
+  const contestStartTime = new Date(
+    contestProblemInfo?.parentId.testPeriod.start,
+  );
   const contestEndTime = new Date(contestProblemInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
@@ -114,7 +117,7 @@ export default function UserContestSubmits(props: DefaultProps) {
 
         if (
           isContestant &&
-          contestEndTime <= currentTime &&
+          contestStartTime <= currentTime &&
           currentTime < contestEndTime
         ) {
           setIsLoading(false);

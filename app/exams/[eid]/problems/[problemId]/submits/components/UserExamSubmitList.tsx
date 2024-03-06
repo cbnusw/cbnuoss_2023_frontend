@@ -4,6 +4,17 @@ import React, { useEffect, useState } from 'react';
 import UserExamSubmitListItem from './UserExamSubmitListItem';
 import NoneUserExamSubmitListItem from './NoneUserExamSubmitListItem';
 import Loading from '@/app/loading';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { useQuery } from '@tanstack/react-query';
+import { ExamSubmitInfo } from '@/app/types/exam';
+
+// 사용자의 코드 제출 정보 목록 정보 조회 API
+const fetchPersonalUserExamSubmitsInfo = ({ queryKey }: any) => {
+  const problemId = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/problem/${problemId}/me`,
+  );
+};
 
 interface ExamSubmitListProps {
   eid: string;
@@ -14,24 +25,67 @@ export default function UserExamSubmitList({
   eid,
   problemId,
 }: ExamSubmitListProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitListEmpty, setIsSumbitListEmpty] = useState(true);
+  const { isPending, data } = useQuery({
+    queryKey: ['personalUserExamSubmitsInfo', problemId],
+    queryFn: fetchPersonalUserExamSubmitsInfo,
+    retry: 0,
+  });
 
-  const numberOfItems = 10;
+  const resData = data?.data.data;
+  const personalUserExamSubmitsInfo: ExamSubmitInfo[] = resData?.documents;
 
-  useEffect(() => {
-    setIsLoading(false);
-    setIsSumbitListEmpty(false);
-  }, []);
-
-  if (isLoading) return <Loading />;
-  if (isSubmitListEmpty) return <NoneUserExamSubmitListItem />;
+  if (isPending) return <Loading />;
 
   return (
-    <tbody>
-      {Array.from({ length: numberOfItems }, (_, idx) => (
-        <UserExamSubmitListItem key={idx} eid={eid} problemId={problemId} />
-      ))}
-    </tbody>
+    <div className="mx-auto w-full">
+      <div className="border dark:bg-gray-800 relative overflow-hidden rounded-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400 text-center">
+              <tr>
+                <th scope="col" className="w-16 px-4 py-2">
+                  번호
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  문제명
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  결과
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  메모리
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  시간
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  언어
+                </th>
+                <th scope="col" className="px-4 py-2">
+                  제출 시간
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {personalUserExamSubmitsInfo?.length === 0 && (
+                <NoneUserExamSubmitListItem />
+              )}
+              {personalUserExamSubmitsInfo.map(
+                (personalUserExamSubmitInfo, idx) => (
+                  <UserExamSubmitListItem
+                    key={idx}
+                    personalUserExamSubmitInfo={personalUserExamSubmitInfo}
+                    total={resData.total}
+                    eid={eid}
+                    problemId={problemId}
+                    index={idx}
+                  />
+                ),
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 }
