@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 // 대회 문제 열람 비밀번호 확인 API
-const confirmContestConfirm = ({
+const confirmContestPassword = ({
   cid,
   password,
 }: {
@@ -55,8 +55,8 @@ export default function UserContestSubmit(props: DefaultProps) {
   const problemId = props.params.problemId;
   const submitId = props.params.submitId;
 
-  const confirmContestConfirmMutation = useMutation({
-    mutationFn: confirmContestConfirm,
+  const confirmContestPasswordMutation = useMutation({
+    mutationFn: confirmContestPassword,
     onError: (error: AxiosError) => {
       const resData: any = error.response?.data;
       switch (resData.status) {
@@ -133,7 +133,7 @@ export default function UserContestSubmit(props: DefaultProps) {
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
             setPassword(contestPasswordCookie);
-            confirmContestConfirmMutation.mutate({
+            confirmContestPasswordMutation.mutate({
               cid,
               password: contestPasswordCookie,
             });
@@ -143,7 +143,7 @@ export default function UserContestSubmit(props: DefaultProps) {
           const inputPassword = prompt('비밀번호를 입력해 주세요');
           if (inputPassword !== null && inputPassword.trim() !== '') {
             setPassword(inputPassword);
-            confirmContestConfirmMutation.mutate({
+            confirmContestPasswordMutation.mutate({
               cid,
               password: inputPassword,
             });

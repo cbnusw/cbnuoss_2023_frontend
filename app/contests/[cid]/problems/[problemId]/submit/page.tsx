@@ -18,7 +18,7 @@ import { UserInfo } from '@/app/types/user';
 import Loading from '@/app/loading';
 
 // 대회 문제 열람 비밀번호 확인 API
-const confirmContestConfirm = ({
+const confirmContestPassword = ({
   cid,
   password,
 }: {
@@ -63,8 +63,8 @@ export default function SubmitContestProblemCode(props: DefaultProps) {
   const cid = props.params.cid;
   const problemId = props.params.problemId;
 
-  const confirmContestConfirmMutation = useMutation({
-    mutationFn: confirmContestConfirm,
+  const confirmContestPasswordMutation = useMutation({
+    mutationFn: confirmContestPassword,
     onError: (error: AxiosError) => {
       const resData: any = error.response?.data;
       switch (resData.status) {
@@ -202,7 +202,7 @@ export default function SubmitContestProblemCode(props: DefaultProps) {
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
             setPassword(contestPasswordCookie);
-            confirmContestConfirmMutation.mutate({
+            confirmContestPasswordMutation.mutate({
               cid,
               password: contestPasswordCookie,
             });
@@ -212,7 +212,7 @@ export default function SubmitContestProblemCode(props: DefaultProps) {
           const inputPassword = prompt('비밀번호를 입력해 주세요');
           if (inputPassword !== null && inputPassword.trim() !== '') {
             setPassword(inputPassword);
-            confirmContestConfirmMutation.mutate({
+            confirmContestPasswordMutation.mutate({
               cid,
               password: inputPassword,
             });
