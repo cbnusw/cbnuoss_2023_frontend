@@ -20,7 +20,7 @@ import { AxiosError } from 'axios';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 
 // 대회 문제 열람 비밀번호 확인 API
-const confirmContestConfirm = ({
+const confirmContestPassword = ({
   cid,
   password,
 }: {
@@ -66,8 +66,8 @@ interface DefaultProps {
 export default function ContestProblems(props: DefaultProps) {
   const cid = props.params.cid;
 
-  const confirmContestConfirmMutation = useMutation({
-    mutationFn: confirmContestConfirm,
+  const confirmContestPasswordMutation = useMutation({
+    mutationFn: confirmContestPassword,
     onError: (error: AxiosError) => {
       const resData: any = error.response?.data;
       switch (resData.status) {
@@ -176,7 +176,7 @@ export default function ContestProblems(props: DefaultProps) {
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
             setPassword(contestPasswordCookie);
-            confirmContestConfirmMutation.mutate({
+            confirmContestPasswordMutation.mutate({
               cid,
               password: contestPasswordCookie,
             });
@@ -186,7 +186,7 @@ export default function ContestProblems(props: DefaultProps) {
           const inputPassword = prompt('비밀번호를 입력해 주세요');
           if (inputPassword !== null && inputPassword.trim() !== '') {
             setPassword(inputPassword);
-            confirmContestConfirmMutation.mutate({
+            confirmContestPasswordMutation.mutate({
               cid,
               password: inputPassword,
             });
