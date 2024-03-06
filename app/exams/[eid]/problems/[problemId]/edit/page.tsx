@@ -1,7 +1,6 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
-import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import {
@@ -101,7 +100,7 @@ export default function EditExamProblem(props: DefaultProps) {
   const maxMemCapRef = useRef<HTMLInputElement>(null);
 
   const currentTime = new Date();
-  const contestEndTime = new Date(examProblemInfo?.parentId.testPeriod.end);
+  const examEndTime = new Date(examProblemInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
 
@@ -203,7 +202,7 @@ export default function EditExamProblem(props: DefaultProps) {
       if (examProblemInfo) {
         const isWriter = examProblemInfo.writer._id === userInfo._id;
 
-        if (isWriter && currentTime < contestEndTime) {
+        if (isWriter && currentTime < examEndTime) {
           setIsLoading(false);
           return;
         }
