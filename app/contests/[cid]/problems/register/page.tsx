@@ -20,7 +20,7 @@ const fetchContestDetailInfo = ({ queryKey }: any) => {
   );
 };
 
-// 대회 문제 등록 API
+// 문제 등록 API
 const registerContestProblem = (params: RegisterProblemParams) => {
   return axiosInstance.post(
     `${process.env.NEXT_PUBLIC_API_VERSION}/problem`,
