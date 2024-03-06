@@ -106,6 +106,7 @@ export default function UserContestSubmit(props: DefaultProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   const currentTime = new Date();
+  const contestStartTime = new Date(submitInfo?.parentId.testPeriod.start);
   const contestEndTime = new Date(submitInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
@@ -123,7 +124,11 @@ export default function UserContestSubmit(props: DefaultProps) {
           (contestant_id) => contestant_id === userInfo._id,
         );
 
-        if (isContestant && currentTime < contestEndTime) {
+        if (
+          isContestant &&
+          contestStartTime <= currentTime &&
+          currentTime < contestEndTime
+        ) {
           setIsLoading(false);
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
