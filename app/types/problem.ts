@@ -81,7 +81,7 @@ export interface RegisterProblemParams {
     maxRealTime: number;
     maxMemory: number;
   };
-  score: number;
+  score?: number;
 }
 
 export interface ProblemsInfo {
