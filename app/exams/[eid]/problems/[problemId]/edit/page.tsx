@@ -4,11 +4,39 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { IoSetItem } from '@/app/types/problem';
+import {
+  IoSetItem,
+  ProblemInfo,
+  RegisterProblemParams,
+} from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 문제 정보 조회 API
+const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
+  const problemId = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
+  );
+};
+
+// 문제 수정 API
+const editExamProblem = ({
+  problemId,
+  params,
+}: {
+  problemId: string;
+  params: RegisterProblemParams;
+}) => {
+  return axiosInstance.put(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem/${problemId}`,
+    params,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -18,37 +46,50 @@ interface DefaultProps {
 }
 
 export default function EditExamProblem(props: DefaultProps) {
-  const problemInfo = {
-    title: '2023-01-자료구조(소프트웨어학부 01반)',
-    maxExeTime: 1000,
-    maxMemCap: 5,
-    score: 1,
-    problemPdfFileUrl: 'http://localhost:3000/pdfs/test.pdf',
-    problemInAndOutFileUrls: [
-      'http://localhost:3000/in_and_out/1.in',
-      'http://localhost:3000/in_and_out/1.out',
-      'http://localhost:3000/in_and_out/2.in',
-      'http://localhost:3000/in_and_out/2.out',
-      'http://localhost:3000/in_and_out/3.in',
-      'http://localhost:3000/in_and_out/3.out',
-    ],
-  };
+  const eid = props.params.eid;
+  const problemId = props.params.problemId;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['examProblemDetailInfo', problemId],
+    queryFn: fetchExamProblemDetailInfo,
+    retry: 0,
+  });
+
+  const editExamProblemeMutation = useMutation({
+    mutationFn: editExamProblem,
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('문제 내용이 수정되었습니다.');
+          router.push(`/exams/${eid}/problems/${problemId}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
+  const resData = data?.data.data;
+  const examProblemInfo: ProblemInfo = resData;
+
   const [isLoading, setIsLoading] = useState(true);
-  const [problemName, setProblemName] = useState(problemInfo.title);
-  const [maxExeTime, setMaxExeTime] = useState<number>(problemInfo.maxExeTime);
-  const [maxMemCap, setMaxMemCap] = useState<number>(problemInfo.maxMemCap);
-  const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState(
-    problemInfo.problemPdfFileUrl,
-  );
+  const [title, setTitle] = useState('');
+  const [maxExeTime, setMaxExeTime] = useState<number>();
+  const [maxMemCap, setMaxMemCap] = useState<number>();
+  const [uploadedProblemPdfFileUrl, setUploadedProblemPdfFileUrl] =
+    useState('');
   const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
+  const [isIoSetDataEmpty, setIsIoSetDataEmpty] = useState<boolean>(true);
 
   const [isProblemNameValidFail, setIsProblemNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
   const [isMaxMemCapValidFail, setIsMaxMemCapValidFail] = useState(false);
-  const [isProblemFileUploadingValidFail, setIsProblemFileUploadingValidFail] =
+  const [isPdfFileUploadingValidFail, setIsPdfFileUploadingValidFail] =
     useState(false);
   const [
     isInAndOutFileUploadingValidFail,
@@ -59,13 +100,27 @@ export default function EditExamProblem(props: DefaultProps) {
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
 
-  const eid = props.params.eid;
-  const problemId = props.params.problemId;
+  const currentTime = new Date();
+  const contestEndTime = new Date(examProblemInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (examProblemInfo) {
+      setTitle(examProblemInfo.title);
+      setMaxExeTime(examProblemInfo.options.maxRealTime);
+      setMaxMemCap(examProblemInfo.options.maxMemory);
+      setUploadedProblemPdfFileUrl(examProblemInfo.content);
+      setIoSetData(examProblemInfo.ioSet);
+    }
+  }, [examProblemInfo]);
+
+  useEffect(() => {
+    if (ioSetData.length !== 0) setIsIoSetDataEmpty(false);
+  }, [ioSetData]);
+
   const handleProblemNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProblemName(e.target.value);
+    setTitle(e.target.value);
     setIsProblemNameValidFail(false);
   };
 
@@ -87,7 +142,7 @@ export default function EditExamProblem(props: DefaultProps) {
   };
 
   const handleEditProblem = () => {
-    if (!problemName) {
+    if (!title) {
       alert('문제명을 입력해 주세요');
       window.scrollTo(0, 0);
       problemNameRef.current?.focus();
@@ -95,7 +150,7 @@ export default function EditExamProblem(props: DefaultProps) {
       return;
     }
 
-    if (!maxExeTime) {
+    if (!maxExeTime || maxExeTime <= 0) {
       alert('최대 실행 시간을 입력해 주세요');
       window.scrollTo(0, 0);
       maxExeTimeRef.current?.focus();
@@ -103,7 +158,7 @@ export default function EditExamProblem(props: DefaultProps) {
       return;
     }
 
-    if (!maxMemCap) {
+    if (!maxMemCap || maxMemCap <= 0) {
       alert('최대 메모리 사용량을 입력해 주세요');
       window.scrollTo(0, 0);
       maxMemCapRef.current?.focus();
@@ -111,36 +166,53 @@ export default function EditExamProblem(props: DefaultProps) {
       return;
     }
 
-    if (!isProblemFileUploadingValidFail) {
-      alert('oblemPDF)을 업로드해 주세요');
+    if (!uploadedProblemPdfFileUrl) {
+      alert('문제 파일(PDF)을 업로드해 주세요');
       window.scrollTo(0, 0);
       return;
     }
 
-    if (!isInAndOutFileUploadingValidFail) {
+    if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
-    alert('수정 기능 개발 예정');
+    const examProblemData = {
+      title,
+      content: uploadedProblemPdfFileUrl,
+      published: null,
+      ioSet: ioSetData,
+      options: {
+        maxRealTime: maxExeTime,
+        maxMemory: maxMemCap,
+      },
+      parentType: 'Assignment',
+      parentId: eid,
+    };
 
-    // console.log('PDF: ', uploadedProblemPdfFileUrl);
-    // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
+    editExamProblemeMutation.mutate({
+      problemId,
+      params: examProblemData,
+    });
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (userInfo.isAuth && OPERATOR_ROLES.includes(userInfo.role)) {
-        setIsLoading(false);
-        return;
-      }
+      if (examProblemInfo) {
+        const isWriter = examProblemInfo.writer._id === userInfo._id;
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+        if (isWriter && currentTime < contestEndTime) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, examProblemInfo, router]);
 
   if (isLoading) return <Loading />;
 
@@ -162,7 +234,7 @@ export default function EditExamProblem(props: DefaultProps) {
                 }-500 focus:outline-none focus:ring-0 peer`}
                 placeholder=" "
                 required
-                value={problemName}
+                value={title}
                 ref={problemNameRef}
                 onChange={handleProblemNameChange}
               />
@@ -263,14 +335,16 @@ export default function EditExamProblem(props: DefaultProps) {
           </div>
           <div className="flex flex-col gap-1">
             <p className="text-lg">문제 파일</p>
-            <MyDropzone
-              type="pdf"
-              guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
-              setIsFileUploaded={setIsProblemFileUploadingValidFail}
-              isFileUploaded={isProblemFileUploadingValidFail}
-              initUrl={problemInfo.problemPdfFileUrl}
-              setUploadedFileUrl={setUploadedPdfFileUrl}
-            />
+            {uploadedProblemPdfFileUrl && (
+              <MyDropzone
+                type="pdf"
+                guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
+                setIsFileUploaded={setIsPdfFileUploadingValidFail}
+                isFileUploaded={isPdfFileUploadingValidFail}
+                initUrl={uploadedProblemPdfFileUrl}
+                setUploadedFileUrl={setUploadedProblemPdfFileUrl}
+              />
+            )}
           </div>
 
           <div className="flex flex-col gap-1 mt-9">
@@ -295,14 +369,16 @@ export default function EditExamProblem(props: DefaultProps) {
                   하나의 입/출력 세트로 묶입니다.
                 </p>
               </div>
-              <MyDropzone
-                type="inOut"
-                guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
-                setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
-                isFileUploaded={isInAndOutFileUploadingValidFail}
-                initInAndOutFiles={ioSetData}
-                setIoSetData={setIoSetData}
-              />
+              {!isIoSetDataEmpty && (
+                <MyDropzone
+                  type="inOut"
+                  guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
+                  setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
+                  isFileUploaded={isInAndOutFileUploadingValidFail}
+                  initInAndOutFiles={ioSetData}
+                  setIoSetData={setIoSetData}
+                />
+              )}
             </div>
           </div>
         </div>
