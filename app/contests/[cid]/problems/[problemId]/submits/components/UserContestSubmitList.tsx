@@ -3,7 +3,6 @@
 import UserContestSubmitListItem from './UserContestSubmitListItem';
 import NoneUserContestSubmitListItem from './NoneUserContestSubmitListItem';
 import Loading from '@/app/loading';
-import { useRouter } from 'next/navigation';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { ContestSubmitInfo } from '@/app/types/contest';
 import { useQuery } from '@tanstack/react-query';
@@ -30,8 +29,6 @@ export default function UserContestSubmitList({
     queryFn: fetchPersonalUserContestSubmitsInfo,
     retry: 0,
   });
-
-  const router = useRouter();
 
   const resData = data?.data.data;
   const personalUserContestSubmitsInfo: ContestSubmitInfo[] =

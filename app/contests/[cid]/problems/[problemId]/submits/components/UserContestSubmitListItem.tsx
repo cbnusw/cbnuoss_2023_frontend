@@ -60,7 +60,6 @@ export default function UserContestSubmitListItem({
       </td>
       <td className="">{personalUserContestSubmitInfo.language}</td>
       <td className="">
-        {' '}
         {formatDateToYYMMDDHHMM(personalUserContestSubmitInfo.createdAt)}
       </td>
     </tr>
