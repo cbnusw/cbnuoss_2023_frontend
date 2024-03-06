@@ -167,7 +167,11 @@ export default function ContestProblems(props: DefaultProps) {
           (contestant_id) => contestant_id === userInfo._id,
         );
 
-        if (isContestant && currentTime < contestEndTime) {
+        if (
+          isContestant &&
+          contestStartTime <= currentTime &&
+          currentTime < contestEndTime
+        ) {
           setIsLoading(false);
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {

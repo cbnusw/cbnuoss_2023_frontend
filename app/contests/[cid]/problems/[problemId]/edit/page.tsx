@@ -3,7 +3,6 @@
 import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { ContestInfo } from '@/app/types/contest';
 import {
   IoSetItem,
   ProblemInfo,
@@ -219,8 +218,7 @@ export default function EditContestProblem(props: DefaultProps) {
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (contestProblemInfo) {
-        const isWriter =
-          contestProblemInfo.parentId.writer._id === userInfo._id;
+        const isWriter = contestProblemInfo.writer._id === userInfo._id;
 
         if (isWriter && currentTime < contestEndTime) {
           setIsLoading(false);

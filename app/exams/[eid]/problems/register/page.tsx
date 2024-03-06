@@ -4,11 +4,30 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { IoSetItem } from '@/app/types/problem';
+import { ExamInfo } from '@/app/types/exam';
+import { IoSetItem, RegisterProblemParams } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 시험 게시글 정보 조회 API
+const fetchExamDetailInfo = ({ queryKey }: any) => {
+  const eid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/assignment/${eid}`,
+  );
+};
+
+// 문제 등록 API
+const registerExamProblem = (params: RegisterProblemParams) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/problem`,
+    params,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -17,10 +36,39 @@ interface DefaultProps {
 }
 
 export default function RegisterExamProblem(props: DefaultProps) {
+  const eid = props.params.eid;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['examDetailInfo', eid],
+    queryFn: fetchExamDetailInfo,
+    retry: 0,
+  });
+
+  const registerExamProblemMutation = useMutation({
+    mutationFn: registerExamProblem,
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          const problemId = resData?.data._id;
+          alert('문제가 등록되었습니다.');
+          router.push(`/exams/${eid}/problems/${problemId}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
+
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
+  const resData = data?.data.data;
+  const examInfo: ExamInfo = resData;
+
   const [isLoading, setIsLoading] = useState(true);
-  const [problemName, setProblemName] = useState('');
+  const [title, setTitle] = useState('');
   const [maxExeTime, setMaxExeTime] = useState<number>();
   const [maxMemCap, setMaxMemCap] = useState<number>();
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
@@ -40,12 +88,14 @@ export default function RegisterExamProblem(props: DefaultProps) {
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
   const maxMemCapRef = useRef<HTMLInputElement>(null);
 
-  const eid = props.params.eid;
+  const currentTime = new Date();
+  const examStartTime = new Date(examInfo?.testPeriod.end);
+  const examEndTime = new Date(examInfo?.testPeriod.end);
 
   const router = useRouter();
 
   const handleProblemNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setProblemName(e.target.value);
+    setTitle(e.target.value);
     setIsProblemNameValidFail(false);
   };
 
@@ -67,7 +117,7 @@ export default function RegisterExamProblem(props: DefaultProps) {
   };
 
   const handleRegisterProblem = () => {
-    if (!problemName) {
+    if (!title) {
       alert('문제명을 입력해 주세요');
       window.scrollTo(0, 0);
       problemNameRef.current?.focus();
@@ -75,7 +125,7 @@ export default function RegisterExamProblem(props: DefaultProps) {
       return;
     }
 
-    if (!maxExeTime) {
+    if (!maxExeTime || maxExeTime <= 0) {
       alert('최대 실행 시간을 입력해 주세요');
       window.scrollTo(0, 0);
       maxExeTimeRef.current?.focus();
@@ -83,7 +133,7 @@ export default function RegisterExamProblem(props: DefaultProps) {
       return;
     }
 
-    if (!maxMemCap) {
+    if (!maxMemCap || maxMemCap <= 0) {
       alert('최대 메모리 사용량을 입력해 주세요');
       window.scrollTo(0, 0);
       maxMemCapRef.current?.focus();
@@ -97,30 +147,44 @@ export default function RegisterExamProblem(props: DefaultProps) {
       return;
     }
 
-    if (!isInAndOutFileUploadingValidFail) {
+    if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
-    alert('등록 기능 개발 예정');
+    const examProblemData = {
+      title,
+      content: uploadedProblemPdfFileUrl,
+      published: null,
+      ioSet: ioSetData,
+      options: {
+        maxRealTime: maxExeTime,
+        maxMemory: maxMemCap,
+      },
+      parentType: 'Assignment',
+      parentId: eid,
+    };
 
-    // console.log('PDF: ', uploadedProblemPdfFileUrl);
-    // console.log('In/Out: ', uploadedProblemInAndOutFileUrls);
+    registerExamProblemMutation.mutate(examProblemData);
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      if (userInfo.isAuth && OPERATOR_ROLES.includes(userInfo.role)) {
-        setIsLoading(false);
-        return;
-      }
+      if (examInfo) {
+        const isWriter = examInfo.writer._id === userInfo._id;
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+        if (isWriter && currentTime < examEndTime) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, examInfo, router]);
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
@@ -140,7 +204,7 @@ export default function RegisterExamProblem(props: DefaultProps) {
                 }-500 focus:outline-none focus:ring-0 peer`}
                 placeholder=" "
                 required
-                value={problemName}
+                value={title}
                 ref={problemNameRef}
                 onChange={handleProblemNameChange}
               />

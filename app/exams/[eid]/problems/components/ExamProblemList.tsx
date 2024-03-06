@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import {
   DragDropContext,
   Draggable,
@@ -9,7 +8,6 @@ import {
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/navigation';
 import NoneExamProblemListItem from './NoneExamProblemListItem';
-import Loading from '@/app/loading';
 import { ProblemInfo } from '@/app/types/problem';
 
 interface ExamProblemListProps {

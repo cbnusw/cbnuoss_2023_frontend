@@ -112,7 +112,11 @@ export default function UserContestSubmits(props: DefaultProps) {
           (contestant_id) => contestant_id === userInfo._id,
         );
 
-        if (isContestant && currentTime < contestEndTime) {
+        if (
+          isContestant &&
+          contestEndTime <= currentTime &&
+          currentTime < contestEndTime
+        ) {
           setIsLoading(false);
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {

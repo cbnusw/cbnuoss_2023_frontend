@@ -115,7 +115,16 @@ export default function ExamProblems(props: DefaultProps) {
           (student_id) => student_id === userInfo._id,
         );
 
-        if (isWriter || isContestant) {
+        if (isWriter) {
+          setIsLoading(false);
+          return;
+        }
+
+        if (
+          isContestant &&
+          examStartTime <= currentTime &&
+          currentTime < examEndTime
+        ) {
           setIsLoading(false);
           return;
         }

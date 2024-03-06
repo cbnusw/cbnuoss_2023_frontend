@@ -124,6 +124,9 @@ export default function ContestProblem(props: DefaultProps) {
   const [isEnrollContest, setIsEnrollContest] = useState(false);
 
   const currentTime = new Date();
+  const contestStartTime = new Date(
+    contestProblemInfo?.parentId.testPeriod.start,
+  );
   const contestEndTime = new Date(contestProblemInfo?.parentId.testPeriod.end);
 
   const router = useRouter();
@@ -179,7 +182,11 @@ export default function ContestProblem(props: DefaultProps) {
           (contestant_id) => contestant_id === userInfo._id,
         );
 
-        if (isContestant && currentTime < contestEndTime) {
+        if (
+          isContestant &&
+          contestStartTime <= currentTime &&
+          currentTime < contestEndTime
+        ) {
           setIsLoading(false);
           const contestPasswordCookie = getCookie(cid);
           if (contestPasswordCookie) {
@@ -312,7 +319,7 @@ export default function ContestProblem(props: DefaultProps) {
           )}
 
           {currentTime < contestEndTime &&
-            userInfo._id === contestProblemInfo.writer && (
+            userInfo._id === contestProblemInfo.writer._id && (
               <>
                 <button
                   onClick={handleEditProblem}
