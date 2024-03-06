@@ -118,7 +118,6 @@ export default function UserContestSubmit(props: DefaultProps) {
   useEffect(() => {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
-      console.log(submitInfo);
       if (submitInfo) {
         const isContestant = submitInfo.parentId.contestants.some(
           (contestant_id) => contestant_id === userInfo._id,
