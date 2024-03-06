@@ -7,7 +7,7 @@ export interface ProblemInfo {
     students: string[];
     _id: string;
     title: string;
-    course?: string;
+    course: string;
     content: string;
     testPeriod: {
       start: string;
