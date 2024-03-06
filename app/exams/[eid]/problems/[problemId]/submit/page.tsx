@@ -176,7 +176,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 href={`/exams/${eid}/problems/${problemId}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
-                (A+B)
+                ({examProblemInfo.title})
               </Link>
             </div>
           </p>
@@ -186,7 +186,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 시간 제한:
                 <span className="font-mono font-light">
                   {' '}
-                  <span>1</span>초
+                  <span>{examProblemInfo.options.maxRealTime / 1000}</span>초
                 </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
@@ -194,19 +194,23 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
                 메모리 제한:
                 <span className="font-mono font-light">
                   {' '}
-                  <span className="mr-1">5</span>MB
+                  {examProblemInfo.options.maxMemory}
                 </span>
+                MB
               </span>
             </div>
             <div className="flex gap-3">
               <span className="font-semibold">
-                시험명: <span className="font-light">코딩테스트 1차</span>
+                시험명:{' '}
+                <span className="font-light">
+                  {examProblemInfo.parentId.title}
+                </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
               <span className="font-semibold">
                 수업명:{' '}
                 <span className="font-light">
-                  2023-01-자료구조(소프트웨어학부 01반)
+                  {examProblemInfo.parentId.course}
                 </span>
               </span>
             </div>
@@ -219,10 +223,9 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
               name="languages"
               id="lang"
               className={`text-sm w-full pl-0 py-1 ${
-                selectedSubmitLanguage === '언어 선택 *' &&
                 isSelectedSubmitLanguageValidFail
                   ? 'text-red-500'
-                  : 'text-gray-500'
+                  : selectedSubmitLanguage === '언어 선택 *' && 'text-gray-500'
               }   bg-transparent border-0 border-b border-${
                 isSelectedSubmitLanguageValidFail ? 'red-500' : 'gray-400'
               }  gray-400 appearance-none focus:outline-none focus:ring-0 focus:border-${
