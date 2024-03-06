@@ -23,7 +23,7 @@ const fetchContestProblemDetailInfo = ({ queryKey }: any) => {
   );
 };
 
-// 대회 문제 수정 API
+// 문제 수정 API
 const editContestProblem = ({
   problemId,
   params,
