@@ -4,8 +4,33 @@ import MyDropzone from '@/app/components/MyDropzone';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import codeImg from '@/public/images/code.png';
+import axiosInstance from '@/app/utils/axiosInstance';
+import { userInfoStore } from '@/app/store/UserInfo';
+import { ProblemInfo } from '@/app/types/problem';
+import { SubmitCode } from '@/app/types/submit';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { UserInfo } from '@/app/types/user';
+import Loading from '@/app/loading';
+import { OPERATOR_ROLES } from '@/app/constants/role';
+
+// 연습문제 게시글 정보 조회 API
+const fetchPracticeDetailInfo = ({ queryKey }: any) => {
+  const pid = queryKey[1];
+  return axiosInstance.get(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${pid}`,
+  );
+};
+
+// 코드 제출 API
+const submitCode = ({ pid, params }: { pid: string; params: SubmitCode }) => {
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${pid}/submit`,
+    params,
+  );
+};
 
 interface DefaultProps {
   params: {
@@ -15,6 +40,38 @@ interface DefaultProps {
 }
 
 export default function SubmitPracticeProblemCode(props: DefaultProps) {
+  const pid = props.params.pid;
+  const problemId = props.params.pid;
+
+  const { isPending, isError, data, error } = useQuery({
+    queryKey: ['practiceDetailInfo', pid],
+    queryFn: fetchPracticeDetailInfo,
+    retry: 0,
+  });
+
+  const submitCodeMutation = useMutation({
+    mutationFn: submitCode,
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          alert('소스코드가 제출되었습니다.');
+          router.push(`/practices/${pid}/submits`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
+
+  const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const resData = data?.data.data;
+  const practiceInfo: ProblemInfo = resData;
+
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
   const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
@@ -25,9 +82,6 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
   ] = useState(false);
   const [isCodeFileUploadingValidFail, setIsCodeFileUploadingValidFail] =
     useState(false);
-
-  const pid = props.params.pid;
-  const problemId = props.params.pid;
 
   const router = useRouter();
 
@@ -56,8 +110,35 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
       return;
     }
 
-    router.push(`/practices/${pid}/submits`);
+    const submitCodeData = {
+      parentType: 'Practice',
+      problem: problemId,
+      source: uploadedCodeFileUrl,
+      language: selectedSubmitLanguage.toLowerCase(),
+    };
+
+    submitCodeMutation.mutate({ pid, params: submitCodeData });
   };
+
+  useEffect(() => {
+    // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
+    fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
+      if (practiceInfo) {
+        const isNormalUser =
+          !OPERATOR_ROLES.includes(userInfo.role) && userInfo.role !== 'staff';
+
+        if (isNormalUser) {
+          setIsLoading(false);
+          return;
+        }
+
+        alert('접근 권한이 없습니다.');
+        router.back();
+      }
+    });
+  }, [updateUserInfo, practiceInfo, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
@@ -80,7 +161,7 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
                 href={`/practices/${pid}`}
                 className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
-                (A+B)
+                ({practiceInfo.title})
               </Link>
             </div>
           </p>
@@ -90,7 +171,7 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
                 시간 제한:
                 <span className="font-mono font-light">
                   {' '}
-                  <span>1</span>초
+                  <span>{practiceInfo.options.maxRealTime / 1000}</span>초
                 </span>
               </span>
               <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
@@ -98,8 +179,9 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
                 메모리 제한:
                 <span className="font-mono font-light">
                   {' '}
-                  <span className="mr-1">5</span>MB
+                  {practiceInfo.options.maxMemory}
                 </span>
+                MB
               </span>
             </div>
           </div>
@@ -111,10 +193,9 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
               name="languages"
               id="lang"
               className={`text-sm w-full pl-0 py-1 ${
-                selectedSubmitLanguage === '언어 선택 *' &&
                 isSelectedSubmitLanguageValidFail
                   ? 'text-red-500'
-                  : 'text-gray-500'
+                  : selectedSubmitLanguage === '언어 선택 *' && 'text-gray-500'
               }   bg-transparent border-0 border-b border-${
                 isSelectedSubmitLanguageValidFail ? 'red-500' : 'gray-400'
               }  gray-400 appearance-none focus:outline-none focus:ring-0 focus:border-${
