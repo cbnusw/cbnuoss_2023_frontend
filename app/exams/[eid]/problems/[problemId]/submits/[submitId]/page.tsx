@@ -43,6 +43,7 @@ export default function UserExamSubmit(props: DefaultProps) {
   const { isPending, data } = useQuery({
     queryKey: ['submitInfo', submitId],
     queryFn: fetchSubmitInfo,
+    retry: 0,
   });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
@@ -66,12 +67,10 @@ export default function UserExamSubmit(props: DefaultProps) {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (submitInfo) {
-        const isContestant = submitInfo.parentId.students.some(
-          (student_id) => student_id === userInfo._id,
-        );
+        const isSubmitOwner = userInfo._id === submitInfo.user._id;
 
         if (
-          isContestant &&
+          isSubmitOwner &&
           examStartTime <= currentTime &&
           currentTime < examEndTime
         ) {
