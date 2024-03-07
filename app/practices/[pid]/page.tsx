@@ -157,31 +157,32 @@ export default function PracticeProblem(props: DefaultProps) {
             </svg>
             문제 목록
           </button>
-          {!OPERATOR_ROLES.includes(userInfo.role) && (
-            <>
-              <button
-                onClick={handleGoToUserPracticeSubmits}
-                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
+          {!OPERATOR_ROLES.includes(userInfo.role) &&
+            userInfo.role !== 'staff' && (
+              <>
+                <button
+                  onClick={handleGoToUserPracticeSubmits}
+                  className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
                 >
-                  <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-                </svg>
-                내 제출 현황
-              </button>
-              <button
-                onClick={handleGoToSubmitPracticeProblemCode}
-                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#3a8af9] px-3 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
-              >
-                제출하기
-              </button>
-            </>
-          )}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="20"
+                    viewBox="0 -960 960 960"
+                    width="20"
+                    fill="white"
+                  >
+                    <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
+                  </svg>
+                  내 제출 현황
+                </button>
+                <button
+                  onClick={handleGoToSubmitPracticeProblemCode}
+                  className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#3a8af9] px-3 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                >
+                  제출하기
+                </button>
+              </>
+            )}
 
           {OPERATOR_ROLES.includes(userInfo.role) &&
             userInfo._id === practiceInfo.writer._id && (
