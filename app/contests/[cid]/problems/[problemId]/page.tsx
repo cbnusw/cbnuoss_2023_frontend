@@ -292,7 +292,7 @@ export default function ContestProblem(props: DefaultProps) {
             </svg>
             문제 목록
           </button>
-          {isEnrollContest && (
+          {isEnrollContest && userInfo.role !== 'staff' && (
             <>
               <button
                 onClick={handleGoToUserContestSubmits}

@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
+import { OPERATOR_ROLES } from '@/app/constants/role';
 
 // 문제 정보 조회 API
 const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
@@ -59,9 +60,12 @@ export default function UserExamSubmits(props: DefaultProps) {
         const isContestant = examProblemInfo.parentId.students.some(
           (student_id) => student_id === userInfo._id,
         );
+        const isNormalUser =
+          !OPERATOR_ROLES.includes(userInfo.role) && userInfo.role !== 'staff';
 
         if (
           isContestant &&
+          isNormalUser &&
           contestStartTime <= currentTime &&
           currentTime < contestEndTime
         ) {

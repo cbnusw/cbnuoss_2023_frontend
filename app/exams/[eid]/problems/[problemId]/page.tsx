@@ -207,7 +207,7 @@ export default function ExamProblem(props: DefaultProps) {
             </svg>
             문제 목록
           </button>
-          {isEnrollExam && (
+          {isEnrollExam && userInfo.role !== 'staff' && (
             <>
               <button
                 onClick={handleGoToUserExamSubmits}

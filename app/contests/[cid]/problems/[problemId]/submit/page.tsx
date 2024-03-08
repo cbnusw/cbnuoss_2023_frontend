@@ -16,6 +16,7 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { AxiosError } from 'axios';
 import { UserInfo } from '@/app/types/user';
 import Loading from '@/app/loading';
+import { OPERATOR_ROLES } from '@/app/constants/role';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -192,9 +193,12 @@ export default function SubmitContestProblemCode(props: DefaultProps) {
         const isContestant = contestProblemInfo.parentId.contestants.some(
           (contestant_id) => contestant_id === userInfo._id,
         );
+        const isNormalUser =
+          !OPERATOR_ROLES.includes(userInfo.role) && userInfo.role !== 'staff';
 
         if (
           isContestant &&
+          isNormalUser &&
           contestStartTime <= currentTime &&
           currentTime < contestEndTime
         ) {

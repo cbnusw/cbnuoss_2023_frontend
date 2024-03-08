@@ -14,6 +14,7 @@ import { userInfoStore } from '@/app/store/UserInfo';
 import Loading from '@/app/loading';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
+import { OPERATOR_ROLES } from '@/app/constants/role';
 
 // 문제 정보 조회 API
 const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
@@ -137,9 +138,12 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
         const isContestant = examProblemInfo.parentId.students.some(
           (student_id) => student_id === userInfo._id,
         );
+        const isNormalUser =
+          !OPERATOR_ROLES.includes(userInfo.role) && userInfo.role !== 'staff';
 
         if (
           isContestant &&
+          isNormalUser &&
           examStartTime <= currentTime &&
           currentTime < examEndTime
         ) {
