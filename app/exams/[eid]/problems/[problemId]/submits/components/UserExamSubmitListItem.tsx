@@ -1,8 +1,13 @@
+'use client';
+
 import { ExamSubmitInfo } from '@/app/types/exam';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
-import { getCodeSubmitResultTypeDescription } from '@/app/utils/getCodeSubmitResultTypeDescription';
+import {
+  getCodeSubmitResultTypeColor,
+  getCodeSubmitResultTypeDescription,
+} from '@/app/utils/getCodeSubmitResultTypeDescription';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface ExamSubmitListItemProps {
   personalUserExamSubmitInfo: ExamSubmitInfo;
@@ -19,15 +24,26 @@ export default function UserExamSubmitListItem({
   total,
   index,
 }: ExamSubmitListItemProps) {
+  const [loadingDots, setLoadingDots] = useState('');
+
   const router = useRouter();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLoadingDots((prev) => (prev.length < 3 ? prev + '.' : ''));
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        router.push(
-          `/exams/${eid}/problems/${problemId}/submits/${personalUserExamSubmitInfo._id}`,
-        );
+        personalUserExamSubmitInfo.result &&
+          router.push(
+            `/exams/${eid}/problems/${problemId}/submits/${personalUserExamSubmitInfo._id}`,
+          );
       }}
     >
       <th
@@ -37,27 +53,40 @@ export default function UserExamSubmitListItem({
         {total - index}
       </th>
       <td className="">{personalUserExamSubmitInfo.problem.title}</td>
-      <td
-        className={`${
-          personalUserExamSubmitInfo.result?.type === 'done'
-            ? 'text-[#0076C0]'
-            : 'text-red-500'
-        } font-semibold`}
-      >
-        {getCodeSubmitResultTypeDescription(
-          personalUserExamSubmitInfo.result?.type,
-        )}
-      </td>
-      <td>
-        <span>
-          {(personalUserExamSubmitInfo.result?.memory / 1048576).toFixed(2)}{' '}
-        </span>
-        <span className="ml-[-1px] text-red-500">MB</span>
-      </td>
-      <td className="">
-        <span>{personalUserExamSubmitInfo.result.time} </span>{' '}
-        <span className="ml-[-1px] text-red-500">ms</span>
-      </td>
+      {personalUserExamSubmitInfo.result ? (
+        <>
+          <td
+            className={`text-[${getCodeSubmitResultTypeColor(
+              personalUserExamSubmitInfo.result.type,
+            )}] font-semibold`}
+          >
+            {getCodeSubmitResultTypeDescription(
+              personalUserExamSubmitInfo.result.type,
+            )}
+          </td>
+          <td>
+            <span>
+              {(personalUserExamSubmitInfo.result.memory / 1048576).toFixed(2)}{' '}
+            </span>
+            <span className="ml-[-1px] text-red-500">MB</span>
+          </td>
+          <td className="">
+            <span>{personalUserExamSubmitInfo.result.time} </span>{' '}
+            <span className="ml-[-1px] text-red-500">ms</span>
+          </td>
+        </>
+      ) : (
+        <>
+          <td className="flex gap-[0.6rem] justify-center items-center w-[3.5rem] h-10 text-[#e67e22] font-semibold mx-auto">
+            채점 중
+            <span className="w-1 ml-[-0.6rem] text-[#e67e22]">
+              {loadingDots}
+            </span>
+          </td>
+          <td>-</td>
+          <td>-</td>
+        </>
+      )}
       <td className="">{personalUserExamSubmitInfo.language}</td>
       <td className="">
         {formatDateToYYMMDDHHMM(personalUserExamSubmitInfo.createdAt)}
