@@ -29,6 +29,7 @@ export default function UserExamSubmitList({
     queryKey: ['personalUserExamSubmitsInfo', problemId],
     queryFn: fetchPersonalUserExamSubmitsInfo,
     retry: 0,
+    refetchInterval: 1500,
   });
 
   const resData = data?.data.data;

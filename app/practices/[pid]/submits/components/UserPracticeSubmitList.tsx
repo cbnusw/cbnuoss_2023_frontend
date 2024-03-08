@@ -26,6 +26,7 @@ export default function UserPracticeSubmitList({
     queryKey: ['personalUserPracticeSubmitsInfo', pid],
     queryFn: fetchPersonalUserPracticeSubmitsInfo,
     retry: 0,
+    refetchInterval: 1500,
   });
 
   const resData = data?.data.data;

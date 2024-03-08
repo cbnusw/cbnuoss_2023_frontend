@@ -28,6 +28,7 @@ export default function UserContestSubmitList({
     queryKey: ['personalUserContestSubmitsInfo', problemId],
     queryFn: fetchPersonalUserContestSubmitsInfo,
     retry: 0,
+    refetchInterval: 1500,
   });
 
   const resData = data?.data.data;
