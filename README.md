@@ -37,8 +37,8 @@ npm install
 
 #### Step 3: Check the Environment File
 
-- Check a file named `.env.local` in the `cbnuoss_2023_frontend` directory.
-> This file will store the environment variable for the project to run.
+- Add a file named `.env.local` in the `cbnuoss_2023_frontend` directory.
+> This file will store the environment variables required for the project to run. You may refer to `.env-help` for guidance on setting up these variables.
 
 #### Step 4: Run the Frontend Server
 
