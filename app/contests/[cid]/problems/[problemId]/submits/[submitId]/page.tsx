@@ -7,7 +7,10 @@ import { UserInfo } from '@/app/types/user';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { formatDateToYYMMDDHHMMSS } from '@/app/utils/formatDate';
-import { getCodeSubmitResultTypeDescription } from '@/app/utils/getCodeSubmitResultTypeDescription';
+import {
+  getCodeSubmitResultTypeColor,
+  getCodeSubmitResultTypeDescription,
+} from '@/app/utils/getCodeSubmitResultTypeDescription';
 import { getLanguageCode } from '@/app/utils/getLanguageCode';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -226,11 +229,9 @@ ${submitInfo.code}`}
                   </th>
                   <td className="">{submitInfo.problem.title}</td>
                   <td
-                    className={`${
-                      submitInfo.result.type === 'done'
-                        ? 'text-[#0076C0]'
-                        : 'text-red-500'
-                    } font-semibold`}
+                    className={`${getCodeSubmitResultTypeColor(
+                      submitInfo.result.type,
+                    )} font-semibold`}
                   >
                     {getCodeSubmitResultTypeDescription(submitInfo.result.type)}
                   </td>

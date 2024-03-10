@@ -56,9 +56,9 @@ export default function UserContestSubmitListItem({
       {personalUserContestSubmitInfo.result ? (
         <>
           <td
-            className={`text-[${getCodeSubmitResultTypeColor(
+            className={`${getCodeSubmitResultTypeColor(
               personalUserContestSubmitInfo.result.type,
-            )}] font-semibold`}
+            )} font-semibold`}
           >
             {getCodeSubmitResultTypeDescription(
               personalUserContestSubmitInfo.result.type,
