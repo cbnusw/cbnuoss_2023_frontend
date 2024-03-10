@@ -20,16 +20,16 @@ export function getCodeSubmitResultTypeDescription(resultType: string): string {
 export function getCodeSubmitResultTypeColor(resultType: string): string {
   switch (resultType) {
     case 'compile':
-      return '#0f4c81';
+      return 'text-[#0f4c81]';
     case 'runtime':
-      return '#5c4c87';
+      return 'text-[#5c4c87]';
     case 'timeout':
     case 'memory':
-      return '#fa7268';
+      return 'text-[#fa7268]';
     case 'wrong':
-      return '#dd4124';
+      return 'text-[#dd4124]';
     case 'done':
-      return '#009874';
+      return 'text-[#009874]';
     default:
       alert('Error: unknown [resultType]');
       return 'X';
