@@ -56,9 +56,9 @@ export default function UserExamSubmitListItem({
       {personalUserExamSubmitInfo.result ? (
         <>
           <td
-            className={`text-[${getCodeSubmitResultTypeColor(
+            className={`${getCodeSubmitResultTypeColor(
               personalUserExamSubmitInfo.result.type,
-            )}] font-semibold`}
+            )} font-semibold`}
           >
             {getCodeSubmitResultTypeDescription(
               personalUserExamSubmitInfo.result.type,

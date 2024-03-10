@@ -53,9 +53,9 @@ export default function UserPracticeSubmitListItem({
       {personalUserPracticeSubmitInfo.result ? (
         <>
           <td
-            className={`text-[${getCodeSubmitResultTypeColor(
+            className={`${getCodeSubmitResultTypeColor(
               personalUserPracticeSubmitInfo.result.type,
-            )}] font-semibold`}
+            )} font-semibold`}
           >
             {getCodeSubmitResultTypeDescription(
               personalUserPracticeSubmitInfo.result.type,
