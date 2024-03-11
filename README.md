@@ -7,13 +7,6 @@
     </p>
 </div>
 
-<p align="center">
-  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-20232A?style=flat&logo=next.js&logoColor=fff&labelColor=grey&color=000"/>  
-  <img alt="Zustand" src="https://img.shields.io/badge/Zustand-eee.svg?&style=flat-square&logo=&logoColor=white"/>
-  <img alt="React Query" src="https://img.shields.io/badge/React Query-20232A?style=flat&logo=react&logoColor=fff&labelColor=grey&color=FF4154"/>
-  <img alt="Tailwind CSSS" src="https://img.shields.io/badge/Tailwind CSS-20232A?style=flat&logo=tailwindcss&logoColor=fff&labelColor=grey&color=06B6D4"/>
-</p>
-
 <br/>
 
 ## Getting started
