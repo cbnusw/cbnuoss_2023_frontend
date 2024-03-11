@@ -137,9 +137,27 @@
 }
 
 .markdown-preview {
+  background-color: white !important;
   letter-spacing: 0.04rem;
 }
 
+.markdown-preview figure {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  width: 100% !important;
+}
+
+.markdown-preview tr:nth-child(odd) {
+  background-color: white !important;
+}
+
+.markdown-preview tr:nth-child(even) {
+  background-color: #f7f9fc !important;
+}
+
+.markdown-preview td {
+  border-color: #d4d6da !important;
+}
 .markdown-preview p {
   margin-bottom: 0 !important;
 }
@@ -185,12 +203,6 @@
   padding: 1rem 1.75rem !important;
   border-left: 0.25rem solid #2fc27b !important;
   background-color: #fafcfe;
-}
-
-.markdown-preview img {
-  display: block !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
 }
 
 .markdown-preview .copied {
@@ -239,6 +251,24 @@
 
 .go3489369143:hover {
   scale: 1.35;
+}
+
+/* CodeMirror */
+.cm-editor {
+  outline: none !important;
+}
+
+.cm-editor .cm-gutters {
+  justify-content: end !important;
+  min-width: 1.5rem;
+}
+
+.cm-editor .cm-foldGutter {
+  display: none !important;
+}
+
+.cm-editor .cm-gutterElement {
+  color: #999999 !important;
 }
 
 /* --------------- */
