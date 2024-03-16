@@ -145,7 +145,7 @@ export default function Home() {
               />
             </svg>
           </Link>
-          <Link href="/notices" className="flex relative">
+          <Link href="/notice" className="flex relative">
             <div className="flex flex-col gap-4 w-[22.5rem] 3xs:w-[30rem] px-6 py-[1.825rem] 2lg:mb-0 rounded-[0.825rem] bg-gradient-to-r from-[#357ad4] to-[#5ac3c7]">
               <p className="text-base text-white font-semibold tracking-wider">
                 공지사항

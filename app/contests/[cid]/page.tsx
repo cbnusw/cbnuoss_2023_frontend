@@ -432,48 +432,45 @@ export default function ContestDetail(props: DefaultProps) {
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
-      <div className="flex flex-col w-[60rem] mx-auto">
+      <div className="flex flex-col w-[19rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="text-2xl font-bold tracking-tight">
             {contestInfo.title}
           </p>
-          <div className="flex justify-between pb-3 border-b border-gray-300">
-            <div className="flex gap-3">
-              <span className="font-semibold">
-                참가신청 기간:{' '}
-                <span className="font-light">
-                  {contestInfo.applyingPeriod ? (
-                    <>
-                      {formatDateToYYMMDDHHMM(contestInfo.applyingPeriod.start)}{' '}
-                      ~ {formatDateToYYMMDDHHMM(contestInfo.applyingPeriod.end)}
-                    </>
-                  ) : (
-                    <>
-                      ~ {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)}
-                    </>
-                  )}
-                </span>
+          <div className="flex flex-col 3md:flex-row pb-3 gap-1 3md:gap-3 border-b border-gray-300">
+            <span className="font-semibold">
+              <span className="3md:hidden text-gray-500">• </span>
+              참가신청 기간:{' '}
+              <span className="font-light">
+                {contestInfo.applyingPeriod ? (
+                  <>
+                    {formatDateToYYMMDDHHMM(contestInfo.applyingPeriod.start)} ~{' '}
+                    {formatDateToYYMMDDHHMM(contestInfo.applyingPeriod.end)}
+                  </>
+                ) : (
+                  <>~ {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)}</>
+                )}
               </span>
-              <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
-              <span className="font-semibold">
-                대회 시간:{' '}
-                <span className="font-light">
-                  {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)} ~{' '}
-                  {formatDateToYYMMDDHHMM(contestInfo.testPeriod.end)}{' '}
-                  {timeUntilEnd?.isPast ? (
-                    <span className="text-red-500 font-bold">(종료)</span>
-                  ) : (
-                    renderRemainingTime()
-                  )}
-                </span>
+            </span>
+            <span className='hidden relative bottom-[0.055rem] font-thin before:content-["|"] 3md:block' />
+            <span className="font-semibold">
+              <span className="3md:hidden text-gray-500">• </span>
+              대회 시간:{' '}
+              <span className="font-light">
+                {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)} ~{' '}
+                {formatDateToYYMMDDHHMM(contestInfo.testPeriod.end)}{' '}
+                {timeUntilEnd?.isPast ? (
+                  <span className="text-red-500 font-bold">(종료)</span>
+                ) : (
+                  renderRemainingTime()
+                )}
               </span>
-            </div>
-            <div className="flex gap-3">
-              <span className="font-semibold">
-                작성자:{' '}
-                <span className="font-light">{contestInfo.writer.name}</span>
-              </span>
-            </div>
+            </span>
+            <span className="ml-0 font-semibold 3md:ml-auto">
+              <span className="3md:hidden text-gray-500">• </span>
+              작성자:{' '}
+              <span className="font-light">{contestInfo.writer.name}</span>
+            </span>
           </div>
         </div>
 
@@ -585,7 +582,7 @@ export default function ContestDetail(props: DefaultProps) {
                     <span className="text-red-500">신청 취소가 가능</span>
                     합니다.
                   </div>
-                  <div className="text-[#777] text-xs">
+                  <div className="px-5 text-[#777] text-xs">
                     비정상적인 이력이 확인될 경우, 서비스 이용이 제한됩니다.
                   </div>
                 </div>
@@ -596,7 +593,7 @@ export default function ContestDetail(props: DefaultProps) {
                     <span className="text-red-500">신청이 불가능</span>
                     합니다.
                   </div>
-                  <div className="text-[#777] text-xs">
+                  <div className="px-5 text-[#777] text-xs">
                     참가 신청 이전에 반드시 대회 내용을 자세히 읽어주시기
                     바랍니다.
                   </div>
