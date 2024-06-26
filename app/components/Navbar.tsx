@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import ChannelService from '../third-party/ChannelTalk';
 import { userInfoStore } from '../store/UserInfo';
 import axiosInstance from '../utils/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
@@ -32,18 +31,9 @@ export default function Navbar() {
   const [rightPos, setRightPos] = useState('-right-full');
 
   useEffect(() => {
-    const CT = new ChannelService();
-    CT.loadScript();
-    CT.boot({ pluginKey: process.env.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY! });
-
     // (로그인 한) 사용자 정보 조회
     const activeAuthorization = localStorage.getItem('activeAuthorization');
     if (activeAuthorization) fetchCurrentUserInfo(updateUserInfo);
-
-    //for unmount
-    return () => {
-      CT.shutdown();
-    };
   }, [updateUserInfo]);
 
   return (
