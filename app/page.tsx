@@ -1,8 +1,23 @@
+'use client'
+
 import Link from 'next/link';
 import ContestList from './components/Contests/ContestList';
 import ExamList from './components/exams/ExamList';
+import { useEffect } from 'react';
+import ChannelService from './third-party/ChannelTalk';
 
 export default function Home() {
+  useEffect(() => {
+    const CT = new ChannelService();
+    CT.loadScript();
+    CT.boot({ pluginKey: process.env.NEXT_PUBLIC_CHANNEL_TALK_PLUGIN_KEY! });
+
+    //for unmount
+    return () => {
+      CT.shutdown();
+    };
+  }, []);
+
   return (
     <div className="mt-[-5rem]">
       <div className="h-80 flex flex-col gap-6 justify-center items-center bg-[url('/images/main.jpg')] bg-cover bg-center bright-in">
