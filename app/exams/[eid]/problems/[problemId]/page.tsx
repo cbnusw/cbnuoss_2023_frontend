@@ -1,5 +1,6 @@
 'use client';
 
+import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { ProblemInfo } from '@/app/types/problem';
@@ -119,9 +120,15 @@ export default function ExamProblem(props: DefaultProps) {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (examProblemInfo) {
         const isWriter = examProblemInfo.writer._id === userInfo._id;
+        const isOperator = OPERATOR_ROLES.includes(userInfo.role);
         const isContestant = examProblemInfo.parentId.students.some(
           (student_id) => student_id === userInfo._id,
         );
+
+        if (isWriter) {
+          setIsLoading(false);
+          return;
+        }
 
         if (
           isContestant &&
@@ -132,7 +139,7 @@ export default function ExamProblem(props: DefaultProps) {
           return;
         }
 
-        if (isWriter) {
+        if (isOperator && currentTime > examEndTime) {
           setIsLoading(false);
           return;
         }
