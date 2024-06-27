@@ -68,14 +68,14 @@ export default function UserScoreInfoListItem({
                 <span
                   className={`${
                     score.right ? 'text-white' : 'text-[#3f3f3f]'
-                  } text-[0.5rem]`}
+                  } text-[0.7rem]`}
                 >
                   시도: {score.tries}회
                 </span>
                 <span
                   className={`${
                     score.right ? 'mt-[-0.2rem] text-white' : 'text-[#3f3f3f]'
-                  } text-[0.5rem]`}
+                  } text-[0.7rem]`}
                 >
                   시간: {score.time}분
                 </span>
