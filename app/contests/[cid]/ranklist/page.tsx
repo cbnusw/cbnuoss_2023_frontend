@@ -164,8 +164,8 @@ export default function ContestRankList(props: DefaultProps) {
   if (isAnyQueryPending) return <Loading />;
 
   return (
-    <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">
-      <div className="flex flex-col w-[60rem] mx-auto">
+    <div className="mt-2 mb-24 px-1 2lg:px-0 overflow-x-auto">
+      <div className="flex flex-col w-[21rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="flex items-center text-2xl font-bold tracking-tight">
             <Image
@@ -176,7 +176,7 @@ export default function ContestRankList(props: DefaultProps) {
               quality={100}
               className="ml-[-1rem] fade-in-fast drop-shadow-lg"
             />
-            <div className="lift-up">
+            <div className="lift-up flex flex-col 3md:flex-row 3md:items-end">
               <span className="ml-2 text-3xl font-semibold tracking-wide">
                 대회 순위
               </span>
@@ -188,7 +188,7 @@ export default function ContestRankList(props: DefaultProps) {
               </Link>
             </div>
           </p>
-          <div className="flex justify-between items-center pb-3 border-b border-gray-300">
+          <div className="flex flex-col 3md:flex-row justify-between pb-3 border-b border-gray-300">
             <div className="flex gap-2">
               {shouldShowProblemsButton() && (
                 <button
@@ -209,7 +209,7 @@ export default function ContestRankList(props: DefaultProps) {
               )}
             </div>
             <div className="mt-3">
-              <span className="font-semibold">
+              <span className="font-semibold 3md:ml-auto">
                 대회 시간:{' '}
                 <span className="font-light">
                   {formatDateToYYMMDDHHMM(contestInfo.testPeriod.start)} ~{' '}
