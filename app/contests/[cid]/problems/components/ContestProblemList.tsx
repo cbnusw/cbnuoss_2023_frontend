@@ -52,7 +52,7 @@ export default function ContestProblemList({
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}
-              className="flex flex-col gap-4 pl-3"
+              className="flex flex-col gap-4"
             >
               {problemsInfo.map((problem, idx) => (
                 <div key={problem._id} className="flex items-center gap-3">
