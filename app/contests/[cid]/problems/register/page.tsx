@@ -190,7 +190,13 @@ export default function RegisterContestProblem(props: DefaultProps) {
       if (contestInfo) {
         const isWriter = contestInfo.writer._id === userInfo._id;
 
-        if (isWriter && currentTime < contestEndTime) {
+        if (currentTime >= contestEndTime) {
+          alert('종료된 대회는 문제 등록이 불가능합니다.');
+          router.back();
+          return;
+        }
+
+        if (isWriter) {
           setIsLoading(false);
           return;
         }
