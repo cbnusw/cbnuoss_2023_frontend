@@ -420,7 +420,7 @@ export default function ExamDetail(props: DefaultProps) {
           />
         </div>
         <div>
-          <div className="flex gap-2 justify-end">
+          <div className="flex flex-col 3md:flex-row gap-2 justify-end">
             {OPERATOR_ROLES.includes(userInfo.role) && (
               <button
                 onClick={handleGoToExamSubmits}
