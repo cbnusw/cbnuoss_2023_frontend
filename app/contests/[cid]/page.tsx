@@ -481,7 +481,7 @@ export default function ContestDetail(props: DefaultProps) {
           />
         </div>
         <div>
-          <div className="flex gap-2 justify-end">
+          <div className="flex flex-col 3md:flex-row gap-2 justify-end">
             <button
               onClick={handleGoToContestRankList}
               className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#0388ca] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#007eb9] hover:bg-[#007eb9]"
