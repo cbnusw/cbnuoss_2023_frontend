@@ -196,6 +196,12 @@ export default function ExamProblems(props: DefaultProps) {
 
   const handleChangeProblemOrder = () => {
     changingProblemOrderBtnRef.current?.blur();
+
+    if (examProblemsInfo.problems.length === 0) {
+      alert('등록된 문제가 없습니다.');
+      return;
+    }
+
     setIsChangingExamProblemOrderActivate((prev) => !prev);
     if (isChagingExamProblemOrderActivate) {
       examProblemReorderMutation.mutate({ eid, params: problemsInfo });
@@ -210,7 +216,7 @@ export default function ExamProblems(props: DefaultProps) {
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
-      <div className="flex flex-col w-[60rem] mx-auto">
+      <div className="flex flex-col w-[21rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="flex items-center text-2xl font-bold tracking-tight">
             <Image
@@ -221,20 +227,20 @@ export default function ExamProblems(props: DefaultProps) {
               quality={100}
               className="ml-[-1rem] fade-in-fast drop-shadow-lg"
             />
-            <div className="lift-up">
+            <div className="lift-up flex flex-col 3md:flex-row 3md:items-end">
               <span className="ml-2 text-3xl font-semibold tracking-wide">
                 문제 목록
               </span>
               <Link
                 href={`/exams/${eid}`}
-                className="mt-1 ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
+                className="mt-1 ml-2 3md:ml-1 text-xl font-medium cursor-pointer hover:underline hover:text-[#0038a8] focus:underline focus:text-[#0038a8] text-[#1048b8]"
               >
                 (시험: {title})
               </Link>
             </div>
           </p>
 
-          <div className="flex justify-between items-center pb-3 border-b border-gray-300">
+          <div className="flex flex-col 3md:flex-row justify-between pb-3 border-b border-gray-300">
             <div className="flex gap-2">
               {!isChagingExamProblemOrderActivate && (
                 <>
