@@ -197,8 +197,8 @@ export default function ExamProblems(props: DefaultProps) {
   const handleChangeProblemOrder = () => {
     changingProblemOrderBtnRef.current?.blur();
 
-    if (examProblemsInfo.problems.length === 0) {
-      alert('등록된 문제가 없습니다.');
+    if (examProblemsInfo.problems.length <= 2) {
+      alert('문제가 2개 이상 등록된 경우에 문제의 순서를 변경할 수 있습니다.');
       return;
     }
 
@@ -241,11 +241,12 @@ export default function ExamProblems(props: DefaultProps) {
           </p>
 
           <div className="flex flex-col 3md:flex-row justify-between pb-3 border-b border-gray-300">
-            <div className="flex gap-2">
+            <div className="flex flex-col 3md:flex-row gap-2">
               {!isChagingExamProblemOrderActivate && (
                 <>
                   {OPERATOR_ROLES.includes(userInfo.role) &&
-                    userInfo._id === examProblemsInfo.writer._id && (
+                    userInfo._id === examProblemsInfo.writer._id &&
+                    currentTime < examEndTime && (
                       <button
                         onClick={handleRegisterExamProblem}
                         className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
@@ -266,7 +267,8 @@ export default function ExamProblems(props: DefaultProps) {
               )}
 
               {OPERATOR_ROLES.includes(userInfo.role) &&
-                userInfo._id === examProblemsInfo.writer._id && (
+                userInfo._id === examProblemsInfo.writer._id &&
+                currentTime < examEndTime && (
                   <button
                     onClick={handleChangeProblemOrder}
                     ref={changingProblemOrderBtnRef}
