@@ -128,6 +128,22 @@ export default function ContestDetail(props: DefaultProps) {
           alert('정의되지 않은 http status code입니다');
       }
     },
+    onError: (error: AxiosError) => {
+      const resData: any = error.response?.data;
+      switch (resData.status) {
+        case 400:
+          switch (resData.code) {
+            case 'BEFORE_APPLYING_PERIOD':
+              alert('대회 신청 기간이 아닙니다.');
+              break;
+            default:
+              alert('정의되지 않은 http code입니다.');
+          }
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
   });
 
   const unErollContestMutation = useMutation({

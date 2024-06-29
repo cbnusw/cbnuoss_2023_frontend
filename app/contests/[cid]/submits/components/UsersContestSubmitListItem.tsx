@@ -1,6 +1,9 @@
 import { ContestSubmitInfo } from '@/app/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
-import { getCodeSubmitResultTypeDescription } from '@/app/utils/getCodeSubmitResultTypeDescription';
+import {
+  getCodeSubmitResultTypeColor,
+  getCodeSubmitResultTypeDescription,
+} from '@/app/utils/getCodeSubmitResultTypeDescription';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -25,7 +28,8 @@ export default function UsersContestSubmitListItem({
     <tr
       className="border-b dark:border-gray-700 text-xs text-center cursor-pointer hover:bg-gray-50 focus:bg-gray-50"
       onClick={(e) => {
-        router.push(`/contests/${cid}/submits/${contestSubmitInfo._id}`);
+        contestSubmitInfo.result &&
+          router.push(`/contests/${cid}/submits/${contestSubmitInfo._id}`);
       }}
     >
       <th
@@ -41,19 +45,21 @@ export default function UsersContestSubmitListItem({
       <td className="">{contestSubmitInfo.problem.title}</td>
       <td
         className={`${
-          contestSubmitInfo.result.type === 'done'
-            ? 'text-[#0076C0]'
-            : 'text-red-500'
+          contestSubmitInfo.result
+            ? getCodeSubmitResultTypeColor(contestSubmitInfo.result.type)
+            : ''
         } font-semibold`}
       >
-        {getCodeSubmitResultTypeDescription(contestSubmitInfo.result.type)}
+        {contestSubmitInfo.result
+          ? getCodeSubmitResultTypeDescription(contestSubmitInfo.result.type)
+          : 'N/A'}
       </td>
       <td>
-        <span>{(contestSubmitInfo.result.memory / 1048576).toFixed(2)} </span>
+        <span>{(contestSubmitInfo.result?.memory / 1048576).toFixed(2)} </span>
         <span className="ml-[-1px] text-red-500">MB</span>
       </td>
       <td className="">
-        <span>{contestSubmitInfo.result.time} </span>{' '}
+        <span>{contestSubmitInfo.result?.time} </span>
         <span className="ml-[-1px] text-red-500">ms</span>
       </td>
       <td className="">{contestSubmitInfo.language}</td>
