@@ -233,7 +233,7 @@ export default function ContestProblem(props: DefaultProps) {
           <p className="text-2xl font-bold tracking-tight">
             {contestProblemInfo.title}
           </p>
-          <div className="flex flex-col 3md:flex-row gap-1 3md:gap-3 pb-3 border-b border-gray-300">
+          <div className="flex flex-col 3md:flex-row 3md:justify-between gap-1 3md:gap-3 pb-3 border-b border-gray-300">
             <div className="flex flex-col 3md:flex-row gap-1 3md:gap-3">
               <span className="font-semibold">
                 <span className="3md:hidden text-gray-500">• </span>

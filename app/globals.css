@@ -45,6 +45,11 @@
     0.25px 1px 4px 0 rgba(0, 0, 0, 0.19);
 }
 
+.react-pdf__Document {
+  display: flex !important;
+  justify-content: center !important;
+}
+
 /* CKEDITOR5 CSS */
 .ck-editor__editable:not(.ck-editor__nested-editable) {
   min-height: 30rem;
