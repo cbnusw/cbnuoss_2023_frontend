@@ -175,7 +175,13 @@ export default function RegisterExamProblem(props: DefaultProps) {
       if (examInfo) {
         const isWriter = examInfo.writer._id === userInfo._id;
 
-        if (isWriter && currentTime < examEndTime) {
+        if (currentTime >= examEndTime) {
+          alert('종료된 시험은 문제 등록이 불가능합니다.');
+          router.back();
+          return;
+        }
+
+        if (isWriter) {
           setIsLoading(false);
           return;
         }
@@ -185,6 +191,8 @@ export default function RegisterExamProblem(props: DefaultProps) {
       }
     });
   }, [updateUserInfo, examInfo, router]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
