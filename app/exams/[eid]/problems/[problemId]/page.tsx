@@ -154,22 +154,24 @@ export default function ExamProblem(props: DefaultProps) {
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
-      <div className="flex flex-col w-[60rem] mx-auto">
+      <div className="flex flex-col w-[21rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="text-2xl font-bold tracking-tight">
             {examProblemInfo.title}
           </p>
-          <div className="flex justify-between pb-3 border-b border-gray-300">
-            <div className="flex gap-3">
+          <div className="flex flex-col 3md:flex-row gap-1 3md:gap-3 pb-3 border-b border-gray-300">
+            <div className="flex flex-col 3md:flex-row gap-1 3md:gap-3">
               <span className="font-semibold">
+                <span className="3md:hidden text-gray-500">• </span>
                 시간 제한:
                 <span className="font-mono font-light">
                   {' '}
                   <span>{examProblemInfo.options.maxRealTime / 1000}</span>초
                 </span>
               </span>
-              <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
+              <span className='hidden relative bottom-[0.055rem] font-thin before:content-["|"] 3md:block' />
               <span className="font-semibold">
+                <span className="3md:hidden text-gray-500">• </span>
                 메모리 제한:
                 <span className="font-mono font-light">
                   {' '}
@@ -180,15 +182,17 @@ export default function ExamProblem(props: DefaultProps) {
                 </span>
               </span>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-col 3md:flex-row gap-1 3md:gap-3">
               <span className="font-semibold">
+                <span className="3md:hidden text-gray-500">• </span>
                 시험명:{' '}
                 <span className="font-light">
                   {examProblemInfo.parentId.title}
                 </span>
               </span>
-              <span className='relative bottom-[0.055rem] font-thin before:content-["|"]' />
+              <span className='hidden relative bottom-[0.055rem] font-thin before:content-["|"] 3md:block' />
               <span className="font-semibold">
+                <span className="3md:hidden text-gray-500">• </span>
                 수업명:{' '}
                 <span className="font-light">
                   {examProblemInfo.parentId.course}
@@ -198,7 +202,7 @@ export default function ExamProblem(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="flex gap-2 justify-end mt-4">
+        <div className="flex flex-col 3md:flex-row gap-2 justify-end mt-4">
           <button
             onClick={handleGoToExamProblems}
             className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
