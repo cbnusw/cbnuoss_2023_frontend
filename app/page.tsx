@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
 import Link from 'next/link';
-import ContestList from './components/Contests/ContestList';
+import ContestList from './components/contests/ContestList';
 import ExamList from './components/exams/ExamList';
 import { useEffect } from 'react';
 import ChannelService from './third-party/ChannelTalk';

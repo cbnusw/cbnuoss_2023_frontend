@@ -46,8 +46,9 @@
 }
 
 .react-pdf__Document {
-  display: flex !important;
-  justify-content: center !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* CKEDITOR5 CSS */
