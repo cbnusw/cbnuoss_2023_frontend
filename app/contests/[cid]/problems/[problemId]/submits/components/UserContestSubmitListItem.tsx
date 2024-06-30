@@ -1,5 +1,3 @@
-'use client';
-
 import { ContestSubmitInfo } from '@/app/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
 import {
@@ -53,31 +51,42 @@ export default function UserContestSubmitListItem({
         {total - index}
       </th>
       <td className="">{personalUserContestSubmitInfo.problem.title}</td>
-      <td
-        className={`${
-          personalUserContestSubmitInfo.result
-            ? getCodeSubmitResultTypeColor(
-                personalUserContestSubmitInfo.result.type,
-              )
-            : ''
-        } font-semibold`}
-      >
-        {personalUserContestSubmitInfo.result
-          ? getCodeSubmitResultTypeDescription(
+      {personalUserContestSubmitInfo.result ? (
+        <>
+          <td
+            className={`${getCodeSubmitResultTypeColor(
               personalUserContestSubmitInfo.result.type,
-            )
-          : 'N/A'}
-      </td>
-      <td>
-        <span>
-          {(personalUserContestSubmitInfo.result?.memory / 1048576).toFixed(2)}{' '}
-        </span>
-        <span className="ml-[-1px] text-red-500">MB</span>
-      </td>
-      <td className="">
-        <span>{personalUserContestSubmitInfo.result?.time} </span>{' '}
-        <span className="ml-[-1px] text-red-500">ms</span>
-      </td>
+            )} font-semibold`}
+          >
+            {getCodeSubmitResultTypeDescription(
+              personalUserContestSubmitInfo.result.type,
+            )}
+          </td>
+          <td>
+            <span>
+              {(personalUserContestSubmitInfo.result.memory / 1048576).toFixed(
+                2,
+              )}{' '}
+            </span>
+            <span className="ml-[-1px] text-red-500">MB</span>
+          </td>
+          <td className="">
+            <span>{personalUserContestSubmitInfo.result.time} </span>{' '}
+            <span className="ml-[-1px] text-red-500">ms</span>
+          </td>
+        </>
+      ) : (
+        <>
+          <td className="flex gap-[0.6rem] justify-center items-center w-[3.5rem] h-10 text-[#e67e22] font-semibold mx-auto">
+            채점 중
+            <span className="w-1 ml-[-0.6rem] text-[#e67e22]">
+              {loadingDots}
+            </span>
+          </td>
+          <td>-</td>
+          <td>-</td>
+        </>
+      )}
       <td className="">{personalUserContestSubmitInfo.language}</td>
       <td className="">
         {formatDateToYYMMDDHHMM(personalUserContestSubmitInfo.createdAt)}
