@@ -1,5 +1,3 @@
-'use client';
-
 import { ExamSubmitInfo } from '@/app/types/exam';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
 import {
