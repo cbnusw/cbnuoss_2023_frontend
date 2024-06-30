@@ -35,3 +35,26 @@ export function getCodeSubmitResultTypeColor(resultType: string): string {
       return 'X';
   }
 }
+
+import { Languages } from '@/app/utils/CodeMirrorExtensionsImport';
+const { cpp, java, javascript, python, go } = Languages;
+
+export function getCodeExtension(language: string) {
+  switch (language) {
+    case 'C':
+    case 'C++':
+      return [cpp()];
+    case 'Java':
+    case 'Kotlin':
+      return [java()];
+    case 'JavaScript':
+      return [javascript()];
+    case 'Python2':
+    case 'Python3':
+      return [python()];
+    case 'Go':
+      return [go()];
+    default:
+      return [];
+  }
+}
