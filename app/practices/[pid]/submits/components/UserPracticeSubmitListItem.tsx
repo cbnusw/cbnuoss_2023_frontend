@@ -1,5 +1,3 @@
-'use client';
-
 import { PracticeSubmitInfo } from '@/app/types/practice';
 import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
 import {
