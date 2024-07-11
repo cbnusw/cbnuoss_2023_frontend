@@ -10,7 +10,7 @@ import { ContestInfo } from '@/app/types/contest';
 
 const fetchProgressingContests = () => {
   return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/progressing`,
+    `${process.env.NEXT_PUBLIC_API_VERSION}/contest/available`,
   );
 };
 
@@ -21,27 +21,9 @@ export default function ContestList() {
   });
 
   const resData = data?.data.data;
+  const contestCnt = resData?.length || 0;
 
-  // Filter contests that are applicable
-  const applicableContests = resData?.documents.filter(
-    (contestInfo: ContestInfo) => {
-      const now = new Date();
-      let isContestApplicable = false;
-
-      if (contestInfo.applyingPeriod) {
-        const applyingPeriodEnd = new Date(contestInfo.applyingPeriod.end);
-        isContestApplicable = applyingPeriodEnd > now;
-      } else {
-        const testPeriodStart = new Date(contestInfo.testPeriod.start);
-        isContestApplicable = testPeriodStart > now;
-      }
-
-      return isContestApplicable;
-    },
-  );
-
-  if (resData?.documents.length === 0 || applicableContests?.length === 0)
-    return <NoneContestListItem />;
+  if (contestCnt === 0) return <NoneContestListItem />;
 
   return (
     <>
@@ -53,16 +35,13 @@ export default function ContestList() {
         </>
       ) : (
         <>
-          {applicableContests.map((contestInfo: ContestInfo) => (
+          {resData.map((contestInfo: ContestInfo) => (
             <ContestListItem contestInfo={contestInfo} key={contestInfo._id} />
           ))}
 
-          {Array.from(
-            { length: 4 - applicableContests?.length },
-            (_, index) => (
-              <DummyContestListemItem key={index} />
-            ),
-          )}
+          {Array.from({ length: 4 - resData?.length }, (_, index) => (
+            <DummyContestListemItem key={index} />
+          ))}
         </>
       )}
     </>
