@@ -1,6 +1,6 @@
 'use client';
 
-import MyDropzone from '@/app/components/MyDropzone';
+// import MyDropzone from '@/app/components/MyDropzone';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -15,6 +15,8 @@ import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
 import Loading from '@/app/loading';
 import { OPERATOR_ROLES } from '@/app/constants/role';
+import dynamic from 'next/dynamic';
+import { getCodeExtension } from '@/app/utils/getCodeSubmitResultTypeDescription';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -38,6 +40,11 @@ interface DefaultProps {
     problemId: string;
   };
 }
+
+const CodeMirror = dynamic(
+  () => import('@uiw/react-codemirror').then((mod) => mod.default),
+  { ssr: false },
+);
 
 export default function SubmitPracticeProblemCode(props: DefaultProps) {
   const pid = props.params.pid;
@@ -75,6 +82,7 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
   const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
+  const [code, setCode] = useState('');
 
   const [
     isSelectedSubmitLanguageValidFail,
@@ -104,8 +112,8 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
       return;
     }
 
-    if (!isCodeFileUploadingValidFail) {
-      alert('소스 코드 파일을 업로드해 주세요');
+    if (!code) {
+      alert('소스 코드를 입력해 주세요');
       window.scrollTo(0, 0);
       return;
     }
@@ -113,7 +121,7 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
     const submitCodeData = {
       parentType: 'Practice',
       problem: problemId,
-      source: uploadedCodeFileUrl,
+      source: code,
       language: selectedSubmitLanguage.toLowerCase(),
     };
 
@@ -225,20 +233,28 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
             </p>
           </div>
 
-          <div className="flex flex-col gap-1 mt-5">
-            <p className="text-lg">소스 코드 파일</p>
-            <MyDropzone
+          <div className="flex flex-col gap-2 mt-5">
+            <p className="text-lg">소스 코드</p>
+            {/* <MyDropzone
               type="code"
               guideMsg="코드 파일을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsCodeFileUploadingValidFail}
               isFileUploaded={isCodeFileUploadingValidFail}
               initUrl={''}
               setUploadedFileUrl={setUploadedCodeFileUrl}
+            /> */}
+            <CodeMirror
+              height="350px"
+              value={code}
+              extensions={[getCodeExtension(selectedSubmitLanguage)]}
+              onChange={(code) => {
+                setCode(code);
+              }}
             />
           </div>
         </div>
 
-        <div className="mt-5 pb-2 flex justify-end gap-3">
+        <div className="pb-2 flex justify-end gap-3">
           <button
             onClick={handleGoToPracticeProblem}
             className="px-4 py-[0.5rem] rounded-[6px] font-light"
