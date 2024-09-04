@@ -3,27 +3,62 @@
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
+import { CreateNoticeParams } from '@/app/types/notice';
 import { UserInfo } from '@/app/types/user';
+import axiosInstance from '@/app/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { useMutation } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+
+// 공지사항 등록 API
+const createNotice = (params: CreateNoticeParams) => {
+  const { title, content } = params;
+  const reqBody = {
+    title,
+    content,
+  };
+
+  return axiosInstance.post(
+    `${process.env.NEXT_PUBLIC_API_VERSION}/notice`,
+    reqBody,
+  );
+};
 
 const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
   ssr: false,
 });
 
-export default function RegisterNotice() {
+export default function CreateNotice() {
+  const createNoticeMutation = useMutation({
+    mutationFn: createNotice,
+    onSuccess: (data) => {
+      const resData = data?.data;
+      const httpStatusCode = resData.status;
+
+      switch (httpStatusCode) {
+        case 200:
+          const nid = resData?.data._id;
+          alert('공지사항이 등록되었습니다.');
+          router.push(`/notices/${nid}`);
+          break;
+        default:
+          alert('정의되지 않은 http status code입니다');
+      }
+    },
+  });
+
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
   const [isLoading, setIsLoading] = useState(true);
-  const [noticeName, setNoticeName] = useState('');
-  const [editorContent, setEditorContent] = useState('');
-  const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
-  const [noticePwd, setNoticePwd] = useState('');
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  // const [isCheckedUsingPwd, setIsCheckedUsingPwd] = useState(false);
+  // const [noticePwd, setNoticePwd] = useState('');
 
   const [isNoticeNameValidFail, setIsNoticeNameValidFail] = useState(false);
-  const [isNoticePwdValidFail, setIsNoticePwdValidFail] = useState(false);
+  // const [isNoticePwdValidFail, setIsNoticePwdValidFail] = useState(false);
 
   const noticeNameRef = useRef<HTMLInputElement>(null);
   const noticePwdRef = useRef<HTMLInputElement>(null);
@@ -31,14 +66,14 @@ export default function RegisterNotice() {
   const router = useRouter();
 
   const handleNoticeNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNoticeName(e.target.value);
+    setTitle(e.target.value);
     setIsNoticeNameValidFail(false);
   };
 
-  const handleNoticePwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNoticePwd(e.target.value);
-    setIsNoticePwdValidFail(false);
-  };
+  // const handleNoticePwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setNoticePwd(e.target.value);
+  //   setIsNoticePwdValidFail(false);
+  // };
 
   const handleCancelNoticeRegister = () => {
     const userResponse = confirm('공지사항 등록을 취소하시겠습니까?');
@@ -48,7 +83,7 @@ export default function RegisterNotice() {
   };
 
   const handleRegisterNotice = () => {
-    if (!noticeName) {
+    if (!title) {
       alert('제목을 입력해 주세요');
       window.scrollTo(0, 0);
       noticeNameRef.current?.focus();
@@ -56,21 +91,21 @@ export default function RegisterNotice() {
       return;
     }
 
-    if (!editorContent) {
+    if (!content) {
       alert('본문을 입력해 주세요');
       window.scrollTo(0, 0);
       return;
     }
 
-    if (isCheckedUsingPwd && !noticePwd) {
-      alert('비밀번호를 입력해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
-      noticePwdRef.current?.focus();
-      setIsNoticePwdValidFail(true);
-      return;
-    }
+    // if (isCheckedUsingPwd && !noticePwd) {
+    //   alert('비밀번호를 입력해 주세요');
+    //   window.scrollTo(0, document.body.scrollHeight);
+    //   noticePwdRef.current?.focus();
+    //   setIsNoticePwdValidFail(true);
+    //   return;
+    // }
 
-    alert('등록 기능 개발 예정');
+    createNoticeMutation.mutate({ title, content });
   };
 
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
@@ -105,7 +140,7 @@ export default function RegisterNotice() {
               }-500 focus:outline-none focus:ring-0 peer`}
               placeholder=" "
               required
-              value={noticeName}
+              value={title}
               ref={noticeNameRef}
               onChange={handleNoticeNameChange}
             />
@@ -132,13 +167,10 @@ export default function RegisterNotice() {
         </div>
 
         <div className="w-full mx-auto overflow-auto">
-          <CustomCKEditor
-            initEditorContent={''}
-            onEditorChange={setEditorContent}
-          />
+          <CustomCKEditor initEditorContent={''} onEditorChange={setContent} />
         </div>
 
-        <div className="flex flex-col mt-8">
+        {/* <div className="flex flex-col mt-8">
           <div className="flex">
             <div className="flex items-center h-5">
               <input
@@ -209,7 +241,7 @@ export default function RegisterNotice() {
               </label>
             </div>
           ) : null}
-        </div>
+        </div> */}
 
         <div className="mt-14 pb-2 flex justify-end gap-3">
           <button
