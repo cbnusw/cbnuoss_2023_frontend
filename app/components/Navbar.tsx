@@ -77,7 +77,7 @@ export default function Navbar() {
               연습문제
             </Link>
             <Link
-              href="/notice"
+              href="/notices"
               className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
             >
               공지사항
@@ -229,7 +229,7 @@ export default function Navbar() {
                 연습문제
               </Link>
               <Link
-                href="/notice"
+                href="/notices"
                 onClick={(e) => {
                   e.stopPropagation();
                   setRightPos('-right-full');
