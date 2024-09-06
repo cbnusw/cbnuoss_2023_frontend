@@ -92,7 +92,7 @@ export default function Navbar() {
                   href="/mypage/profile"
                   className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
                 >
-                  <span className="font-semibold">{userInfo.name}</span>님
+                  <span className="font-semibold">{userInfo.name}</span> 님
                 </Link>
                 <button
                   className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
