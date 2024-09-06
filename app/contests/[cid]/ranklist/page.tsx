@@ -2,7 +2,7 @@
 
 import Loading from '@/app/loading';
 import UserScoreInfoList from './components/UserScoreInfoList';
-import NoneUserScoreInfoList from './components/NoneUserScoreInfoListItem';
+import EmptyUserScoreInfoListItem from './components/EmptyUserScoreInfoListItem';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -226,7 +226,7 @@ export default function ContestRankList(props: DefaultProps) {
         </div>
 
         {contestRankListInfo.length === 0 ? (
-          <NoneUserScoreInfoList />
+          <EmptyUserScoreInfoListItem />
         ) : (
           <>
             <div className="flex mt-4 justify-between items-center">

@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import UsersContestSubmitListItem from './UsersContestSubmitListItem';
-import NoneUsersContestSubmitListItem from './NoneUsersContestSubmitListItem';
+import EmptyUsersContestSubmitListItem from './EmptyUsersContestSubmitListItem';
 import Loading from '@/app/loading';
 import { useQuery } from '@tanstack/react-query';
 import { ContestSubmitInfo } from '@/app/types/contest';
@@ -108,7 +108,7 @@ export default function UsersContestSubmitList({
             </thead>
             <tbody>
               {contestSubmitsInfo?.length === 0 && (
-                <NoneUsersContestSubmitListItem />
+                <EmptyUsersContestSubmitListItem />
               )}
               {contestSubmitsInfo.map((contestSubmitInfo, idx) => (
                 <UsersContestSubmitListItem

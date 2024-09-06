@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import UsersExamSubmitListItem from './UsersExamSubmitListItem';
-import NoneUsersExamSubmitListItem from './NoneUsersExamSubmitListItem';
+import EmptyUsersExamSubmitListItem from './EmptyUsersExamSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/app/utils/axiosInstance';
 import useDebounce from '@/app/hooks/useDebounce';
@@ -103,7 +103,7 @@ export default function UsersExamSubmitList({
             </thead>
             <tbody>
               {contestSubmitsInfo?.length === 0 && (
-                <NoneUsersExamSubmitListItem />
+                <EmptyUsersExamSubmitListItem />
               )}
               {contestSubmitsInfo.map((examSubmitInfo, idx) => (
                 <UsersExamSubmitListItem

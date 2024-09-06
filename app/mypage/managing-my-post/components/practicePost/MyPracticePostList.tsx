@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
-import NoneMyPracticePostListItem from './NoneMyPracticePostListItem';
+import EmptyMyPracticePostListItem from './EmptyMyPracticePostListItem';
 import MyPracticePostListItem from './MyPracticePostListItem';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -76,7 +76,7 @@ export default function MyPracticePostList() {
               </tr>
             </thead>
             <tbody>
-              {practicePostList.length === 0 && <NoneMyPracticePostListItem />}
+              {practicePostList.length === 0 && <EmptyMyPracticePostListItem />}
               {practicePostList.map(
                 (practiceInfo: ProblemInfo, index: number) => (
                   <MyPracticePostListItem

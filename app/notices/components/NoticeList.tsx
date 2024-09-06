@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import NoticeListItem from './NoticeListItem';
-import NoneNoticeListItem from './NoneNoticeListItem';
+import EmptyNoticeListItem from './EmptyNoticeListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/app/utils/axiosInstance';
 import useDebounce from '@/app/hooks/useDebounce';
@@ -80,7 +80,7 @@ export default function NoticeList({ searchQuery }: NoticeListProps) {
               </tr>
             </thead>
             <tbody>
-              {resData?.documents.length === 0 && <NoneNoticeListItem />}
+              {resData?.documents.length === 0 && <EmptyNoticeListItem />}
               {resData?.documents.map(
                 (noticeInfo: NoticeInfo, index: number) => (
                   <NoticeListItem

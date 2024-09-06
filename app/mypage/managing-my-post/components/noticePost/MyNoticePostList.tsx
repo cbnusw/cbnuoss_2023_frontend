@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
-import NoneMyNoticePostListItem from './NoneMyNoticePostListItem';
+import EmptyMyNoticePostListItem from './EmptyMyNoticePostListItem';
 import MyNoticePostListItem from './MyNoticePostListItem';
 
 export default function MyNoticePostList() {
@@ -17,7 +17,7 @@ export default function MyNoticePostList() {
   }, []);
 
   if (isLoading) return <Loading />;
-  if (isMyPracticePostEmpty) return <NoneMyNoticePostListItem />;
+  if (isMyPracticePostEmpty) return <EmptyMyNoticePostListItem />;
 
   return (
     <div className="mx-auto mt-6 w-full">

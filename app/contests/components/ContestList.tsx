@@ -1,7 +1,7 @@
 'use client';
 
 import ContestListItem from './ContestListItem';
-import NoneContestListItem from './NoneContestListItem';
+import EmptyContestListItem from './EmptyContestListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '../../utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
@@ -83,7 +83,7 @@ export default function ContestList({ searchQuery }: ContestListProps) {
               </tr>
             </thead>
             <tbody>
-              {resData?.documents.length === 0 && <NoneContestListItem />}
+              {resData?.documents.length === 0 && <EmptyContestListItem />}
               {resData?.documents.map(
                 (contestInfo: ContestInfo, index: number) => (
                   <ContestListItem

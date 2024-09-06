@@ -3,7 +3,7 @@
 import React from 'react';
 import axiosInstance from '../../utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import NoneExamListItem from './NoneExamListItem';
+import EmptyExamListItem from './EmptyExamListItem';
 import ExamListItem from './ExamListItem';
 import DummyExamListItem from './DummyExamListItem'; // DummyExamListItem 컴포넌트를 import 해야 합니다.
 import { ExamInfo } from '@/app/types/exam';
@@ -38,7 +38,7 @@ export default function ExamList() {
   }
 
   if (examCnt === 0) {
-    return <NoneExamListItem />;
+    return <EmptyExamListItem />;
   }
 
   return (

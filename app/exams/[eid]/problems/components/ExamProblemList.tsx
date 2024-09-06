@@ -7,7 +7,7 @@ import {
   Droppable,
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/navigation';
-import NoneExamProblemListItem from './NoneExamProblemListItem';
+import EmptyExamProblemListItem from './EmptyExamProblemListItem';
 import { ProblemInfo } from '@/app/types/problem';
 
 interface ExamProblemListProps {
@@ -38,7 +38,7 @@ export default function ExamProblemList({
     router.push(`/exams/${eid}/problems/${id}`);
   };
 
-  if (problemsInfo.length === 0) return <NoneExamProblemListItem />;
+  if (problemsInfo.length === 0) return <EmptyExamProblemListItem />;
 
   return (
     <div className="mb-14">

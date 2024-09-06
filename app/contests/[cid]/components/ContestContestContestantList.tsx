@@ -1,7 +1,7 @@
 'use client';
 
 import { ContestInfo } from '@/app/types/contest';
-import NoneContestContestantListItem from './NoneContestContestantListItem';
+import EmptyContestContestantListItem from './EmptyContestContestantListItem';
 import ContestContestantListItem from './ContestContestantListItem';
 
 export interface ContestContestContestantListProps {
@@ -38,7 +38,7 @@ export default function ContestContestContestantList(
           </thead>
           <tbody>
             {contestContestants.length === 0 && (
-              <NoneContestContestantListItem />
+              <EmptyContestContestantListItem />
             )}
             {contestContestants.map((contestant, index) => (
               <ContestContestantListItem

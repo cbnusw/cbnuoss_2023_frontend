@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NoneMyContestPostListItem() {
+export default function EmptyContestEnrolledListItem() {
   return (
     <tr className="border-b dark:border-gray-700 text-xs text-center">
       <th
@@ -9,7 +9,7 @@ export default function NoneMyContestPostListItem() {
       >
         1
       </th>
-      <td className="text-sm">조회된 정보가 없습니다</td>
+      <td className="text-xs">조회된 출전 정보가 없습니다</td>
     </tr>
   );
 }

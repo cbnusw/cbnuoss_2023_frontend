@@ -1,7 +1,7 @@
 'use client';
 
 import UserPracticeSubmitListItem from './UserPracticeSubmitListItem';
-import NoneUserPracticeSubmitListItem from './NoneUserPracticeSubmitListItem';
+import EmptyUserPracticeSubmitListItem from './EmptyUserPracticeSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
@@ -63,7 +63,7 @@ export default function UserPracticeSubmitList({
             </thead>
             <tbody>
               {personalUserPracticeSubmitsInfo?.length === 0 && (
-                <NoneUserPracticeSubmitListItem />
+                <EmptyUserPracticeSubmitListItem />
               )}
               {personalUserPracticeSubmitsInfo.map(
                 (personalUserPracticeSubmitInfo, idx) => (
