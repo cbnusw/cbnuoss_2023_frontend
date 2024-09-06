@@ -75,14 +75,14 @@ export default function CreateNotice() {
   //   setIsNoticePwdValidFail(false);
   // };
 
-  const handleCancelNoticeRegister = () => {
+  const handleCancelNoticeCreate = () => {
     const userResponse = confirm('공지사항 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
     router.push('/notices');
   };
 
-  const handleRegisterNotice = () => {
+  const handleCreateNotice = () => {
     if (!title) {
       alert('제목을 입력해 주세요');
       window.scrollTo(0, 0);
@@ -245,13 +245,13 @@ export default function CreateNotice() {
 
         <div className="mt-14 pb-2 flex justify-end gap-3">
           <button
-            onClick={handleCancelNoticeRegister}
+            onClick={handleCancelNoticeCreate}
             className="px-4 py-[0.5rem] rounded-[6px] font-light"
           >
             취소
           </button>
           <button
-            onClick={handleRegisterNotice}
+            onClick={handleCreateNotice}
             className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
             등록
