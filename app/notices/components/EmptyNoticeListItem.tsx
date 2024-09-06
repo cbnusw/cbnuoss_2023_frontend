@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NonePracticeListItem() {
+export default function EmptyNoticeListItem() {
   return (
     <tr className="border-b dark:border-gray-700 text-xs text-center">
       <th
@@ -9,7 +9,7 @@ export default function NonePracticeListItem() {
       >
         1
       </th>
-      <td className="text-sm">등록된 연습문제 정보가 없습니다</td>
+      <td className="text-xs">등록된 공지사항 정보가 없습니다</td>
     </tr>
   );
 }

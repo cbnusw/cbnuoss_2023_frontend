@@ -1,7 +1,7 @@
 'use client';
 
 import Loading from '@/app/loading';
-import NoneContestEnrolledListItem from './NoneContestEnrolledListItem';
+import EmptyContestEnrolledListItem from './EmptyContestEnrolledListItem';
 import ContestEnrolledListItem from './ContestEnrolledListItem';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
@@ -41,7 +41,7 @@ export default function ContestEnrolledList() {
               </tr>
             </thead>
             <tbody>
-              {numberOfItems === 0 && <NoneContestEnrolledListItem />}
+              {numberOfItems === 0 && <EmptyContestEnrolledListItem />}
               {resData?.map(
                 (contestEnrolledInfo: ContestEnrolledInfo, index: number) => (
                   <ContestEnrolledListItem

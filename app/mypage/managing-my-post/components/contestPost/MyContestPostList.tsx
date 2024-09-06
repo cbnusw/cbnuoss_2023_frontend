@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import Loading from '@/app/loading';
-import NoneMyContestPostListItem from './NoneMyContestPostListItem';
+import EmptyMyContestPostListItem from './EmptyMyContestPostListItem';
 import MyContestPostListItem from './MyContestPostListItem';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
@@ -75,7 +75,9 @@ export default function MyContestPostList() {
               </tr>
             </thead>
             <tbody>
-              {resData?.documents.length === 0 && <NoneMyContestPostListItem />}
+              {resData?.documents.length === 0 && (
+                <EmptyMyContestPostListItem />
+              )}
               {resData?.documents.map(
                 (contestInfo: ContestInfo, index: number) => (
                   <MyContestPostListItem

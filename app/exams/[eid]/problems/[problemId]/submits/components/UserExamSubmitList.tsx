@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import UserExamSubmitListItem from './UserExamSubmitListItem';
-import NoneUserExamSubmitListItem from './NoneUserExamSubmitListItem';
+import EmptyUserExamSubmitListItem from './EmptyUserExamSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
@@ -69,7 +69,7 @@ export default function UserExamSubmitList({
             </thead>
             <tbody>
               {personalUserExamSubmitsInfo?.length === 0 && (
-                <NoneUserExamSubmitListItem />
+                <EmptyUserExamSubmitListItem />
               )}
               {personalUserExamSubmitsInfo.map(
                 (personalUserExamSubmitInfo, idx) => (

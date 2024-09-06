@@ -1,6 +1,6 @@
 'use client';
 
-import NoneContestProblemListItem from './NoneContestProblemListItem';
+import EmptyContestProblemListItem from './EmptyContestProblemListItem';
 import {
   DragDropContext,
   Draggable,
@@ -38,7 +38,7 @@ export default function ContestProblemList({
     router.push(`/contests/${cid}/problems/${id}`);
   };
 
-  if (problemsInfo.length === 0) return <NoneContestProblemListItem />;
+  if (problemsInfo.length === 0) return <EmptyContestProblemListItem />;
 
   return (
     <div className="mb-14">

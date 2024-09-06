@@ -1,7 +1,7 @@
 import React from 'react';
 import DummyContestListemItem from './DummyContestListemItem';
 
-export default function NoneContestListItem() {
+export default function EmptyContestListItem() {
   return (
     <>
       <div className="relative flex flex-col gap-4 bg-[#f7f7f7] text-gray-500 px-3 py-[1.9rem] group">

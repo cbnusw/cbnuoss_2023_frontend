@@ -1,7 +1,7 @@
 'use client';
 
 import Loading from '@/app/loading';
-import NoneMyExamPostListItem from './NoneMyExamPostListItem';
+import EmptyMyExamPostListItem from './EmptyMyExamPostListItem';
 import MyExamPostListItem from './MyExamPostListItem';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -67,7 +67,7 @@ export default function MyExamPostList() {
               </tr>
             </thead>
             <tbody>
-              {resData?.documents.length === 0 && <NoneMyExamPostListItem />}
+              {resData?.documents.length === 0 && <EmptyMyExamPostListItem />}
               {resData?.documents.map((examInfo: ExamInfo, index: number) => (
                 <MyExamPostListItem
                   examInfo={examInfo}

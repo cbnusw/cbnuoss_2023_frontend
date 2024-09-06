@@ -1,7 +1,7 @@
 import React from 'react';
 import DummyExamListemItem from './DummyExamListItem';
 
-export default function NoneExamListItem() {
+export default function EmptyExamListItem() {
   return (
     <>
       <div className="relative flex flex-col gap-4 bg-[#f7f7f7] text-gray-500 px-3 py-[2.5rem] group">

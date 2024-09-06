@@ -4,7 +4,7 @@ import React from 'react';
 import axiosInstance from '../../utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import ContestListItem from './ContestListItem';
-import NoneContestListItem from './NoneContestListItem';
+import EmptyContestListItem from './EmptyContestListItem';
 import DummyContestListemItem from './DummyContestListemItem';
 import { ContestInfo } from '@/app/types/contest';
 
@@ -23,7 +23,7 @@ export default function ContestList() {
   const resData = data?.data.data;
   const contestCnt = resData?.length || 0;
 
-  if (contestCnt === 0) return <NoneContestListItem />;
+  if (contestCnt === 0) return <EmptyContestListItem />;
 
   return (
     <>

@@ -1,7 +1,7 @@
 'use client';
 
 import Loading from '@/app/loading';
-import NoneExamEnrolledListItem from './NoneExamEnrolledListItem';
+import EmptyExamEnrolledListItem from './EmptyExamEnrolledListItem';
 import ExamEnrolledListItem from './ExamEnrolledListItem';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
@@ -44,7 +44,7 @@ export default function ExamEnrolledList() {
               </tr>
             </thead>
             <tbody>
-              {numberOfItems === 0 && <NoneExamEnrolledListItem />}
+              {numberOfItems === 0 && <EmptyExamEnrolledListItem />}
               {resData?.map(
                 (examEnrolledInfo: ExamEnrolledInfo, index: number) => (
                   <ExamEnrolledListItem

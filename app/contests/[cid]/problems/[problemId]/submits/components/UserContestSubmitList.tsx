@@ -1,7 +1,7 @@
 'use client';
 
 import UserContestSubmitListItem from './UserContestSubmitListItem';
-import NoneUserContestSubmitListItem from './NoneUserContestSubmitListItem';
+import EmptyUserContestSubmitListItem from './EmptyUserContestSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/app/utils/axiosInstance';
 import { ContestSubmitInfo } from '@/app/types/contest';
@@ -69,7 +69,7 @@ export default function UserContestSubmitList({
             </thead>
             <tbody>
               {personalUserContestSubmitsInfo?.length === 0 && (
-                <NoneUserContestSubmitListItem />
+                <EmptyUserContestSubmitListItem />
               )}
               {personalUserContestSubmitsInfo.map(
                 (personalUserContestSubmitInfo, idx) => (

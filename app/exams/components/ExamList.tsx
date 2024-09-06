@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import ExamListItem from './ExamListItem';
-import NoneExamListItem from './NoneExamListItem';
+import EmptyExamListItem from './EmptyExamListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/app/utils/axiosInstance';
 import useDebounce from '@/app/hooks/useDebounce';
@@ -83,7 +83,7 @@ export default function ExamList({ searchQuery }: ExamListProps) {
               </tr>
             </thead>
             <tbody>
-              {resData?.documents.length === 0 && <NoneExamListItem />}
+              {resData?.documents.length === 0 && <EmptyExamListItem />}
               {resData?.documents.map((examInfo: ExamInfo, index: number) => (
                 <ExamListItem
                   examInfo={examInfo}

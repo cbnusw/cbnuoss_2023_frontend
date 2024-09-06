@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function NoneMyExamPostListItem() {
+export default function EmptyUserContestSubmitListItem() {
   return (
     <tr className="border-b dark:border-gray-700 text-xs text-center">
       <th
@@ -9,7 +9,7 @@ export default function NoneMyExamPostListItem() {
       >
         1
       </th>
-      <td className="text-sm">조회된 정보가 없습니다</td>
+      <td className="text-xs">조회된 제출 정보가 없습니다</td>
     </tr>
   );
 }
