@@ -87,7 +87,6 @@ export default function NoticeDetail(props: DefaultProps) {
       '현재 공지사항 게시글을 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
     );
     if (!userResponse) return;
-    alert('게시글을 삭제하였습니다.');
 
     deleteNoticeMutation.mutate(nid);
   };
