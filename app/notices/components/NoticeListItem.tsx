@@ -1,9 +1,5 @@
 import { NoticeInfo } from '@/app/types/notice';
-import {
-  formatDateToYYMMDDHHMM,
-  formatDateToYYMMDD,
-  formatDateToYYMMDDHHMMSS,
-} from '@/app/utils/formatDate';
+import { formatDateToYYMMDD } from '@/app/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -35,7 +31,7 @@ export default function NoticeListItem(props: NoticeListItemProps) {
       <td className="hover:underline focus:underline">{noticeInfo.title}</td>
       <td className="font-medium">{noticeInfo.writer.name}</td>
       <td className="font-medium">
-        {formatDateToYYMMDDHHMMSS(noticeInfo.createdAt)}
+        {formatDateToYYMMDD(noticeInfo.createdAt)}
       </td>
     </tr>
   );
