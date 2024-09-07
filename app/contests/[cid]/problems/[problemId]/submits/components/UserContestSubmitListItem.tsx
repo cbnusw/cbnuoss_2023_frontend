@@ -1,9 +1,9 @@
 import { ContestSubmitInfo } from '@/app/types/contest';
-import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
+import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import {
   getCodeSubmitResultTypeColor,
   getCodeSubmitResultTypeDescription,
-} from '@/app/utils/getCodeSubmitResultTypeDescription';
+} from '@/utils/getCodeSubmitResultTypeDescription';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 

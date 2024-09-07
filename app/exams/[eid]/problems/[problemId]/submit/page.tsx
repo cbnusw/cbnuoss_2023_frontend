@@ -6,13 +6,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import codeImg from '@/public/images/code.png';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { SubmitCode } from '@/app/types/submit';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ProblemInfo } from '@/app/types/problem';
 import { userInfoStore } from '@/app/store/UserInfo';
 import Loading from '@/app/loading';
-import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 

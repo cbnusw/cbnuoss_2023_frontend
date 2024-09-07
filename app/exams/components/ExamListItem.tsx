@@ -1,5 +1,5 @@
 import { ExamInfo } from '@/app/types/exam';
-import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
+import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useRouter } from 'next/navigation';
 
 interface ExamListItemProps {

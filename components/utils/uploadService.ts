@@ -1,5 +1,5 @@
 import { UploadedFileInfo } from '@/app/types/problem';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 
 interface UploadResponse {
   uploaded: boolean;

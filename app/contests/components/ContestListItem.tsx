@@ -1,8 +1,5 @@
 import { ContestInfo } from '@/app/types/contest';
-import {
-  formatDateToYYMMDDHHMM,
-  formatDateToYYMMDD,
-} from '@/app/utils/formatDate';
+import { formatDateToYYMMDDHHMM, formatDateToYYMMDD } from '@/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 

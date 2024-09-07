@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import UsersExamSubmitListItem from './UsersExamSubmitListItem';
 import EmptyUsersExamSubmitListItem from './EmptyUsersExamSubmitListItem';
 import Loading from '@/app/loading';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/app/hooks/useDebounce';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';

@@ -5,14 +5,14 @@ import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { SubmitInfo } from '@/app/types/submit';
 import { UserInfo } from '@/app/types/user';
-import axiosInstance from '@/app/utils/axiosInstance';
-import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
-import { formatDateToYYMMDDHHMMSS } from '@/app/utils/formatDate';
+import axiosInstance from '@/utils/axiosInstance';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
+import { formatDateToYYMMDDHHMMSS } from '@/utils/formatDate';
 import {
   getCodeSubmitResultTypeColor,
   getCodeSubmitResultTypeDescription,
-} from '@/app/utils/getCodeSubmitResultTypeDescription';
-import { getLanguageCode } from '@/app/utils/getLanguageCode';
+} from '@/utils/getCodeSubmitResultTypeDescription';
+import { getLanguageCode } from '@/utils/getLanguageCode';
 import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';

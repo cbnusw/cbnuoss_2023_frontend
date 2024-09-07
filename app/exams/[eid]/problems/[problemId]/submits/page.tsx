@@ -6,12 +6,12 @@ import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { ProblemInfo } from '@/app/types/problem';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
 import { OPERATOR_ROLES } from '@/app/constants/role';
 

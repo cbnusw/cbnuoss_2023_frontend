@@ -3,7 +3,7 @@
 import UserPracticeSubmitListItem from './UserPracticeSubmitListItem';
 import EmptyUserPracticeSubmitListItem from './EmptyUserPracticeSubmitListItem';
 import Loading from '@/app/loading';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { PracticeSubmitInfo } from '@/app/types/practice';
 

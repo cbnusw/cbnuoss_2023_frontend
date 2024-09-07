@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import EmptyPracticeListItem from './EmptyPracticeListItem';
 import Loading from '@/app/loading';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/app/hooks/useDebounce';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';

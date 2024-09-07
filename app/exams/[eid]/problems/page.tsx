@@ -7,15 +7,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import ExamProblemList from './components/ExamProblemList';
 import Image from 'next/image';
 import listImg from '@/public/images/list.png';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { ProblemInfo, ProblemsInfo } from '@/app/types/problem';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
-import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
 import { OPERATOR_ROLES } from '@/app/constants/role';
-import { formatDateToYYMMDDHHMM } from '@/app/utils/formatDate';
+import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 
 // 시험에 등록된 문제 목록 정보 조회 API
 const fetchExamProblemsDetailInfo = ({ queryKey }: any) => {
