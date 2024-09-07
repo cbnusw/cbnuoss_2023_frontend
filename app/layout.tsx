@@ -1,7 +1,7 @@
 import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import './globals.css';
-import Providers from './utils/Providers';
+import Providers from '@/utils/Providers';
 
 export const metadata = {
   title: 'SW Online Judge',

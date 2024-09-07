@@ -3,7 +3,7 @@
 import Loading from '@/app/loading';
 import EmptyContestEnrolledListItem from './EmptyContestEnrolledListItem';
 import ContestEnrolledListItem from './ContestEnrolledListItem';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { ContestEnrolledInfo } from '@/app/types/contest';
 

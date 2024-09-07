@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import axiosInstance from '../../utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import EmptyExamListItem from './EmptyExamListItem';
 import ExamListItem from './ExamListItem';

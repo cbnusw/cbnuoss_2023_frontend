@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import Loading from '@/app/loading';
 import EmptyMyContestPostListItem from './EmptyMyContestPostListItem';
 import MyContestPostListItem from './MyContestPostListItem';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ContestInfo } from '@/app/types/contest';

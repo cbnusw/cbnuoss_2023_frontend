@@ -6,16 +6,16 @@ import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
-import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useRouter } from 'next/navigation';
 import { OPERATOR_ROLES } from '@/app/constants/role';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ExamInfo, ExamSubmitInfo } from '@/app/types/exam';
 import * as XLSX from 'xlsx';
-import { getCodeSubmitResultTypeDescription } from '@/app/utils/getCodeSubmitResultTypeDescription';
+import { getCodeSubmitResultTypeDescription } from '@/utils/getCodeSubmitResultTypeDescription';
 
 // 시험 게시글 정보 조회 API
 const fetchExamDetailInfo = ({ queryKey }: any) => {

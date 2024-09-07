@@ -3,9 +3,9 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { userInfoStore } from '../store/UserInfo';
-import axiosInstance from '../utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
-import { fetchCurrentUserInfo } from '../utils/fetchCurrentUserInfo';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 
 // 로그아웃 API
 const logout = () => {

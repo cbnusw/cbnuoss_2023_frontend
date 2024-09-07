@@ -10,8 +10,8 @@ import {
   RegisterProblemParams,
 } from '@/app/types/problem';
 import { UserInfo } from '@/app/types/user';
-import axiosInstance from '@/app/utils/axiosInstance';
-import { fetchCurrentUserInfo } from '@/app/utils/fetchCurrentUserInfo';
+import axiosInstance from '@/utils/axiosInstance';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';

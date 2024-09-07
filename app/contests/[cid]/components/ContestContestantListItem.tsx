@@ -3,7 +3,7 @@
 import { OPERATOR_ROLES } from '@/app/constants/role';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { ContestInfo } from '@/app/types/contest';
-import { maskEmail, maskString } from '@/app/utils/maskString';
+import { maskEmail, maskString } from '@/utils/maskString';
 
 interface ContestContestantListItemProps {
   contestantInfo: ContestInfo['contestants'][number]; // This denotes a single contestant object

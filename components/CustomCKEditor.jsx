@@ -1,7 +1,7 @@
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import Editor from '@/ckeditor5/build/ckeditor';
-import { UploadService } from './utils/uploadService';
 import { UploadAdapter } from './utils/uploadAdapter';
+import { UploadService } from './utils/uploadService';
 
 const editorConfiguration = {
   placeholder: '내용을 입력해 주세요',

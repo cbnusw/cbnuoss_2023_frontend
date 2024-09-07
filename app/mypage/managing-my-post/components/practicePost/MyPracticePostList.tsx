@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import EmptyMyPracticePostListItem from './EmptyMyPracticePostListItem';
 import MyPracticePostListItem from './MyPracticePostListItem';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ProblemInfo } from '@/app/types/problem';

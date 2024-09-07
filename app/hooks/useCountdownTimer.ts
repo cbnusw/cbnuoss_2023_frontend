@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TimeDifference } from '@/app/utils/formatDate'; // TimeDifference 타입을 가져옵니다.
+import { TimeDifference } from '@/utils/formatDate'; // TimeDifference 타입을 가져옵니다.
 
 export const useCountdownTimer = (endDate: string): TimeDifference => {
   const calculateTimeDifference = (endDate: string): TimeDifference => {

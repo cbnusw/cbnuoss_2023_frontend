@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import logoImg from '@/public/images/logo.png';
-import axiosInstance from '../utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { userInfoStore } from '../store/UserInfo';
 import { AxiosError } from 'axios';
 

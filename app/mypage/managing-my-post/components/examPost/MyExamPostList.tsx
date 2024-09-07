@@ -3,7 +3,7 @@
 import Loading from '@/app/loading';
 import EmptyMyExamPostListItem from './EmptyMyExamPostListItem';
 import MyExamPostListItem from './MyExamPostListItem';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ExamInfo } from '@/app/types/exam';

@@ -1,5 +1,5 @@
 import { NoticeInfo } from '@/app/types/notice';
-import { formatDateToYYMMDD } from '@/app/utils/formatDate';
+import { formatDateToYYMMDD } from '@/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 

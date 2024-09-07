@@ -36,7 +36,7 @@ export function getCodeSubmitResultTypeColor(resultType: string): string {
   }
 }
 
-import { Languages } from '@/app/utils/CodeMirrorExtensionsImport';
+import { Languages } from '@/utils/CodeMirrorExtensionsImport';
 const { cpp, java, javascript, python, go } = Languages;
 
 export function getCodeExtension(language: string) {

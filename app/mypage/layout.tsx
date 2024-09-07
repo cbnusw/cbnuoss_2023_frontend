@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { mypageTabNameStore } from '../store/MypageTabName';
 import { userInfoStore } from '../store/UserInfo';
 import { useEffect, useState } from 'react';
-import { fetchCurrentUserInfo } from '../utils/fetchCurrentUserInfo';
+import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import Loading from '../loading';
 import { OPERATOR_ROLES } from '../constants/role';
 

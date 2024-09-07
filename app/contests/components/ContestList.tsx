@@ -3,7 +3,7 @@
 import ContestListItem from './ContestListItem';
 import EmptyContestListItem from './EmptyContestListItem';
 import Loading from '@/app/loading';
-import axiosInstance from '../../utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { ContestInfo } from '@/app/types/contest';
 import { useRouter, useSearchParams } from 'next/navigation';

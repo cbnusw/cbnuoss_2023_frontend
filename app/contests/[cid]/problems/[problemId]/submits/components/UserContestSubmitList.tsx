@@ -3,7 +3,7 @@
 import UserContestSubmitListItem from './UserContestSubmitListItem';
 import EmptyUserContestSubmitListItem from './EmptyUserContestSubmitListItem';
 import Loading from '@/app/loading';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { ContestSubmitInfo } from '@/app/types/contest';
 import { useQuery } from '@tanstack/react-query';
 

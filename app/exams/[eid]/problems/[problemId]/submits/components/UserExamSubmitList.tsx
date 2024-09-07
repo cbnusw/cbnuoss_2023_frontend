@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import UserExamSubmitListItem from './UserExamSubmitListItem';
 import EmptyUserExamSubmitListItem from './EmptyUserExamSubmitListItem';
 import Loading from '@/app/loading';
-import axiosInstance from '@/app/utils/axiosInstance';
+import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { ExamSubmitInfo } from '@/app/types/exam';
 
