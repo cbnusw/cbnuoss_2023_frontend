@@ -14,7 +14,7 @@ import { userInfoStore } from '@/app/store/UserInfo';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
-import { OPERATOR_ROLES } from '@/app/constants/role';
+import { OPERATOR_ROLES } from '@/constants/role';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 
 // 시험에 등록된 문제 목록 정보 조회 API

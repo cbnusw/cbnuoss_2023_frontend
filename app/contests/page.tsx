@@ -6,7 +6,7 @@ import Image from 'next/image';
 import trophyImg from '@/public/images/trophy.png';
 import { useState } from 'react';
 import { userInfoStore } from '../store/UserInfo';
-import { OPERATOR_ROLES } from '../constants/role';
+import { OPERATOR_ROLES } from '../../constants/role';
 
 export default function Contests() {
   const [searchQuery, setSearchQuery] = useState('');

@@ -6,7 +6,7 @@ import PracticeList from './components/PracticeList';
 import Image from 'next/image';
 import pencilImg from '@/public/images/pencil.png';
 import { userInfoStore } from '../store/UserInfo';
-import { OPERATOR_ROLES } from '../constants/role';
+import { OPERATOR_ROLES } from '../../constants/role';
 
 export default function Practices() {
   const [searchQuery, setSearchQuery] = useState('');

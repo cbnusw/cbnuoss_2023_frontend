@@ -1,7 +1,7 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
-import { OPERATOR_ROLES } from '@/app/constants/role';
+import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
 import {

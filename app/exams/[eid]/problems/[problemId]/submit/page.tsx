@@ -14,7 +14,7 @@ import { userInfoStore } from '@/app/store/UserInfo';
 import Loading from '@/app/loading';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/app/types/user';
-import { OPERATOR_ROLES } from '@/app/constants/role';
+import { OPERATOR_ROLES } from '@/constants/role';
 
 // 문제 정보 조회 API
 const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
