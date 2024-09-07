@@ -82,7 +82,7 @@ export default function ManagingMyPost() {
             )}
           </div>
         </div>
-        {/* <div>
+        <div>
           <div>
             <button
               onClick={() => handleChangeCategory('notice')}
@@ -96,7 +96,7 @@ export default function ManagingMyPost() {
               <div className="relative top-[3px] h-[2px] rounded-full bg-[#1a1f27]" />
             )}
           </div>
-        </div> */}
+        </div>
       </div>
       <div>
         {category === 'contest' ? (
