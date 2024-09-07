@@ -11,7 +11,7 @@ import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { userInfoStore } from '@/app/store/UserInfo';
 import ContestContestContestantList from './components/ContestContestContestantList';
-import { OPERATOR_ROLES } from '@/app/constants/role';
+import { OPERATOR_ROLES } from '@/constants/role';
 import * as XLSX from 'xlsx';
 import { AxiosError } from 'axios';
 

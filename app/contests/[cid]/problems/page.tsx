@@ -13,7 +13,7 @@ import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { OPERATOR_ROLES } from '@/app/constants/role';
+import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
 import { UserInfo } from '@/app/types/user';
 import { AxiosError } from 'axios';

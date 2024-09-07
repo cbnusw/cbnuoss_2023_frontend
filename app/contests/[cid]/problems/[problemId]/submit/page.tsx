@@ -16,7 +16,7 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { AxiosError } from 'axios';
 import { UserInfo } from '@/app/types/user';
 import Loading from '@/app/loading';
-import { OPERATOR_ROLES } from '@/app/constants/role';
+import { OPERATOR_ROLES } from '@/constants/role';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({

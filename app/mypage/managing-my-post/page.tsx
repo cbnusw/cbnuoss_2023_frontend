@@ -8,7 +8,7 @@ import MyNoticePostList from './components/noticePost/MyNoticePostList';
 import { mypageTabNameStore } from '@/app/store/MypageTabName';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useRouter } from 'next/navigation';
-import { OPERATOR_ROLES } from '@/app/constants/role';
+import { OPERATOR_ROLES } from '@/constants/role';
 
 export default function ManagingMyPost() {
   const [category, setCategory] = useState('contest');
