@@ -8,11 +8,11 @@ import { useEffect, useState } from 'react';
 import codeImg from '@/public/images/code.png';
 import axiosInstance from '@/utils/axiosInstance';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { ProblemInfo } from '@/app/types/problem';
-import { SubmitCode } from '@/app/types/submit';
+import { ProblemInfo } from '@/types/problem';
+import { SubmitCode } from '@/types/submit';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import Loading from '@/app/loading';
 import { OPERATOR_ROLES } from '@/constants/role';
 

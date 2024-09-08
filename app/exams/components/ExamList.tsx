@@ -8,7 +8,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/app/hooks/useDebounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { ExamInfo } from '@/app/types/exam';
+import { ExamInfo } from '@/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 interface ExamListProps {

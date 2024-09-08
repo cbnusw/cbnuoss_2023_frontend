@@ -4,12 +4,8 @@ import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import {
-  IoSetItem,
-  ProblemInfo,
-  RegisterProblemParams,
-} from '@/app/types/problem';
-import { UserInfo } from '@/app/types/user';
+import { IoSetItem, ProblemInfo, RegisterProblemParams } from '@/types/problem';
+import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { useRouter } from 'next/navigation';

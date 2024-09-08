@@ -1,4 +1,4 @@
-import { ExamSubmitInfo } from '@/app/types/exam';
+import { ExamSubmitInfo } from '@/types/exam';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import {
   getCodeSubmitResultTypeColor,

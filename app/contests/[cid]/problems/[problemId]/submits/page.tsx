@@ -13,8 +13,8 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { UserInfo } from '@/app/types/user';
-import { ProblemInfo } from '@/app/types/problem';
+import { UserInfo } from '@/types/user';
+import { ProblemInfo } from '@/types/problem';
 import { OPERATOR_ROLES } from '@/constants/role';
 
 // 대회 문제 열람 비밀번호 확인 API

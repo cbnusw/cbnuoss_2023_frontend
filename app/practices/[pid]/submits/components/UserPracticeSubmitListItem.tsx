@@ -1,4 +1,4 @@
-import { PracticeSubmitInfo } from '@/app/types/practice';
+import { PracticeSubmitInfo } from '@/types/practice';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import {
   getCodeSubmitResultTypeColor,

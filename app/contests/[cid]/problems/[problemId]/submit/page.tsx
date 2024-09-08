@@ -6,15 +6,15 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import codeImg from '@/public/images/code.png';
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 import axiosInstance from '@/utils/axiosInstance';
-import { SubmitCode } from '@/app/types/submit';
+import { SubmitCode } from '@/types/submit';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { AxiosError } from 'axios';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import Loading from '@/app/loading';
 import { OPERATOR_ROLES } from '@/constants/role';
 

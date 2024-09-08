@@ -8,11 +8,11 @@ import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import { useRouter } from 'next/navigation';
 import axiosInstance from '@/utils/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { ContestInfo, ContestSubmitInfo } from '@/app/types/contest';
+import { ContestInfo, ContestSubmitInfo } from '@/types/contest';
 import * as XLSX from 'xlsx';
 import { getCodeSubmitResultTypeDescription } from '@/utils/getCodeSubmitResultTypeDescription';
 

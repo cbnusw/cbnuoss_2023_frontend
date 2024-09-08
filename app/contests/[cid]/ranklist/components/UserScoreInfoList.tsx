@@ -1,6 +1,6 @@
 import React from 'react';
 import UserScoreInfoListItem from './UserScoreInfoListItem';
-import { ContestRankInfo } from '@/app/types/contest';
+import { ContestRankInfo } from '@/types/contest';
 
 interface UserScoreInfoListProps {
   cid: string;

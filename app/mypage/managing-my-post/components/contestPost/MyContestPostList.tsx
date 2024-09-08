@@ -7,7 +7,7 @@ import MyContestPostListItem from './MyContestPostListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ContestInfo } from '@/app/types/contest';
+import { ContestInfo } from '@/types/contest';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 // 본인이 작성한 대회 게시글 목록 반환 API (10개 게시글 단위로)

@@ -9,7 +9,7 @@ import useDebounce from '@/app/hooks/useDebounce';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { ExamSubmitInfo } from '@/app/types/exam';
+import { ExamSubmitInfo } from '@/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 // 시험 코드 제출 목록 조회 API

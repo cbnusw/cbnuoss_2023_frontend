@@ -9,7 +9,7 @@ import useDebounce from '@/app/hooks/useDebounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
-import { NoticeInfo } from '@/app/types/notice';
+import { NoticeInfo } from '@/types/notice';
 
 interface NoticeListProps {
   searchQuery: string;

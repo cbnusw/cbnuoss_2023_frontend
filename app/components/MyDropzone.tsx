@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import dynamic from 'next/dynamic';
 import { UploadService } from '@/components/utils/uploadService';
-import { IoSetItem, UploadedFileInfo } from '../types/problem';
+import { IoSetItem, UploadedFileInfo } from '../../types/problem';
 
 interface MyDropzoneProps {
   type: string;

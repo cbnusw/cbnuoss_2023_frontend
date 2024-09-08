@@ -9,7 +9,7 @@ import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import PracticeListItem from './PracticeListItem';
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 interface PracticeListProps {

@@ -6,7 +6,7 @@ import EmptyUserExamSubmitListItem from './EmptyUserExamSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { ExamSubmitInfo } from '@/app/types/exam';
+import { ExamSubmitInfo } from '@/types/exam';
 
 // 사용자의 코드 제출 정보 목록 정보 조회 API
 const fetchPersonalUserExamSubmitsInfo = ({ queryKey }: any) => {

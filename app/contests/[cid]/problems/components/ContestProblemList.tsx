@@ -8,7 +8,7 @@ import {
   Droppable,
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/navigation';
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 
 interface ContestProblemListProps {
   cid: string;

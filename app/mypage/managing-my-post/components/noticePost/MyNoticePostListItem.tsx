@@ -1,4 +1,4 @@
-import { NoticeInfo } from '@/app/types/notice';
+import { NoticeInfo } from '@/types/notice';
 import { formatDateToYYMMDD } from '@/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';

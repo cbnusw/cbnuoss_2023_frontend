@@ -3,8 +3,8 @@
 import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { RegisterExamParams } from '@/app/types/exam';
-import { UserInfo } from '@/app/types/user';
+import { RegisterExamParams } from '@/types/exam';
+import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { toUTCString } from '@/utils/formatDate';

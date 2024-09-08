@@ -1,4 +1,4 @@
-import { ExamEnrolledInfo } from '@/app/types/exam';
+import { ExamEnrolledInfo } from '@/types/exam';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 

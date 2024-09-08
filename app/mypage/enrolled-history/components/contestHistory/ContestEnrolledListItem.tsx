@@ -1,4 +1,4 @@
-import { ContestEnrolledInfo } from '@/app/types/contest';
+import { ContestEnrolledInfo } from '@/types/contest';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 

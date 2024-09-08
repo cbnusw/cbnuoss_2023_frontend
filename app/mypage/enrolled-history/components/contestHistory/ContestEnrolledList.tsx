@@ -5,7 +5,7 @@ import EmptyContestEnrolledListItem from './EmptyContestEnrolledListItem';
 import ContestEnrolledListItem from './ContestEnrolledListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { ContestEnrolledInfo } from '@/app/types/contest';
+import { ContestEnrolledInfo } from '@/types/contest';
 
 // 참가했던 대회 목록 반환 API
 const fetchEnrolledContests = () => {

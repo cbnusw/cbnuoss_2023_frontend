@@ -9,7 +9,7 @@ import Image from 'next/image';
 import trophyImg from '@/public/images/trophy.png';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQueries } from '@tanstack/react-query';
-import { ContestInfo, ContestRankInfo } from '@/app/types/contest';
+import { ContestInfo, ContestRankInfo } from '@/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { useCallback, useEffect, useState } from 'react';
