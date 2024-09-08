@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
-import useDebounce from '@/app/hooks/useDebounce'; // Assuming useDebounce is defined here
+import useDebounce from '@/hooks/useDebounce'; // Assuming useDebounce is defined here
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 

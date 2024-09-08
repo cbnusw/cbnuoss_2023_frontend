@@ -1,7 +1,7 @@
 'use client';
 
 import { OPERATOR_ROLES } from '@/constants/role';
-import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
+import { useCountdownTimer } from '@/hooks/useCountdownTimer';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ExamInfo } from '@/types/exam';

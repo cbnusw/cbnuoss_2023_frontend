@@ -5,7 +5,7 @@ import UsersExamSubmitListItem from './UsersExamSubmitListItem';
 import EmptyUsersExamSubmitListItem from './EmptyUsersExamSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
-import useDebounce from '@/app/hooks/useDebounce';
+import useDebounce from '@/hooks/useDebounce';
 import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';

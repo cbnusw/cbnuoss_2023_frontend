@@ -9,7 +9,7 @@ import { ContestInfo } from '@/types/contest';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
-import useDebounce from '@/app/hooks/useDebounce';
+import useDebounce from '@/hooks/useDebounce';
 
 interface ContestListProps {
   searchQuery: string;

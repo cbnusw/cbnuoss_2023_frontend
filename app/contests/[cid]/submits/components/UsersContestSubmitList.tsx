@@ -9,7 +9,7 @@ import { ContestSubmitInfo } from '@/types/contest';
 import axiosInstance from '@/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
-import useDebounce from '@/app/hooks/useDebounce';
+import useDebounce from '@/hooks/useDebounce';
 
 // 대회 코드 제출 목록 조회 API
 const fetchContestSubmitsInfo = ({ queryKey }: any) => {

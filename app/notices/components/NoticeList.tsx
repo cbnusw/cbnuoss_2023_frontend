@@ -5,7 +5,7 @@ import NoticeListItem from './NoticeListItem';
 import EmptyNoticeListItem from './EmptyNoticeListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
-import useDebounce from '@/app/hooks/useDebounce';
+import useDebounce from '@/hooks/useDebounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';

@@ -10,7 +10,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/utils/axiosInstance';
 import { ProblemInfo, ProblemsInfo } from '@/types/problem';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
-import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
+import { useCountdownTimer } from '@/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
