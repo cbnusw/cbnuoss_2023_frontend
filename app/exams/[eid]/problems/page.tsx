@@ -11,7 +11,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { ProblemInfo, ProblemsInfo } from '@/types/problem';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { userInfoStore } from '@/store/UserInfo';
-import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
+import { useCountdownTimer } from '@/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';

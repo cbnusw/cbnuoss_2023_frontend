@@ -11,7 +11,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { useQueries } from '@tanstack/react-query';
 import { ContestInfo, ContestRankInfo } from '@/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
-import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
+import { useCountdownTimer } from '@/hooks/useCountdownTimer';
 import { useCallback, useEffect, useState } from 'react';
 import { userInfoStore } from '@/store/UserInfo';
 
