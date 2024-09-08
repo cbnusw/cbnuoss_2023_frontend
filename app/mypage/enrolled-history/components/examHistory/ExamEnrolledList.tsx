@@ -5,7 +5,7 @@ import EmptyExamEnrolledListItem from './EmptyExamEnrolledListItem';
 import ExamEnrolledListItem from './ExamEnrolledListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { ExamEnrolledInfo } from '@/app/types/exam';
+import { ExamEnrolledInfo } from '@/types/exam';
 
 // 참가했던 시험 목록 반환 API
 const fetchEnrolledExams = () => {

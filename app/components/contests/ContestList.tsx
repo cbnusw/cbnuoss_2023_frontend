@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import ContestListItem from './ContestListItem';
 import EmptyContestListItem from './EmptyContestListItem';
 import DummyContestListemItem from './DummyContestListemItem';
-import { ContestInfo } from '@/app/types/contest';
+import { ContestInfo } from '@/types/contest';
 
 const fetchProgressingContests = () => {
   return axiosInstance.get(

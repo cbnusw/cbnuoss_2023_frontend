@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
-import { ExamInfo } from '@/app/types/exam';
+import { ExamInfo } from '@/types/exam';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 
 interface ExamProps {

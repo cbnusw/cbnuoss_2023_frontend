@@ -7,12 +7,12 @@ import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import axiosInstance from '@/utils/axiosInstance';
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 
 // 문제 정보 조회 API

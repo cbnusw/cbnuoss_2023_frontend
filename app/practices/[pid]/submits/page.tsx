@@ -8,10 +8,10 @@ import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
 

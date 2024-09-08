@@ -7,13 +7,13 @@ import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useRouter } from 'next/navigation';
 import { OPERATOR_ROLES } from '@/constants/role';
 import axiosInstance from '@/utils/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { ExamInfo, ExamSubmitInfo } from '@/app/types/exam';
+import { ExamInfo, ExamSubmitInfo } from '@/types/exam';
 import * as XLSX from 'xlsx';
 import { getCodeSubmitResultTypeDescription } from '@/utils/getCodeSubmitResultTypeDescription';
 

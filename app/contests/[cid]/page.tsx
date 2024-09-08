@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ContestInfo } from '@/app/types/contest';
+import { ContestInfo } from '@/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { userInfoStore } from '@/app/store/UserInfo';

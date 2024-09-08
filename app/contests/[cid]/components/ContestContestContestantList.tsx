@@ -1,6 +1,6 @@
 'use client';
 
-import { ContestInfo } from '@/app/types/contest';
+import { ContestInfo } from '@/types/contest';
 import EmptyContestContestantListItem from './EmptyContestContestantListItem';
 import ContestContestantListItem from './ContestContestantListItem';
 

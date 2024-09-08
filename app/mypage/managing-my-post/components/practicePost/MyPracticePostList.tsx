@@ -7,7 +7,7 @@ import MyPracticePostListItem from './MyPracticePostListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import { userInfoStore } from '@/app/store/UserInfo';
 

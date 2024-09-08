@@ -8,12 +8,12 @@ import ExamProblemList from './components/ExamProblemList';
 import Image from 'next/image';
 import listImg from '@/public/images/list.png';
 import axiosInstance from '@/utils/axiosInstance';
-import { ProblemInfo, ProblemsInfo } from '@/app/types/problem';
+import { ProblemInfo, ProblemsInfo } from '@/types/problem';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 

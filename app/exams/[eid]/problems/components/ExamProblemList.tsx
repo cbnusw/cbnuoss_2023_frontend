@@ -8,7 +8,7 @@ import {
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/navigation';
 import EmptyExamProblemListItem from './EmptyExamProblemListItem';
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 
 interface ExamProblemListProps {
   eid: string;

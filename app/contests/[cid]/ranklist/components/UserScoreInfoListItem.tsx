@@ -1,6 +1,6 @@
 'use client';
 
-import { ContestRankInfo } from '@/app/types/contest';
+import { ContestRankInfo } from '@/types/contest';
 import { useRouter } from 'next/navigation';
 
 interface UserScoreInfoListItemProps {

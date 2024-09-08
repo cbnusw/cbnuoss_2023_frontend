@@ -3,8 +3,8 @@
 import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { ProblemInfo } from '@/app/types/problem';
-import { UserInfo } from '@/app/types/user';
+import { ProblemInfo } from '@/types/problem';
+import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { useMutation, useQuery } from '@tanstack/react-query';

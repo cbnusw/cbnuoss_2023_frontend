@@ -1,4 +1,4 @@
-import { ProblemInfo } from '@/app/types/problem';
+import { ProblemInfo } from '@/types/problem';
 import { formatDateToYYMMDD } from '@/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
-import { ContestInfo } from '@/app/types/contest';
+import { ContestInfo } from '@/types/contest';
 
 interface ContestProps {
   contestInfo: ContestInfo;

@@ -2,8 +2,8 @@
 
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { SubmitInfo } from '@/app/types/submit';
-import { UserInfo } from '@/app/types/user';
+import { SubmitInfo } from '@/types/submit';
+import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { formatDateToYYMMDDHHMMSS } from '@/utils/formatDate';

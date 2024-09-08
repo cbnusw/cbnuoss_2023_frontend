@@ -4,7 +4,7 @@ import UserContestSubmitListItem from './UserContestSubmitListItem';
 import EmptyUserContestSubmitListItem from './EmptyUserContestSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
-import { ContestSubmitInfo } from '@/app/types/contest';
+import { ContestSubmitInfo } from '@/types/contest';
 import { useQuery } from '@tanstack/react-query';
 
 // 사용자의 코드 제출 정보 목록 정보 조회 API

@@ -8,14 +8,14 @@ import Image from 'next/image';
 import listImg from '@/public/images/list.png';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/utils/axiosInstance';
-import { ProblemInfo, ProblemsInfo } from '@/app/types/problem';
+import { ProblemInfo, ProblemsInfo } from '@/types/problem';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { userInfoStore } from '@/app/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
-import { UserInfo } from '@/app/types/user';
+import { UserInfo } from '@/types/user';
 import { AxiosError } from 'axios';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 

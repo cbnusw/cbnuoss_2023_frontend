@@ -5,7 +5,7 @@ import Loading from '@/app/loading';
 import EmptyMyNoticePostListItem from './EmptyMyNoticePostListItem';
 import MyNoticePostListItem from './MyNoticePostListItem';
 import axiosInstance from '@/utils/axiosInstance';
-import { NoticeInfo } from '@/app/types/notice';
+import { NoticeInfo } from '@/types/notice';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';

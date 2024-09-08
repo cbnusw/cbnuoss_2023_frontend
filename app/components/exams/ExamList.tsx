@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import EmptyExamListItem from './EmptyExamListItem';
 import ExamListItem from './ExamListItem';
 import DummyExamListItem from './DummyExamListItem'; // DummyExamListItem 컴포넌트를 import 해야 합니다.
-import { ExamInfo } from '@/app/types/exam';
+import { ExamInfo } from '@/types/exam';
 
 // 시험 목록 반환 API (최근 데이터 3개까지)
 const fetchExams = () => {

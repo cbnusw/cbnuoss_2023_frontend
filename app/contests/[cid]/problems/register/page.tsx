@@ -3,9 +3,9 @@
 import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/app/store/UserInfo';
-import { ContestInfo } from '@/app/types/contest';
-import { IoSetItem, RegisterProblemParams } from '@/app/types/problem';
-import { UserInfo } from '@/app/types/user';
+import { ContestInfo } from '@/types/contest';
+import { IoSetItem, RegisterProblemParams } from '@/types/problem';
+import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { useMutation, useQuery } from '@tanstack/react-query';

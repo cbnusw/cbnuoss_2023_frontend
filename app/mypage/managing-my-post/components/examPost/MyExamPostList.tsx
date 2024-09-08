@@ -6,7 +6,7 @@ import MyExamPostListItem from './MyExamPostListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { ExamInfo } from '@/app/types/exam';
+import { ExamInfo } from '@/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
 // 본인이 작성한 시험 게시글 목록 반환 API (10개 게시글 단위로)

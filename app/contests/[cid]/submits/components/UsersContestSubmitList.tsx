@@ -5,7 +5,7 @@ import UsersContestSubmitListItem from './UsersContestSubmitListItem';
 import EmptyUsersContestSubmitListItem from './EmptyUsersContestSubmitListItem';
 import Loading from '@/app/loading';
 import { useQuery } from '@tanstack/react-query';
-import { ContestSubmitInfo } from '@/app/types/contest';
+import { ContestSubmitInfo } from '@/types/contest';
 import axiosInstance from '@/utils/axiosInstance';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';

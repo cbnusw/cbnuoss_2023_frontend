@@ -1,4 +1,4 @@
-import { ContestSubmitInfo } from '@/app/types/contest';
+import { ContestSubmitInfo } from '@/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import {
   getCodeSubmitResultTypeColor,

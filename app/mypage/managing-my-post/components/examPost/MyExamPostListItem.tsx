@@ -1,4 +1,4 @@
-import { ExamInfo } from '@/app/types/exam';
+import { ExamInfo } from '@/types/exam';
 import { formatDateToYYMMDD, formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useRouter } from 'next/navigation';
 import React from 'react';

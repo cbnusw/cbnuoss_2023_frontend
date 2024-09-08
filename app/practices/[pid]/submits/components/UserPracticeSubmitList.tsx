@@ -5,7 +5,7 @@ import EmptyUserPracticeSubmitListItem from './EmptyUserPracticeSubmitListItem';
 import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
-import { PracticeSubmitInfo } from '@/app/types/practice';
+import { PracticeSubmitInfo } from '@/types/practice';
 
 // 사용자의 코드 제출 정보 목록 정보 조회 API
 const fetchPersonalUserPracticeSubmitsInfo = ({ queryKey }: any) => {

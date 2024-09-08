@@ -1,4 +1,4 @@
-import { UploadedFileInfo } from '@/app/types/problem';
+import { UploadedFileInfo } from '@/types/problem';
 import axiosInstance from '@/utils/axiosInstance';
 
 interface UploadResponse {
