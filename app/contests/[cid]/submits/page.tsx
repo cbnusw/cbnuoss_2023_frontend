@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
 import { useRouter } from 'next/navigation';

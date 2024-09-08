@@ -8,7 +8,7 @@ import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import axiosInstance from '@/utils/axiosInstance';
 import { ProblemInfo } from '@/types/problem';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';

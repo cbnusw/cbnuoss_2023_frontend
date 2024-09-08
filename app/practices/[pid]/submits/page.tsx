@@ -12,7 +12,7 @@ import { ProblemInfo } from '@/types/problem';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
 
 // 연습문제 게시글 정보 조회 API

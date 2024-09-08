@@ -11,7 +11,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { SubmitCode } from '@/types/submit';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { AxiosError } from 'axios';
 import { UserInfo } from '@/types/user';

@@ -2,7 +2,7 @@
 
 import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { NoticeInfo } from '@/types/notice';
 import axiosInstance from '@/utils/axiosInstance';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';

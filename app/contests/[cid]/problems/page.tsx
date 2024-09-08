@@ -12,7 +12,7 @@ import { ProblemInfo, ProblemsInfo } from '@/types/problem';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
 import { UserInfo } from '@/types/user';

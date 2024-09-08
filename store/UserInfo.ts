@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { UserInfo } from '../../types/user';
+import { UserInfo } from '@/types/user';
 
 export interface StoreState {
   userInfo: UserInfo;

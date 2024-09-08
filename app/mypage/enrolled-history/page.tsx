@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import ContestEnrolledList from './components/contestHistory/ContestEnrolledList';
-import { mypageTabNameStore } from '@/app/store/MypageTabName';
+import { mypageTabNameStore } from '@/store/MypageTabName';
 import ExamEnrolledList from './components/examHistory/ExamEnrolledList';
 
 export default function EnrolledHistory() {

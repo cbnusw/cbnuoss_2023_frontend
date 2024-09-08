@@ -3,7 +3,7 @@
 import { OPERATOR_ROLES } from '@/constants/role';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import Loading from '@/app/loading';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { ExamInfo } from '@/types/exam';
 import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
