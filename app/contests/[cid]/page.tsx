@@ -9,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ContestInfo } from '@/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import ContestContestContestantList from './components/ContestContestContestantList';
 import { OPERATOR_ROLES } from '@/constants/role';
 import * as XLSX from 'xlsx';

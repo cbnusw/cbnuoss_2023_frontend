@@ -2,7 +2,7 @@
 
 import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { ContestInfo, RegisterContestParams } from '@/types/contest';
 import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';

@@ -10,7 +10,7 @@ import listImg from '@/public/images/list.png';
 import axiosInstance from '@/utils/axiosInstance';
 import { ProblemInfo, ProblemsInfo } from '@/types/problem';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';

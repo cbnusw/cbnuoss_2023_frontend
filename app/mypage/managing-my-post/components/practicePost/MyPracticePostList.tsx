@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ProblemInfo } from '@/types/problem';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 
 // 본인이 작성한 대회 게시글 목록 반환 API (10개 게시글 단위로)
 const fetchMyPractices = async ({ queryKey }: any) => {

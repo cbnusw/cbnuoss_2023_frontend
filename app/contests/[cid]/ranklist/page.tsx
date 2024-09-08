@@ -13,7 +13,7 @@ import { ContestInfo, ContestRankInfo } from '@/types/contest';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import { useCountdownTimer } from '@/app/hooks/useCountdownTimer';
 import { useCallback, useEffect, useState } from 'react';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {

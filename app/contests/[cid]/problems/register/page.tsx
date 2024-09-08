@@ -2,7 +2,7 @@
 
 import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { ContestInfo } from '@/types/contest';
 import { IoSetItem, RegisterProblemParams } from '@/types/problem';
 import { UserInfo } from '@/types/user';

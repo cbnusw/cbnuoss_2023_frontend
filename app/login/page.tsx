@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import logoImg from '@/public/images/logo.png';
 import axiosInstance from '@/utils/axiosInstance';
-import { userInfoStore } from '../store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { AxiosError } from 'axios';
 
 interface UserLoginInfoType {

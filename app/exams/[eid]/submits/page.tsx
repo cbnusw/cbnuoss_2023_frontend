@@ -8,7 +8,7 @@ import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { useRouter } from 'next/navigation';
 import { OPERATOR_ROLES } from '@/constants/role';
 import axiosInstance from '@/utils/axiosInstance';

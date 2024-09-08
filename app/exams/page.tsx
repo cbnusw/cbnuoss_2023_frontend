@@ -5,7 +5,7 @@ import Link from 'next/link';
 import ExamList from './components/ExamList';
 import Image from 'next/image';
 import examImg from '@/public/images/exam.png';
-import { userInfoStore } from '../store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '../../constants/role';
 
 export default function Exams() {

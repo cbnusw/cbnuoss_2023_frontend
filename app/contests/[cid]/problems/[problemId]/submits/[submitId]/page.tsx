@@ -1,7 +1,7 @@
 'use client';
 
 import Loading from '@/app/loading';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { SubmitInfo } from '@/types/submit';
 import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';

@@ -5,8 +5,8 @@ import MyContestPostList from './components/contestPost/MyContestPostList';
 import MyExamPostList from './components/examPost/MyExamPostList';
 import MyPracticePostList from './components/practicePost/MyPracticePostList';
 import MyNoticePostList from './components/noticePost/MyNoticePostList';
-import { mypageTabNameStore } from '@/app/store/MypageTabName';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { mypageTabNameStore } from '@/store/MypageTabName';
+import { userInfoStore } from '@/store/UserInfo';
 import { useRouter } from 'next/navigation';
 import { OPERATOR_ROLES } from '@/constants/role';
 

@@ -12,7 +12,7 @@ import { AxiosError } from 'axios';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { UserInfo } from '@/types/user';
 import { ProblemInfo } from '@/types/problem';
 import { OPERATOR_ROLES } from '@/constants/role';

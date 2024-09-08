@@ -5,7 +5,7 @@ import Link from 'next/link';
 import NoticeList from './components/NoticeList';
 import Image from 'next/image';
 import bellImg from '@/public/images/bell.png';
-import { userInfoStore } from '../store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '../../constants/role';
 
 export default function Notices() {

@@ -1,7 +1,7 @@
 'use client';
 
-import { mypageTabNameStore } from '@/app/store/MypageTabName';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { mypageTabNameStore } from '@/store/MypageTabName';
+import { userInfoStore } from '@/store/UserInfo';
 import React, { useEffect } from 'react';
 
 export default function Profile() {

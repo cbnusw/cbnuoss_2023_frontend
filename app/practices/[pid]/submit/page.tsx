@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import codeImg from '@/public/images/code.png';
 import axiosInstance from '@/utils/axiosInstance';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { ProblemInfo } from '@/types/problem';
 import { SubmitCode } from '@/types/submit';
 import { useMutation, useQuery } from '@tanstack/react-query';

@@ -1,7 +1,7 @@
 'use client';
 
 import { OPERATOR_ROLES } from '@/constants/role';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { ContestInfo } from '@/types/contest';
 import { maskEmail, maskString } from '@/utils/maskString';
 

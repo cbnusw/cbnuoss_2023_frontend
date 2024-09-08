@@ -2,7 +2,7 @@
 
 import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import { IoSetItem, ProblemInfo, RegisterProblemParams } from '@/types/problem';
 import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';

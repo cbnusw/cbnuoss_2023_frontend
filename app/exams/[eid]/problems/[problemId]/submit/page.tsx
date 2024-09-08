@@ -10,7 +10,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { SubmitCode } from '@/types/submit';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { ProblemInfo } from '@/types/problem';
-import { userInfoStore } from '@/app/store/UserInfo';
+import { userInfoStore } from '@/store/UserInfo';
 import Loading from '@/app/loading';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
