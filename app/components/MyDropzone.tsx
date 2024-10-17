@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { useDropzone } from 'react-dropzone';
 import dynamic from 'next/dynamic';
 import { UploadService } from '@/components/utils/uploadService';
@@ -10,13 +16,14 @@ interface MyDropzoneProps {
   setIsFileUploaded: (isUploaded: boolean) => void;
   isFileUploaded: boolean;
   initUrl?: string;
+  initUrls?: string[];
   initInAndOutFiles?: IoSetItem[];
   setUploadedFileUrl?: (url: string) => void;
+  setExampleFileInfos?: Dispatch<SetStateAction<UploadResponseData[]>>;
   setIoSetData?: (
     ioSetData: IoSetItem[] | ((prevIoSetData: IoSetItem[]) => IoSetItem[]),
   ) => void;
 }
-
 const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
 });
@@ -28,8 +35,10 @@ function MyDropzone(props: MyDropzoneProps) {
     setIsFileUploaded,
     isFileUploaded,
     initUrl,
+    initUrls,
     initInAndOutFiles,
     setUploadedFileUrl,
+    setExampleFileInfos,
     setIoSetData,
   } = props;
 
@@ -44,15 +53,13 @@ function MyDropzone(props: MyDropzoneProps) {
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       if (type === 'inOut') {
-        // .in과 .out 파일들을 분류
+        // inOut 파일 처리 로직 유지
         const inFiles = acceptedFiles.filter((file) =>
           file.name.endsWith('.in'),
         );
         const outFiles = acceptedFiles.filter((file) =>
           file.name.endsWith('.out'),
         );
-
-        // 쌍을 찾기
         const pairs = inFiles.flatMap((inFile) => {
           const baseName = inFile.name.replace('.in', '');
           const outFile = outFiles.find(
@@ -67,51 +74,62 @@ function MyDropzone(props: MyDropzoneProps) {
             uploadService.upload(outFile),
           ])
             .then(([inResponse, outResponse]) => {
-              // 업로드된 파일 정보를 기반으로 IoSetItem 객체 생성
               const newIoSetItem: IoSetItem = {
-                inFile: { ...inResponse.data, filename: inFile.name }, // inFile 정보 추가
-                outFile: { ...outResponse.data, filename: outFile.name }, // outFile 정보 추가
+                inFile: { ...inResponse.data, filename: inFile.name },
+                outFile: { ...outResponse.data, filename: outFile.name },
               };
-
-              // setIoSetData 함수를 사용하여 IoSetItem[] 상태 업데이트
-              if (setIoSetData) {
-                setIoSetData((prevIoSetData) => [
-                  ...prevIoSetData,
-                  newIoSetItem,
-                ]);
-              }
-
-              // 업로드된 파일 정보를 기반으로 fileList 업데이트
+              setIoSetData?.((prevIoSetData) => [
+                ...prevIoSetData,
+                newIoSetItem,
+              ]);
               setFileList((prevList) => [
                 ...prevList,
-                { ...inResponse.data, filename: inFile.name }, // inFile 정보 추가
-                { ...outResponse.data, filename: outFile.name }, // outFile 정보 추가
+                { ...inResponse.data, filename: inFile.name },
+                { ...outResponse.data, filename: outFile.name },
               ]);
             })
-            .catch((error) => {
-              console.error('File upload error:', error);
-            });
+            .catch((error) => console.error('File upload error:', error));
         });
       } else {
-        // 다른 타입('pdf' 또는 'code')의 파일 처리 로직
+        // pdf, code, exampleFile 타입의 파일 처리 로직 수정
         acceptedFiles.forEach((file) => {
           uploadService
             .upload(file)
             .then((response) => {
-              const newFile = response.data; // 서버로부터 받은 파일 정보
-              setFileList([newFile]);
-              if (type === 'pdf' || type === 'code')
+              const newFile = response.data;
+              setFileList((prevList) => [...prevList, newFile]); // 파일 리스트에 새 파일 추가
+
+              // pdf나 code 타입일 경우 단일 파일 URL 설정
+              if (type === 'pdf' || type === 'code') {
                 setUploadedFileUrl?.(newFile.url);
-              setFileNameList([newFile.filename]);
+                setIsFileUploaded(true);
+              }
+
+              // exampleFile 타입의 경우 URL 배열 업데이트
+              if (type === 'exampleFile' && setExampleFileInfos) {
+                setExampleFileInfos(
+                  (prevExampleFileInfos: UploadResponseData[]) => [
+                    ...prevExampleFileInfos,
+                    newFile,
+                  ],
+                ); // exampleFileUrls 업데이트
+              }
+
+              setFileNameList((prevList) => [...prevList, newFile.filename]);
               setIsFileUploaded(true);
             })
-            .catch((error) => {
-              console.error('File upload error:', error);
-            });
+            .catch((error) => console.error('File upload error:', error));
         });
       }
     },
-    [uploadService, type, setIsFileUploaded, setUploadedFileUrl, setIoSetData],
+    [
+      uploadService,
+      type,
+      setIsFileUploaded,
+      setIoSetData,
+      setUploadedFileUrl,
+      setExampleFileInfos,
+    ],
   );
 
   useEffect(() => {
@@ -184,6 +202,31 @@ function MyDropzone(props: MyDropzoneProps) {
     }
   };
 
+  // 예제 파일 삭제 핸들러 함수 추가
+  const handleDeleteExampleFile = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    file: UploadedFileInfo,
+  ) => {
+    e.preventDefault();
+
+    // `fileList`와 `fileNameList` 업데이트
+    const updatedFileList = fileList.filter(
+      (existingFile) => existingFile.url !== file.url,
+    );
+    setFileList(updatedFileList);
+    setFileNameList(updatedFileList.map((file) => file.filename));
+
+    // `exampleFileUrls` 상태를 업데이트
+    setExampleFileInfos?.((prevExampleFileInfos: UploadResponseData[]) =>
+      prevExampleFileInfos.filter(
+        (prevExampleFileInfo) => prevExampleFileInfo.url !== file.url,
+      ),
+    );
+
+    // 파일이 모두 삭제되었는지 확인
+    setIsFileUploaded(updatedFileList.length > 0);
+  };
+
   // Dropzone 테두리 활성화/비활성화 로직
   useEffect(() => {
     if (isDragAndDropped) setIsDragEntered(false);
@@ -228,10 +271,34 @@ function MyDropzone(props: MyDropzoneProps) {
 
         setFileList(files); // fileList 상태를 업데이트합니다.
         setIsFileUploaded(true); // 파일이 업로드된 것으로 표시합니다.
+      } else if (type === 'exampleFile' && initUrls) {
+        // exampleFile 초기화 로직
+        const initialFiles = initUrls.map((url) => ({
+          ref: null,
+          refModel: null,
+          _id: '',
+          url,
+          filename: url.split('/').pop() || '',
+          mimetype: '',
+          size: 0,
+          uploader: '',
+          uploadedAt: '',
+          __v: 0,
+        }));
+
+        setFileList(initialFiles);
+        setIsFileUploaded(true);
       }
       setIsInitialized(true);
     }
-  }, [type, initUrl, initInAndOutFiles, isInitialized, setIsFileUploaded]);
+  }, [
+    type,
+    initUrl,
+    initInAndOutFiles,
+    isInitialized,
+    setIsFileUploaded,
+    initUrls,
+  ]);
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-full">
@@ -293,7 +360,7 @@ function MyDropzone(props: MyDropzoneProps) {
       {isFileUploaded ? (
         type === 'pdf' ? (
           <PDFViewer pdfFileURL={fileList[0]?.url} />
-        ) : (
+        ) : type === 'inOut' ? (
           getInAndOutFilePairs(fileList).map((pair, index) => (
             <div
               key={index}
@@ -317,6 +384,40 @@ function MyDropzone(props: MyDropzoneProps) {
               <button
                 className="mr-1"
                 onClick={(e) => handleDeletePair(e, pair)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="30"
+                  viewBox="0 -960 960 960"
+                  width="30"
+                  fill="#6b7280"
+                >
+                  <path d="M480-444.616 270.307-234.924q-7.23 7.231-17.499 7.423-10.269.193-17.884-7.423-7.616-7.615-7.616-17.691 0-10.077 7.616-17.692L444.616-480 234.924-689.693q-7.231-7.23-7.423-17.499-.193-10.269 7.423-17.884 7.615-7.616 17.691-7.616 10.077 0 17.692 7.616L480-515.384l209.693-209.692q7.23-7.231 17.499-7.423 10.269-.193 17.884 7.423 7.616 7.615 7.616 17.691 0 10.077-7.616 17.692L515.384-480l209.692 209.693q7.231 7.23 7.423 17.499.193 10.269-7.423 17.884-7.615 7.616-17.691 7.616-10.077 0-17.692-7.616L480-444.616Z" />
+                </svg>
+              </button>
+            </div>
+          ))
+        ) : (
+          fileList.map((file, index) => (
+            <div
+              key={index}
+              className="flex justify-between border border-gray-400 rounded-[0.25rem] w-full px-2 py-2"
+            >
+              <div className="flex items-center gap-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="25"
+                  viewBox="0 -960 960 960"
+                  width="25"
+                  fill="#6b7280"
+                >
+                  <path d="M226.666-80q-27 0-46.833-19.833T160-146.666v-666.668q0-27 19.833-46.833T226.666-880H574l226 226v507.334q0 27-19.833 46.833T733.334-80H226.666Zm314.001-542.667v-190.667H226.666v666.668h506.668v-476.001H540.667ZM226.666-813.334v190.667-190.667 666.668-666.668Z" />
+                </svg>
+                <span className="text-gray-600">{file.filename}</span>
+              </div>
+              <button
+                className="mr-1"
+                onClick={(e) => handleDeleteExampleFile(e, file)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
