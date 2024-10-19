@@ -6,6 +6,14 @@
   color: #1a1f27;
 }
 
+.download-exmaple-file-btn {
+  background-color: rgba(2, 32, 71, 0.04);
+}
+
+.download-exmaple-file-btn:hover {
+  background-color: rgba(2, 32, 71, 0.0825);
+}
+
 .fade-in {
   animation: fadeIn 3s;
   -moz-animation: fadeIn 3s; /* Firefox */

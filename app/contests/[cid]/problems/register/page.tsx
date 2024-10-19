@@ -72,7 +72,10 @@ export default function RegisterContestProblem(props: DefaultProps) {
   const [maxMemCap, setMaxMemCap] = useState<number>();
   const [score, setScore] = useState<number>(1);
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
-  const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
+  const [ioSetDatas, setIoSetDatas] = useState<IoSetItem[]>([]);
+  const [exampleFileInfos, setExampleFileInfos] = useState<
+    UploadResponseData[]
+  >([]);
 
   const [isTitleValidFail, setIsTitleValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -84,6 +87,8 @@ export default function RegisterContestProblem(props: DefaultProps) {
     isInAndOutFileUploadingValidFail,
     setIsInAndOutFileUploadingValidFail,
   ] = useState(false);
+  const [isExampleFileUploadingValidFail, setIsExampleFileUploadingValidFail] =
+    useState(false);
 
   const problemNameRef = useRef<HTMLInputElement>(null);
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
@@ -161,7 +166,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
       return;
     }
 
-    if (ioSetData.length === 0) {
+    if (ioSetDatas.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
       window.scrollTo(0, document.body.scrollHeight);
       return;
@@ -171,7 +176,8 @@ export default function RegisterContestProblem(props: DefaultProps) {
       title,
       content: uploadedProblemPdfFileUrl,
       published: null,
-      ioSet: ioSetData,
+      ioSet: ioSetDatas,
+      exampleFiles: exampleFileInfos,
       options: {
         maxRealTime: maxExeTime,
         maxMemory: maxMemCap,
@@ -362,6 +368,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
               </div>
             </div>
           </div>
+
           <div className="flex flex-col gap-1">
             <p className="text-lg">문제 파일</p>
             <MyDropzone
@@ -402,9 +409,21 @@ export default function RegisterContestProblem(props: DefaultProps) {
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
                 initInAndOutFiles={[]}
-                setIoSetData={setIoSetData}
+                setIoSetData={setIoSetDatas}
               />
             </div>
+          </div>
+
+          <div className="flex flex-col gap-1 mt-9">
+            <p className="text-lg">예제 파일</p>
+            <MyDropzone
+              type="exampleFile"
+              guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
+              setIsFileUploaded={setIsExampleFileUploadingValidFail}
+              isFileUploaded={isExampleFileUploadingValidFail}
+              initUrls={[]}
+              setExampleFileInfos={setExampleFileInfos}
+            />
           </div>
         </div>
 
