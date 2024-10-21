@@ -73,9 +73,9 @@ export default function RegisterContestProblem(props: DefaultProps) {
   const [score, setScore] = useState<number>(1);
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
   const [ioSetDatas, setIoSetDatas] = useState<IoSetItem[]>([]);
-  const [exampleFileInfos, setExampleFileInfos] = useState<
-    UploadResponseData[]
-  >([]);
+  const [exampleFileInfos, setExampleFiles] = useState<UploadResponseData[]>(
+    [],
+  );
 
   const [isTitleValidFail, setIsTitleValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -415,14 +415,16 @@ export default function RegisterContestProblem(props: DefaultProps) {
           </div>
 
           <div className="flex flex-col gap-1 mt-9">
-            <p className="text-lg">예제 파일</p>
+            <p className="text-lg">
+              예제 파일<span className="text-[0.825rem]">(선택)</span>
+            </p>
             <MyDropzone
               type="exampleFile"
               guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
               setIsFileUploaded={setIsExampleFileUploadingValidFail}
               isFileUploaded={isExampleFileUploadingValidFail}
-              initUrls={[]}
-              setExampleFileInfos={setExampleFileInfos}
+              initExampleFiles={[]}
+              setExampleFiles={setExampleFiles}
             />
           </div>
         </div>

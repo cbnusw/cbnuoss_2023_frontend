@@ -62,8 +62,8 @@ export interface ExampleFile {
 
 // 업로드 파일 정보
 export interface UploadedFileInfo {
-  ref: null;
-  refModel: null;
+  ref: string | null;
+  refModel: string | null;
   _id: string;
   url: string;
   filename: string;

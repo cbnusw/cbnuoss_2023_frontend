@@ -8,7 +8,7 @@ import React, {
 import { useDropzone } from 'react-dropzone';
 import dynamic from 'next/dynamic';
 import { UploadService } from '@/components/utils/uploadService';
-import { IoSetItem, UploadedFileInfo } from '../../types/problem';
+import { ExampleFile, IoSetItem, UploadedFileInfo } from '../../types/problem';
 
 interface MyDropzoneProps {
   type: string;
@@ -16,10 +16,10 @@ interface MyDropzoneProps {
   setIsFileUploaded: (isUploaded: boolean) => void;
   isFileUploaded: boolean;
   initUrl?: string;
-  initUrls?: string[];
+  initExampleFiles?: ExampleFile[];
   initInAndOutFiles?: IoSetItem[];
   setUploadedFileUrl?: (url: string) => void;
-  setExampleFileInfos?: Dispatch<SetStateAction<UploadResponseData[]>>;
+  setExampleFiles?: Dispatch<SetStateAction<UploadResponseData[]>>;
   setIoSetData?: (
     ioSetData: IoSetItem[] | ((prevIoSetData: IoSetItem[]) => IoSetItem[]),
   ) => void;
@@ -35,10 +35,10 @@ function MyDropzone(props: MyDropzoneProps) {
     setIsFileUploaded,
     isFileUploaded,
     initUrl,
-    initUrls,
+    initExampleFiles,
     initInAndOutFiles,
     setUploadedFileUrl,
-    setExampleFileInfos,
+    setExampleFiles,
     setIoSetData,
   } = props;
 
@@ -103,11 +103,12 @@ function MyDropzone(props: MyDropzoneProps) {
               if (type === 'pdf' || type === 'code') {
                 setUploadedFileUrl?.(newFile.url);
                 setIsFileUploaded(true);
+                alert('1');
               }
 
               // exampleFile 타입의 경우 URL 배열 업데이트
-              if (type === 'exampleFile' && setExampleFileInfos) {
-                setExampleFileInfos(
+              if (type === 'exampleFile' && setExampleFiles) {
+                setExampleFiles(
                   (prevExampleFileInfos: UploadResponseData[]) => [
                     ...prevExampleFileInfos,
                     newFile,
@@ -117,6 +118,7 @@ function MyDropzone(props: MyDropzoneProps) {
 
               setFileNameList((prevList) => [...prevList, newFile.filename]);
               setIsFileUploaded(true);
+              alert('2');
             })
             .catch((error) => console.error('File upload error:', error));
         });
@@ -128,7 +130,7 @@ function MyDropzone(props: MyDropzoneProps) {
       setIsFileUploaded,
       setIoSetData,
       setUploadedFileUrl,
-      setExampleFileInfos,
+      setExampleFiles,
     ],
   );
 
@@ -217,7 +219,7 @@ function MyDropzone(props: MyDropzoneProps) {
     setFileNameList(updatedFileList.map((file) => file.filename));
 
     // `exampleFileUrls` 상태를 업데이트
-    setExampleFileInfos?.((prevExampleFileInfos: UploadResponseData[]) =>
+    setExampleFiles?.((prevExampleFileInfos: UploadResponseData[]) =>
       prevExampleFileInfos.filter(
         (prevExampleFileInfo) => prevExampleFileInfo.url !== file.url,
       ),
@@ -254,6 +256,7 @@ function MyDropzone(props: MyDropzoneProps) {
         };
         setFileList([newFile]);
         setIsFileUploaded(true);
+        alert('3');
       } else if (
         type === 'inOut' &&
         initInAndOutFiles &&
@@ -271,14 +274,19 @@ function MyDropzone(props: MyDropzoneProps) {
 
         setFileList(files); // fileList 상태를 업데이트합니다.
         setIsFileUploaded(true); // 파일이 업로드된 것으로 표시합니다.
-      } else if (type === 'exampleFile' && initUrls) {
+        alert('4');
+      } else if (
+        type === 'exampleFile' &&
+        initExampleFiles &&
+        initExampleFiles.length > 0
+      ) {
         // exampleFile 초기화 로직
-        const initialFiles = initUrls.map((url) => ({
-          ref: null,
+        const initialFiles = initExampleFiles.map((initExampleFile) => ({
+          ref: initExampleFile.ref,
           refModel: null,
-          _id: '',
-          url,
-          filename: url.split('/').pop() || '',
+          _id: initExampleFile._id,
+          url: '',
+          filename: initExampleFile.filename,
           mimetype: '',
           size: 0,
           uploader: '',
@@ -297,7 +305,7 @@ function MyDropzone(props: MyDropzoneProps) {
     initInAndOutFiles,
     isInitialized,
     setIsFileUploaded,
-    initUrls,
+    initExampleFiles,
   ]);
 
   return (
