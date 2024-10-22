@@ -19,7 +19,7 @@ interface MyDropzoneProps {
   initExampleFiles?: ExampleFile[];
   initInAndOutFiles?: IoSetItem[];
   setUploadedFileUrl?: (url: string) => void;
-  setExampleFiles?: Dispatch<SetStateAction<UploadResponseData[]>>;
+  setExampleFiles?: Dispatch<SetStateAction<ExampleFile[]>>;
   setIoSetData?: (
     ioSetData: IoSetItem[] | ((prevIoSetData: IoSetItem[]) => IoSetItem[]),
   ) => void;
@@ -103,22 +103,23 @@ function MyDropzone(props: MyDropzoneProps) {
               if (type === 'pdf' || type === 'code') {
                 setUploadedFileUrl?.(newFile.url);
                 setIsFileUploaded(true);
-                alert('1');
               }
 
               // exampleFile 타입의 경우 URL 배열 업데이트
               if (type === 'exampleFile' && setExampleFiles) {
-                setExampleFiles(
-                  (prevExampleFileInfos: UploadResponseData[]) => [
-                    ...prevExampleFileInfos,
-                    newFile,
-                  ],
-                ); // exampleFileUrls 업데이트
+                const newExampleFile: ExampleFile = {
+                  ref: newFile.ref ?? '',
+                  _id: newFile._id,
+                  filename: newFile.filename,
+                };
+                setExampleFiles((prevExampleFiles: ExampleFile[]) => [
+                  ...prevExampleFiles,
+                  newExampleFile,
+                ]);
               }
 
               setFileNameList((prevList) => [...prevList, newFile.filename]);
               setIsFileUploaded(true);
-              alert('2');
             })
             .catch((error) => console.error('File upload error:', error));
         });
@@ -204,7 +205,7 @@ function MyDropzone(props: MyDropzoneProps) {
     }
   };
 
-  // 예제 파일 삭제 핸들러 함수 추가
+  // 예제 파일 삭제 핸들러 함수 수정
   const handleDeleteExampleFile = (
     e: React.MouseEvent<HTMLButtonElement>,
     file: UploadedFileInfo,
@@ -213,19 +214,21 @@ function MyDropzone(props: MyDropzoneProps) {
 
     // `fileList`와 `fileNameList` 업데이트
     const updatedFileList = fileList.filter(
-      (existingFile) => existingFile.url !== file.url,
+      (existingFile) => existingFile._id !== file._id,
     );
     setFileList(updatedFileList);
     setFileNameList(updatedFileList.map((file) => file.filename));
 
-    // `exampleFileUrls` 상태를 업데이트
-    setExampleFiles?.((prevExampleFileInfos: UploadResponseData[]) =>
-      prevExampleFileInfos.filter(
-        (prevExampleFileInfo) => prevExampleFileInfo.url !== file.url,
-      ),
-    );
+    // `setExampleFiles` 상태를 업데이트
+    setExampleFiles?.((prevExampleFiles: ExampleFile[]) => {
+      // 삭제할 파일을 제외한 새로운 배열 생성
+      const newExampleFiles = prevExampleFiles.filter(
+        (prevExampleFileInfo) => prevExampleFileInfo._id !== file._id,
+      );
+      return newExampleFiles;
+    });
 
-    // 파일이 모두 삭제되었는지 확인
+    // 파일이 모두 삭제되었는지 확인 후 UI 업데이트
     setIsFileUploaded(updatedFileList.length > 0);
   };
 
@@ -256,7 +259,6 @@ function MyDropzone(props: MyDropzoneProps) {
         };
         setFileList([newFile]);
         setIsFileUploaded(true);
-        alert('3');
       } else if (
         type === 'inOut' &&
         initInAndOutFiles &&
@@ -274,7 +276,6 @@ function MyDropzone(props: MyDropzoneProps) {
 
         setFileList(files); // fileList 상태를 업데이트합니다.
         setIsFileUploaded(true); // 파일이 업로드된 것으로 표시합니다.
-        alert('4');
       } else if (
         type === 'exampleFile' &&
         initExampleFiles &&
@@ -313,7 +314,7 @@ function MyDropzone(props: MyDropzoneProps) {
       <label
         {...getRootProps()}
         htmlFor="dropzone-file"
-        className={`flex flex-col items-center justify-center w-full h-40 duration-150 border-2 border-gray-${
+        className={`flex flex-col items-center justify-center w-full h-40 border-2 border-gray-${
           isDragEntered ? '500' : isFileUploaded ? '500' : '300'
         } border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600`}
       >
