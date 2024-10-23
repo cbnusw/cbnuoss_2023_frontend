@@ -288,43 +288,8 @@ export default function ContestProblem(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="flex justify-between">
-          <div className="mt-7">
-            {contestProblemInfo.exampleFiles.length > 0 && (
-              <>
-                <h4 className="text-base font-semibold">예제 파일 다운로드</h4>
-                <div className="mt-3 flex gap-3">
-                  {contestProblemInfo.exampleFiles.map(
-                    (exampleFile: ExampleFile, index: number) => (
-                      <button
-                        key={index}
-                        onClick={() =>
-                          downloadExampleFile(exampleFile.ref, exampleFile._id)
-                        }
-                        className="flex gap-[0.375rem] download-exmaple-file-btn rounded-[0.375rem] py-[0.6rem] px-[1rem] group"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          height="22.5px"
-                          viewBox="0 -960 960 960"
-                          width="22.5px"
-                          fill="#5f6368"
-                          className="group-hover:fill-[#0056b3]"
-                        >
-                          <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
-                        </svg>
-                        <span className="text-[#4e5968] group-hover:text-[#0056b3] font-semibold">
-                          {exampleFile.filename}
-                        </span>
-                      </button>
-                    ),
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-
-          <div className="flex flex-col 3md:flex-row gap-2 justify-end mt-4 h-fit">
+        <div className="3md:flex justify-between">
+          <div className="flex flex-col 3md:flex-row gap-2 justify-end mt-4 h-fit 3md:order-last">
             <button
               onClick={handleGoToContestProblems}
               className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
@@ -401,6 +366,41 @@ export default function ContestProblem(props: DefaultProps) {
                   </button>
                 </>
               )}
+          </div>
+
+          <div className="mt-7 3md:order-first">
+            {contestProblemInfo.exampleFiles.length > 0 && (
+              <>
+                <h4 className="text-base font-semibold">예제 파일 다운로드</h4>
+                <div className="mt-3 grid grid-cols-1 3xs:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {contestProblemInfo.exampleFiles.map(
+                    (exampleFile: ExampleFile, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() =>
+                          downloadExampleFile(exampleFile.ref, exampleFile._id)
+                        }
+                        className="flex gap-[0.375rem] download-exmaple-file-btn rounded-[0.375rem] py-[0.6rem] px-[1rem] group"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="22.5px"
+                          viewBox="0 -960 960 960"
+                          width="22.5px"
+                          fill="#5f6368"
+                          className="group-hover:fill-[#0056b3]"
+                        >
+                          <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+                        </svg>
+                        <span className="text-[#4e5968] group-hover:text-[#0056b3] font-semibold">
+                          {exampleFile.filename}
+                        </span>
+                      </button>
+                    ),
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
