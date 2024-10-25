@@ -4,7 +4,7 @@ import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ContestInfo } from '@/types/contest';
-import { IoSetItem, RegisterProblemParams } from '@/types/problem';
+import { ExampleFile, IoSetItem, RegisterProblemParams } from '@/types/problem';
 import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
@@ -73,9 +73,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
   const [score, setScore] = useState<number>(1);
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
   const [ioSetDatas, setIoSetDatas] = useState<IoSetItem[]>([]);
-  const [exampleFileInfos, setExampleFiles] = useState<UploadResponseData[]>(
-    [],
-  );
+  const [exampleFiles, setExampleFiles] = useState<ExampleFile[]>([]);
 
   const [isTitleValidFail, setIsTitleValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -177,7 +175,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
       content: uploadedProblemPdfFileUrl,
       published: null,
       ioSet: ioSetDatas,
-      exampleFiles: exampleFileInfos,
+      exampleFiles,
       options: {
         maxRealTime: maxExeTime,
         maxMemory: maxMemCap,
