@@ -3,7 +3,12 @@
 import MyDropzone from '@/app/components/MyDropzone';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
-import { IoSetItem, ProblemInfo, RegisterProblemParams } from '@/types/problem';
+import {
+  ExampleFile,
+  IoSetItem,
+  ProblemInfo,
+  RegisterProblemParams,
+} from '@/types/problem';
 import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
@@ -80,6 +85,7 @@ export default function EditExamProblem(props: DefaultProps) {
     useState('');
   const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
   const [isIoSetDataEmpty, setIsIoSetDataEmpty] = useState<boolean>(true);
+  const [exampleFiles, setExampleFiles] = useState<ExampleFile[]>([]);
 
   const [isProblemNameValidFail, setIsProblemNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -90,6 +96,8 @@ export default function EditExamProblem(props: DefaultProps) {
     isInAndOutFileUploadingValidFail,
     setIsInAndOutFileUploadingValidFail,
   ] = useState(false);
+  const [isExampleFileUploadingValidFail, setIsExampleFileUploadingValidFail] =
+    useState(false);
 
   const problemNameRef = useRef<HTMLInputElement>(null);
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
@@ -107,6 +115,7 @@ export default function EditExamProblem(props: DefaultProps) {
       setMaxMemCap(examProblemInfo.options.maxMemory);
       setUploadedProblemPdfFileUrl(examProblemInfo.content);
       setIoSetData(examProblemInfo.ioSet);
+      setExampleFiles(examProblemInfo.exampleFiles);
     }
   }, [examProblemInfo]);
 
@@ -178,6 +187,7 @@ export default function EditExamProblem(props: DefaultProps) {
       content: uploadedProblemPdfFileUrl,
       published: null,
       ioSet: ioSetData,
+      exampleFiles,
       options: {
         maxRealTime: maxExeTime,
         maxMemory: maxMemCap,
@@ -375,6 +385,20 @@ export default function EditExamProblem(props: DefaultProps) {
                 />
               )}
             </div>
+          </div>
+
+          <div className="flex flex-col gap-1 mt-9">
+            <p className="text-lg">
+              예제 파일<span className="text-[0.825rem]">(선택)</span>
+            </p>
+            <MyDropzone
+              type="exampleFile"
+              guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
+              setIsFileUploaded={setIsExampleFileUploadingValidFail}
+              isFileUploaded={isExampleFileUploadingValidFail}
+              initExampleFiles={exampleFiles}
+              setExampleFiles={setExampleFiles}
+            />
           </div>
         </div>
 

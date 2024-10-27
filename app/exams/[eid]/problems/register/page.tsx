@@ -5,7 +5,7 @@ import { OPERATOR_ROLES } from '@/constants/role';
 import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ExamInfo } from '@/types/exam';
-import { IoSetItem, RegisterProblemParams } from '@/types/problem';
+import { ExampleFile, IoSetItem, RegisterProblemParams } from '@/types/problem';
 import { UserInfo } from '@/types/user';
 import axiosInstance from '@/utils/axiosInstance';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
@@ -73,6 +73,7 @@ export default function RegisterExamProblem(props: DefaultProps) {
   const [maxMemCap, setMaxMemCap] = useState<number>();
   const [uploadedProblemPdfFileUrl, setUploadedPdfFileUrl] = useState('');
   const [ioSetData, setIoSetData] = useState<IoSetItem[]>([]);
+  const [exampleFiles, setExampleFiles] = useState<ExampleFile[]>([]);
 
   const [isProblemNameValidFail, setIsProblemNameValidFail] = useState(false);
   const [isMaxExeTimeValidFail, setIsMaxExeTimeValidFail] = useState(false);
@@ -83,6 +84,8 @@ export default function RegisterExamProblem(props: DefaultProps) {
     isInAndOutFileUploadingValidFail,
     setIsInAndOutFileUploadingValidFail,
   ] = useState(false);
+  const [isExampleFileUploadingValidFail, setIsExampleFileUploadingValidFail] =
+    useState(false);
 
   const problemNameRef = useRef<HTMLInputElement>(null);
   const maxExeTimeRef = useRef<HTMLInputElement>(null);
@@ -158,6 +161,7 @@ export default function RegisterExamProblem(props: DefaultProps) {
       content: uploadedProblemPdfFileUrl,
       published: null,
       ioSet: ioSetData,
+      exampleFiles,
       options: {
         maxRealTime: maxExeTime,
         maxMemory: maxMemCap,
@@ -354,6 +358,20 @@ export default function RegisterExamProblem(props: DefaultProps) {
                 setIoSetData={setIoSetData}
               />
             </div>
+          </div>
+
+          <div className="flex flex-col gap-1 mt-9">
+            <p className="text-lg">
+              예제 파일<span className="text-[0.825rem]">(선택)</span>
+            </p>
+            <MyDropzone
+              type="exampleFile"
+              guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
+              setIsFileUploaded={setIsExampleFileUploadingValidFail}
+              isFileUploaded={isExampleFileUploadingValidFail}
+              initExampleFiles={[]}
+              setExampleFiles={setExampleFiles}
+            />
           </div>
         </div>
 
