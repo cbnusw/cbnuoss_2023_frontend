@@ -24,6 +24,7 @@ export interface ProblemInfo {
   parentType: string;
   published: null | boolean;
   score: number;
+  exampleFiles: ExampleFile[];
   _id: string;
   title: string;
   content: string;
@@ -53,10 +54,16 @@ export interface ProblemInfo {
   __v: number;
 }
 
+export interface ExampleFile {
+  ref: string;
+  _id: string;
+  filename: string;
+}
+
 // 업로드 파일 정보
 export interface UploadedFileInfo {
-  ref: null;
-  refModel: null;
+  ref: string | null;
+  refModel: string | null;
   _id: string;
   url: string;
   filename: string;
