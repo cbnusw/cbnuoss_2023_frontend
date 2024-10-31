@@ -65,13 +65,22 @@ export default function UsersExamSubmits(props: DefaultProps) {
 
   const router = useRouter();
 
+  const currentTime = new Date();
+  const examEndTime = new Date(examInfo?.testPeriod.end);
+
   // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인
   useEffect(() => {
     fetchCurrentUserInfo(updateUserInfo).then((userInfo: UserInfo) => {
       if (examInfo) {
+        const isWriter = examInfo.writer._id === userInfo._id;
         const isOperator = OPERATOR_ROLES.includes(userInfo.role);
 
-        if (isOperator) {
+        if (isWriter) {
+          setIsLoading(false);
+          return;
+        }
+
+        if (isOperator && currentTime > examEndTime) {
           setIsLoading(false);
           return;
         }

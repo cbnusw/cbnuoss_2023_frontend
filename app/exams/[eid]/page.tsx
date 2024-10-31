@@ -188,6 +188,19 @@ export default function ExamDetail(props: DefaultProps) {
     }
   };
 
+  // "코드 제출 목록" 버튼의 렌더링 조건을 설정
+  const shouldShowSubmitsButton = () => {
+    // 대회 게시글 작성자인 경우, 언제든지 버튼 보임
+    if (userInfo._id === examInfo.writer._id) {
+      return true;
+    }
+
+    // 관리자 사용자의 경우, 대회 종료 시간 이후에만 버튼 보임
+    if (OPERATOR_ROLES.includes(userInfo.role) && currentTime > examEndTime) {
+      return true;
+    }
+  };
+
   // "문제 목록" 버튼의 렌더링 조건을 설정
   const shouldShowProblemsButton = () => {
     // 대회 게시글 작성자인 경우, 언제든지 버튼 보임
@@ -421,7 +434,7 @@ export default function ExamDetail(props: DefaultProps) {
         </div>
         <div>
           <div className="flex flex-col 3md:flex-row gap-2 justify-end">
-            {OPERATOR_ROLES.includes(userInfo.role) && (
+            {shouldShowSubmitsButton() && (
               <button
                 onClick={handleGoToExamSubmits}
                 className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
