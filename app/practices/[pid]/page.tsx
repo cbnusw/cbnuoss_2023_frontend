@@ -69,6 +69,7 @@ export default function PracticeProblem(props: DefaultProps) {
   const practiceProblemInfo: ProblemInfo = resData;
 
   const [isLoading, setIsLoading] = useState(true);
+  const [pdfScale, setPdfScale] = useState(0);
 
   const router = useRouter();
 
@@ -117,7 +118,7 @@ export default function PracticeProblem(props: DefaultProps) {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
+    <div className="relative mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[21rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="text-2xl font-bold tracking-tight">
@@ -253,7 +254,7 @@ export default function PracticeProblem(props: DefaultProps) {
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          height="22.5px"
+                          height="30px"
                           viewBox="0 -960 960 960"
                           width="22.5px"
                           fill="#5f6368"
@@ -273,9 +274,47 @@ export default function PracticeProblem(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="gap-5 border-b mt-8 mb-4 pb-5">
-          <PDFViewer pdfFileURL={practiceProblemInfo.content} />
+        <div className="border-b mt-4 mb-4 pb-5">
+          <PDFViewer
+            pdfFileURL={practiceProblemInfo.content}
+            pdfScale={pdfScale}
+          />
         </div>
+      </div>
+
+      <div className="fixed right-7 bottom-7 z-10 flex flex-col gap-y-2">
+        <button
+          onClick={() => {
+            setPdfScale((prev) => prev + 0.1);
+          }}
+          className="zoom-btn"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="30px"
+            viewBox="0 -960 960 960"
+            width="30px"
+            fill="#434343"
+          >
+            <path d="M450-450H250q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37Q237.25-510 250-510h200v-200q0-12.75 8.63-21.37 8.63-8.63 21.38-8.63 12.76 0 21.37 8.63Q510-722.75 510-710v200h200q12.75 0 21.37 8.63 8.63 8.63 8.63 21.38 0 12.76-8.63 21.37Q722.75-450 710-450H510v200q0 12.75-8.63 21.37-8.63 8.63-21.38 8.63-12.76 0-21.37-8.63Q450-237.25 450-250v-200Z" />
+          </svg>
+        </button>
+        <button
+          onClick={() => {
+            setPdfScale((prev) => prev - 0.1);
+          }}
+          className="zoom-btn"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="30px"
+            viewBox="0 -960 960 960"
+            width="30px"
+            fill="#434343"
+          >
+            <path d="M250-450q-12.75 0-21.37-8.63-8.63-8.63-8.63-21.38 0-12.76 8.63-21.37Q237.25-510 250-510h460q12.75 0 21.37 8.63 8.63 8.63 8.63 21.38 0 12.76-8.63 21.37Q722.75-450 710-450H250Z" />
+          </svg>
+        </button>
       </div>
     </div>
   );
