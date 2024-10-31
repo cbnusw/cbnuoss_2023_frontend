@@ -68,20 +68,23 @@ export default function UserExamSubmitList({
               </tr>
             </thead>
             <tbody>
-              {personalUserExamSubmitsInfo?.length === 0 && (
+              {personalUserExamSubmitsInfo?.length === 0 ? (
                 <EmptyUserExamSubmitListItem />
-              )}
-              {personalUserExamSubmitsInfo.map(
-                (personalUserExamSubmitInfo, idx) => (
-                  <UserExamSubmitListItem
-                    key={idx}
-                    personalUserExamSubmitInfo={personalUserExamSubmitInfo}
-                    total={resData.total}
-                    eid={eid}
-                    problemId={problemId}
-                    index={idx}
-                  />
-                ),
+              ) : (
+                <>
+                  {personalUserExamSubmitsInfo.map(
+                    (personalUserExamSubmitInfo, idx) => (
+                      <UserExamSubmitListItem
+                        key={idx}
+                        personalUserExamSubmitInfo={personalUserExamSubmitInfo}
+                        total={resData.total}
+                        eid={eid}
+                        problemId={problemId}
+                        index={idx}
+                      />
+                    ),
+                  )}
+                </>
               )}
             </tbody>
           </table>

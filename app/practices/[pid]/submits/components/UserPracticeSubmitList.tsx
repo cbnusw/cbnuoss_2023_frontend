@@ -62,21 +62,24 @@ export default function UserPracticeSubmitList({
               </tr>
             </thead>
             <tbody>
-              {personalUserPracticeSubmitsInfo?.length === 0 && (
+              {personalUserPracticeSubmitsInfo?.length === 0 ? (
                 <EmptyUserPracticeSubmitListItem />
-              )}
-              {personalUserPracticeSubmitsInfo.map(
-                (personalUserPracticeSubmitInfo, idx) => (
-                  <UserPracticeSubmitListItem
-                    key={idx}
-                    personalUserPracticeSubmitInfo={
-                      personalUserPracticeSubmitInfo
-                    }
-                    total={resData.length}
-                    pid={pid}
-                    index={idx}
-                  />
-                ),
+              ) : (
+                <>
+                  {personalUserPracticeSubmitsInfo.map(
+                    (personalUserPracticeSubmitInfo, idx) => (
+                      <UserPracticeSubmitListItem
+                        key={idx}
+                        personalUserPracticeSubmitInfo={
+                          personalUserPracticeSubmitInfo
+                        }
+                        total={resData.length}
+                        pid={pid}
+                        index={idx}
+                      />
+                    ),
+                  )}
+                </>
               )}
             </tbody>
           </table>

@@ -79,6 +79,10 @@ export default function UserExamSubmits(props: DefaultProps) {
     });
   }, [updateUserInfo, examProblemInfo, eid, router]);
 
+  const handleGoToExamProblems = () => {
+    router.push(`/exams/${eid}/problems`);
+  };
+
   if (isLoading) return <Loading />;
 
   return (
@@ -107,7 +111,7 @@ export default function UserExamSubmits(props: DefaultProps) {
             </div>
           </p>
 
-          <div className="flex justify-end pb-3 border-gray-300">
+          <div className="flex justify-end items-center gap-x-4 pb-3 border-gray-300">
             <div className="flex gap-3">
               <span className="font-semibold">
                 시험명:{' '}
@@ -123,6 +127,22 @@ export default function UserExamSubmits(props: DefaultProps) {
                 </span>
               </span>
             </div>
+
+            <button
+              onClick={handleGoToExamProblems}
+              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="20"
+                viewBox="0 -960 960 960"
+                width="20"
+                fill="white"
+              >
+                <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
+              </svg>
+              문제 목록
+            </button>
           </div>
         </div>
 
