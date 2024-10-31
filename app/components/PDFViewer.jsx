@@ -4,7 +4,7 @@ import useDebounce from '@/hooks/useDebounce'; // Assuming useDebounce is define
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
-export default function PDFViewer({ pdfFileURL }) {
+export default function PDFViewer({ pdfFileURL, pdfScale }) {
   const [numPages, setNumPages] = useState(0);
   const [scale, setScale] = useState(1.75);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -58,7 +58,7 @@ export default function PDFViewer({ pdfFileURL }) {
           pageNumber={index + 1}
           renderAnnotationLayer={false}
           renderTextLayer={false}
-          scale={scale}
+          scale={scale + pdfScale}
         />
       ))}
     </Document>
