@@ -47,6 +47,7 @@ function MyDropzone(props: MyDropzoneProps) {
   const [isInitialized, setIsInitialized] = useState(false);
   const [fileList, setFileList] = useState<UploadedFileInfo[]>([]);
   const [fileNameList, setFileNameList] = useState<string[]>([]);
+  const [pdfScale, setPdfScale] = useState(0);
 
   const [uploadService] = useState(new UploadService()); // UploadService 인스턴스 생성
 
@@ -368,7 +369,7 @@ function MyDropzone(props: MyDropzoneProps) {
 
       {isFileUploaded ? (
         type === 'pdf' ? (
-          <PDFViewer pdfFileURL={fileList[0]?.url} />
+          <PDFViewer pdfFileURL={fileList[0]?.url} pdfScale={pdfScale} />
         ) : type === 'inOut' ? (
           getInAndOutFilePairs(fileList).map((pair, index) => (
             <div
