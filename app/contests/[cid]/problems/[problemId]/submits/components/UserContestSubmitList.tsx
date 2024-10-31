@@ -68,22 +68,25 @@ export default function UserContestSubmitList({
               </tr>
             </thead>
             <tbody>
-              {personalUserContestSubmitsInfo?.length === 0 && (
+              {personalUserContestSubmitsInfo?.length === 0 ? (
                 <EmptyUserContestSubmitListItem />
-              )}
-              {personalUserContestSubmitsInfo.map(
-                (personalUserContestSubmitInfo, idx) => (
-                  <UserContestSubmitListItem
-                    key={idx}
-                    personalUserContestSubmitInfo={
-                      personalUserContestSubmitInfo
-                    }
-                    total={resData.total}
-                    cid={cid}
-                    problemId={problemId}
-                    index={idx}
-                  />
-                ),
+              ) : (
+                <>
+                  {personalUserContestSubmitsInfo.map(
+                    (personalUserContestSubmitInfo, idx) => (
+                      <UserContestSubmitListItem
+                        key={idx}
+                        personalUserContestSubmitInfo={
+                          personalUserContestSubmitInfo
+                        }
+                        total={resData.total}
+                        cid={cid}
+                        problemId={problemId}
+                        index={idx}
+                      />
+                    ),
+                  )}
+                </>
               )}
             </tbody>
           </table>

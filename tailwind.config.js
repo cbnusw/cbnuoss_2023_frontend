@@ -7,6 +7,13 @@ module.exports = {
     './node_modules/flowbite-react/**/*.js',
     './public/**/*.html',
   ],
+  safelist: [
+    'text-[#0f4c81]',
+    'text-[#5c4c87]',
+    'text-[#fa7268]',
+    'text-[#dd4124]',
+    'text-[#009874]',
+  ],
   theme: {
     extend: {
       backgroundImage: {
