@@ -254,7 +254,7 @@ export default function PracticeProblem(props: DefaultProps) {
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          height="30px"
+                          height="22.5px"
                           viewBox="0 -960 960 960"
                           width="22.5px"
                           fill="#5f6368"
