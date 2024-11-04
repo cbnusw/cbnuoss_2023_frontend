@@ -243,7 +243,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
                   isTitleValidFail ? 'red' : 'blue'
                 }-600 peer-focus:dark:text-${
                   isTitleValidFail ? 'red' : 'blue'
-                }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
               >
                 문제명
               </label>
@@ -280,7 +280,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
                     isMaxExeTimeValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isMaxExeTimeValidFail ? 'red' : 'blue'
-                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                 >
                   최대 실행 시간
                 </label>
@@ -316,7 +316,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
                     isMaxMemCapValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isMaxMemCapValidFail ? 'red' : 'blue'
-                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                 >
                   최대 메모리 사용량
                 </label>
@@ -352,7 +352,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
                     isScoreValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isScoreValidFail ? 'red' : 'blue'
-                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                 >
                   점수
                 </label>

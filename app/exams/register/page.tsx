@@ -202,7 +202,7 @@ export default function RegisterExam() {
                 isExamNameValidFail ? 'red' : 'blue'
               }-600 peer-focus:dark:text-${
                 isExamNameValidFail ? 'red' : 'blue'
-              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
             >
               시험명
             </label>
@@ -238,7 +238,7 @@ export default function RegisterExam() {
                 isCourseNameValidFail ? 'red' : 'blue'
               }-600 peer-focus:dark:text-${
                 isCourseNameValidFail ? 'red' : 'blue'
-              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
             >
               수업명
             </label>
@@ -327,7 +327,7 @@ export default function RegisterExam() {
                     isExamPwdValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isExamPwdValidFail ? 'red' : 'blue'
-                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                 >
                   비밀번호
                 </label>

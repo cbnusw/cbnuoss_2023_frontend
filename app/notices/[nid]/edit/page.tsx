@@ -172,7 +172,7 @@ export default function EditNotice(props: DefaultProps) {
                 isNoticeNameValidFail ? 'red' : 'blue'
               }-600 peer-focus:dark:text-${
                 isNoticeNameValidFail ? 'red' : 'blue'
-              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+              }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
             >
               제목
             </label>
@@ -258,7 +258,7 @@ export default function EditNotice(props: DefaultProps) {
                   isNoticePwdValidFail ? 'red' : 'blue'
                 }-600 peer-focus:dark:text-${
                   isNoticePwdValidFail ? 'red' : 'blue'
-                }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
               >
                 비밀번호
               </label>

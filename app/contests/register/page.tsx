@@ -242,7 +242,7 @@ export default function RegisterContest() {
               isContestNameValidFail ? 'red' : 'blue'
             }-600 peer-focus:dark:text-${
               isContestNameValidFail ? 'red' : 'blue'
-            }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+            }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
           >
             대회명
           </label>
@@ -330,7 +330,7 @@ export default function RegisterContest() {
                     isContestProblemsPwdValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isContestProblemsPwdValidFail ? 'red' : 'blue'
-                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                 >
                   비밀번호
                 </label>
@@ -477,7 +477,7 @@ export default function RegisterContest() {
                       isContestPwdValidFail ? 'red' : 'blue'
                     }-600 peer-focus:dark:text-${
                       isContestPwdValidFail ? 'red' : 'blue'
-                    }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                    }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                   >
                     비밀번호
                   </label>
