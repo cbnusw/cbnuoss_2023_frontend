@@ -44,7 +44,6 @@ function MyDropzone(props: MyDropzoneProps) {
 
   const [isDragEntered, setIsDragEntered] = useState(false);
   const [isDragAndDropped, setIsDragAndDropped] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
   const [fileList, setFileList] = useState<UploadedFileInfo[]>([]);
   const [fileNameList, setFileNameList] = useState<string[]>([]);
   const [pdfScale, setPdfScale] = useState(0);
@@ -112,6 +111,7 @@ function MyDropzone(props: MyDropzoneProps) {
                   ref: newFile.ref ?? '',
                   _id: newFile._id,
                   filename: newFile.filename,
+                  url: newFile.url ?? '', // url 필드를 추가하여 기본값 할당
                 };
                 setExampleFiles((prevExampleFiles: ExampleFile[]) => [
                   ...prevExampleFiles,
@@ -243,72 +243,71 @@ function MyDropzone(props: MyDropzoneProps) {
   }, [isDragEntered, isFileUploaded, setIsDragAndDropped]);
 
   useEffect(() => {
-    if (!isInitialized) {
-      if (type === 'pdf' && initUrl) {
-        // PDF 파일 초기화 로직
-        const newFile = {
-          ref: null,
-          refModel: null,
-          _id: '',
-          url: initUrl,
-          filename: '',
-          mimetype: '',
-          size: 0,
-          uploader: '',
-          uploadedAt: '',
-          __v: 0,
-        };
-        setFileList([newFile]);
-        setIsFileUploaded(true);
-      } else if (
-        type === 'inOut' &&
-        initInAndOutFiles &&
-        initInAndOutFiles.length > 0
-      ) {
-        // In/Out 파일 초기화 로직
-        const files: UploadedFileInfo[] = initInAndOutFiles.reduce(
-          (acc: UploadedFileInfo[], ioSetItem: IoSetItem) => {
-            // inFile과 outFile을 배열에 추가합니다.
-            acc.push(ioSetItem.inFile, ioSetItem.outFile);
-            return acc;
-          },
-          [] as UploadedFileInfo[],
-        );
-
-        setFileList(files); // fileList 상태를 업데이트합니다.
-        setIsFileUploaded(true); // 파일이 업로드된 것으로 표시합니다.
-      } else if (
-        type === 'exampleFile' &&
-        initExampleFiles &&
-        initExampleFiles.length > 0
-      ) {
-        // exampleFile 초기화 로직
-        const initialFiles = initExampleFiles.map((initExampleFile) => ({
-          ref: initExampleFile.ref,
-          refModel: null,
-          _id: initExampleFile._id,
-          url: '',
-          filename: initExampleFile.filename,
-          mimetype: '',
-          size: 0,
-          uploader: '',
-          uploadedAt: '',
-          __v: 0,
-        }));
-
-        setFileList(initialFiles);
-        setIsFileUploaded(true);
-      }
-      setIsInitialized(true);
+    // pdf 초기화 로직
+    if (type === 'pdf' && initUrl) {
+      const newFile = {
+        ref: null,
+        refModel: null,
+        _id: '',
+        url: initUrl,
+        filename: fileList[0]?.filename || 'problem.pdf', // Use uploaded filename or fallback to 'problem.pdf'
+        mimetype: 'application/pdf',
+        size: 0,
+        uploader: '',
+        uploadedAt: '',
+        __v: 0,
+      };
+      setFileList([newFile]);
+      setFileNameList([newFile.filename]);
+      setIsFileUploaded(true);
+    }
+    // inOut 초기화 로직
+    else if (
+      type === 'inOut' &&
+      initInAndOutFiles &&
+      initInAndOutFiles.length > 0
+    ) {
+      const files: UploadedFileInfo[] = initInAndOutFiles.reduce(
+        (acc: UploadedFileInfo[], ioSetItem: IoSetItem) => {
+          acc.push(ioSetItem.inFile, ioSetItem.outFile);
+          return acc;
+        },
+        [],
+      );
+      setFileList(files);
+      setFileNameList(files.map((file) => file.filename));
+      setIsFileUploaded(true);
+    }
+    // exampleFile 초기화 로직
+    else if (
+      type === 'exampleFile' &&
+      initExampleFiles &&
+      initExampleFiles.length > 0
+    ) {
+      const initialFiles = initExampleFiles.map((initExampleFile) => ({
+        ref: initExampleFile.ref,
+        refModel: null,
+        _id: initExampleFile._id,
+        url: '',
+        filename: initExampleFile.filename,
+        mimetype: '',
+        size: 0,
+        uploader: '',
+        uploadedAt: '',
+        __v: 0,
+      }));
+      setFileList(initialFiles);
+      setFileNameList(initialFiles.map((file) => file.filename));
+      setIsFileUploaded(true);
     }
   }, [
     type,
     initUrl,
     initInAndOutFiles,
-    isInitialized,
-    setIsFileUploaded,
     initExampleFiles,
-  ]);
+    setIsFileUploaded,
+    fileList,
+  ]); // `useEffect`의 의존성 배열에 `init` props 추가
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-full">
