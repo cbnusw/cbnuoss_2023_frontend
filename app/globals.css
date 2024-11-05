@@ -6,6 +6,10 @@
   color: #1a1f27;
 }
 
+.window {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.075), 0 -1px 15px rgba(0, 0, 0, 0.075);
+}
+
 .zoom-btn {
   padding: 0.5rem;
   border-radius: 9999px;
