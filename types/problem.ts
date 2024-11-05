@@ -21,6 +21,7 @@ export interface ProblemInfo {
     updatedAt: string;
     __v: number;
   };
+  parentTitle: string | null;
   parentType: string;
   published: null | boolean;
   score: number;
@@ -58,6 +59,7 @@ export interface ExampleFile {
   ref: string;
   _id: string;
   filename: string;
+  url: string | null;
 }
 
 // 업로드 파일 정보
