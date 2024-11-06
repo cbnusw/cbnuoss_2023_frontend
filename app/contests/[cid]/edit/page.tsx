@@ -295,7 +295,7 @@ export default function EditContest(props: DefaultProps) {
               isContestNameValidFail ? 'red' : 'blue'
             }-600 peer-focus:dark:text-${
               isContestNameValidFail ? 'red' : 'blue'
-            }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+            }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
           >
             대회명
           </label>
@@ -386,7 +386,7 @@ export default function EditContest(props: DefaultProps) {
                     isContestProblemsPwdValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isContestProblemsPwdValidFail ? 'red' : 'blue'
-                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                  }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                 >
                   비밀번호
                 </label>
@@ -533,7 +533,7 @@ export default function EditContest(props: DefaultProps) {
                       isContestPwdValidFail ? 'red' : 'blue'
                     }-600 peer-focus:dark:text-${
                       isContestPwdValidFail ? 'red' : 'blue'
-                    }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem]`}
+                    }-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10`}
                   >
                     비밀번호
                   </label>
