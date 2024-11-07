@@ -280,7 +280,7 @@ export default function ContestProblems(props: DefaultProps) {
   const handleChangeProblemOrder = () => {
     changingProblemOrderBtnRef.current?.blur();
 
-    if (contestProblemsInfo.problems.length <= 2) {
+    if (contestProblemsInfo.problems.length < 2) {
       alert('문제가 2개 이상 등록된 경우에 문제의 순서를 변경할 수 있습니다.');
       return;
     }
