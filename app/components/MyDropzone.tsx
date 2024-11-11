@@ -244,13 +244,13 @@ function MyDropzone(props: MyDropzoneProps) {
 
   useEffect(() => {
     // pdf 초기화 로직
-    if (type === 'pdf' && initUrl) {
+    if (type === 'pdf' && initUrl && fileList.length === 0) {
       const newFile = {
         ref: null,
         refModel: null,
         _id: '',
         url: initUrl,
-        filename: fileList[0]?.filename || 'problem.pdf', // Use uploaded filename or fallback to 'problem.pdf'
+        filename: 'problem.pdf', // 기본값
         mimetype: 'application/pdf',
         size: 0,
         uploader: '',
@@ -265,7 +265,8 @@ function MyDropzone(props: MyDropzoneProps) {
     else if (
       type === 'inOut' &&
       initInAndOutFiles &&
-      initInAndOutFiles.length > 0
+      initInAndOutFiles.length > 0 &&
+      fileList.length === 0
     ) {
       const files: UploadedFileInfo[] = initInAndOutFiles.reduce(
         (acc: UploadedFileInfo[], ioSetItem: IoSetItem) => {
@@ -282,7 +283,8 @@ function MyDropzone(props: MyDropzoneProps) {
     else if (
       type === 'exampleFile' &&
       initExampleFiles &&
-      initExampleFiles.length > 0
+      initExampleFiles.length > 0 &&
+      fileList.length === 0
     ) {
       const initialFiles = initExampleFiles.map((initExampleFile) => ({
         ref: initExampleFile.ref,
@@ -300,14 +302,7 @@ function MyDropzone(props: MyDropzoneProps) {
       setFileNameList(initialFiles.map((file) => file.filename));
       setIsFileUploaded(true);
     }
-  }, [
-    type,
-    initUrl,
-    initInAndOutFiles,
-    initExampleFiles,
-    setIsFileUploaded,
-    fileList,
-  ]); // `useEffect`의 의존성 배열에 `init` props 추가
+  }, [type, initUrl, initInAndOutFiles, initExampleFiles, setIsFileUploaded]); // fileList를 의존성 배열에서 제거
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center w-full">
