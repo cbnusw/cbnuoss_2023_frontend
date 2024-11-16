@@ -1,6 +1,5 @@
 import React, { forwardRef } from 'react';
 import { ExampleFile, IoSetItem, ProblemInfo } from '@/types/problem';
-import axiosInstance from '@/utils/axiosInstance';
 import { UploadService } from '@/components/utils/uploadService';
 
 interface SearchedProblemListItemProps {
@@ -147,8 +146,18 @@ const SearchedProblemListItem = forwardRef<
         <span className="text-inherit font-medium">{problemInfo.title}</span>
       </div>
 
-      <div className="p-[0.325rem]">
-        <span className="text-[#8994a2]">{problemInfo.parentTitle}</span>
+      <div className="flex items-center gap-x-2">
+        {problemInfo.parentType !== 'Practice' && (
+          <span className="text-[#8994a2]">{problemInfo.parentTitle}</span>
+        )}
+
+        <span className="text-xs bg-[#e8f3ff] text-[#1b64da] rounded-full px-2 py-1">
+          {problemInfo.parentType === 'Practice'
+            ? '연습문제'
+            : problemInfo.parentType === 'Contest'
+            ? '대회'
+            : '시험'}
+        </span>
       </div>
     </button>
   );

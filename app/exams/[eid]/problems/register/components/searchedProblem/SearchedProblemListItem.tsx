@@ -126,7 +126,7 @@ const SearchedProblemListItem = forwardRef<
     <button
       ref={ref} // forwardRef로 받은 ref를 DOM 요소에 전달
       onClick={handleClick}
-      className={`w-full flex justify-between items-center gap-x-3 bg-white hover:bg-[#f2f4f6] focus:bg-[#f2f4f6] focus:outline-none p-[0.4rem] rounded-md ${className}`}
+      className={`w-full flex justify-between items-center gap-x-3 bg-white hover:bg-[#f2f4f6] focus:bg-[#f2f4f6] focus:outline-none p-[0.575rem] rounded-md ${className}`}
     >
       <div className="flex items-center gap-x-3">
         <svg
@@ -147,8 +147,18 @@ const SearchedProblemListItem = forwardRef<
         <span className="text-inherit font-medium">{problemInfo.title}</span>
       </div>
 
-      <div className="p-[0.325rem]">
-        <span className="text-[#8994a2]">{problemInfo.parentTitle}</span>
+      <div className="flex items-center gap-x-2">
+        {problemInfo.parentType !== 'Practice' && (
+          <span className="text-[#8994a2]">{problemInfo.parentTitle}</span>
+        )}
+
+        <span className="text-xs bg-[#e8f3ff] text-[#1b64da] rounded-full px-2 py-1">
+          {problemInfo.parentType === 'Practice'
+            ? '연습문제'
+            : problemInfo.parentType === 'Contest'
+            ? '대회'
+            : '시험'}
+        </span>
       </div>
     </button>
   );

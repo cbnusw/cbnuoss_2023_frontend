@@ -541,6 +541,7 @@ export default function EditContestProblem(props: DefaultProps) {
             <p className="text-lg">문제 파일</p>
             {uploadedProblemPdfFileUrl && (
               <MyDropzone
+                key={uploadedProblemPdfFileUrl}
                 type="pdf"
                 guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
                 setIsFileUploaded={setIsPdfFileUploadingValidFail}
@@ -575,6 +576,7 @@ export default function EditContestProblem(props: DefaultProps) {
               </div>
               {!isIoSetDataEmpty && (
                 <MyDropzone
+                  key={JSON.stringify(ioSetData)}
                   type="inOut"
                   guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
                   setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
@@ -590,14 +592,17 @@ export default function EditContestProblem(props: DefaultProps) {
             <p className="text-lg">
               예제 파일<span className="text-[0.825rem]">(선택)</span>
             </p>
-            <MyDropzone
-              type="exampleFile"
-              guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
-              setIsFileUploaded={setIsExampleFileUploadingValidFail}
-              isFileUploaded={isExampleFileUploadingValidFail}
-              initExampleFiles={exampleFiles}
-              setExampleFiles={setExampleFiles}
-            />
+            {exampleFiles && (
+              <MyDropzone
+                key={JSON.stringify(exampleFiles)}
+                type="exampleFile"
+                guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
+                setIsFileUploaded={setIsExampleFileUploadingValidFail}
+                isFileUploaded={isExampleFileUploadingValidFail}
+                initExampleFiles={exampleFiles}
+                setExampleFiles={setExampleFiles}
+              />
+            )}
           </div>
         </div>
 
