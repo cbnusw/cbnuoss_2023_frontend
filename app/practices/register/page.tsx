@@ -425,6 +425,7 @@ export default function RegisterPractice() {
           <div className="flex flex-col gap-1">
             <p className="text-lg">문제 파일</p>
             <MyDropzone
+              key={uploadedProblemPdfFileUrl}
               type="pdf"
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsPdfFileUploadingValidFail}
@@ -457,6 +458,7 @@ export default function RegisterPractice() {
                 </p>
               </div>
               <MyDropzone
+                key={JSON.stringify(ioSetData)}
                 type="inOut"
                 guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
@@ -472,6 +474,7 @@ export default function RegisterPractice() {
               예제 파일<span className="text-[0.825rem]">(선택)</span>
             </p>
             <MyDropzone
+              key={JSON.stringify(exampleFiles)}
               type="exampleFile"
               guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
               setIsFileUploaded={setIsExampleFileUploadingValidFail}

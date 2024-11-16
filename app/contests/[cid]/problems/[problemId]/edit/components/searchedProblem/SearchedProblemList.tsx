@@ -8,11 +8,22 @@ import { ExampleFile, IoSetItem, ProblemInfo } from '@/types/problem';
 import EmptySearchedProblemListItem from './EmptySearchedProblemListItem';
 
 // 연관 검색 문제 정보 목록 조회 API
-const fetchRelatedSearchedProblemInfos = ({ queryKey }: any) => {
+const fetchRelatedSearchedProblemInfos = async ({ queryKey }: any) => {
   const searchQuery = queryKey[1];
-  return axiosInstance.get(
+  const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/search?title=${searchQuery}`,
   );
+
+  // 'parentTitle'이 null이 아닌 데이터만 필터링
+  const filteredDocuments = response.data.data.documents.filter(
+    (doc: ProblemInfo) =>
+      doc.parentTitle !== null || doc.parentType === 'Practice',
+  );
+
+  return {
+    ...response.data,
+    data: { ...response.data.data, documents: filteredDocuments },
+  };
 };
 
 interface SearchedProblemListProps {
@@ -38,14 +49,14 @@ export default function SearchedProblemList(props: SearchedProblemListProps) {
     setExampleFiles,
   } = props;
 
-  const { data } = useQuery({
+  const { isPending, data } = useQuery({
     queryKey: ['relatedSearchTagInfos', debouncedSearchQuery],
     queryFn: fetchRelatedSearchedProblemInfos,
     enabled: !!debouncedSearchQuery, // searchQuery 있을 때만 쿼리 활성화
     retry: 0,
   });
 
-  const relatedSearchedProblemInfos: ProblemInfo[] = data?.data.data.documents;
+  const relatedSearchedProblemInfos: ProblemInfo[] = data?.data.documents;
 
   // 빈 배열로 초기화하여 안전하게 useRef 사용
   const itemRefs = useRef<React.RefObject<HTMLButtonElement>[]>(
@@ -62,7 +73,7 @@ export default function SearchedProblemList(props: SearchedProblemListProps) {
       </div>
     );
 
-  if (searchQuery !== debouncedSearchQuery)
+  if (isPending || searchQuery !== debouncedSearchQuery)
     return (
       <div className="w-full bg-white hover:bg-[#f2f4f6] px-2 py-[0.4rem] rounded-md">
         <span className="text-[#888e96] text-[0.825rem] font-extralight">
@@ -79,7 +90,7 @@ export default function SearchedProblemList(props: SearchedProblemListProps) {
   }
 
   return (
-    <div>
+    <div className="max-h-[26.25rem] overflow-y-auto">
       {relatedSearchedProblemInfos.length === 0 ? (
         <EmptySearchedProblemListItem />
       ) : (

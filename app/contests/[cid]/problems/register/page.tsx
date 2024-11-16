@@ -149,7 +149,7 @@ export default function RegisterContestProblem(props: DefaultProps) {
     }
 
     if (!maxExeTime || maxExeTime <= 0) {
-      alert('최대 실행 시간을 입력해 주세요');
+      alert('최대 실행 시간을 올바르게 입력해 주세요');
       window.scrollTo(0, 0);
       maxExeTimeRef.current?.focus();
       setIsMaxExeTimeValidFail(true);
@@ -516,11 +516,12 @@ export default function RegisterContestProblem(props: DefaultProps) {
           <div className="flex flex-col gap-1">
             <p className="text-lg">문제 파일</p>
             <MyDropzone
+              key={uploadedProblemPdfFileUrl}
               type="pdf"
               guideMsg="문제 파일(PDF)을 이곳에 업로드해 주세요"
               setIsFileUploaded={setIsPdfFileUploadingValidFail}
               isFileUploaded={isPdfFileUploadingValidFail}
-              initUrl={''}
+              initUrl={uploadedProblemPdfFileUrl}
               setUploadedFileUrl={setUploadedProblemPdfFileUrl}
             />
           </div>
@@ -548,11 +549,12 @@ export default function RegisterContestProblem(props: DefaultProps) {
                 </p>
               </div>
               <MyDropzone
+                key={JSON.stringify(ioSetData)}
                 type="inOut"
                 guideMsg="입/출력 파일(in, out)들을 이곳에 업로드해 주세요"
                 setIsFileUploaded={setIsInAndOutFileUploadingValidFail}
                 isFileUploaded={isInAndOutFileUploadingValidFail}
-                initInAndOutFiles={[]}
+                initInAndOutFiles={ioSetData}
                 setIoSetData={setIoSetData}
               />
             </div>
@@ -563,11 +565,12 @@ export default function RegisterContestProblem(props: DefaultProps) {
               예제 파일<span className="text-[0.825rem]">(선택)</span>
             </p>
             <MyDropzone
+              key={JSON.stringify(exampleFiles)}
               type="exampleFile"
               guideMsg="소스코드 파일(c, cpp, java, py)을 업로드해 주세요"
               setIsFileUploaded={setIsExampleFileUploadingValidFail}
               isFileUploaded={isExampleFileUploadingValidFail}
-              initExampleFiles={[]}
+              initExampleFiles={exampleFiles}
               setExampleFiles={setExampleFiles}
             />
           </div>
