@@ -102,6 +102,8 @@ function MyDropzone(props: MyDropzoneProps) {
               // pdf나 code 타입일 경우 단일 파일 URL 설정
               if (type === 'pdf' || type === 'code') {
                 setUploadedFileUrl?.(newFile.url);
+                setFileList([newFile]);
+                setFileNameList([newFile.filename]);
                 setIsFileUploaded(true);
               }
 
