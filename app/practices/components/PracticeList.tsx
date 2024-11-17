@@ -19,7 +19,7 @@ interface PracticeListProps {
 // 연습문제 목록 반환 API (10개 게시글 단위로)
 const fetchPractices = async ({ queryKey }: any) => {
   const page = queryKey[1];
-  const searchQuery = queryKey[2];
+  const searchQuery = encodeURIComponent(queryKey[2]);
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/practice/?page=${page}&limit=10&sort=-createdAt&q=title,writer=${searchQuery}`,
   );
