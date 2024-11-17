@@ -9,7 +9,7 @@ import EmptySearchedProblemListItem from './EmptySearchedProblemListItem';
 
 // 연관 검색 문제 정보 목록 조회 API
 const fetchRelatedSearchedProblemInfos = async ({ queryKey }: any) => {
-  const searchQuery = queryKey[1];
+  const searchQuery = encodeURIComponent(queryKey[1]);
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/search?title=${searchQuery}`,
   );
