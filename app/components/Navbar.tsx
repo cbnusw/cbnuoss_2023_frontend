@@ -6,6 +6,7 @@ import { userInfoStore } from '@/store/UserInfo';
 import axiosInstance from '@/utils/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
+import { usePathname } from 'next/navigation';
 
 // 로그아웃 API
 const logout = () => {
@@ -30,6 +31,9 @@ export default function Navbar() {
 
   const [rightPos, setRightPos] = useState('-right-full');
 
+  const pathname = usePathname();
+  const currentPathKeyword = pathname.split('/')[1];
+
   useEffect(() => {
     // (로그인 한) 사용자 정보 조회
     const activeAuthorization = localStorage.getItem('activeAuthorization');
@@ -38,64 +42,75 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`w-full z-10 p-2 pl-3 fixed top-0 border-b border-[#e6e8ea] whitespace-nowrap bg-white`}
+      className={`w-full z-20 p-2 pl-3 fixed top-0 border-b border-[#e6e8ea] whitespace-nowrap bg-white`}
     >
-      <div className="2lg:w-[60rem] flex items-center mx-auto">
+      <div className="2lg:w-[60rem] flex justify-between items-center mx-auto">
         <div className="py-2 2md:py-0">
           <Link href="/">
-            <div className="flex gap-1">
+            <div className="flex gap-[0.2rem]">
               <img
                 src="/images/logo.png"
                 alt="logo"
-                style={{ width: '35px', height: '24px' }}
-                className="relative top-[2px]"
+                style={{ width: '30px', height: '21px' }}
               />
-              <span className="hidden 2lg:block tracking-tight text-lg font-semibold">
+              <span className="hidden 2lg:block tracking-tighter text-sm font-semibold text-[#333]">
                 SW Online Judge
               </span>
             </div>
           </Link>
         </div>
-        <div className="hidden ml-16 2md:block">
-          <div className="flex gap-3 font-medium mx-auto">
-            <Link
-              href="/contests"
-              className="px-4 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
-            >
-              대회
-            </Link>
-            <Link
-              href="/exams"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
-            >
-              시험
-            </Link>
-            <Link
-              href="/practices"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
-            >
-              연습문제
-            </Link>
-            <Link
-              href="/notices"
-              className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] focus:bg-[#f3f4f5]"
-            >
-              공지사항
-            </Link>
+
+        <div className="hidden 2md:flex gap-x-14">
+          <div className="w-fit hidden ml-16 2md:block">
+            <div className="flex gap-4 text-[0.825rem] text-[#4e5968] mx-auto">
+              <Link
+                href="/contests"
+                className={`${
+                  currentPathKeyword === 'contests' && 'font-semibold'
+                } px-3 py-2 rounded-md hover:bg-[#f3f4f5] hover:text-[#0057b3]`}
+              >
+                대회
+              </Link>
+              <Link
+                href="/exams"
+                className={`${
+                  currentPathKeyword === 'exams' && 'font-semibold'
+                } px-3 py-2 rounded-md hover:bg-[#f3f4f5] hover:text-[#0057b3]`}
+              >
+                시험
+              </Link>
+              <Link
+                href="/practices"
+                className={`${
+                  currentPathKeyword === 'practices' && 'font-semibold'
+                } px-3 py-2 rounded-md hover:bg-[#f3f4f5] hover:text-[#0057b3]`}
+              >
+                연습문제
+              </Link>
+              <Link
+                href="/notices"
+                className={`${
+                  currentPathKeyword === 'notices' && 'font-semibold'
+                } px-3 py-2 rounded-md hover:bg-[#f3f4f5] hover:text-[#0057b3]`}
+              >
+                공지사항
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="hidden w-[17.5rem] ml-auto 2md:flex">
-          <div className="flex ml-auto gap-3">
+
+          <div className="flex ml-auto gap-3 text-[0.825rem] text-[#4e5968]">
             {userInfo.isAuth ? (
               <>
                 <Link
                   href="/mypage/profile"
-                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                  className={`${
+                    currentPathKeyword === 'mypage' && 'font-semibold'
+                  } px-3 py-2 rounded-md hover:bg-[#f3f4f5]`}
                 >
                   <span className="font-semibold">{userInfo.name}</span> 님
                 </Link>
                 <button
-                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] hover:text-[#0057b3]"
                   onClick={() => logoutMutation.mutate()}
                 >
                   로그아웃
@@ -105,14 +120,14 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] hover:text-[#0057b3]"
                 >
                   로그인
                 </Link>
                 <a
                   href="https://sw7up.cbnu.ac.kr/account/join"
                   target="_blank"
-                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5]"
+                  className="px-3 py-2 rounded-md hover:bg-[#f3f4f5] hover:text-[#0057b3]"
                 >
                   회원가입
                 </a>
@@ -160,7 +175,7 @@ export default function Navbar() {
                       }}
                       className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
                     >
-                      <span className="font-semibold">{userInfo.name}</span>님
+                      <span className="font-semibold">{userInfo.name}</span> 님
                     </Link>
                     <button
                       className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
