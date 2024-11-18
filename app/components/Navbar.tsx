@@ -98,7 +98,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex ml-auto gap-3 text-[0.825rem] text-[#4e5968]">
+          <div className="flex justify-end gap-3 w-[10rem] text-[0.825rem] text-[#4e5968]">
             {userInfo.isAuth ? (
               <>
                 <Link
