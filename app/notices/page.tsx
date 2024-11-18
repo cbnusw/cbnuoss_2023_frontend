@@ -65,7 +65,7 @@ export default function Notices() {
                 <div className="flex justify-end mb-2">
                   <div className="flex">
                     <Link
-                      href="notices/new"
+                      href="notices/register"
                       className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                     >
                       등록하기

@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import UsersExamSubmitListItem from './UsersExamSubmitListItem';
 import EmptyUsersExamSubmitListItem from './EmptyUsersExamSubmitListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/hooks/useDebounce';
 import { useSearchParams } from 'next/navigation';
@@ -63,7 +62,7 @@ export default function UsersExamSubmitList({
     }
   }, [page, params, router, eid]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return null;
 
   return (
     <div className="mx-auto w-full">

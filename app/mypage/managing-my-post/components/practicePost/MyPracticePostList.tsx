@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Loading from '@/app/loading';
 import EmptyMyPracticePostListItem from './EmptyMyPracticePostListItem';
 import MyPracticePostListItem from './MyPracticePostListItem';
 import axiosInstance from '@/utils/axiosInstance';
@@ -10,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ProblemInfo } from '@/types/problem';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import { userInfoStore } from '@/store/UserInfo';
+import MyPracticePostListLoadingSkeleton from './MyPracticePostListLoadingSkeleton';
 
 // 본인이 작성한 대회 게시글 목록 반환 API (10개 게시글 단위로)
 const fetchMyPractices = async ({ queryKey }: any) => {
@@ -55,7 +55,7 @@ export default function MyPracticePostList() {
     }
   }, [page, params, router]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return <MyPracticePostListLoadingSkeleton />;
 
   return (
     <div className="mx-auto mt-6 w-full">

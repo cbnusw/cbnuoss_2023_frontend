@@ -1,7 +1,6 @@
 'use client';
 
 import { OPERATOR_ROLES } from '@/constants/role';
-import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ExampleFile, ProblemInfo } from '@/types/problem';
 import { UserInfo } from '@/types/user';
@@ -11,6 +10,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import ExamProblemDetailLoadingSkeleton from './components/ExamProblemDetailLoadingSkeleton';
 
 // 문제 정보 조회 API
 const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
@@ -38,7 +38,7 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
 });
 
-export default function ExamProblem(props: DefaultProps) {
+export default function ExamProblemDetail(props: DefaultProps) {
   const eid = props.params.eid;
   const problemId = props.params.problemId;
 
@@ -159,7 +159,7 @@ export default function ExamProblem(props: DefaultProps) {
     });
   }, [updateUserInfo, examProblemInfo, eid, router]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <ExamProblemDetailLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">

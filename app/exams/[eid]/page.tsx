@@ -2,7 +2,6 @@
 
 import { OPERATOR_ROLES } from '@/constants/role';
 import { useCountdownTimer } from '@/hooks/useCountdownTimer';
-import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ExamInfo } from '@/types/exam';
 import { UserInfo } from '@/types/user';
@@ -13,6 +12,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import ExamDetailLoadingSkeleton from './components/ExamDetailLoadingSkeleton';
 
 // 시험 게시글 정보 조회 API
 const fetchExamDetailInfo = ({ queryKey }: any) => {
@@ -393,7 +393,7 @@ export default function ExamDetail(props: DefaultProps) {
     });
   }, [updateUserInfo, router, examInfo]);
 
-  if (!isConfirmPassword || isPending) return <Loading />;
+  if (!isConfirmPassword || isPending) return <ExamDetailLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-1 2lg:px-0 overflow-x-auto">
@@ -414,8 +414,7 @@ export default function ExamDetail(props: DefaultProps) {
                 )}
               </span>
             </span>
-            <span className='hidden relative bottom-[0.055rem] font-thin before:content-["|"] 3md:block' />
-            <span className="font-semibold">
+            <span className="ml-0 font-semibold 3md:ml-auto">
               <span className="3md:hidden text-gray-500">• </span>
               수업명: <span className="font-light">{examInfo.course}</span>
             </span>

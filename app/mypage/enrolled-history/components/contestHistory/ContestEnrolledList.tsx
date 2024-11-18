@@ -1,11 +1,11 @@
 'use client';
 
-import Loading from '@/app/loading';
 import EmptyContestEnrolledListItem from './EmptyContestEnrolledListItem';
 import ContestEnrolledListItem from './ContestEnrolledListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { ContestEnrolledInfo } from '@/types/contest';
+import ContestEnrolledListLoadingSkeleton from './ContestEnrolledListLoadingSkeleton';
 
 // 참가했던 대회 목록 반환 API
 const fetchEnrolledContests = () => {
@@ -23,7 +23,7 @@ export default function ContestEnrolledList() {
   const resData = data?.data.data;
   const numberOfItems = resData?.length;
 
-  if (isPending) return <Loading />;
+  if (isPending) return <ContestEnrolledListLoadingSkeleton />;
 
   return (
     <div className="mx-auto mt-6 w-full">

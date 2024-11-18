@@ -1,7 +1,6 @@
 'use client';
 
 import { OPERATOR_ROLES } from '@/constants/role';
-import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ExampleFile, ProblemInfo } from '@/types/problem';
 import axiosInstance from '@/utils/axiosInstance';
@@ -10,6 +9,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import PracticeDetailLoadingSkeleton from './components/PracticeDetailLoadingSkeleton';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -115,7 +115,7 @@ export default function PracticeProblem(props: DefaultProps) {
     });
   }, [updateUserInfo, practiceProblemInfo]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <PracticeDetailLoadingSkeleton />;
 
   return (
     <div className="relative mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">

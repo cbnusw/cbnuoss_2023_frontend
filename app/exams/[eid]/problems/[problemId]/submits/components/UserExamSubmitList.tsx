@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import UserExamSubmitListItem from './UserExamSubmitListItem';
 import EmptyUserExamSubmitListItem from './EmptyUserExamSubmitListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { ExamSubmitInfo } from '@/types/exam';
@@ -35,7 +34,7 @@ export default function UserExamSubmitList({
   const resData = data?.data.data;
   const personalUserExamSubmitsInfo: ExamSubmitInfo[] = resData?.documents;
 
-  if (isPending) return <Loading />;
+  if (isPending) return null;
 
   return (
     <div className="mx-auto w-full">

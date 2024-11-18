@@ -1,6 +1,6 @@
 'use client';
 
-import Loading from '@/app/loading';
+import Loading from '@/app/components/Loading';
 import UserScoreInfoList from './components/UserScoreInfoList';
 import EmptyUserScoreInfoListItem from './components/EmptyUserScoreInfoListItem';
 import Link from 'next/link';

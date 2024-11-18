@@ -1,7 +1,7 @@
 'use client';
 
 import { OPERATOR_ROLES } from '@/constants/role';
-import Loading from '@/app/loading';
+import Loading from '@/app/components/Loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ContestInfo, RegisterContestParams } from '@/types/contest';
 import { UserInfo } from '@/types/user';

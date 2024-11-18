@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Loading from '@/app/loading';
 import EmptyMyContestPostListItem from './EmptyMyContestPostListItem';
 import MyContestPostListItem from './MyContestPostListItem';
 import axiosInstance from '@/utils/axiosInstance';
@@ -9,6 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ContestInfo } from '@/types/contest';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
+import MyContestPostListLoadingSkeleton from './MyContestPostListLoadingSkeleton';
 
 // 본인이 작성한 대회 게시글 목록 반환 API (10개 게시글 단위로)
 const fetchMyContests = async ({ queryKey }: any) => {
@@ -48,7 +48,7 @@ export default function MyContestPostList() {
     }
   }, [page, params, router]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return <MyContestPostListLoadingSkeleton />;
 
   return (
     <div className="mx-auto mt-6 w-full">

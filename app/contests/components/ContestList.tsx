@@ -2,7 +2,6 @@
 
 import ContestListItem from './ContestListItem';
 import EmptyContestListItem from './EmptyContestListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { ContestInfo } from '@/types/contest';
@@ -10,6 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import useDebounce from '@/hooks/useDebounce';
+import ContestListLoadingSkeleton from './ContestListLoadingSkeleton';
 
 interface ContestListProps {
   searchQuery: string;
@@ -56,7 +56,7 @@ export default function ContestList({ searchQuery }: ContestListProps) {
     }
   }, [page, params, router]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return <ContestListLoadingSkeleton />;
 
   return (
     <div className="mx-auto w-full">

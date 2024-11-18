@@ -1,11 +1,11 @@
 'use client';
 
-import Loading from '@/app/loading';
 import EmptyExamEnrolledListItem from './EmptyExamEnrolledListItem';
 import ExamEnrolledListItem from './ExamEnrolledListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { ExamEnrolledInfo } from '@/types/exam';
+import ExamEnrolledListLoadingSkeleton from './ExamEnrolledListLoadingSkeleton';
 
 // 참가했던 시험 목록 반환 API
 const fetchEnrolledExams = () => {
@@ -23,7 +23,7 @@ export default function ExamEnrolledList() {
   const resData = data?.data.data;
   const numberOfItems = resData?.length;
 
-  if (isPending) return <Loading />;
+  if (isPending) return <ExamEnrolledListLoadingSkeleton />;
 
   return (
     <div className="mx-auto mt-6 w-full">

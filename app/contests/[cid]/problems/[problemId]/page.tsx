@@ -1,6 +1,5 @@
 'use client';
 
-import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ExampleFile, ProblemInfo } from '@/types/problem';
 import { UserInfo } from '@/types/user';
@@ -12,6 +11,7 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import ContestProblemDetailPageLoadingSkeleton from './components/ContestProblemDetailPageLoadingSkeleton';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -52,7 +52,7 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
 });
 
-export default function ContestProblem(props: DefaultProps) {
+export default function ContestProblemDetail(props: DefaultProps) {
   const cid = props.params.cid;
   const problemId = props.params.problemId;
 
@@ -233,7 +233,8 @@ export default function ContestProblem(props: DefaultProps) {
     });
   }, [updateUserInfo, contestProblemInfo, cid, router]);
 
-  if (isLoading || !isPasswordChecked) return <Loading />;
+  if (isLoading || !isPasswordChecked)
+    return <ContestProblemDetailPageLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">

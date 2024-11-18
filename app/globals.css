@@ -6,6 +6,31 @@
   color: #1a1f27;
 }
 
+/* 애니메이션 효과 */
+/* f7f7f7, efefef */
+.skeleton {
+  background-color: #f3f3f3;
+  background: linear-gradient(
+    90deg,
+    #f3f3f3 35%,
+    #ecebeb 50%,
+    #f3f3f3 65%
+  ); /* 그라디언트 효과 */
+  border-radius: 3px;
+  background-size: 200% 100%; /* 애니메이션 효과 크기 */
+  animation: shimmer 3s infinite; /* 애니메이션 이름과 속도 */
+}
+
+/* Shimmer 애니메이션 */
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 .window {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.075), 0 -1px 15px rgba(0, 0, 0, 0.075);
 }

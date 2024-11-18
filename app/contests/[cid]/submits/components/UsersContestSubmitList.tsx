@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import UsersContestSubmitListItem from './UsersContestSubmitListItem';
 import EmptyUsersContestSubmitListItem from './EmptyUsersContestSubmitListItem';
-import Loading from '@/app/loading';
 import { useQuery } from '@tanstack/react-query';
 import { ContestSubmitInfo } from '@/types/contest';
 import axiosInstance from '@/utils/axiosInstance';
@@ -62,7 +61,7 @@ export default function UsersContestSubmitList({
     }
   }, [page, params, router, cid]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return null;
 
   return (
     <div className="mx-auto w-full">
