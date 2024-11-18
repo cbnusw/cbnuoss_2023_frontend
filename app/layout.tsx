@@ -16,12 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/images/logo.png" />
+        <link rel="icon" href="/images/cube-logo.png" />
       </head>
       <body className="text-sm">
         <Providers>
           <Navbar />
-          <main className="w-full mx-auto pt-20 mb-14">{children}</main>
+          <main className="w-full mx-auto pt-20 mb-[10rem]">{children}</main>
           <Footer />
         </Providers>
       </body>

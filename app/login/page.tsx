@@ -8,6 +8,7 @@ import logoImg from '@/public/images/logo.png';
 import axiosInstance from '@/utils/axiosInstance';
 import { userInfoStore } from '@/store/UserInfo';
 import { AxiosError } from 'axios';
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
 interface UserLoginInfoType {
   id: string;
@@ -135,6 +136,10 @@ export default function Login() {
     STR_RIGHT_CASE_LABEL_ELEMENT_STYLE_CLASSNAME,
   );
   const [isAdjustOpacity, setIsAdjustOpacity] = useState(false);
+
+  const [openPrivacyPolicyModal, setOpenPrivacyPolicyModal] = useState<
+    string | undefined
+  >();
 
   const idInputRef = useRef<HTMLInputElement>(null);
   const pwdInputRef = useRef<HTMLInputElement>(null);
@@ -315,9 +320,18 @@ export default function Login() {
           </div>
         </div>
         <div className="flex mt-5 text-[0.6rem] text-gray-700 justify-end">
-          <a href="https://sw7up.cbnu.ac.kr/policy/privacy" target="_blank">
-            개인정보처리방침
-          </a>
+          <button
+            onClick={() => setOpenPrivacyPolicyModal('default')}
+            className="text-[#b0b8c1]"
+          >
+            개인정보 처리방침
+          </button>
+          {openPrivacyPolicyModal && (
+            <PrivacyPolicyModal
+              openPrivacyPolicyModal={openPrivacyPolicyModal}
+              setOpenPrivacyPolicyModal={setOpenPrivacyPolicyModal}
+            />
+          )}
         </div>
       </div>
     </div>
