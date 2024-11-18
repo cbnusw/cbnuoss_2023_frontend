@@ -14,10 +14,10 @@ import { useCountdownTimer } from '@/hooks/useCountdownTimer';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
-import Loading from '@/app/loading';
 import { UserInfo } from '@/types/user';
 import { AxiosError } from 'axios';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
+import ContestProblemListPageLoadingSkeleton from './components/ContestProblemListPageLoadingSkeleton';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -291,7 +291,8 @@ export default function ContestProblems(props: DefaultProps) {
     }
   };
 
-  if (isLoading || !isPasswordChecked) return <Loading />;
+  if (isLoading || !isPasswordChecked)
+    return <ContestProblemListPageLoadingSkeleton />;
 
   return (
     <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">

@@ -1,6 +1,5 @@
 'use client';
 
-import Loading from '@/app/loading';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
@@ -16,6 +15,7 @@ import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
+import ExamProblemListPageLoadingSkeleton from './components/ExamProblemListPageLoadingSkeleton';
 
 // 시험에 등록된 문제 목록 정보 조회 API
 const fetchExamProblemsDetailInfo = ({ queryKey }: any) => {
@@ -214,10 +214,10 @@ export default function ExamProblems(props: DefaultProps) {
     router.push(`/exams/${eid}/problems/register`);
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <ExamProblemListPageLoadingSkeleton />;
 
   return (
-    <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
+    <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[21rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="flex items-center text-2xl font-bold tracking-tight">

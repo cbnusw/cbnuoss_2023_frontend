@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import UserContestSubmitList from './components/UserContestSubmitList';
 import { useEffect, useState } from 'react';
-import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import axiosInstance from '@/utils/axiosInstance';
@@ -16,6 +15,7 @@ import { userInfoStore } from '@/store/UserInfo';
 import { UserInfo } from '@/types/user';
 import { ProblemInfo } from '@/types/problem';
 import { OPERATOR_ROLES } from '@/constants/role';
+import UserContestSubmitListPageLoadingSkeleton from './components/UserContestSubmitListPageLoadingSkeleton';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -159,7 +159,8 @@ export default function UserContestSubmits(props: DefaultProps) {
     router.push(`/contests/${cid}/problems`);
   };
 
-  if (isLoading || !isPasswordChecked) return <Loading />;
+  if (isLoading || !isPasswordChecked)
+    return <UserContestSubmitListPageLoadingSkeleton />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

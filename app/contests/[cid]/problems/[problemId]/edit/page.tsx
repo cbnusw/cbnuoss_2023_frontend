@@ -1,7 +1,7 @@
 'use client';
 
 import MyDropzone from '@/app/components/MyDropzone';
-import Loading from '@/app/loading';
+import Loading from '@/app/components/Loading';
 import { userInfoStore } from '@/store/UserInfo';
 import {
   ExampleFile,

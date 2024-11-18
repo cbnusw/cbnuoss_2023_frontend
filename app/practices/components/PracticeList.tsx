@@ -2,7 +2,6 @@
 
 import React, { useEffect } from 'react';
 import EmptyPracticeListItem from './EmptyPracticeListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/hooks/useDebounce';
 import { useSearchParams } from 'next/navigation';
@@ -11,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import PracticeListItem from './PracticeListItem';
 import { ProblemInfo } from '@/types/problem';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
+import PracticeListLoadingSkeleton from './PracticeListLoadingSkeleton';
 
 interface PracticeListProps {
   searchQuery: string;
@@ -57,7 +57,7 @@ export default function PracticeList({ searchQuery }: PracticeListProps) {
     }
   }, [page, params, router]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return <PracticeListLoadingSkeleton />;
 
   return (
     <div className="mx-auto w-full">

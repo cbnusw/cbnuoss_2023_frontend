@@ -2,7 +2,6 @@
 
 import UserPracticeSubmitListItem from './UserPracticeSubmitListItem';
 import EmptyUserPracticeSubmitListItem from './EmptyUserPracticeSubmitListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { PracticeSubmitInfo } from '@/types/practice';
@@ -32,7 +31,7 @@ export default function UserPracticeSubmitList({
   const resData = data?.data.data;
   const personalUserPracticeSubmitsInfo: PracticeSubmitInfo[] = resData;
 
-  if (isPending) return <Loading />;
+  if (isPending) return null;
 
   return (
     <div className="mx-auto w-full">

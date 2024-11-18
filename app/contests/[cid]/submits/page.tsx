@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import UsersContestSubmitList from './components/UsersContestSubmitList';
 import { useEffect, useState } from 'react';
-import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import { userInfoStore } from '@/store/UserInfo';
@@ -15,6 +14,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { ContestInfo, ContestSubmitInfo } from '@/types/contest';
 import * as XLSX from 'xlsx';
 import { getCodeSubmitResultTypeDescription } from '@/utils/getCodeSubmitResultTypeDescription';
+import UsersContestSubmitPageLoadingSkeleton from './components/UsersContestSubmitPageLoadingSkeleton';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
@@ -138,7 +138,7 @@ export default function UsersContestSubmits(props: DefaultProps) {
     fetchContestantSubmitsInfoMutation.mutate();
   };
 
-  if (isLoading || isPending) return <Loading />;
+  if (isLoading || isPending) return <UsersContestSubmitPageLoadingSkeleton />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

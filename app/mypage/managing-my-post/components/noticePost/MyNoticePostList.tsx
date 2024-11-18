@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Loading from '@/app/loading';
 import EmptyMyNoticePostListItem from './EmptyMyNoticePostListItem';
 import MyNoticePostListItem from './MyNoticePostListItem';
 import axiosInstance from '@/utils/axiosInstance';
@@ -9,6 +8,7 @@ import { NoticeInfo } from '@/types/notice';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
+import MyNoticePostListLoadingSkeleton from './MyNoticePostListLoadingSkeleton';
 
 // 본인이 작성한 공지사항 게시글 목록 반환 API (10개 게시글 단위로)
 const fetchMyNotices = async ({ queryKey }: any) => {
@@ -41,7 +41,7 @@ export default function MyNoticePostList() {
     router.push(`/mypage/managing-my-post?page=${newPage}`);
   };
 
-  if (isPending) return <Loading />;
+  if (isPending) return <MyNoticePostListLoadingSkeleton />;
 
   return (
     <div className="mx-auto mt-6 w-full">

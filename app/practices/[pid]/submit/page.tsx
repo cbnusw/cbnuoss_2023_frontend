@@ -13,8 +13,8 @@ import { SubmitCode } from '@/types/submit';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
-import Loading from '@/app/loading';
 import { OPERATOR_ROLES } from '@/constants/role';
+import SubmitPracticeProblemCodePageLoadingSkeleton from './components/SubmitPracticeProblemCodePageLoadingSkeleton';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -138,10 +138,10 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
     });
   }, [updateUserInfo, practiceInfo, router]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <SubmitPracticeProblemCodePageLoadingSkeleton />;
 
   return (
-    <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
+    <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">
       <div className="flex flex-col w-[60rem] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="flex items-center text-2xl font-bold tracking-tight">

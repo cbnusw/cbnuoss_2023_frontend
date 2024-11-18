@@ -2,7 +2,6 @@
 
 import UserContestSubmitListItem from './UserContestSubmitListItem';
 import EmptyUserContestSubmitListItem from './EmptyUserContestSubmitListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { ContestSubmitInfo } from '@/types/contest';
 import { useQuery } from '@tanstack/react-query';
@@ -35,7 +34,7 @@ export default function UserContestSubmitList({
   const personalUserContestSubmitsInfo: ContestSubmitInfo[] =
     resData?.documents;
 
-  if (isPending) return <Loading />;
+  if (isPending) return null;
 
   return (
     <div className="mx-auto w-full">

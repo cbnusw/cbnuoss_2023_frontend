@@ -1,7 +1,7 @@
 'use client';
 
 import { OPERATOR_ROLES } from '@/constants/role';
-import Loading from '@/app/loading';
+import Loading from '@/app/components/Loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { CreateNoticeParams } from '@/types/notice';
 import { UserInfo } from '@/types/user';
@@ -30,7 +30,7 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
   ssr: false,
 });
 
-export default function CreateNotice() {
+export default function RegisterNotice() {
   const createNoticeMutation = useMutation({
     mutationFn: createNotice,
     onSuccess: (data) => {

@@ -1,6 +1,5 @@
 'use client';
 
-import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { SubmitInfo } from '@/types/submit';
 import { UserInfo } from '@/types/user';
@@ -16,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import UserExamSubmitDetailPageLoadingSkeleton from './components/UserExamSubmitDetailPageLoadingSkeleton';
 
 // 코드 제출 정보 조회 API
 const fetchSubmitInfo = ({ queryKey }: any) => {
@@ -35,10 +35,10 @@ interface DefaultProps {
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
-  { ssr: false },
+  { ssr: false, loading: () => <div className="skeleton h-[15rem]" /> },
 );
 
-export default function UserExamSubmit(props: DefaultProps) {
+export default function UserExamSubmitDetail(props: DefaultProps) {
   const eid = props.params.eid;
   const problemId = props.params.problemId;
   const submitId = props.params.submitId;
@@ -91,7 +91,7 @@ export default function UserExamSubmit(props: DefaultProps) {
     router.push(`/exams/${eid}/problems`);
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <UserExamSubmitDetailPageLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">

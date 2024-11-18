@@ -1,6 +1,5 @@
 'use client';
 
-import Loading from '@/app/loading';
 import EmptyMyExamPostListItem from './EmptyMyExamPostListItem';
 import MyExamPostListItem from './MyExamPostListItem';
 import axiosInstance from '@/utils/axiosInstance';
@@ -8,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ExamInfo } from '@/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
+import MyExamPostListLoadingSkeleton from './MyExamPostListLoadingSkeleton';
 
 // 본인이 작성한 시험 게시글 목록 반환 API (10개 게시글 단위로)
 const fetchMyExams = async ({ queryKey }: any) => {
@@ -40,7 +40,7 @@ export default function MyExamPostList() {
     router.push(`/mypage/managing-my-post?page=${newPage}`);
   };
 
-  if (isPending) return <Loading />;
+  if (isPending) return <MyExamPostListLoadingSkeleton />;
 
   return (
     <div className="mx-auto mt-6 w-full">

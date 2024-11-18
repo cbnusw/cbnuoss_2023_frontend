@@ -5,8 +5,8 @@ import { mypageTabNameStore } from '@/store/MypageTabName';
 import { userInfoStore } from '@/store/UserInfo';
 import { useEffect, useState } from 'react';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
-import Loading from '../loading';
 import { OPERATOR_ROLES } from '../../constants/role';
+import MyPagelayoutLoadingSkeleton from './components/MyPagelayoutLoadingSkeleton';
 
 export default function MyPagelayout({
   children,
@@ -36,7 +36,7 @@ export default function MyPagelayout({
     });
   }, [updateUserInfo]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <MyPagelayoutLoadingSkeleton />;
 
   return (
     <div className="mt-6 px-5 2lg:px-0 overflow-x-auto">

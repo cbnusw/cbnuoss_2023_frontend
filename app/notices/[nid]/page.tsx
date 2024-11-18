@@ -1,7 +1,6 @@
 'use client';
 
 import { OPERATOR_ROLES } from '@/constants/role';
-import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { NoticeInfo } from '@/types/notice';
 import axiosInstance from '@/utils/axiosInstance';
@@ -10,7 +9,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import NoticeDetailLoadingSkeleton from './components/NoticeDetailLoadingSkeleton';
 
 // 공지사항 게시글 정보 조회 API
 const fetchNoticeDetailInfo = ({ queryKey }: any) => {
@@ -91,7 +90,7 @@ export default function NoticeDetail(props: DefaultProps) {
     deleteNoticeMutation.mutate(nid);
   };
 
-  if (isPending) return <Loading />;
+  if (isPending) return <NoticeDetailLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">

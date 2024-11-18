@@ -1,6 +1,5 @@
 'use client';
 
-import Loading from '@/app/loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { SubmitInfo } from '@/types/submit';
 import { UserInfo } from '@/types/user';
@@ -18,6 +17,7 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import UserContestSubmitDetailPageLoadingSkeleton from './components/UserContestSubmitDetailPageLoadingSkeleton';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -50,10 +50,13 @@ interface DefaultProps {
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
-  { ssr: false },
+  {
+    ssr: false,
+    loading: () => <div className="skeleton h-[15rem]" />,
+  },
 );
 
-export default function UserContestSubmit(props: DefaultProps) {
+export default function UserContestSubmitDetail(props: DefaultProps) {
   const cid = props.params.cid;
   const problemId = props.params.problemId;
   const submitId = props.params.submitId;
@@ -164,7 +167,8 @@ export default function UserContestSubmit(props: DefaultProps) {
     router.push(`/contests/${cid}/problems`);
   };
 
-  if (isLoading || !isPasswordChecked) return <Loading />;
+  if (isLoading || !isPasswordChecked)
+    return <UserContestSubmitDetailPageLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">

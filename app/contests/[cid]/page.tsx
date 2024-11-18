@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ContestInfo } from '@/types/contest';
@@ -14,6 +13,7 @@ import ContestContestContestantList from './components/ContestContestContestantL
 import { OPERATOR_ROLES } from '@/constants/role';
 import * as XLSX from 'xlsx';
 import { AxiosError } from 'axios';
+import ContestDetailLoadingSkeleton from './components/ContestDetailLoadingSkeleton';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
@@ -444,7 +444,7 @@ export default function ContestDetail(props: DefaultProps) {
     return () => clearInterval(interval);
   }, []);
 
-  if (isPending) return <Loading />;
+  if (isPending) return <ContestDetailLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-1 2lg:px-0 overflow-x-auto">

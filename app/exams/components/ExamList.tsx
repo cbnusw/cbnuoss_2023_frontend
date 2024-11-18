@@ -3,13 +3,13 @@
 import React, { useEffect } from 'react';
 import ExamListItem from './ExamListItem';
 import EmptyExamListItem from './EmptyExamListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/hooks/useDebounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ExamInfo } from '@/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
+import ExamListLoadingSkeleton from './ExamListLoadingSkeleton';
 
 interface ExamListProps {
   searchQuery: string;
@@ -56,7 +56,7 @@ export default function ExamList({ searchQuery }: ExamListProps) {
     }
   }, [page, params, router]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return <ExamListLoadingSkeleton />;
 
   return (
     <div className="mx-auto w-full">

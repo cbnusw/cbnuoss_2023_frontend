@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import UserPracticeSubmitList from './components/UserPracticeSubmitList';
 import { useEffect, useState } from 'react';
-import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import axiosInstance from '@/utils/axiosInstance';
@@ -14,6 +13,7 @@ import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
 import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
+import UserPracticeSubmitPageLoadingSkeleton from './components/UserPracticeSubmitPageLoadingSkeleton';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -64,7 +64,7 @@ export default function UserPracticeSubmits(props: DefaultProps) {
     });
   }, [updateUserInfo, practiceInfo, router]);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <UserPracticeSubmitPageLoadingSkeleton />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

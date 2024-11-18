@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import UsersExamSubmitList from './components/UsersExamSubmitList';
 import { useEffect, useState } from 'react';
-import Loading from '@/app/loading';
 import Image from 'next/image';
 import codeImg from '@/public/images/code.png';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
@@ -16,6 +15,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { ExamInfo, ExamSubmitInfo } from '@/types/exam';
 import * as XLSX from 'xlsx';
 import { getCodeSubmitResultTypeDescription } from '@/utils/getCodeSubmitResultTypeDescription';
+import UsersExamSubmitPageLoadingSkeleton from './components/UsersExamSubmitPageLoadingSkeleton';
 
 // 시험 게시글 정보 조회 API
 const fetchExamDetailInfo = ({ queryKey }: any) => {
@@ -144,7 +144,7 @@ export default function UsersExamSubmits(props: DefaultProps) {
     fetchContestantSubmitsInfoMutation.mutate();
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <UsersExamSubmitPageLoadingSkeleton />;
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">

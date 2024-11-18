@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import NoticeListItem from './NoticeListItem';
 import EmptyNoticeListItem from './EmptyNoticeListItem';
-import Loading from '@/app/loading';
 import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/hooks/useDebounce';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 import { NoticeInfo } from '@/types/notice';
+import NoticeListLoadingSkeleton from './NoticeListLoadingSkeleton';
 
 interface NoticeListProps {
   searchQuery: string;
@@ -56,7 +56,7 @@ export default function NoticeList({ searchQuery }: NoticeListProps) {
     }
   }, [page, params, router]);
 
-  if (isPending) return <Loading />;
+  if (isPending) return <NoticeListLoadingSkeleton />;
 
   return (
     <div className="mx-auto w-full">

@@ -15,8 +15,8 @@ import { userInfoStore } from '@/store/UserInfo';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { AxiosError } from 'axios';
 import { UserInfo } from '@/types/user';
-import Loading from '@/app/loading';
 import { OPERATOR_ROLES } from '@/constants/role';
+import SubmitContestProblemCodePageLoadingSkeleton from './components/SubmitContestProblemCodePageLoadingSkeleton';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -233,7 +233,8 @@ export default function SubmitContestProblemCode(props: DefaultProps) {
     });
   }, [updateUserInfo, contestProblemInfo, cid, router]);
 
-  if (isLoading || !isPasswordChecked) return <Loading />;
+  if (isLoading || !isPasswordChecked)
+    return <SubmitContestProblemCodePageLoadingSkeleton />;
 
   return (
     <div className="mt-2 mb-24 px-5 2lg:px-0 overflow-x-auto">

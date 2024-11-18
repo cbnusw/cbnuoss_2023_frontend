@@ -2,7 +2,7 @@
 
 import MyDropzone from '@/app/components/MyDropzone';
 import { OPERATOR_ROLES } from '@/constants/role';
-import Loading from '@/app/loading';
+import Loading from '@/app/components/Loading';
 import { userInfoStore } from '@/store/UserInfo';
 import { ExampleFile, IoSetItem, RegisterProblemParams } from '@/types/problem';
 import { UserInfo } from '@/types/user';
