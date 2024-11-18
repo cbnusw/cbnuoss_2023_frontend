@@ -42,7 +42,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`w-full z-20 p-2 pl-3 fixed top-0 border-b border-[#e6e8ea] whitespace-nowrap bg-white`}
+      className={`w-screen z-20 p-2 pl-3 fixed top-0 border-b border-[#e6e8ea] whitespace-nowrap bg-white`}
     >
       <div className="2lg:w-[60rem] flex justify-between items-center mx-auto">
         <div className="py-2 2md:py-0">
