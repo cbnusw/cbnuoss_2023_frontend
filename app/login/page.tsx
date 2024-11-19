@@ -175,7 +175,7 @@ export default function Login() {
   };
 
   return (
-    <div className="mt-10 h-[39rem]">
+    <div className="mt-4 h-[39rem]">
       <div
         className={`w-fit 2md:w-96 p-4 mx-auto ${
           isAdjustOpacity && 'opacity-60'
@@ -319,7 +319,7 @@ export default function Login() {
             </div>
           </div>
         </div>
-        <div className="flex mt-5 text-[0.6rem] text-gray-700 justify-end">
+        <div className="flex mt-3 text-[0.6rem] text-gray-700 justify-end">
           <button
             onClick={() => setOpenPrivacyPolicyModal('default')}
             className="text-[#b0b8c1]"
