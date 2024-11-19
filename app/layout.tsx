@@ -2,6 +2,7 @@ import Footer from './components/Footer';
 import Navbar from './components/Navbar';
 import './globals.css';
 import Providers from '@/utils/Providers';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata = {
   title: 'SW Online Judge',
@@ -21,6 +22,7 @@ export default function RootLayout({
       <body className="text-sm">
         <Providers>
           <Navbar />
+          <SpeedInsights />
           <main className="w-full mx-auto pt-20 mb-[10rem]">{children}</main>
           <Footer />
         </Providers>

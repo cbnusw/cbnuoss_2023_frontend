@@ -28,6 +28,7 @@
     "@uiw/react-codemirror": "^4.21.24",
     "@uiw/react-markdown-preview": "^4.1.13",
     "@uiw/react-md-editor": "3.6.0",
+    "@vercel/speed-insights": "^1.1.0",
     "aos": "^2.3.4",
     "autoprefixer": "10.4.14",
     "axios": "^1.6.5",
