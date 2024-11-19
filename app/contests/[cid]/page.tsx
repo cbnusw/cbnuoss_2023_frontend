@@ -586,7 +586,7 @@ export default function ContestDetail(props: DefaultProps) {
           </div>
         </div>
 
-        {!OPERATOR_ROLES.includes(userInfo.role) && (
+        {userInfo.role === 'student' && (
           <div className="mt-4">
             <p className="text-2xl font-semibold mt-10 ">참여 방법</p>
             <div className="flex flex-col items-center gap-4 mt-4 mx-auto bg-[#fafafa] w-full py-[1.75rem] border border-[#e4e4e4] border-t-2 border-t-gray-400">
