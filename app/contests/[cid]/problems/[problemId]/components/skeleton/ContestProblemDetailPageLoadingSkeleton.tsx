@@ -1,3 +1,5 @@
+import ContestProblemDetailPdfLoadingSkeleton from './ContestProblemDetailPdfLoadingSkeleton';
+
 export default function ContestProblemDetailPageLoadingSkeleton() {
   return (
     <div className="mt-6 mb-24 w-[21rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
@@ -15,7 +17,22 @@ export default function ContestProblemDetailPageLoadingSkeleton() {
         </div>
       </div>
 
-      <div className="skeleton mt-[13rem] w-[40rem] h-[56.56rem] pb-5 border-b mx-auto" />
+      <div className="mt-4 flex justify-end gap-x-2 mb-[9rem]">
+        <div
+          className="skeleton w-[5.75rem] h-[2.15rem] "
+          style={{ borderRadius: '0.35rem' }}
+        />
+        <div
+          className="skeleton w-[5.75rem] h-[2.15rem] "
+          style={{ borderRadius: '0.35rem' }}
+        />
+        <div
+          className="skeleton w-[5.75rem] h-[2.15rem] "
+          style={{ borderRadius: '0.35rem' }}
+        />
+      </div>
+
+      <ContestProblemDetailPdfLoadingSkeleton />
     </div>
   );
 }

@@ -11,7 +11,8 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import ContestProblemDetailPageLoadingSkeleton from './components/ContestProblemDetailPageLoadingSkeleton';
+import ContestProblemDetailPageLoadingSkeleton from './components/skeleton/ContestProblemDetailPageLoadingSkeleton';
+import ContestProblemDetailPdfLoadingSkeleton from './components/skeleton/ContestProblemDetailPdfLoadingSkeleton';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -50,6 +51,7 @@ interface DefaultProps {
 
 const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
+  loading: () => <ContestProblemDetailPdfLoadingSkeleton />,
 });
 
 export default function ContestProblemDetail(props: DefaultProps) {
@@ -406,7 +408,7 @@ export default function ContestProblemDetail(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="gap-5 border-b mt-4 mb-4 pb-5">
+        <div className="gap-5 border-b my-4 pb-5">
           <PDFViewer
             pdfFileURL={contestProblemInfo.content}
             pdfScale={pdfScale}

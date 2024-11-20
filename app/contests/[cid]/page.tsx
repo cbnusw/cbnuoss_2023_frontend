@@ -13,7 +13,8 @@ import ContestContestContestantList from './components/ContestContestContestantL
 import { OPERATOR_ROLES } from '@/constants/role';
 import * as XLSX from 'xlsx';
 import { AxiosError } from 'axios';
-import ContestDetailLoadingSkeleton from './components/ContestDetailLoadingSkeleton';
+import ContestDetailPageLoadingSkeleton from './components/skeleton/ContestDetailPageLoadingSkeleton';
+import ContestDetailContentLoadingSkeleton from './components/skeleton/ContestDetailContentLoadingSkeleton';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
@@ -52,7 +53,10 @@ interface DefaultProps {
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
-  { ssr: false },
+  {
+    ssr: false,
+    loading: () => <ContestDetailContentLoadingSkeleton />,
+  },
 );
 
 export default function ContestDetail(props: DefaultProps) {
@@ -444,7 +448,7 @@ export default function ContestDetail(props: DefaultProps) {
     return () => clearInterval(interval);
   }, []);
 
-  if (isPending) return <ContestDetailLoadingSkeleton />;
+  if (isPending) return <ContestDetailPageLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-1 2lg:px-0 overflow-x-auto">

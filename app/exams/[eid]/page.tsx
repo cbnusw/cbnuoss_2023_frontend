@@ -12,7 +12,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import ExamDetailLoadingSkeleton from './components/ExamDetailLoadingSkeleton';
+import ExamDetailPageLoadingSkeleton from './components/skeleton/ExamDetailPageLoadingSkeleton';
+import ExamDetailContentLoadingSkeleton from './components/skeleton/ExamDetailContentLoadingSkeleton';
 
 // 시험 게시글 정보 조회 API
 const fetchExamDetailInfo = ({ queryKey }: any) => {
@@ -51,7 +52,7 @@ interface DefaultProps {
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
-  { ssr: false },
+  { ssr: false, loading: () => <ExamDetailContentLoadingSkeleton /> },
 );
 
 export default function ExamDetail(props: DefaultProps) {
@@ -393,7 +394,7 @@ export default function ExamDetail(props: DefaultProps) {
     });
   }, [updateUserInfo, router, examInfo]);
 
-  if (!isConfirmPassword || isPending) return <ExamDetailLoadingSkeleton />;
+  if (!isConfirmPassword || isPending) return <ExamDetailPageLoadingSkeleton />;
 
   return (
     <div className="mt-6 mb-24 px-1 2lg:px-0 overflow-x-auto">

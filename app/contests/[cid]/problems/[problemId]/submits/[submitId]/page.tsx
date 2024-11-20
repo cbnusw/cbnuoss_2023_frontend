@@ -17,7 +17,8 @@ import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import UserContestSubmitDetailPageLoadingSkeleton from './components/UserContestSubmitDetailPageLoadingSkeleton';
+import UserContestSubmitDetailPageLoadingSkeleton from './components/skeleton/UserContestSubmitDetailPageLoadingSkeleton';
+import UserContestSubmitDetailCodeLoadingSkeleton from './components/skeleton/UserContestSubmitDetailCodeLoadingSkeleton';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -52,7 +53,7 @@ const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
   {
     ssr: false,
-    loading: () => <div className="skeleton h-[15rem]" />,
+    loading: () => <UserContestSubmitDetailCodeLoadingSkeleton />,
   },
 );
 

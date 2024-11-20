@@ -241,7 +241,7 @@ export default function ContestRankList(props: DefaultProps) {
               </span>
             </div>
 
-            <div className="mt-4 mb-4 pb-5">
+            <div className="my-4 pb-5">
               <UserScoreInfoList
                 cid={cid}
                 contestRankListInfo={contestRankListInfo}

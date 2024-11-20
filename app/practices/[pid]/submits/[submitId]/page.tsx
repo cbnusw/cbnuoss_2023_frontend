@@ -16,7 +16,8 @@ import { useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import UserPracticeSubmitDetailPageLoadingSkeleton from './components/UserPracticeSubmitDetailPageLoadingSkeleton';
+import UserPracticeSubmitDetailPageLoadingSkeleton from './components/skeleton/UserPracticeSubmitDetailPageLoadingSkeleton';
+import UserPracticeSubmitDetailCodeLoadingSkeleton from './components/skeleton/UserPracticeSubmitDetailCodeLoadingSkeleton';
 
 // 코드 제출 정보 조회 API
 const fetchSubmitInfo = ({ queryKey }: any) => {
@@ -35,7 +36,10 @@ interface DefaultProps {
 
 const MarkdownPreview = dynamic(
   () => import('@uiw/react-markdown-preview').then((mod) => mod.default),
-  { ssr: false, loading: () => <div className="skeleton h-[15rem]" /> },
+  {
+    ssr: false,
+    loading: () => <UserPracticeSubmitDetailCodeLoadingSkeleton />,
+  },
 );
 
 export default function UserPracticeSubmitDetail(props: DefaultProps) {

@@ -13,7 +13,7 @@ export default function UserExamSubmitPageLoadingSkeleton() {
             <div className="skeleton w-[12.5rem]" />
           </div>
           <div
-            className="skeleton w-[5.5rem] h-[2.25rem] "
+            className="skeleton w-[5.5rem] h-[2.15rem] "
             style={{ borderRadius: '0.35rem' }}
           />
         </div>
@@ -21,11 +21,11 @@ export default function UserExamSubmitPageLoadingSkeleton() {
 
       <div className="flex flex-col gap-y-2">
         <div className="skeleton h-[2rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
       </div>
     </div>
   );

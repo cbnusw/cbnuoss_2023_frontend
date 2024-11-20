@@ -12,7 +12,7 @@ export default function UsersContestSubmitPageLoadingSkeleton() {
             <div className="skeleton w-1/6 h-[0.5rem]" />
           </div>
           <div
-            className="skeleton w-[9rem] h-[2.25rem] "
+            className="skeleton w-[9rem] h-[2.15rem] "
             style={{ borderRadius: '0.35rem' }}
           />
         </div>
@@ -20,11 +20,11 @@ export default function UsersContestSubmitPageLoadingSkeleton() {
 
       <div className="flex flex-col gap-y-2">
         <div className="skeleton h-[2rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
       </div>
 
       <div className="mt-3 flex justify-between">

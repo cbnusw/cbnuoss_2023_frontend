@@ -4,6 +4,7 @@
 
 * {
   color: #1a1f27;
+  overflow-anchor: none;
 }
 
 /* 애니메이션 효과 */
@@ -13,7 +14,7 @@
   background: linear-gradient(
     90deg,
     #f3f3f3 35%,
-    #ecebeb 50%,
+    #dfdfdf 50%,
     #f3f3f3 65%
   ); /* 그라디언트 효과 */
   border-radius: 3px;

@@ -3,11 +3,11 @@ export default function NoticeListLoadingSkeleton() {
     <>
       <div className="flex flex-col gap-y-2">
         <div className="skeleton h-[2rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
-        <div className="skeleton h-[2.25rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
+        <div className="skeleton h-[2.15rem]" />
       </div>
 
       <div className="mt-3 flex justify-between">

@@ -32,11 +32,11 @@ export default function SubmitContestProblemCodePageLoadingSkeleton() {
 
       <div className="mt-10 flex justify-end gap-x-2">
         <div
-          className="skeleton w-[3.5rem] h-[2.25rem] "
+          className="skeleton w-[3.5rem] h-[2.15rem] "
           style={{ borderRadius: '0.35rem' }}
         />
         <div
-          className="skeleton w-[3.5rem] h-[2.25rem] "
+          className="skeleton w-[3.5rem] h-[2.15rem] "
           style={{ borderRadius: '0.35rem' }}
         />
       </div>
