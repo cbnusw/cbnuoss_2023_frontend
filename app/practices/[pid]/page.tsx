@@ -9,7 +9,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import PracticeDetailLoadingSkeleton from './components/PracticeDetailLoadingSkeleton';
+import PracticeDetailPageLoadingSkeleton from './components/skeleton/PracticeDetailPageLoadingSkeleton';
+import PracticeDetailPdfLoadingSkeleton from './components/skeleton/PracticeDetailPdfLoadingSkeleton';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -34,6 +35,7 @@ interface DefaultProps {
 
 const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
+  loading: () => <PracticeDetailPdfLoadingSkeleton />,
 });
 
 export default function PracticeProblem(props: DefaultProps) {
@@ -115,7 +117,7 @@ export default function PracticeProblem(props: DefaultProps) {
     });
   }, [updateUserInfo, practiceProblemInfo]);
 
-  if (isLoading) return <PracticeDetailLoadingSkeleton />;
+  if (isLoading) return <PracticeDetailPageLoadingSkeleton />;
 
   return (
     <div className="relative mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
@@ -274,7 +276,7 @@ export default function PracticeProblem(props: DefaultProps) {
           </div>
         </div>
 
-        <div className="border-b mt-4 mb-4 pb-5">
+        <div className="border-b my-4 pb-5">
           <PDFViewer
             pdfFileURL={practiceProblemInfo.content}
             pdfScale={pdfScale}

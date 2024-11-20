@@ -9,6 +9,7 @@ import { useDropzone } from 'react-dropzone';
 import dynamic from 'next/dynamic';
 import { UploadService } from '@/components/utils/uploadService';
 import { ExampleFile, IoSetItem, UploadedFileInfo } from '../../types/problem';
+import Loading from './Loading';
 
 interface MyDropzoneProps {
   type: string;
@@ -24,8 +25,10 @@ interface MyDropzoneProps {
     ioSetData: IoSetItem[] | ((prevIoSetData: IoSetItem[]) => IoSetItem[]),
   ) => void;
 }
+
 const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
   ssr: false,
+  loading: () => <Loading />,
 });
 
 function MyDropzone(props: MyDropzoneProps) {
