@@ -296,39 +296,21 @@ export default function ContestProblemDetail(props: DefaultProps) {
           <div className="flex flex-col 3md:flex-row gap-2 justify-end mt-4 h-fit 3md:order-last">
             <button
               onClick={handleGoToContestProblems}
-              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
-              >
-                <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
-              </svg>
               문제 목록
             </button>
             {isEnrollContest && userInfo.role !== 'staff' && (
               <>
                 <button
                   onClick={handleGoToUserContestSubmits}
-                  className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#487fee] bg-[#e8f3ff] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20"
-                    viewBox="0 -960 960 960"
-                    width="20"
-                    fill="white"
-                  >
-                    <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-                  </svg>
                   내 제출 현황
                 </button>
                 <button
                   onClick={handleGoToSubmitContestProblemCode}
-                  className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#3a8af9] px-3 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                 >
                   제출하기
                 </button>
@@ -340,33 +322,15 @@ export default function ContestProblemDetail(props: DefaultProps) {
                 <>
                   <button
                     onClick={handleEditProblem}
-                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#dc9429] hover:bg-[#dc9429]"
+                    className="3md:ml-4 3md:mt-0 ml-0 mt-4 flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 -960 960 960"
-                      width="20"
-                      fill="white"
-                    >
-                      <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-                    </svg>
-                    문제 수정
+                    수정
                   </button>
                   <button
                     onClick={handleDeleteProblem}
-                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#e14343] hover:bg-[#e14343]"
+                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 -960 960 960"
-                      width="20"
-                      fill="white"
-                    >
-                      <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-                    </svg>
-                    문제 삭제
+                    삭제
                   </button>
                 </>
               )}

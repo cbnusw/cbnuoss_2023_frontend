@@ -30,10 +30,32 @@ export default function UsersContestSubmitList({
   searchQuery,
 }: UsersContestSubmitListProps) {
   const debouncedSearchQuery = useDebounce(searchQuery, 400);
-
   const params = useSearchParams();
+  const router = useRouter();
 
+  // 현재 URL의 파라미터 값 가져오기
   const page = Number(params?.get('page')) || 1;
+  const query = decodeURIComponent(params?.get('q') || '');
+
+  // 초기 로드 및 URL 설정
+  useEffect(() => {
+    if (!params?.has('page') || !params?.has('q')) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1');
+      newQuery.set('q', '');
+      router.replace(`/contests/${cid}/submits?${newQuery.toString()}`);
+    }
+  }, [params, router, cid]);
+
+  // 검색어 변경 시 URL 업데이트
+  useEffect(() => {
+    if (debouncedSearchQuery !== query) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1'); // 검색어 변경 시 페이지를 1로 초기화
+      newQuery.set('q', encodeURIComponent(debouncedSearchQuery));
+      router.replace(`/contests/${cid}/submits?${newQuery.toString()}`);
+    }
+  }, [debouncedSearchQuery, query, params, router, cid]);
 
   const { isPending, data } = useQuery({
     queryKey: ['contestSubmitsInfo', cid, page, debouncedSearchQuery],
@@ -41,25 +63,19 @@ export default function UsersContestSubmitList({
     retry: 0,
   });
 
-  const router = useRouter();
-
   const resData = data?.data.data;
   const contestSubmitsInfo: ContestSubmitInfo[] = resData?.documents;
   const startItemNum = (resData?.page - 1) * 10 + 1;
   const endItemNum = startItemNum - 1 + resData?.documents.length;
   const totalPages = Math.ceil(resData?.total / 10);
 
+  // 페이지네이션 핸들링
   const handlePagination = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
-    router.push(`/contests/${cid}/submits?page=${newPage}`);
+    const newQuery = new URLSearchParams(params.toString());
+    newQuery.set('page', String(newPage));
+    router.push(`/contests/${cid}/submits?${newQuery.toString()}`);
   };
-
-  useEffect(() => {
-    // page가 유효한 양의 정수가 아닌 경우, ?page=1로 리다이렉트
-    if (!params?.has('page') || !Number.isInteger(page) || page < 1) {
-      router.replace(`contests/${cid}/submits?page=1`);
-    }
-  }, [page, params, router, cid]);
 
   if (isPending) return null;
 

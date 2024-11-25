@@ -15,10 +15,9 @@ interface ContestListProps {
   searchQuery: string;
 }
 
-// 대회 목록 반환 API (10개 게시글 단위로)
 const fetchContests = async ({ queryKey }: any) => {
   const page = queryKey[1];
-  const searchQuery = encodeURIComponent(queryKey[2]);
+  const searchQuery = encodeURIComponent(queryKey[2] || '');
   const response = await axiosInstance.get(
     `${process.env.NEXT_PUBLIC_API_VERSION}/contest/?page=${page}&limit=10&sort=-createdAt&q=title=${searchQuery}`,
   );
@@ -27,17 +26,37 @@ const fetchContests = async ({ queryKey }: any) => {
 
 export default function ContestList({ searchQuery }: ContestListProps) {
   const debouncedSearchQuery = useDebounce(searchQuery, 400);
-
   const params = useSearchParams();
+  const router = useRouter();
 
   const page = Number(params?.get('page')) || 1;
+  const titleQuery = decodeURIComponent(params?.get('title') || '');
+
+  // 초기 로드 및 URL 설정
+  useEffect(() => {
+    if (!params?.has('page') || !params?.has('title')) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1');
+      newQuery.set('title', '');
+      router.replace(`/contests?${newQuery.toString()}`);
+    }
+  }, [params, router]);
+
+  // 검색어 변경 시 URL 업데이트
+  useEffect(() => {
+    if (debouncedSearchQuery !== titleQuery) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1'); // 검색어 변경 시 페이지를 1로 초기화
+      newQuery.set('title', encodeURIComponent(debouncedSearchQuery));
+      router.replace(`/contests?${newQuery.toString()}`);
+    }
+  }, [debouncedSearchQuery, titleQuery, params, router]);
 
   const { isPending, data } = useQuery({
-    queryKey: ['contestList', page, debouncedSearchQuery],
+    queryKey: ['contestList', page, titleQuery],
     queryFn: fetchContests,
+    retry: 0,
   });
-
-  const router = useRouter();
 
   const resData = data?.data;
   const startItemNum = (resData?.page - 1) * 10 + 1;
@@ -46,15 +65,10 @@ export default function ContestList({ searchQuery }: ContestListProps) {
 
   const handlePagination = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
-    router.push(`/contests?page=${newPage}`);
+    const newQuery = new URLSearchParams(params.toString());
+    newQuery.set('page', String(newPage));
+    router.push(`/contests?${newQuery.toString()}`);
   };
-
-  useEffect(() => {
-    // page가 유효한 양의 정수가 아닌 경우, /contests?page=1로 리다이렉트
-    if (!params?.has('page') || !Number.isInteger(page) || page < 1) {
-      router.replace('/contests?page=1');
-    }
-  }, [page, params, router]);
 
   if (isPending) return <ContestListLoadingSkeleton />;
 

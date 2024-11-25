@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import UsersExamSubmitListItem from './UsersExamSubmitListItem';
 import EmptyUsersExamSubmitListItem from './EmptyUsersExamSubmitListItem';
 import axiosInstance from '@/utils/axiosInstance';
 import useDebounce from '@/hooks/useDebounce';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { ExamSubmitInfo } from '@/types/exam';
 import { RenderPaginationButtons } from '@/app/components/RenderPaginationButtons';
 
@@ -17,7 +16,11 @@ const fetchExamSubmitsInfo = ({ queryKey }: any) => {
   const page = queryKey[2];
   const searchQuery = queryKey[3];
   return axiosInstance.get(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/submit/assignment/${eid}?page=${page}&limit=10&sort=-createdAt&q=user,language=${searchQuery}`,
+    `${
+      process.env.NEXT_PUBLIC_API_VERSION
+    }/submit/assignment/${eid}?page=${page}&limit=10&sort=-createdAt&q=user,language=${encodeURIComponent(
+      searchQuery || '',
+    )}`,
   );
 };
 
@@ -31,18 +34,38 @@ export default function UsersExamSubmitList({
   searchQuery,
 }: UsersExamSubmitListProps) {
   const debouncedSearchQuery = useDebounce(searchQuery, 400);
-
   const params = useSearchParams();
+  const router = useRouter();
 
+  // 현재 URL의 파라미터 값 가져오기
   const page = Number(params?.get('page')) || 1;
+  const query = decodeURIComponent(params?.get('q') || '');
+
+  // 초기 로드 및 URL 설정
+  useEffect(() => {
+    if (!params?.has('page') || !params?.has('q')) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1');
+      newQuery.set('q', '');
+      router.replace(`/exams/${eid}/submits?${newQuery.toString()}`);
+    }
+  }, [params, router, eid]);
+
+  // 검색어 변경 시 URL 업데이트
+  useEffect(() => {
+    if (debouncedSearchQuery !== query) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1'); // 검색어 변경 시 페이지를 1로 초기화
+      newQuery.set('q', encodeURIComponent(debouncedSearchQuery));
+      router.replace(`/exams/${eid}/submits?${newQuery.toString()}`);
+    }
+  }, [debouncedSearchQuery, query, params, router, eid]);
 
   const { isPending, data } = useQuery({
-    queryKey: ['contestSubmitsInfo', eid, page, debouncedSearchQuery],
+    queryKey: ['examSubmitsInfo', eid, page, debouncedSearchQuery],
     queryFn: fetchExamSubmitsInfo,
     retry: 0,
   });
-
-  const router = useRouter();
 
   const resData = data?.data.data;
   const contestSubmitsInfo: ExamSubmitInfo[] = resData?.documents;
@@ -50,17 +73,13 @@ export default function UsersExamSubmitList({
   const endItemNum = startItemNum - 1 + resData?.documents.length;
   const totalPages = Math.ceil(resData?.total / 10);
 
+  // 페이지네이션 핸들링
   const handlePagination = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
-    router.push(`/exams/${eid}/submits?page=${newPage}`);
+    const newQuery = new URLSearchParams(params.toString());
+    newQuery.set('page', String(newPage));
+    router.push(`/exams/${eid}/submits?${newQuery.toString()}`);
   };
-
-  useEffect(() => {
-    // page가 유효한 양의 정수가 아닌 경우, ?page=1로 리다이렉트
-    if (!params?.has('page') || !Number.isInteger(page) || page < 1) {
-      router.replace(`exams/${eid}/submits?page=1`);
-    }
-  }, [page, params, router, eid]);
 
   if (isPending) return null;
 

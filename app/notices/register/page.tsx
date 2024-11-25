@@ -75,14 +75,14 @@ export default function RegisterNotice() {
   //   setIsNoticePwdValidFail(false);
   // };
 
-  const handleCancelNoticeCreate = () => {
+  const handleCancelNoticeRegister = () => {
     const userResponse = confirm('공지사항 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
     router.push('/notices');
   };
 
-  const handleCreateNotice = () => {
+  const handleRegisterNotice = () => {
     if (!title) {
       alert('제목을 입력해 주세요');
       window.scrollTo(0, 0);
@@ -148,7 +148,7 @@ export default function RegisterNotice() {
               htmlFor="floating_first_name"
               className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
                 isNoticeNameValidFail ? 'red' : 'gray'
-              }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+              }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
                 isNoticeNameValidFail ? 'red' : 'blue'
               }-600 peer-focus:dark:text-${
                 isNoticeNameValidFail ? 'red' : 'blue'
@@ -231,7 +231,7 @@ export default function RegisterNotice() {
                 htmlFor="floating_first_name"
                 className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
                   isNoticePwdValidFail ? 'red' : 'gray'
-                }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
                   isNoticePwdValidFail ? 'red' : 'blue'
                 }-600 peer-focus:dark:text-${
                   isNoticePwdValidFail ? 'red' : 'blue'
@@ -243,16 +243,16 @@ export default function RegisterNotice() {
           ) : null}
         </div> */}
 
-        <div className="mt-14 pb-2 flex justify-end gap-3">
+        <div className="mt-14 pb-2 flex justify-end gap-2">
           <button
-            onClick={handleCancelNoticeCreate}
-            className="px-4 py-[0.5rem] rounded-[6px] font-light"
+            onClick={handleCancelNoticeRegister}
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
           >
             취소
           </button>
           <button
-            onClick={handleCreateNotice}
-            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+            onClick={handleRegisterNotice}
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
             등록
           </button>

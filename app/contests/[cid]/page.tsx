@@ -500,94 +500,48 @@ export default function ContestDetail(props: DefaultProps) {
             source={contestInfo.content}
           />
         </div>
-        <div>
-          <div className="flex flex-col 3md:flex-row gap-2 justify-end">
-            <button
-              onClick={handleGoToContestRankList}
-              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#0388ca] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#007eb9] hover:bg-[#007eb9]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="20"
-                viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
-              >
-                <path d="M298-120v-60h152v-148q-54-11-96-46.5T296-463q-74-8-125-60t-51-125v-44q0-25 17.5-42.5T180-752h104v-88h392v88h104q25 0 42.5 17.5T840-692v44q0 73-51 125t-125 60q-16 53-58 88.5T510-328v148h152v60H298Zm-14-406v-166H180v44q0 45 29.5 78.5T284-526Zm392 0q45-10 74.5-43.5T780-648v-44H676v166Z" />
-              </svg>
-              대회 순위
-            </button>
-            {OPERATOR_ROLES.includes(userInfo.role) &&
-              userInfo._id === contestInfo.writer._id && (
-                <button
-                  onClick={handleGoToUsersContestSubmits}
-                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#5951f0] hover:bg-[#5951f0]"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20"
-                    viewBox="0 -960 960 960"
-                    width="20"
-                    fill="white"
-                  >
-                    <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-                  </svg>
-                  코드 제출 목록
-                </button>
-              )}
-            {shouldShowProblemsButton() && (
+
+        <div className="flex flex-col 3md:flex-row gap-2 justify-end">
+          <button
+            onClick={handleGoToContestRankList}
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#487fee] bg-[#e8f3ff] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+          >
+            대회 순위
+          </button>
+          {OPERATOR_ROLES.includes(userInfo.role) &&
+            userInfo._id === contestInfo.writer._id && (
               <button
-                onClick={handleGoToContestProblems}
-                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3e9368] hover:bg-[#3e9368]"
+                onClick={handleGoToUsersContestSubmits}
+                className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
-                >
-                  <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
-                </svg>
-                문제 목록
+                코드 제출 목록
               </button>
             )}
-            {OPERATOR_ROLES.includes(userInfo.role) &&
-              userInfo._id === contestInfo.writer._id && (
-                <>
-                  <button
-                    onClick={handleEditContest}
-                    className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 -960 960 960"
-                      width="20"
-                      fill="white"
-                    >
-                      <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-                    </svg>
-                    게시글 수정
-                  </button>
-                  <button
-                    onClick={handleDeleteContest}
-                    className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 -960 960 960"
-                      width="20"
-                      fill="white"
-                    >
-                      <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-                    </svg>
-                    게시글 삭제
-                  </button>
-                </>
-              )}
-          </div>
+          {shouldShowProblemsButton() && (
+            <button
+              onClick={handleGoToContestProblems}
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
+            >
+              문제 목록
+            </button>
+          )}
+          {OPERATOR_ROLES.includes(userInfo.role) &&
+            userInfo._id === contestInfo.writer._id && (
+              <>
+                <button
+                  onClick={handleEditContest}
+                  className="3md:ml-4 3md:mt-0 ml-0 mt-4 flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
+                >
+                  수정
+                </button>
+                <button
+                  onClick={handleDeleteContest}
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                >
+                  삭제
+                </button>
+              </>
+            )}
         </div>
 
         {userInfo.role === 'student' && (
@@ -637,18 +591,22 @@ export default function ContestDetail(props: DefaultProps) {
               {OPERATOR_ROLES.includes(userInfo.role) && (
                 <button
                   onClick={handleDownloadContestantList}
-                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#4fa16a] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3b8d56] hover:bg-[#3b8d56]"
+                  className="flex justify-center items-center gap-2 text-[0.8rem] bg-[#e8f3ff] px-3 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 50 50"
-                    width="18"
-                    height="18"
-                    fill="white"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
                   >
-                    <path d="M 28.8125 0.03125 L 0.8125 5.34375 C 0.339844 5.433594 0 5.863281 0 6.34375 L 0 43.65625 C 0 44.136719 0.339844 44.566406 0.8125 44.65625 L 28.8125 49.96875 C 28.875 49.980469 28.9375 50 29 50 C 29.230469 50 29.445313 49.929688 29.625 49.78125 C 29.855469 49.589844 30 49.296875 30 49 L 30 1 C 30 0.703125 29.855469 0.410156 29.625 0.21875 C 29.394531 0.0273438 29.105469 -0.0234375 28.8125 0.03125 Z M 32 6 L 32 13 L 34 13 L 34 15 L 32 15 L 32 20 L 34 20 L 34 22 L 32 22 L 32 27 L 34 27 L 34 29 L 32 29 L 32 35 L 34 35 L 34 37 L 32 37 L 32 44 L 47 44 C 48.101563 44 49 43.101563 49 42 L 49 8 C 49 6.898438 48.101563 6 47 6 Z M 36 13 L 44 13 L 44 15 L 36 15 Z M 6.6875 15.6875 L 11.8125 15.6875 L 14.5 21.28125 C 14.710938 21.722656 14.898438 22.265625 15.0625 22.875 L 15.09375 22.875 C 15.199219 22.511719 15.402344 21.941406 15.6875 21.21875 L 18.65625 15.6875 L 23.34375 15.6875 L 17.75 24.9375 L 23.5 34.375 L 18.53125 34.375 L 15.28125 28.28125 C 15.160156 28.054688 15.035156 27.636719 14.90625 27.03125 L 14.875 27.03125 C 14.8125 27.316406 14.664063 27.761719 14.4375 28.34375 L 11.1875 34.375 L 6.1875 34.375 L 12.15625 25.03125 Z M 36 20 L 44 20 L 44 22 L 36 22 Z M 36 27 L 44 27 L 44 29 L 36 29 Z M 36 35 L 44 35 L 44 37 L 36 37 Z" />
+                    <g fill="#487fee">
+                      <path d="M11.21 15.4c.21.21.5.32.78.32s.56-.11.78-.32L18 10.16c.43-.43.43-1.13 0-1.56s-1.13-.43-1.56 0l-3.35 3.35V2.78c0-.61-.49-1.1-1.1-1.1s-1.1.49-1.1 1.1v9.18L7.53 8.61c-.43-.43-1.13-.43-1.56 0s-.43 1.13 0 1.56l5.24 5.23z"></path>
+                      <path d="M21.38 13.09c-.61 0-1.1.49-1.1 1.1v4.21c0 .72-.58 1.3-1.3 1.3H5c-.72 0-1.3-.58-1.3-1.3v-4.21c0-.61-.49-1.1-1.1-1.1s-1.1.49-1.1 1.1v4.21c0 1.93 1.57 3.5 3.5 3.5h13.98c1.93 0 3.5-1.57 3.5-3.5v-4.21c0-.61-.49-1.1-1.1-1.1z"></path>
+                    </g>
                   </svg>
-                  명단 다운로드
+                  <span className="text-[#487fee] whitespace-nowrap">
+                    명단 다운로드
+                  </span>
                 </button>
               )}
             </div>

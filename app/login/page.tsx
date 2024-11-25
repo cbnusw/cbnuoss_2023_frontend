@@ -306,7 +306,7 @@ export default function Login() {
                 <button
                   type="submit"
                   onClick={handleSignIn}
-                  className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                  className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                 >
                   로그인
                 </button>

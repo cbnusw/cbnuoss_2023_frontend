@@ -1,17 +1,30 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import NoticeList from './components/NoticeList';
 import Image from 'next/image';
 import bellImg from '@/public/images/bell.png';
 import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '../../constants/role';
+import { useSearchParams } from 'next/navigation';
 
 export default function Notices() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const userInfo = userInfoStore((state: any) => state.userInfo);
+
+  const params = useSearchParams();
+
+  const titleQuery = decodeURIComponent(params?.get('title') || '');
+
+  useEffect(() => {
+    if (!isInitialized) {
+      setSearchQuery(titleQuery);
+      setIsInitialized(true);
+    }
+  }, [titleQuery, isInitialized]);
 
   return (
     <div className="mt-2 px-5 2lg:px-0 overflow-x-auto">
@@ -52,7 +65,7 @@ export default function Notices() {
               </div>
               <label
                 htmlFor="floating_first_name"
-                className="peer-focus:font-light absolute text-base font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-x-[-1.75rem] -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10"
+                className="peer-focus:font-light absolute text-base font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-x-[-1.75rem] -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10"
               >
                 검색
               </label>
@@ -66,7 +79,7 @@ export default function Notices() {
                   <div className="flex">
                     <Link
                       href="notices/register"
-                      className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                      className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
                     >
                       등록하기
                     </Link>
@@ -77,9 +90,11 @@ export default function Notices() {
           </div>
         </form>
 
-        <section className="dark:bg-gray-900">
-          <NoticeList searchQuery={searchQuery} />
-        </section>
+        {isInitialized && (
+          <section className="dark:bg-gray-900">
+            <NoticeList searchQuery={searchQuery} />
+          </section>
+        )}
       </div>
     </div>
   );

@@ -193,7 +193,7 @@ export default function PrivacyPolicyModal({
       <Modal.Footer className="ml-auto border-none">
         <button
           onClick={() => setOpenPrivacyPolicyModal(undefined)}
-          className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+          className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
         >
           닫기
         </button>

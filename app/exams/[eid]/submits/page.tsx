@@ -8,7 +8,7 @@ import codeImg from '@/public/images/code.png';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
 import { userInfoStore } from '@/store/UserInfo';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { OPERATOR_ROLES } from '@/constants/role';
 import axiosInstance from '@/utils/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -63,6 +63,14 @@ export default function UsersExamSubmits(props: DefaultProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const params = useSearchParams();
+
+  const titleQuery = decodeURIComponent(params?.get('q') || '');
+
+  useEffect(() => {
+    if (titleQuery) setSearchQuery(titleQuery);
+  }, [titleQuery]);
+
   const router = useRouter();
 
   const currentTime = new Date();
@@ -97,7 +105,7 @@ export default function UsersExamSubmits(props: DefaultProps) {
   ) => {
     // 엑셀 파일에 쓸 데이터 생성
     const data = contestantSubmitsInfo.map((submitInfo, index) => ({
-      번호: index + 1,
+      '#': index + 1,
       학번: submitInfo.user.no,
       이름: submitInfo.user.name,
       문제명: submitInfo.problem.title,
@@ -106,6 +114,7 @@ export default function UsersExamSubmits(props: DefaultProps) {
       시간: `${submitInfo.result.time} ms`,
       언어: submitInfo.language,
       '제출 시간': new Date(submitInfo.createdAt).toLocaleString(), // 날짜 형식 변환
+      '수동 채점': '',
     }));
 
     // 워크시트 생성
@@ -116,16 +125,17 @@ export default function UsersExamSubmits(props: DefaultProps) {
       { wch: 7.5 }, // 번호
       { wch: 12.5 }, // 학번
       { wch: 10 }, // 이름
-      { wch: 55 }, // 문제명
+      { wch: 20 }, // 문제명
       { wch: 12.5 }, // 결과
       { wch: 10 }, // 메모리
       { wch: 10 }, // 시간
       { wch: 10 }, // 언어
       { wch: 20 }, // 제출 시간
+      { wch: 55 }, // 제출 시간
     ];
 
     worksheet['!autofilter'] = {
-      ref: `A1:K${contestantSubmitsInfo.length + 1}`,
+      ref: `A1:J${contestantSubmitsInfo.length + 1}`,
     };
 
     const workbook = XLSX.utils.book_new();
@@ -198,7 +208,7 @@ export default function UsersExamSubmits(props: DefaultProps) {
             </div>
             <label
               htmlFor="floating_first_name"
-              className="peer-focus:font-light absolute text-base font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-x-[-1.75rem] -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10"
+              className="peer-focus:font-light absolute text-base font-light text-gray-500 dark:text-gray-400 duration-300 transform -translate-x-[-1.75rem] -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-[1.25rem] z-10"
             >
               검색
             </label>
@@ -210,18 +220,22 @@ export default function UsersExamSubmits(props: DefaultProps) {
             <div className="flex justify-end mb-2">
               <button
                 onClick={handleDownloadSubmitsInfoList}
-                className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#4fa16a] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#3b8d56] hover:bg-[#3b8d56]"
+                className="flex justify-center items-center gap-2 text-[0.8rem] bg-[#e8f3ff] px-3 py-[0.5rem] rounded-[7px] font-medium hover:bg-[#cee1fc]"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 50 50"
-                  width="18"
-                  height="18"
-                  fill="white"
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
                 >
-                  <path d="M 28.8125 0.03125 L 0.8125 5.34375 C 0.339844 5.433594 0 5.863281 0 6.34375 L 0 43.65625 C 0 44.136719 0.339844 44.566406 0.8125 44.65625 L 28.8125 49.96875 C 28.875 49.980469 28.9375 50 29 50 C 29.230469 50 29.445313 49.929688 29.625 49.78125 C 29.855469 49.589844 30 49.296875 30 49 L 30 1 C 30 0.703125 29.855469 0.410156 29.625 0.21875 C 29.394531 0.0273438 29.105469 -0.0234375 28.8125 0.03125 Z M 32 6 L 32 13 L 34 13 L 34 15 L 32 15 L 32 20 L 34 20 L 34 22 L 32 22 L 32 27 L 34 27 L 34 29 L 32 29 L 32 35 L 34 35 L 34 37 L 32 37 L 32 44 L 47 44 C 48.101563 44 49 43.101563 49 42 L 49 8 C 49 6.898438 48.101563 6 47 6 Z M 36 13 L 44 13 L 44 15 L 36 15 Z M 6.6875 15.6875 L 11.8125 15.6875 L 14.5 21.28125 C 14.710938 21.722656 14.898438 22.265625 15.0625 22.875 L 15.09375 22.875 C 15.199219 22.511719 15.402344 21.941406 15.6875 21.21875 L 18.65625 15.6875 L 23.34375 15.6875 L 17.75 24.9375 L 23.5 34.375 L 18.53125 34.375 L 15.28125 28.28125 C 15.160156 28.054688 15.035156 27.636719 14.90625 27.03125 L 14.875 27.03125 C 14.8125 27.316406 14.664063 27.761719 14.4375 28.34375 L 11.1875 34.375 L 6.1875 34.375 L 12.15625 25.03125 Z M 36 20 L 44 20 L 44 22 L 36 22 Z M 36 27 L 44 27 L 44 29 L 36 29 Z M 36 35 L 44 35 L 44 37 L 36 37 Z" />
+                  <g fill="#487fee">
+                    <path d="M11.21 15.4c.21.21.5.32.78.32s.56-.11.78-.32L18 10.16c.43-.43.43-1.13 0-1.56s-1.13-.43-1.56 0l-3.35 3.35V2.78c0-.61-.49-1.1-1.1-1.1s-1.1.49-1.1 1.1v9.18L7.53 8.61c-.43-.43-1.13-.43-1.56 0s-.43 1.13 0 1.56l5.24 5.23z"></path>
+                    <path d="M21.38 13.09c-.61 0-1.1.49-1.1 1.1v4.21c0 .72-.58 1.3-1.3 1.3H5c-.72 0-1.3-.58-1.3-1.3v-4.21c0-.61-.49-1.1-1.1-1.1s-1.1.49-1.1 1.1v4.21c0 1.93 1.57 3.5 3.5 3.5h13.98c1.93 0 3.5-1.57 3.5-3.5v-4.21c0-.61-.49-1.1-1.1-1.1z"></path>
+                  </g>
                 </svg>
-                제출 목록 다운로드
+                <span className="text-[#487fee] whitespace-nowrap">
+                  제출 목록 다운로드
+                </span>
               </button>
             </div>
           </div>

@@ -211,13 +211,12 @@ function MyDropzone(props: MyDropzoneProps) {
     }
   };
 
-  // 예제 파일 삭제 핸들러 함수 수정
-  const handleDeleteExampleFile = (
+  // 첨부한 개별 파일 삭제 핸들러 함수 수정
+  const handleDeleteEachUploadedFile = (
     e: React.MouseEvent<HTMLButtonElement>,
     file: UploadedFileInfo,
   ) => {
     e.preventDefault();
-
     // `fileList`와 `fileNameList` 업데이트
     const updatedFileList = fileList.filter(
       (existingFile) => existingFile._id !== file._id,
@@ -426,7 +425,7 @@ function MyDropzone(props: MyDropzoneProps) {
               </div>
               <button
                 className="mr-1"
-                onClick={(e) => handleDeleteExampleFile(e, file)}
+                onClick={(e) => handleDeleteEachUploadedFile(e, file)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
