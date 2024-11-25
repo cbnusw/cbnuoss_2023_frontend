@@ -93,8 +93,8 @@ export default function NoticeDetail(props: DefaultProps) {
   if (isPending) return <NoticeDetailLoadingSkeleton />;
 
   return (
-    <div className="mt-6 mb-24 px-5 2lg:px-0 overflow-x-auto">
-      <div className="flex flex-col w-[60rem] mx-auto">
+    <div className="mt-6 mb-24 px-1 2lg:px-0 overflow-x-auto">
+      <div className="flex flex-col w-[21rem] xs:w-[90%] xl:w-[72.5%] mx-auto">
         <div className="flex flex-col gap-8">
           <p className="text-2xl font-bold tracking-tight">
             {noticeInfo.title}
@@ -123,43 +123,25 @@ export default function NoticeDetail(props: DefaultProps) {
           />
         </div>
 
-        {OPERATOR_ROLES.includes(userInfo.role) &&
-          userInfo._id === noticeInfo.writer._id && (
-            <div>
-              <div className="flex gap-2 justify-end">
+        <div className="flex flex-col 3md:flex-row gap-2 justify-end">
+          {OPERATOR_ROLES.includes(userInfo.role) &&
+            userInfo._id === noticeInfo.writer._id && (
+              <>
                 <button
                   onClick={handleEditNotice}
-                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] focus:bg-[#dc9429] hover:bg-[#dc9429]"
+                  className="3md:ml-4 3md:mt-0 ml-0 mt-4 flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20"
-                    viewBox="0 -960 960 960"
-                    width="20"
-                    fill="white"
-                  >
-                    <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-                  </svg>
-                  게시글 수정
+                  수정
                 </button>
                 <button
                   onClick={handleDeleteNotice}
-                  className="flex justify-center items-center gap-[0.375rem] text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] focus:bg-[#e14343] hover:bg-[#e14343]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="20"
-                    viewBox="0 -960 960 960"
-                    width="20"
-                    fill="white"
-                  >
-                    <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-                  </svg>
-                  게시글 삭제
+                  삭제
                 </button>
-              </div>
-            </div>
-          )}
+              </>
+            )}
+        </div>
       </div>
     </div>
   );

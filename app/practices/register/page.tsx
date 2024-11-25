@@ -96,7 +96,7 @@ export default function RegisterPractice() {
     setIsMaxMemCapValidFail(false);
   };
 
-  const handleCancelContestRegister = () => {
+  const handleCancelPracticeRegister = () => {
     const userResponse = confirm('연습문제 등록을 취소하시겠습니까?');
     if (!userResponse) return;
 
@@ -136,7 +136,6 @@ export default function RegisterPractice() {
 
     if (ioSetData.length === 0) {
       alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
@@ -331,7 +330,7 @@ export default function RegisterPractice() {
                 htmlFor="floating_first_name"
                 className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
                   isTitleValidFail ? 'red' : 'gray'
-                }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
                   isTitleValidFail ? 'red' : 'blue'
                 }-600 peer-focus:dark:text-${
                   isTitleValidFail ? 'red' : 'blue'
@@ -368,7 +367,7 @@ export default function RegisterPractice() {
                   htmlFor="floating_first_name"
                   className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
                     isMaxExeTimeValidFail ? 'red' : 'gray'
-                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
                     isMaxExeTimeValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isMaxExeTimeValidFail ? 'red' : 'blue'
@@ -404,7 +403,7 @@ export default function RegisterPractice() {
                   htmlFor="floating_first_name"
                   className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
                     isMaxMemCapValidFail ? 'red' : 'gray'
-                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
                     isMaxMemCapValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isMaxMemCapValidFail ? 'red' : 'blue'
@@ -485,16 +484,16 @@ export default function RegisterPractice() {
           </div>
         </div>
 
-        <div className="mt-14 pb-2 flex justify-end gap-3">
+        <div className="mt-14 pb-2 flex justify-end gap-2">
           <button
-            onClick={handleCancelContestRegister}
-            className="px-4 py-[0.5rem] rounded-[6px] font-light"
+            onClick={handleCancelPracticeRegister}
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
           >
             취소
           </button>
           <button
             onClick={handleRegisterPractice}
-            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
           >
             등록
           </button>

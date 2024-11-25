@@ -177,13 +177,11 @@ export default function EditContest(props: DefaultProps) {
 
     if (!contestStartDateTime || !contestEndDateTime) {
       alert('대회 시간을 설정해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
     if (!contestProblemsPwd) {
       alert('문제 비밀번호를 입력해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
       contestProblemsPwdRef.current?.focus();
       setIsContestProblemsPwdValidFail(true);
       return;
@@ -194,7 +192,6 @@ export default function EditContest(props: DefaultProps) {
       (!contestAppliedStartDateTime || !contestAppliedEndDateTime)
     ) {
       alert('신청 기간을 설정해 주세요');
-      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
@@ -209,7 +206,6 @@ export default function EditContest(props: DefaultProps) {
     // 대회 시작 시간과 종료 시간의 유효성 검사
     if (contestStartDateTime >= contestEndDateTime) {
       alert('대회 종료 시간은 시작 시간 이후로 설정해야 합니다.');
-      window.scrollTo(0, document.body.scrollHeight);
       return;
     }
 
@@ -217,14 +213,12 @@ export default function EditContest(props: DefaultProps) {
     if (isCheckedAppliedPeriod) {
       if (contestAppliedStartDateTime >= contestAppliedEndDateTime) {
         alert('대회 신청 종료 시간은 시작 시간 이후로 설정해야 합니다.');
-        window.scrollTo(0, document.body.scrollHeight);
         return;
       }
 
       // 대회 신청 종료 시간이 대회 시작 시간 이전인지 검사
       if (contestAppliedEndDateTime >= contestStartDateTime) {
         alert('대회 신청기간은 대회 시작 시간 이전으로 설정해야 합니다.');
-        window.scrollTo(0, document.body.scrollHeight);
         return;
       }
     }
@@ -291,7 +285,7 @@ export default function EditContest(props: DefaultProps) {
             htmlFor="floating_first_name"
             className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
               isContestNameValidFail ? 'red' : 'gray'
-            }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+            }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
               isContestNameValidFail ? 'red' : 'blue'
             }-600 peer-focus:dark:text-${
               isContestNameValidFail ? 'red' : 'blue'
@@ -382,7 +376,7 @@ export default function EditContest(props: DefaultProps) {
                   htmlFor="floating_first_name"
                   className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
                     isContestProblemsPwdValidFail ? 'red' : 'gray'
-                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                  }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
                     isContestProblemsPwdValidFail ? 'red' : 'blue'
                   }-600 peer-focus:dark:text-${
                     isContestProblemsPwdValidFail ? 'red' : 'blue'
@@ -529,7 +523,7 @@ export default function EditContest(props: DefaultProps) {
                     htmlFor="floating_first_name"
                     className={`peer-focus:font-light absolute text-base left-[0.1rem] font-light text-${
                       isContestPwdValidFail ? 'red' : 'gray'
-                    }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 -z-10 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
+                    }-500 dark:text-gray-400 duration-300 transform -translate-y-5 scale-75 top-3 origin-[0] peer-focus:left-[0.1rem] peer-focus:text-${
                       isContestPwdValidFail ? 'red' : 'blue'
                     }-600 peer-focus:dark:text-${
                       isContestPwdValidFail ? 'red' : 'blue'
@@ -542,16 +536,16 @@ export default function EditContest(props: DefaultProps) {
             </div> */}
           </div>
 
-          <div className="mt-14 pb-2 flex justify-end gap-3">
+          <div className="mt-14 pb-2 flex justify-end gap-2">
             <button
               onClick={handleCancelContestEdit}
-              className="px-4 py-[0.5rem] rounded-[6px] font-light"
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
             >
               취소
             </button>
             <button
               onClick={handleEditContest}
-              className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
             >
               수정
             </button>

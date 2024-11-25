@@ -27,17 +27,37 @@ const fetchNotices = async ({ queryKey }: any) => {
 
 export default function NoticeList({ searchQuery }: NoticeListProps) {
   const debouncedSearchQuery = useDebounce(searchQuery, 400);
-
   const params = useSearchParams();
+  const router = useRouter();
 
   const page = Number(params?.get('page')) || 1;
+  const titleQuery = decodeURIComponent(params?.get('title') || '');
+
+  // 초기 로드 및 URL 설정
+  useEffect(() => {
+    if (!params?.has('page') || !params?.has('title')) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1');
+      newQuery.set('title', '');
+      router.replace(`/notices?${newQuery.toString()}`);
+    }
+  }, [params, router]);
+
+  // 검색어 변경 시 URL 업데이트
+  useEffect(() => {
+    if (debouncedSearchQuery !== titleQuery) {
+      const newQuery = new URLSearchParams(params.toString());
+      newQuery.set('page', '1'); // 검색어 변경 시 페이지를 1로 초기화
+      newQuery.set('title', encodeURIComponent(debouncedSearchQuery));
+      router.replace(`/notices?${newQuery.toString()}`);
+    }
+  }, [debouncedSearchQuery, titleQuery, params, router]);
 
   const { isPending, data } = useQuery({
-    queryKey: ['noticeList', page, debouncedSearchQuery],
+    queryKey: ['noticeList', page, titleQuery],
     queryFn: fetchNotices,
+    retry: 0,
   });
-
-  const router = useRouter();
 
   const resData = data?.data;
   const startItemNum = (resData?.page - 1) * 10 + 1;
@@ -46,15 +66,10 @@ export default function NoticeList({ searchQuery }: NoticeListProps) {
 
   const handlePagination = (newPage: number) => {
     if (newPage < 1 || newPage > totalPages) return;
-    router.push(`/notices?page=${newPage}`);
+    const newQuery = new URLSearchParams(params.toString());
+    newQuery.set('page', String(newPage));
+    router.push(`/notices?${newQuery.toString()}`);
   };
-
-  useEffect(() => {
-    // page가 유효한 양의 정수가 아닌 경우, /notices?page=1로 리다이렉트
-    if (!params?.has('page') || !Number.isInteger(page) || page < 1) {
-      router.replace('/notices?page=1');
-    }
-  }, [page, params, router]);
 
   if (isPending) return <NoticeListLoadingSkeleton />;
 

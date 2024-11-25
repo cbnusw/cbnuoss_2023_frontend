@@ -432,79 +432,42 @@ export default function ExamDetail(props: DefaultProps) {
             source={examInfo.content}
           />
         </div>
-        <div>
-          <div className="flex flex-col 3md:flex-row gap-2 justify-end">
-            {shouldShowSubmitsButton() && (
-              <button
-                onClick={handleGoToExamSubmits}
-                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#6860ff] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#5951f0] hover:bg-[#5951f0]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="20"
-                  viewBox="0 -960 960 960"
-                  width="20"
-                  fill="white"
-                >
-                  <path d="M320-242 80-482l242-242 43 43-199 199 197 197-43 43Zm318 2-43-43 199-199-197-197 43-43 240 240-242 242Z" />
-                </svg>
-                코드 제출 목록
-              </button>
-            )}
-            {shouldShowProblemsButton() && (
-              <button
-                onClick={handleGoToExamProblems}
-                className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="18"
-                  viewBox="0 -960 960 960"
-                  width="18"
-                  fill="white"
-                >
-                  <path d="M319-250h322v-60H319v60Zm0-170h322v-60H319v60ZM220-80q-24 0-42-18t-18-42v-680q0-24 18-42t42-18h361l219 219v521q0 24-18 42t-42 18H220Zm331-554h189L551-820v186Z" />
-                </svg>
-                문제 목록
-              </button>
-            )}
 
-            {OPERATOR_ROLES.includes(userInfo.role) &&
-              userInfo._id === examInfo.writer._id && (
-                <>
-                  <button
-                    onClick={handleEditExam}
-                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-[#eba338] px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#dc9429] hover:bg-[#dc9429]"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 -960 960 960"
-                      width="20"
-                      fill="white"
-                    >
-                      <path d="M794-666 666-794l42-42q17-17 42.5-16.5T793-835l43 43q17 17 17 42t-17 42l-42 42Zm-42 42L248-120H120v-128l504-504 128 128Z" />
-                    </svg>
-                    게시글 수정
-                  </button>
-                  <button
-                    onClick={handleDeleteExam}
-                    className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-red-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#e14343] hover:bg-[#e14343]"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      height="20"
-                      viewBox="0 -960 960 960"
-                      width="20"
-                      fill="white"
-                    >
-                      <path d="m361-299 119-121 120 121 47-48-119-121 119-121-47-48-120 121-119-121-48 48 120 121-120 121 48 48ZM261-120q-24 0-42-18t-18-42v-570h-41v-60h188v-30h264v30h188v60h-41v570q0 24-18 42t-42 18H261Z" />
-                    </svg>
-                    게시글 삭제
-                  </button>
-                </>
-              )}
-          </div>
+        <div className="flex flex-col 3md:flex-row gap-2 justify-end">
+          {shouldShowSubmitsButton() && (
+            <button
+              onClick={handleGoToExamSubmits}
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
+            >
+              코드 제출 목록
+            </button>
+          )}
+          {shouldShowProblemsButton() && (
+            <button
+              onClick={handleGoToExamProblems}
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
+            >
+              문제 목록
+            </button>
+          )}
+
+          {OPERATOR_ROLES.includes(userInfo.role) &&
+            userInfo._id === examInfo.writer._id && (
+              <>
+                <button
+                  onClick={handleEditExam}
+                  className="3md:ml-4 3md:mt-0 ml-0 mt-4 flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
+                >
+                  수정
+                </button>
+                <button
+                  onClick={handleDeleteExam}
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                >
+                  삭제
+                </button>
+              </>
+            )}
         </div>
 
         {userInfo.role === 'student' && (

@@ -155,6 +155,14 @@ export default function UserContestSubmits(props: DefaultProps) {
     });
   }, [updateUserInfo, contestProblemInfo, cid, router]);
 
+  const handleGoToContestProblem = () => {
+    router.push(`/contests/${cid}/problems/${problemId}`);
+  };
+
+  const handleGoToSubmitContestProblemCode = () => {
+    router.push(`/contests/${cid}/problems/${problemId}/submit`);
+  };
+
   const handleGoToContestProblems = () => {
     router.push(`/contests/${cid}/problems`);
   };
@@ -188,31 +196,51 @@ export default function UserContestSubmits(props: DefaultProps) {
             </div>
           </p>
 
-          <div className="flex justify-end items-center gap-x-4 pb-3 border-gray-300">
-            <div className="flex gap-3">
-              <span className="font-semibold">
-                대회:{' '}
-                <span className="font-light">
-                  {contestProblemInfo.parentId.title}
-                </span>
-              </span>
-            </div>
-
+          <div className="flex justify-between items-center gap-x-4 pb-3 border-gray-300">
             <button
-              onClick={handleGoToContestProblems}
-              className="flex justify-center items-center gap-[0.375rem] text-sm text-[#f9fafb] bg-green-500 px-2 py-[0.45rem] rounded-[6px] font-medium focus:bg-[#3e9368] hover:bg-[#3e9368]"
+              onClick={handleGoToContestProblem}
+              className="flex items-center gap-x-1"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="20"
+                height="18"
                 viewBox="0 -960 960 960"
-                width="20"
-                fill="white"
+                width="18"
+                fill="#656565"
               >
-                <path d="M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z" />
+                <path d="M233-440h607q17 0 28.5-11.5T880-480q0-17-11.5-28.5T840-520H233l155-156q11-11 11.5-27.5T388-732q-11-11-28-11t-28 11L108-508q-6 6-8.5 13T97-480q0 8 2.5 15t8.5 13l224 224q11 11 27.5 11t28.5-11q12-12 12-28.5T388-285L233-440Z" />
               </svg>
-              문제 목록
+              <span className="text-[#656565] text-xs font-light hover:text-black">
+                문제로 돌아가기
+              </span>
             </button>
+
+            <div className="flex items-center gap-x-3">
+              <div className="flex gap-3">
+                <span className="font-semibold">
+                  대회:{' '}
+                  <span className="font-light">
+                    {contestProblemInfo.parentId.title}
+                  </span>
+                </span>
+              </div>
+
+              <div className="flex gap-2">
+                <button
+                  onClick={handleGoToSubmitContestProblemCode}
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                >
+                  제출하기
+                </button>
+
+                <button
+                  onClick={handleGoToContestProblems}
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#4e5968] bg-[#f2f4f6] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#d3d6da] hover:bg-[#d3d6da]"
+                >
+                  문제 목록
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

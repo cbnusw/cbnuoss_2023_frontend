@@ -63,12 +63,18 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('소스코드가 제출되었습니다.');
           router.push(`/exams/${eid}/problems/${problemId}/submits`);
           break;
         default:
           alert('정의되지 않은 http status code입니다');
       }
+    },
+    onError: (error) => {
+      console.error('Error submitting code:', error);
+      alert('코드 제출 중 오류가 발생했습니다.');
+    },
+    onSettled: () => {
+      setIsSubmitting(false);
     },
   });
 
@@ -88,6 +94,8 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
   ] = useState(false);
   const [isCodeFileUploadingValidFail, setIsCodeFileUploadingValidFail] =
     useState(false);
+  const [isSubmitBtnEnable, setIsSubmitBtnEnable] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const currentTime = new Date();
   const examStartTime = new Date(examProblemInfo?.parentId.testPeriod.start);
@@ -107,6 +115,10 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
   };
 
   const handleSubmitExamProblemCode = () => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true); // 제출 시작
+
     if (selectedSubmitLanguage === '언어 선택 *') {
       alert('제출 언어를 선택해 주세요');
       window.scrollTo(0, 0);
@@ -130,6 +142,19 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
 
     submitCodeMutation.mutate({ problemId, params: submitCodeData });
   };
+
+  useEffect(() => {
+    if (
+      selectedSubmitLanguage !== '언어 선택 *' &&
+      isCodeFileUploadingValidFail
+    )
+      setIsSubmitBtnEnable(true);
+    else setIsSubmitBtnEnable(false);
+  }, [
+    selectedSubmitLanguage,
+    isCodeFileUploadingValidFail,
+    setIsSubmitBtnEnable,
+  ]);
 
   useEffect(() => {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
@@ -275,15 +300,20 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
         <div className="mt-5 pb-2 flex justify-end gap-3">
           <button
             onClick={handleGoToExamProblem}
-            className="px-4 py-[0.5rem] rounded-[6px] font-light"
+            className="px-4 py-[0.5rem] rounded-[7px] font-light"
           >
             취소
           </button>
           <button
             onClick={handleSubmitExamProblemCode}
-            className="text-[#f9fafb] bg-[#3a8af9] px-4 py-[0.5rem] rounded-[6px] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+            disabled={!isSubmitBtnEnable || isSubmitting}
+            className={`${
+              isSubmitBtnEnable && !isSubmitting
+                ? 'bg-[#3a8af9] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]'
+                : 'bg-[#90c2ff]'
+            } text-white px-4 py-[0.5rem] rounded-[7px] `}
           >
-            제출
+            {isSubmitting ? '제출 중...' : '제출'}
           </button>
         </div>
       </div>
