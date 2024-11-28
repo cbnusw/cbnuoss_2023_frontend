@@ -7,6 +7,8 @@ import axiosInstance from '@/utils/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
 import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { usePathname } from 'next/navigation';
+import logoImg from '@/public/images/cube-logo.png';
+import Image from 'next/image';
 
 // 로그아웃 API
 const logout = () => {
@@ -47,12 +49,8 @@ export default function Navbar() {
       <div className="2lg:w-[60rem] flex justify-between items-center mx-auto">
         <div className="py-2 2md:py-0">
           <Link href="/">
-            <div className="flex gap-[0.2rem]">
-              <img
-                src="/images/logo.png"
-                alt="logo"
-                style={{ width: '30px', height: '21px' }}
-              />
+            <div className="flex items-center gap-x-[0.175rem]">
+              <Image src={logoImg} alt="logo" width={30} quality={100} />
               <span className="hidden 2lg:block tracking-tighter text-sm font-semibold text-[#333]">
                 SW Online Judge
               </span>

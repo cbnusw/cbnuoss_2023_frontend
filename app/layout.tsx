@@ -1,5 +1,6 @@
+import ConditionalNavbar from './components/ConditionalNavbar';
 import Footer from './components/Footer';
-import Navbar from './components/Navbar';
+import Toast from './components/toast/Toast';
 import './globals.css';
 import Providers from '@/utils/Providers';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -21,8 +22,9 @@ export default function RootLayout({
       </head>
       <body className="text-sm">
         <Providers>
-          <Navbar />
+          <ConditionalNavbar />
           <SpeedInsights />
+          <Toast />
           <main className="w-full mx-auto pt-20 mb-[10rem]">{children}</main>
           <Footer />
         </Providers>

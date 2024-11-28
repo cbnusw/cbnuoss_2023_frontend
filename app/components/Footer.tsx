@@ -20,50 +20,69 @@ export default function Footer() {
       <div className="flex flex-col gap-y-2 mx-auto w-[47.5rem] py-10">
         <div className="flex justify-between w-full">
           <div className="flex gap-x-20">
-            <div className="flex flex-col gap-[0.7rem] text-[0.825rem] leading-[1.25]">
+            <div className="flex flex-col text-[0.825rem] leading-[1.25]">
               <span className="text-[#b0b8c1] font-semibold">서비스</span>
               <Link
                 href="/contests"
-                className="mt-2 text-[#6b7684] hover:underline"
+                className="mt-2 text-[#6b7684] hover:underline py-[0.375rem]"
               >
                 대회
               </Link>
-              <Link href="/exams" className="text-[#6b7684] hover:underline">
+              <Link
+                href="/exams"
+                className="text-[#6b7684] hover:underline py-[0.375rem]"
+              >
                 시험
               </Link>
               <Link
                 href="/practices"
-                className="text-[#6b7684] hover:underline"
+                className="text-[#6b7684] hover:underline py-[0.375rem]"
               >
                 연습문제
               </Link>
-              <Link href="/notices" className="text-[#6b7684] hover:underline">
+              <Link
+                href="/notices"
+                className="text-[#6b7684] hover:underline py-[0.375rem]"
+              >
                 공지사항
               </Link>
             </div>
 
-            <div className="flex flex-col gap-[0.7rem] text-[0.825rem] leading-[1.25]">
+            <div className="flex flex-col text-[0.825rem] leading-[1.25]">
               <span className="text-[#b0b8c1] font-semibold">관련 사이트</span>
               <a
                 target="_blank"
                 href="https://sw7up.cbnu.ac.kr/home"
-                className="mt-2 text-[#6b7684] hover:underline"
+                className="mt-2 text-[#6b7684] hover:underline py-[0.375rem]"
               >
                 SW중심대학사업단
               </a>
               <a
                 target="_blank"
                 href="https://sw7up.cbnu.ac.kr/project/dashboard"
-                className="text-[#6b7684] hover:underline"
+                className="text-[#6b7684] hover:underline py-[0.375rem]"
               >
                 코딩이력관리시스템
               </a>
               <a
                 target="_blank"
                 href="https://www.chungbuk.ac.kr/www/index.do"
-                className="text-[#6b7684] hover:underline"
+                className="text-[#6b7684] hover:underline py-[0.375rem]"
               >
                 충북대학교
+              </a>
+            </div>
+
+            <div className="flex flex-col text-[0.825rem] leading-[1.25]">
+              <span className="text-[#b0b8c1] font-semibold">고객센터</span>
+              <span className="mt-2 text-[#6b7684] py-[0.375rem]">
+                운영시간: 평일 09:00 - 18:00 (주말 및 공휴일 휴무)
+              </span>
+              <a
+                href="mailto:cbnusw.oss@gmail.com"
+                className="text-[#6b7684] hover:underline py-[0.375rem]"
+              >
+                이메일: cbnusw.oss@gmail.com
               </a>
             </div>
           </div>
@@ -71,7 +90,7 @@ export default function Footer() {
 
         <div className="mt-10 text-xs grid grid-cols-1 gap-y-5">
           <span className="text-[0.77rem] leading-[1.25] text-[#b0b8c1] font-semibold">
-            SW중심대학사업단
+            Copyright © 충북대학교 SW중심대학사업단. All Rights Reserved
           </span>
           <p className="flex flex-col gap-y-[0.1rem] tracking-tight text-[0.5rem]">
             <span className=" text-[#8b95a1]">

@@ -15,6 +15,7 @@ import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 import SubmitPracticeProblemCodePageLoadingSkeleton from './components/SubmitPracticeProblemCodePageLoadingSkeleton';
+import SmallLoading from '@/app/components/SmallLoading';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -275,11 +276,14 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
             disabled={!isSubmitBtnEnable || isSubmitting}
             className={`${
               isSubmitBtnEnable && !isSubmitting
-                ? 'bg-[#3a8af9] focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]'
-                : 'bg-[#90c2ff]'
-            } text-white px-4 py-[0.5rem] rounded-[7px] `}
+                ? 'focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]'
+                : 'opacity-70'
+            } flex justify-center items-center gap-[0.1rem] text-white ${
+              isSubmitting ? 'px-[0.725rem]' : 'px-4'
+            } py-[0.5rem] rounded-[7px] bg-[#3a8af9]`}
           >
-            {isSubmitting ? '제출 중...' : '제출'}
+            {isSubmitting && <SmallLoading />}
+            제출
           </button>
         </div>
       </div>

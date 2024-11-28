@@ -32,6 +32,101 @@
   }
 }
 
+@keyframes animation-loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash-offset-animation {
+  0% {
+    stroke-dashoffset: 190;
+  }
+  50% {
+    stroke-dashoffset: 140;
+  }
+  100% {
+    stroke-dashoffset: 190;
+  }
+}
+
+.svg-animation {
+  animation: animation-loading 1.5s linear infinite;
+  transform-origin: center;
+}
+
+.circle-dash-animation {
+  animation: dash-offset-animation 1.75s ease-in-out infinite;
+}
+
+.svg-animation {
+  animation-composition: replace;
+  animation-delay: 0s;
+  animation-direction: normal;
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: animation-loading;
+  animation-play-state: running;
+  animation-range-end: normal;
+  animation-range-start: normal;
+  animation-timeline: auto;
+  animation-timing-function: linear;
+}
+
+.toast-container {
+  position: relative; /* 자식 요소의 absolute 위치를 기준으로 함 */
+  top: 2.75rem;
+  width: 45rem; /* 부모 컨테이너는 전체 너비 */
+  height: auto;
+}
+
+.toast {
+  position: absolute;
+  left: 50%; /* 가로축 중앙으로 이동 */
+  transform: translateX(-50%); /* 중앙 정렬 보정 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 15px 15px rgba(0, 0, 0, 0.075), 0 -1px 15px rgba(0, 0, 0, 0.075);
+  width: auto; /* 너비는 내용에 따라 자동 조정 */
+  max-width: 90%; /* 긴 메시지 제한 */
+  word-wrap: break-word; /* 긴 단어 줄바꿈 */
+}
+
+.toast span {
+  &:first-child {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    min-width: 20px;
+
+    svg {
+      transform: scale(1.05);
+
+      circle {
+        fill: #ffcf58;
+      }
+
+      path {
+        fill: #333d4b;
+      }
+    }
+  }
+
+  &:last-child {
+    color: #555e6a;
+    font-weight: 500;
+  }
+}
+
 .window {
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.075), 0 -1px 15px rgba(0, 0, 0, 0.075);
 }
