@@ -138,9 +138,10 @@ export default function Login() {
               alert('Bad Request(400)...');
               break;
             case 'INVALID_PASSWORD':
-              addToast(
-                '제한된 로그인 시도 횟수를 초과했습니다. 잠시 후 다시 시도해 주세요.',
-              );
+              // addToast(
+              //   '제한된 로그인 시도 횟수를 초과했습니다. 잠시 후 다시 시도해 주세요.',
+              // );
+              addToast('정확한 로그인 정보를 입력해 주세요.');
               break;
             default:
               alert('정의되지 않은 http code입니다.');
