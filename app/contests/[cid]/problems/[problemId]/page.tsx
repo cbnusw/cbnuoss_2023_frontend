@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import ContestProblemDetailPageLoadingSkeleton from './components/skeleton/ContestProblemDetailPageLoadingSkeleton';
 import ContestProblemDetailPdfLoadingSkeleton from './components/skeleton/ContestProblemDetailPdfLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -58,6 +59,8 @@ export default function ContestProblemDetail(props: DefaultProps) {
   const cid = props.params.cid;
   const problemId = props.params.problemId;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const confirmContestPasswordMutation = useMutation({
     mutationFn: confirmContestPassword,
     onError: (error: AxiosError) => {
@@ -66,16 +69,16 @@ export default function ContestProblemDetail(props: DefaultProps) {
         case 400:
           switch (resData.code) {
             case 'CONTEST_PASSWORD_NOT_MATCH':
-              alert('비밀번호가 일치하지 않습니다.');
+              addToast('warning', '비밀번호가 일치하지 않아요.');
               deleteCookie(cid);
               router.back();
               break;
             default:
-              alert('정의되지 않은 http code입니다.');
+              addToast('error', '비밀번호 확인 중에 에러가 발생했어요.');
           }
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '비밀번호 확인 중에 에러가 발생했어요.');
       }
     },
     onSuccess: (data) => {
@@ -88,7 +91,7 @@ export default function ContestProblemDetail(props: DefaultProps) {
           setIsPasswordChecked(true);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '비밀번호 확인 중에 에러가 발생했어요.');
       }
     },
   });
@@ -107,11 +110,11 @@ export default function ContestProblemDetail(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('문제가 삭제되었습니다.');
+          addToast('success', '문제가 삭제되었어요.');
           router.push(`/contests/${cid}/problems`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
   });
@@ -229,11 +232,11 @@ export default function ContestProblemDetail(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, contestProblemInfo, cid, router]);
+  }, [updateUserInfo, contestProblemInfo, cid, router, addToast]);
 
   if (isLoading || !isPasswordChecked)
     return <ContestProblemDetailPageLoadingSkeleton />;
@@ -310,7 +313,7 @@ export default function ContestProblemDetail(props: DefaultProps) {
                 </button>
                 <button
                   onClick={handleGoToSubmitContestProblemCode}
-                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
                 >
                   제출하기
                 </button>
@@ -328,7 +331,7 @@ export default function ContestProblemDetail(props: DefaultProps) {
                   </button>
                   <button
                     onClick={handleDeleteProblem}
-                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium hover:bg-[#f8d6d7]"
                   >
                     삭제
                   </button>

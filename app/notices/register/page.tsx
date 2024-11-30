@@ -11,6 +11,7 @@ import { useMutation } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 공지사항 등록 API
 const createNotice = (params: CreateNoticeParams) => {
@@ -31,6 +32,8 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 });
 
 export default function RegisterNotice() {
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const createNoticeMutation = useMutation({
     mutationFn: createNotice,
     onSuccess: (data) => {
@@ -40,11 +43,11 @@ export default function RegisterNotice() {
       switch (httpStatusCode) {
         case 200:
           const nid = resData?.data._id;
-          alert('공지사항이 등록되었습니다.');
+          addToast('success', '공지사항이 등록되었어요.');
           router.push(`/notices/${nid}`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '등록 중에 에러가 발생했어요.');
       }
     },
   });
@@ -84,7 +87,7 @@ export default function RegisterNotice() {
 
   const handleRegisterNotice = () => {
     if (!title) {
-      alert('제목을 입력해 주세요');
+      addToast('warning', '제목을 입력해 주세요.');
       window.scrollTo(0, 0);
       noticeNameRef.current?.focus();
       setIsNoticeNameValidFail(true);
@@ -92,13 +95,12 @@ export default function RegisterNotice() {
     }
 
     if (!content) {
-      alert('본문을 입력해 주세요');
+      addToast('warning', '본문을 입력해 주세요.');
       window.scrollTo(0, 0);
       return;
     }
 
     // if (isCheckedUsingPwd && !noticePwd) {
-    //   alert('비밀번호를 입력해 주세요');
     //   window.scrollTo(0, document.body.scrollHeight);
     //   noticePwdRef.current?.focus();
     //   setIsNoticePwdValidFail(true);
@@ -116,10 +118,10 @@ export default function RegisterNotice() {
         return;
       }
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+      addToast('warning', '접근 권한이 없어요.');
+      router.push('/');
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, router, addToast]);
 
   if (isLoading) return <Loading />;
 
@@ -252,7 +254,7 @@ export default function RegisterNotice() {
           </button>
           <button
             onClick={handleRegisterNotice}
-            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
           >
             등록
           </button>

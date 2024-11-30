@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import UserExamSubmitDetailPageLoadingSkeleton from './components/skeleton/UserExamSubmitDetailPageLoadingSkeleton';
 import UserExamSubmitDetailCodeLoadingSkeleton from './components/skeleton/UserExamSubmitDetailCodeLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 코드 제출 정보 조회 API
 const fetchSubmitInfo = ({ queryKey }: any) => {
@@ -43,6 +44,8 @@ export default function UserExamSubmitDetail(props: DefaultProps) {
   const eid = props.params.eid;
   const problemId = props.params.problemId;
   const submitId = props.params.submitId;
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const { isPending, data } = useQuery({
     queryKey: ['submitInfo', submitId],
@@ -82,11 +85,11 @@ export default function UserExamSubmitDetail(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, submitInfo, eid, router]);
+  }, [updateUserInfo, submitInfo, eid, router, addToast]);
 
   const handleGoToExamProblems = () => {
     router.push(`/exams/${eid}/problems`);

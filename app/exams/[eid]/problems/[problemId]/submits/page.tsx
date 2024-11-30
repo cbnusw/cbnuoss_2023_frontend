@@ -14,6 +14,7 @@ import { fetchCurrentUserInfo } from '@/utils/fetchCurrentUserInfo';
 import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 import UserExamSubmitPageLoadingSkeleton from './components/UserExamSubmitPageLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 문제 정보 조회 API
 const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
@@ -33,6 +34,8 @@ interface DefaultProps {
 export default function UserExamSubmits(props: DefaultProps) {
   const eid = props.params.eid;
   const problemId = props.params.problemId;
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['examProblemDetailInfo', problemId],
@@ -73,11 +76,11 @@ export default function UserExamSubmits(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, examProblemInfo, eid, router]);
+  }, [updateUserInfo, examProblemInfo, eid, router, addToast]);
 
   const handleGoToExamProblem = () => {
     router.push(`/exams/${eid}/problems/${problemId}`);
@@ -158,7 +161,7 @@ export default function UserExamSubmits(props: DefaultProps) {
               <div className="flex gap-2">
                 <button
                   onClick={handleGoToSubmitExamProblemCode}
-                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
                 >
                   제출하기
                 </button>

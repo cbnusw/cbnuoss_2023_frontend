@@ -9,14 +9,17 @@ import { mypageTabNameStore } from '@/store/MypageTabName';
 import { userInfoStore } from '@/store/UserInfo';
 import { useRouter } from 'next/navigation';
 import { OPERATOR_ROLES } from '@/constants/role';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 export default function ManagingMyPost() {
+  const userInfo = userInfoStore((state: any) => state.userInfo);
+  const updateTabName = mypageTabNameStore((state: any) => state.updateTabName);
+
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const [category, setCategory] = useState('contest');
 
   const router = useRouter();
-
-  const userInfo = userInfoStore((state: any) => state.userInfo);
-  const updateTabName = mypageTabNameStore((state: any) => state.updateTabName);
 
   const handleChangeCategory = (newCategory: string) => {
     if (category !== newCategory) {
@@ -31,8 +34,8 @@ export default function ManagingMyPost() {
 
   // 비관리자 회원의 접근 시 로그인 페이지로 리다이렉트 수행
   if (!OPERATOR_ROLES.includes(userInfo.role)) {
-    alert('접근 권한이 없습니다.');
-    router.back();
+    addToast('warning', '접근 권한이 없어요.');
+    router.push('/');
     return;
   }
 

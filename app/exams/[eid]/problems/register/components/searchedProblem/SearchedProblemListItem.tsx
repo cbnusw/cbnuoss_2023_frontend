@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import { ExampleFile, IoSetItem, ProblemInfo } from '@/types/problem';
 import axiosInstance from '@/utils/axiosInstance';
 import { UploadService } from '@/components/utils/uploadService';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 interface SearchedProblemListItemProps {
   problemInfo: ProblemInfo;
@@ -31,6 +32,8 @@ const SearchedProblemListItem = forwardRef<
   } = props;
 
   const uploadService = new UploadService();
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const handleClick = async () => {
     setTitle(problemInfo.title);
@@ -118,7 +121,7 @@ const SearchedProblemListItem = forwardRef<
       setExampleFiles(newExampleFiles);
     } catch (error) {
       console.error('File upload error:', error);
-      alert('파일 업로드 중 오류가 발생했습니다.');
+      addToast('error', '파일 업로드 중에 오류가 발생했어요.');
     }
   };
 

@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import ExamProblemDetailPageLoadingSkeleton from './components/skeleton/ExamProblemDetailPageLoadingSkeleton';
 import ExamProblemDetailPdfLoadingSkeleton from './components/skeleton/ExamProblemDetailPdfLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 문제 정보 조회 API
 const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
@@ -44,6 +45,8 @@ export default function ExamProblemDetail(props: DefaultProps) {
   const eid = props.params.eid;
   const problemId = props.params.problemId;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['examProblemDetailInfo', problemId],
     queryFn: fetchExamProblemDetailInfo,
@@ -58,11 +61,11 @@ export default function ExamProblemDetail(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('문제가 삭제되었습니다.');
+          addToast('success', '문제가 삭제되었어요.');
           router.push(`/exams/${eid}/problems`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
   });
@@ -155,11 +158,11 @@ export default function ExamProblemDetail(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, examProblemInfo, eid, router]);
+  }, [updateUserInfo, examProblemInfo, eid, router, addToast]);
 
   if (isLoading) return <ExamProblemDetailPageLoadingSkeleton />;
 
@@ -231,7 +234,7 @@ export default function ExamProblemDetail(props: DefaultProps) {
                 </button>
                 <button
                   onClick={handleGoToSubmitExamProblemCode}
-                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
                 >
                   제출하기
                 </button>
@@ -249,7 +252,7 @@ export default function ExamProblemDetail(props: DefaultProps) {
                   </button>
                   <button
                     onClick={handleDeleteProblem}
-                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium hover:bg-[#f8d6d7]"
                   >
                     삭제
                   </button>

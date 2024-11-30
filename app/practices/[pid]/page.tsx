@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import PracticeDetailPageLoadingSkeleton from './components/skeleton/PracticeDetailPageLoadingSkeleton';
 import PracticeDetailPdfLoadingSkeleton from './components/skeleton/PracticeDetailPdfLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -41,6 +42,8 @@ const PDFViewer = dynamic(() => import('@/app/components/PDFViewer'), {
 export default function PracticeProblem(props: DefaultProps) {
   const pid = props.params.pid;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['practiceDetailInfo', pid],
     queryFn: fetchPracticeDetailInfo,
@@ -55,11 +58,11 @@ export default function PracticeProblem(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('연습문제가 삭제되었습니다.');
+          addToast('success', '연습문제가 삭제되었어요.');
           router.push('/practices');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
   });
@@ -178,7 +181,7 @@ export default function PracticeProblem(props: DefaultProps) {
                   </button>
                   <button
                     onClick={handleGoToSubmitPracticeProblemCode}
-                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
                   >
                     제출하기
                   </button>
@@ -196,7 +199,7 @@ export default function PracticeProblem(props: DefaultProps) {
                   </button>
                   <button
                     onClick={handleDeletePractice}
-                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                    className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium hover:bg-[#f8d6d7]"
                   >
                     삭제
                   </button>

@@ -3,21 +3,22 @@ import { devtools } from 'zustand/middleware';
 
 export interface Toast {
   id: string;
+  type: string;
   message: string;
 }
 
 export interface ToastInfoStoreState {
   toasts: Toast[];
-  addToast: (message: string) => void;
+  addToast: (type: string, message: string) => void;
   removeToast: (id: string) => void;
 }
 
 export const ToastInfoStore = create<ToastInfoStoreState>()(
   devtools((set) => ({
     toasts: [],
-    addToast: (message: string) =>
+    addToast: (type: string, message: string) =>
       set((state) => ({
-        toasts: [{ id: Date.now().toString(), message }, ...state.toasts],
+        toasts: [{ id: Date.now().toString(), type, message }, ...state.toasts],
       })),
     removeToast: (id: string) =>
       set((state) => ({

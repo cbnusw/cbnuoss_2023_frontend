@@ -14,6 +14,7 @@ import { UserInfo } from '@/types/user';
 import { userInfoStore } from '@/store/UserInfo';
 import { OPERATOR_ROLES } from '@/constants/role';
 import UserPracticeSubmitPageLoadingSkeleton from './components/UserPracticeSubmitPageLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -40,6 +41,8 @@ export default function UserPracticeSubmits(props: DefaultProps) {
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const resData = data?.data.data;
   const practiceInfo: ProblemInfo = resData;
 
@@ -58,11 +61,11 @@ export default function UserPracticeSubmits(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, practiceInfo, router]);
+  }, [updateUserInfo, practiceInfo, router, addToast]);
 
   const handleGoToPracticeProblem = () => {
     router.push(`/practices/${pid}/`);
@@ -127,7 +130,7 @@ export default function UserPracticeSubmits(props: DefaultProps) {
               <div className="flex gap-2">
                 <button
                   onClick={handleGoToSubmitPracticeProblemCode}
-                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
                 >
                   제출하기
                 </button>

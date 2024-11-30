@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import SearchedProblemList from './components/searchedProblem/SearchedProblemList';
 import useDebounce from '@/hooks/useDebounce';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 연습문제 등록 API
 const registerPractice = (params: RegisterProblemParams) => {
@@ -32,16 +33,18 @@ export default function RegisterPractice() {
       switch (httpStatusCode) {
         case 200:
           const pid = resData?.data._id;
-          alert('연습문제가 등록되었습니다.');
+          addToast('success', '연습문제가 등록되었어요.');
           router.push(`/practices/${pid}`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '등록 중에 에러가 발생했어요.');
       }
     },
   });
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const [isLoading, setIsLoading] = useState(true);
   const [title, setTitle] = useState('');
@@ -105,7 +108,7 @@ export default function RegisterPractice() {
 
   const handleRegisterPractice = () => {
     if (!title) {
-      alert('문제명을 입력해 주세요');
+      addToast('warning', '문제명을 입력해 주세요.');
       window.scrollTo(0, 0);
       practiceNameRef.current?.focus();
       setIsTitleValidFail(true);
@@ -113,7 +116,7 @@ export default function RegisterPractice() {
     }
 
     if (!maxExeTime || maxExeTime <= 0) {
-      alert('최대 실행 시간을 올바르게 입력해 주세요');
+      addToast('warning', '최대 실행 시간을 올바르게 입력해 주세요.');
       window.scrollTo(0, 0);
       maxExeTimeRef.current?.focus();
       setIsMaxExeTimeValidFail(true);
@@ -121,7 +124,7 @@ export default function RegisterPractice() {
     }
 
     if (!maxMemCap || maxMemCap <= 0) {
-      alert('최대 메모리 사용량을 올바르게 입력해 주세요');
+      addToast('warning', '최대 메모리 사용량을 올바르게 입력해 주세요.');
       window.scrollTo(0, 0);
       maxMemCapRef.current?.focus();
       setIsMaxMemCapValidFail(true);
@@ -129,13 +132,13 @@ export default function RegisterPractice() {
     }
 
     if (!uploadedProblemPdfFileUrl) {
-      alert('문제 파일(PDF)을 업로드해 주세요');
+      addToast('warning', '문제 파일(PDF)을 업로드해 주세요.');
       window.scrollTo(0, 0);
       return;
     }
 
     if (ioSetData.length === 0) {
-      alert('입/출력 파일 셋(in/out)을 업로드해 주세요');
+      addToast('warning', '입/출력 파일 셋(in/out)을 업로드해 주세요.');
       return;
     }
 
@@ -231,10 +234,10 @@ export default function RegisterPractice() {
         return;
       }
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+      addToast('warning', '접근 권한이 없어요.');
+      router.push('/');
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, router, addToast]);
 
   if (isLoading) return <Loading />;
 
@@ -493,7 +496,7 @@ export default function RegisterPractice() {
           </button>
           <button
             onClick={handleRegisterPractice}
-            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
           >
             등록
           </button>

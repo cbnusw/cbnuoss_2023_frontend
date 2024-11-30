@@ -10,6 +10,7 @@ import { AxiosError } from 'axios';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import NoticeDetailLoadingSkeleton from './components/NoticeDetailLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 공지사항 게시글 정보 조회 API
 const fetchNoticeDetailInfo = ({ queryKey }: any) => {
@@ -40,6 +41,8 @@ const MarkdownPreview = dynamic(
 export default function NoticeDetail(props: DefaultProps) {
   const nid = props.params.nid;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['noticeDetailInfo', nid],
     queryFn: fetchNoticeDetailInfo,
@@ -54,18 +57,18 @@ export default function NoticeDetail(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('공지사항이 삭제되었습니다.');
+          addToast('success', '공지사항이 삭제되었어요.');
           router.push('/notices');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
     onError: (error: AxiosError) => {
       const resData: any = error.response?.data;
       switch (resData.status) {
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
   });
@@ -135,7 +138,7 @@ export default function NoticeDetail(props: DefaultProps) {
                 </button>
                 <button
                   onClick={handleDeleteNotice}
-                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium hover:bg-[#f8d6d7]"
                 >
                   삭제
                 </button>

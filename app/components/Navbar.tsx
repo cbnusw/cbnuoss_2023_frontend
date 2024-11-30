@@ -171,12 +171,12 @@ export default function Navbar() {
                         e.stopPropagation();
                         setRightPos('-right-full');
                       }}
-                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                      className="hover:bg-gray-200  py-4 px-6 w-full"
                     >
                       <span className="font-semibold">{userInfo.name}</span> 님
                     </Link>
                     <button
-                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                      className="hover:bg-gray-200  py-4 px-6 w-full"
                       onClick={(e) => {
                         e.stopPropagation();
                         setRightPos('-right-full');
@@ -194,14 +194,14 @@ export default function Navbar() {
                         e.stopPropagation();
                         setRightPos('-right-full');
                       }}
-                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                      className="hover:bg-gray-200  py-4 px-6 w-full"
                     >
                       로그인
                     </Link>
                     <a
                       href="https://sw7up.cbnu.ac.kr/account/join"
                       target="_blank"
-                      className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full"
+                      className="hover:bg-gray-200  py-4 px-6 w-full"
                       onClick={(e) => {
                         e.stopPropagation();
                       }}
@@ -217,7 +217,7 @@ export default function Navbar() {
                   e.stopPropagation();
                   setRightPos('-right-full');
                 }}
-                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200  py-4 px-6 w-full font-medium"
               >
                 대회
               </Link>
@@ -227,7 +227,7 @@ export default function Navbar() {
                   e.stopPropagation();
                   setRightPos('-right-full');
                 }}
-                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200  py-4 px-6 w-full font-medium"
               >
                 시험
               </Link>
@@ -237,7 +237,7 @@ export default function Navbar() {
                   e.stopPropagation();
                   setRightPos('-right-full');
                 }}
-                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200  py-4 px-6 w-full font-medium"
               >
                 연습문제
               </Link>
@@ -247,7 +247,7 @@ export default function Navbar() {
                   e.stopPropagation();
                   setRightPos('-right-full');
                 }}
-                className="hover:bg-gray-200 focus:bg-grey-200 py-4 px-6 w-full font-medium"
+                className="hover:bg-gray-200  py-4 px-6 w-full font-medium"
               >
                 공지사항
               </Link>
