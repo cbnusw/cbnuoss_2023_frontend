@@ -15,6 +15,7 @@ import { ContestInfo, ContestSubmitInfo } from '@/types/contest';
 import * as XLSX from 'xlsx';
 import { getCodeSubmitResultTypeDescription } from '@/utils/getCodeSubmitResultTypeDescription';
 import UsersContestSubmitPageLoadingSkeleton from './components/UsersContestSubmitPageLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
@@ -39,6 +40,8 @@ interface DefaultProps {
 
 export default function UsersContestSubmits(props: DefaultProps) {
   const cid = props.params.cid;
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const { isPending, data } = useQuery({
     queryKey: ['contestDetailInfo', cid],
@@ -83,11 +86,11 @@ export default function UsersContestSubmits(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, contestInfo, router]);
+  }, [updateUserInfo, contestInfo, router, addToast]);
 
   const downloadSubmitsInfoListAsExcel = (
     contestantSubmitsInfo: ContestSubmitInfo[],

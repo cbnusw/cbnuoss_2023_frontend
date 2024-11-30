@@ -18,6 +18,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import UserPracticeSubmitDetailPageLoadingSkeleton from './components/skeleton/UserPracticeSubmitDetailPageLoadingSkeleton';
 import UserPracticeSubmitDetailCodeLoadingSkeleton from './components/skeleton/UserPracticeSubmitDetailCodeLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 코드 제출 정보 조회 API
 const fetchSubmitInfo = ({ queryKey }: any) => {
@@ -54,6 +55,8 @@ export default function UserPracticeSubmitDetail(props: DefaultProps) {
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const resData = data?.data.data;
   const submitInfo: SubmitInfo = resData;
 
@@ -76,11 +79,11 @@ export default function UserPracticeSubmitDetail(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, submitInfo, router]);
+  }, [updateUserInfo, submitInfo, router, addToast]);
 
   if (isLoading) return <UserPracticeSubmitDetailPageLoadingSkeleton />;
 

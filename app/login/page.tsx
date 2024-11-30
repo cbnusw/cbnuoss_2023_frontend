@@ -135,23 +135,20 @@ export default function Login() {
         case 400:
           switch (resData.code) {
             case 'REG_NUMBER_REQUIRED':
-              alert('Bad Request(400)...');
+              addToast('error', '로그인 중에 에러가 발생했어요.');
               break;
             case 'INVALID_PASSWORD':
-              // addToast(
-              //   '제한된 로그인 시도 횟수를 초과했습니다. 잠시 후 다시 시도해 주세요.',
-              // );
-              addToast('정확한 로그인 정보를 입력해 주세요.');
+              addToast('warning', '정확한 로그인 정보를 입력해 주세요.');
               break;
             default:
-              alert('정의되지 않은 http code입니다.');
+              addToast('error', '로그인 중에 에러가 발생했어요.');
           }
           break;
         case 404:
-          addToast('정확한 로그인 정보를 입력해 주세요.');
+          addToast('warning', '정확한 로그인 정보를 입력해 주세요.');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '로그인 중에 에러가 발생했어요.');
       }
     },
     onSuccess: (data) => {
@@ -292,7 +289,7 @@ export default function Login() {
               className={`${
                 isSubmitting
                   ? 'opacity-70 px-2'
-                  : 'focus:bg-[#1c6cdb] hover:bg-[#1c6cdb] px-[0.775rem]'
+                  : ' hover:bg-[#1c6cdb] px-[0.775rem]'
               } flex justify-center items-center text-[0.8rem] py-[0.6em] rounded-[6px] font-medium bg-[#3183f6]`}
             >
               {isSubmitting && <SmallLoading />}

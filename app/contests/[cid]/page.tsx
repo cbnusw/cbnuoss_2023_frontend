@@ -15,6 +15,7 @@ import * as XLSX from 'xlsx';
 import { AxiosError } from 'axios';
 import ContestDetailPageLoadingSkeleton from './components/skeleton/ContestDetailPageLoadingSkeleton';
 import ContestDetailContentLoadingSkeleton from './components/skeleton/ContestDetailContentLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
@@ -61,6 +62,8 @@ const MarkdownPreview = dynamic(
 
 export default function ContestDetail(props: DefaultProps) {
   const cid = props.params.cid;
+
+  const addToast = ToastInfoStore((state) => state.addToast);
   const queryClient = useQueryClient();
 
   const { isPending, isError, data, error } = useQuery({
@@ -77,11 +80,11 @@ export default function ContestDetail(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('대회가 삭제되었습니다.');
+          addToast('success', '대회가 삭제되었어요.');
           router.push('/contests');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
     onError: (error: AxiosError) => {
@@ -90,14 +93,14 @@ export default function ContestDetail(props: DefaultProps) {
         case 400:
           switch (resData.code) {
             case 'AFTER_TEST_START':
-              alert('대회 시작 시간 이후에는 게시글을 삭제하실 수 없습니다.');
+              addToast('warning', '대회 시작 후에는 삭제할 수 없어요.');
               break;
             default:
-              alert('정의되지 않은 http code입니다.');
+              addToast('error', '삭제 중에 에러가 발생했어요.');
           }
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
   });
@@ -111,9 +114,7 @@ export default function ContestDetail(props: DefaultProps) {
       switch (httpStatusCode) {
         case 200:
           setIsEnrollContest(true);
-          alert(
-            '대회 참가 신청이 완료되었습니다.\n대회 시간을 확인한 후, 해당 시간에 참가해 주세요',
-          );
+          addToast('success', '신청이 완료되었어요.');
 
           // 쿼리 데이터 업데이트
           const updatedContestants = [...contestInfo.contestants, userInfo];
@@ -129,7 +130,7 @@ export default function ContestDetail(props: DefaultProps) {
           });
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '신청 중에 에러가 발생했어요.');
       }
     },
     onError: (error: AxiosError) => {
@@ -138,14 +139,14 @@ export default function ContestDetail(props: DefaultProps) {
         case 400:
           switch (resData.code) {
             case 'BEFORE_APPLYING_PERIOD':
-              alert('대회 신청 기간이 아닙니다.');
+              addToast('warning', '대회 신청 기간이 아니에요.');
               break;
             default:
-              alert('정의되지 않은 http code입니다.');
+              addToast('error', '신청 중에 에러가 발생했어요.');
           }
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '신청 중에 에러가 발생했어요.');
       }
     },
   });
@@ -159,7 +160,7 @@ export default function ContestDetail(props: DefaultProps) {
       switch (httpStatusCode) {
         case 200:
           setIsEnrollContest(false);
-          alert('대회 참가 신청이 취소되었습니다.');
+          addToast('success', '신청이 취소되었어요.');
           const updatedContestants = contestInfo.contestants.filter(
             (contestant) => contestant._id !== userInfo._id,
           );
@@ -177,7 +178,7 @@ export default function ContestDetail(props: DefaultProps) {
           });
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '취소 중에 에러가 발생했어요.');
       }
     },
   });
@@ -295,7 +296,7 @@ export default function ContestDetail(props: DefaultProps) {
 
   const handleDeleteContest = () => {
     const userResponse = confirm(
-      '대회를 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없습니다.',
+      '대회를 삭제하시겠습니까?\n삭제 후 내용을 되돌릴 수 없어요.',
     );
     if (!userResponse) return;
 
@@ -323,7 +324,7 @@ export default function ContestDetail(props: DefaultProps) {
 
   const handleUnEnrollContest = () => {
     const userResponse = confirm(
-      '대회 참가 신청을 취소하시겠습니까?\n참가신청 기간 이후에는 다시 신청할 수 없습니다.',
+      '대회 참가 신청을 취소하시겠습니까?\n참가신청 기간 이후에는 다시 신청할 수 없어요.',
     );
     if (!userResponse) return;
 
@@ -536,7 +537,7 @@ export default function ContestDetail(props: DefaultProps) {
                 </button>
                 <button
                   onClick={handleDeleteContest}
-                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium hover:bg-[#f8d6d7]"
                 >
                   삭제
                 </button>

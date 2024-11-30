@@ -16,6 +16,7 @@ import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 import { formatDateToYYMMDDHHMM } from '@/utils/formatDate';
 import ExamProblemListPageLoadingSkeleton from './components/ExamProblemListPageLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 시험에 등록된 문제 목록 정보 조회 API
 const fetchExamProblemsDetailInfo = ({ queryKey }: any) => {
@@ -51,6 +52,8 @@ interface DefaultProps {
 export default function ExamProblems(props: DefaultProps) {
   const eid = props.params.eid;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['examProblemsDetailInfo', eid],
     queryFn: fetchExamProblemsDetailInfo,
@@ -68,10 +71,10 @@ export default function ExamProblems(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('문제 순서가 변경되었습니다.');
+          addToast('success', '문제 순서가 변경되었어요.');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '문제 순서 변경 중에 에러가 발생했어요.');
       }
     },
   });
@@ -134,11 +137,11 @@ export default function ExamProblems(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, examProblemsInfo, router]);
+  }, [updateUserInfo, examProblemsInfo, router, addToast]);
 
   // 시험 시간 표시에 사용할 클래스를 결정하는 함수
   const getTimeDisplayClass = () => {
@@ -198,7 +201,7 @@ export default function ExamProblems(props: DefaultProps) {
     changingProblemOrderBtnRef.current?.blur();
 
     if (examProblemsInfo.problems.length < 2) {
-      alert('문제가 2개 이상 등록된 경우에 문제의 순서를 변경할 수 있습니다.');
+      addToast('warning', '문제가 2개 이상 등록해 주세요.');
       return;
     }
 
@@ -274,7 +277,7 @@ export default function ExamProblems(props: DefaultProps) {
                     currentTime < examEndTime && (
                       <button
                         onClick={handleRegisterExamProblem}
-                        className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+                        className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-4 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
                       >
                         문제 등록
                       </button>

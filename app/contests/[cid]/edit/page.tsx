@@ -12,6 +12,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 어드민 전용 대회 게시글 정보 조회 API
 const fetchContestDetailInfo = ({ queryKey }: any) => {
@@ -48,6 +49,8 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 export default function EditContest(props: DefaultProps) {
   const cid = props.params.cid;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['contestDetailInfo', cid],
     queryFn: fetchContestDetailInfo,
@@ -62,11 +65,11 @@ export default function EditContest(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('대회 내용이 수정되었습니다.');
+          addToast('success', '대회 정보가 수정되었어요.');
           router.push(`/contests/${cid}`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '수정 중에 에러가 발생했어요.');
       }
     },
   });
@@ -82,22 +85,13 @@ export default function EditContest(props: DefaultProps) {
   const [contestStartDateTime, setContestStartDateTime] = useState('');
   const [contestEndDateTime, setContestEndDateTime] = useState('');
   const [isCheckedAppliedPeriod, setIsCheckedAppliedPeriod] = useState(false);
-  // const [isCheckedUsingContestPwd, setIsCheckedUsingContestPwd] = useState(
-  //   contestInfo.isPassword,
-  // );
-  const [
-    isCheckedUsingContestProblemsPwd,
-    setIsCheckedUsingContestProblemsPwd,
-  ] = useState(false);
   const [contestAppliedStartDateTime, setContestAppliedStartDateTime] =
     useState('');
   const [contestAppliedEndDateTime, setContestAppliedEndDateTime] =
     useState('');
-  // const [contestPwd, setContestPwd] = useState(contestInfo.contestPwd);
   const [contestProblemsPwd, setContestProblemsPwd] = useState('');
 
   const [isContestNameValidFail, setIsContestNameValidFail] = useState(false);
-  // const [isContestPwdValidFail, setIsContestPwdValidFail] = useState(false);
   const [isContestProblemsPwdValidFail, setIsContestProblemsPwdValidFail] =
     useState(false);
 
@@ -122,13 +116,11 @@ export default function EditContest(props: DefaultProps) {
           ? convertUTCToLocalDateTime(contestInfo.applyingPeriod.end)
           : '',
       );
-      setIsCheckedUsingContestProblemsPwd(contestInfo.isPassword);
       setContestProblemsPwd(contestInfo.password || '');
     }
   }, [contestInfo]);
 
   const contestNameRef = useRef<HTMLInputElement>(null);
-  // const contestPwdRef = useRef<HTMLInputElement>(null);
   const contestProblemsPwdRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
@@ -140,11 +132,6 @@ export default function EditContest(props: DefaultProps) {
     setTitle(e.target.value);
     setIsContestNameValidFail(false);
   };
-
-  // const handleContestPwdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setContestPwd(e.target.value);
-  //   setIsContestPwdValidFail(false);
-  // };
 
   const handleContestProblemsPwdChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -162,7 +149,7 @@ export default function EditContest(props: DefaultProps) {
 
   const handleEditContest = () => {
     if (!title) {
-      alert('대회명을 입력해 주세요');
+      addToast('warning', '대회명을 입력해 주세요.');
       window.scrollTo(0, 0);
       contestNameRef.current?.focus();
       setIsContestNameValidFail(true);
@@ -170,18 +157,18 @@ export default function EditContest(props: DefaultProps) {
     }
 
     if (!content) {
-      alert('본문을 입력해 주세요');
+      addToast('warning', '본문을 입력해 주세요.');
       window.scrollTo(0, 0);
       return;
     }
 
     if (!contestStartDateTime || !contestEndDateTime) {
-      alert('대회 시간을 설정해 주세요');
+      addToast('warning', '대회 시간을 설정해 주세요.');
       return;
     }
 
     if (!contestProblemsPwd) {
-      alert('문제 비밀번호를 입력해 주세요');
+      addToast('warning', '문제 열람 비밀번호를 입력해 주세요.');
       contestProblemsPwdRef.current?.focus();
       setIsContestProblemsPwdValidFail(true);
       return;
@@ -191,34 +178,29 @@ export default function EditContest(props: DefaultProps) {
       isCheckedAppliedPeriod &&
       (!contestAppliedStartDateTime || !contestAppliedEndDateTime)
     ) {
-      alert('신청 기간을 설정해 주세요');
+      addToast('warning', '신청 기간을 설정해 주세요.');
       return;
     }
 
-    // if (isCheckedUsingContestPwd && !contestPwd) {
-    //   alert('대회 비밀번호를 입력해 주세요');
-    //   window.scrollTo(0, document.body.scrollHeight);
-    //   contestPwdRef.current?.focus();
-    //   setIsContestPwdValidFail(true);
-    //   return;
-    // }
-
     // 대회 시작 시간과 종료 시간의 유효성 검사
     if (contestStartDateTime >= contestEndDateTime) {
-      alert('대회 종료 시간은 시작 시간 이후로 설정해야 합니다.');
+      addToast('warning', '대회 종료 시간은 시작 시간 이후로 설정해 주세요.');
       return;
     }
 
     // 대회 신청 기간 설정이 활성화되어 있고, 시작 시간과 종료 시간의 유효성 검사
     if (isCheckedAppliedPeriod) {
       if (contestAppliedStartDateTime >= contestAppliedEndDateTime) {
-        alert('대회 신청 종료 시간은 시작 시간 이후로 설정해야 합니다.');
+        addToast('warning', '신청 종료 시간은 시작 시간 이후로 설정해 주세요.');
         return;
       }
 
       // 대회 신청 종료 시간이 대회 시작 시간 이전인지 검사
       if (contestAppliedEndDateTime >= contestStartDateTime) {
-        alert('대회 신청기간은 대회 시작 시간 이전으로 설정해야 합니다.');
+        addToast(
+          'warning',
+          '신청 기간은 대회 시작 시간 이전으로 설정해 주세요.',
+        );
         return;
       }
     }
@@ -254,11 +236,11 @@ export default function EditContest(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, contestInfo, router]);
+  }, [updateUserInfo, contestInfo, router, addToast]);
 
   if (isLoading || isPending) return <Loading />;
 
@@ -545,7 +527,7 @@ export default function EditContest(props: DefaultProps) {
             </button>
             <button
               onClick={handleEditContest}
-              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
             >
               수정
             </button>

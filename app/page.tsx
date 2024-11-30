@@ -32,7 +32,7 @@ export default function Home() {
             <div className="mb-5">
               <Link
                 href="/exams"
-                className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba] hover:text-black focus:text-black"
+                className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba] hover:text-black"
               >
                 추가된 시험
               </Link>
@@ -48,7 +48,7 @@ export default function Home() {
             <div className="mb-5">
               <Link
                 href="/contests"
-                className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba] hover:text-black focus:text-black"
+                className="text-[#595f68] text-xl pb-[11px] border-b-2 border-[#3274ba] hover:text-black"
               >
                 신청 가능한 대회
               </Link>

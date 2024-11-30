@@ -12,6 +12,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 시험 게시글 정보 조회 API
 const fetchExamDetailInfo = ({ queryKey }: any) => {
@@ -57,6 +58,8 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 export default function EditExam(props: DefaultProps) {
   const eid = props.params.eid;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['examDetailInfo', eid],
     queryFn: fetchExamDetailInfo,
@@ -71,11 +74,11 @@ export default function EditExam(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('시험 내용이 수정되었습니다.');
+          addToast('success', '시험 정보가 수정되었어요.');
           router.push(`/exams/${eid}`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '수정 중에 에러가 발생했어요.');
       }
     },
   });
@@ -143,7 +146,7 @@ export default function EditExam(props: DefaultProps) {
 
   const handleEditExam = () => {
     if (!title) {
-      alert('시험명을 입력해 주세요');
+      addToast('warning', '시험명을 입력해 주세요.');
       window.scrollTo(0, 0);
       examNameRef.current?.focus();
       setIsExamNameValidFail(true);
@@ -151,7 +154,7 @@ export default function EditExam(props: DefaultProps) {
     }
 
     if (!courseName) {
-      alert('수업명을 입력해 주세요');
+      addToast('warning', '수업명을 입력해 주세요.');
       window.scrollTo(0, 0);
       courseNameRef.current?.focus();
       setIsCourseNameValidFail(true);
@@ -159,24 +162,24 @@ export default function EditExam(props: DefaultProps) {
     }
 
     if (!content) {
-      alert('본문을 입력해 주세요');
+      addToast('warning', '본문을 입력해 주세요.');
       window.scrollTo(0, 0);
       return;
     }
 
     if (!examStartDateTime || !examEndDateTime) {
-      alert('시험 시간을 설정해 주세요');
+      addToast('warning', '시험 시간을 설정해 주세요.');
       return;
     }
 
     // 시험 시작 시간과 종료 시간의 유효성 검사
     if (examStartDateTime >= examEndDateTime) {
-      alert('시험 종료 시간은 시작 시간 이후로 설정해야 합니다.');
+      addToast('warning', '시험 종료 시간은 시작 시간 이후로 설정해 주세요.');
       return;
     }
 
     if (!examPwd) {
-      alert('비밀번호를 입력해 주세요');
+      addToast('warning', '시험 비밀번호를 입력해 주세요.');
       examPwdRef.current?.focus();
       setIsExamPwdValidFail(true);
       return;
@@ -207,11 +210,11 @@ export default function EditExam(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, examInfo, router]);
+  }, [updateUserInfo, examInfo, router, addToast]);
 
   if (isLoading || isPending) return <Loading />;
 
@@ -386,7 +389,7 @@ export default function EditExam(props: DefaultProps) {
             </button>
             <button
               onClick={handleEditExam}
-              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+              className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
             >
               수정
             </button>

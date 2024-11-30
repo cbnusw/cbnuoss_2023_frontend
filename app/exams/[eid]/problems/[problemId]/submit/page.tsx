@@ -16,6 +16,12 @@ import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 import SubmitExamProblemCodePageLoadingSkeleton from './components/SubmitExamProblemCodePageLoadingSkeleton';
 import SmallLoading from '@/app/components/SmallLoading';
+import { ToastInfoStore } from '@/store/ToastInfo';
+import ReactCodeMirror from '@uiw/react-codemirror';
+import { getCodeExtension } from '@/utils/getCodeSubmitResultTypeDescription';
+import { createAndUploadFile } from '@/utils/createAndUploadFile';
+import { UploadService } from '@/components/utils/uploadService';
+import { submitCodeData } from '@/utils/submitCodeData';
 
 // 문제 정보 조회 API
 const fetchExamProblemDetailInfo = ({ queryKey }: any) => {
@@ -50,6 +56,8 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
   const eid = props.params.eid;
   const problemId = props.params.problemId;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['examProblemDetailInfo', problemId],
     queryFn: fetchExamProblemDetailInfo,
@@ -67,12 +75,12 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
           router.push(`/exams/${eid}/problems/${problemId}/submits`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '코드 제출 중에 에러가 발생했어요.');
       }
     },
     onError: (error) => {
       console.error('Error submitting code:', error);
-      alert('코드 제출 중 오류가 발생했습니다.');
+      addToast('error', '코드 제출 중에 에러가 발생했어요.');
     },
     onSettled: () => {
       setIsSubmitting(false);
@@ -84,17 +92,16 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
 
   const updateUserInfo = userInfoStore((state: any) => state.updateUserInfo);
 
+  const [uploadService] = useState(new UploadService()); // UploadService 인스턴스 생성
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
-  const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
+  const [code, setCode] = useState('');
 
   const [
     isSelectedSubmitLanguageValidFail,
     setIsSelectedSubmitLanguageValidFail,
   ] = useState(false);
-  const [isCodeFileUploadingValidFail, setIsCodeFileUploadingValidFail] =
-    useState(false);
   const [isSubmitBtnEnable, setIsSubmitBtnEnable] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -115,47 +122,58 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
     setIsSelectedSubmitLanguageValidFail(false);
   };
 
-  const handleSubmitExamProblemCode = () => {
+  const handleSubmitExamProblemCode = async () => {
     if (isSubmitting) return;
 
     setIsSubmitting(true); // 제출 시작
 
     if (selectedSubmitLanguage === '언어 선택 *') {
-      alert('제출 언어를 선택해 주세요');
+      addToast('warning', '제출 언어를 선택해 주세요.');
       window.scrollTo(0, 0);
       setIsSelectedSubmitLanguageValidFail(true);
       return;
     }
 
-    if (!isCodeFileUploadingValidFail) {
-      alert('소스 코드 파일을 업로드해 주세요');
-      window.scrollTo(0, 0);
+    // 코드 입력 확인
+    if (!code.trim()) {
+      addToast('warning', '코드를 입력해 주세요.');
+      setIsSubmitting(false);
       return;
     }
 
-    const submitCodeData = {
-      parentId: eid,
-      parentType: 'Assignment',
-      problem: problemId,
-      source: uploadedCodeFileUrl,
-      language: selectedSubmitLanguage.toLowerCase(),
-    };
+    try {
+      const uploadedFileUrl = await createAndUploadFile(
+        code,
+        selectedSubmitLanguage,
+        uploadService,
+      );
 
-    submitCodeMutation.mutate({ problemId, params: submitCodeData });
+      // parentId 확인
+      if (!eid) {
+        throw new Error('parentId가 없습니다.');
+      }
+
+      await submitCodeData(
+        eid, // 올바른 parentId 전달
+        'Assignment',
+        problemId,
+        uploadedFileUrl,
+        selectedSubmitLanguage,
+        submitCodeMutation,
+        addToast,
+      );
+    } catch (error) {
+      addToast('error', '코드 제출 중에 에러가 발생했어요.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
-    if (
-      selectedSubmitLanguage !== '언어 선택 *' &&
-      isCodeFileUploadingValidFail
-    )
+    if (selectedSubmitLanguage !== '언어 선택 *' && code !== '')
       setIsSubmitBtnEnable(true);
     else setIsSubmitBtnEnable(false);
-  }, [
-    selectedSubmitLanguage,
-    isCodeFileUploadingValidFail,
-    setIsSubmitBtnEnable,
-  ]);
+  }, [selectedSubmitLanguage, code, setIsSubmitBtnEnable]);
 
   useEffect(() => {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
@@ -177,11 +195,11 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, examProblemInfo, eid, router]);
+  }, [updateUserInfo, examProblemInfo, eid, router, addToast]);
 
   if (isLoading) return <SubmitExamProblemCodePageLoadingSkeleton />;
 
@@ -287,13 +305,13 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
 
           <div className="flex flex-col gap-1 mt-5">
             <p className="text-lg">소스 코드 파일</p>
-            <MyDropzone
-              type="code"
-              guideMsg="코드 파일을 이곳에 업로드해 주세요"
-              setIsFileUploaded={setIsCodeFileUploadingValidFail}
-              isFileUploaded={isCodeFileUploadingValidFail}
-              initUrl={''}
-              setUploadedFileUrl={setUploadedCodeFileUrl}
+            <ReactCodeMirror
+              value={code}
+              extensions={[getCodeExtension(selectedSubmitLanguage)]}
+              onChange={(code) => {
+                setCode(code);
+              }}
+              className="cm border-y"
             />
           </div>
         </div>
@@ -310,7 +328,7 @@ export default function SubmitExamProblemCode(props: DefaultProps) {
             disabled={!isSubmitBtnEnable || isSubmitting}
             className={`${
               isSubmitBtnEnable && !isSubmitting
-                ? 'focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]'
+                ? ' hover:bg-[#1c6cdb]'
                 : 'opacity-70'
             } flex justify-center items-center gap-[0.1rem] text-white ${
               isSubmitting ? 'px-[0.725rem]' : 'px-4'

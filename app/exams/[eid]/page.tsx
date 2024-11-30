@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import ExamDetailPageLoadingSkeleton from './components/skeleton/ExamDetailPageLoadingSkeleton';
 import ExamDetailContentLoadingSkeleton from './components/skeleton/ExamDetailContentLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 시험 게시글 정보 조회 API
 const fetchExamDetailInfo = ({ queryKey }: any) => {
@@ -58,6 +59,8 @@ const MarkdownPreview = dynamic(
 export default function ExamDetail(props: DefaultProps) {
   const eid = props.params.eid;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['examDetailInfo', eid],
     queryFn: fetchExamDetailInfo,
@@ -72,11 +75,11 @@ export default function ExamDetail(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('시험이 삭제되었습니다.');
+          addToast('success', '시험이 삭제되었어요.');
           router.push('/exams');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '삭제 중에 에러가 발생했어요.');
       }
     },
   });
@@ -90,12 +93,10 @@ export default function ExamDetail(props: DefaultProps) {
       switch (httpStatusCode) {
         case 200:
           setIsEnrollExam(true);
-          alert(
-            '시험 응시가 완료되었습니다.\n시험 시간을 확인한 후, 해당 시간에 시작해 주세요',
-          );
+          addToast('success', '신청이 완료되었어요.');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '신청 중 에러가 발생했어요.');
       }
     },
   });
@@ -109,10 +110,10 @@ export default function ExamDetail(props: DefaultProps) {
       switch (httpStatusCode) {
         case 200:
           setIsEnrollExam(false);
-          alert('시험 응시가 취소되었습니다.');
+          addToast('success', '신청이 취소되었어요.');
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '취소 중에 에러가 발생했어요.');
       }
     },
   });
@@ -388,7 +389,7 @@ export default function ExamDetail(props: DefaultProps) {
           return;
         }
 
-        alert('비밀번호가 일치하지 않습니다.');
+        addToast('warning', '비밀번호가 일치하지 않아요.');
         router.back();
       }
     });
@@ -462,7 +463,7 @@ export default function ExamDetail(props: DefaultProps) {
                 </button>
                 <button
                   onClick={handleDeleteExam}
-                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#cee1fc] hover:bg-[#cee1fc]"
+                  className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-[#de5257] bg-[#fcefee] px-4 py-[0.5rem] rounded-[7px] font-medium hover:bg-[#f8d6d7]"
                 >
                   삭제
                 </button>

@@ -11,6 +11,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 공지사항 게시글 정보 조회 API
 const fetchNoticeDetailInfo = ({ queryKey }: any) => {
@@ -53,6 +54,8 @@ const CustomCKEditor = dynamic(() => import('@/components/CustomCKEditor'), {
 export default function EditNotice(props: DefaultProps) {
   const nid = props.params.nid;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['noticeDetailInfo', nid],
     queryFn: fetchNoticeDetailInfo,
@@ -67,11 +70,11 @@ export default function EditNotice(props: DefaultProps) {
 
       switch (httpStatusCode) {
         case 200:
-          alert('공지사항 내용이 수정되었습니다.');
+          addToast('success', '공지사항 정보가 수정되었어요.');
           router.push(`/notices/${nid}`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('warning', '수정 중에 에러가 발생했어요.');
       }
     },
   });
@@ -112,7 +115,7 @@ export default function EditNotice(props: DefaultProps) {
 
   const handleEditNotice = () => {
     if (!title) {
-      alert('제목을 입력해 주세요');
+      addToast('warning', '제목을 입력해 주세요.');
       window.scrollTo(0, 0);
       noticeNameRef.current?.focus();
       setIsNoticeNameValidFail(true);
@@ -120,7 +123,7 @@ export default function EditNotice(props: DefaultProps) {
     }
 
     if (!content) {
-      alert('본문을 입력해 주세요');
+      addToast('warning', '본문을 입력해 주세요.');
       window.scrollTo(0, 0);
       return;
     }
@@ -136,10 +139,10 @@ export default function EditNotice(props: DefaultProps) {
         return;
       }
 
-      alert('접근 권한이 없습니다.');
-      router.back();
+      addToast('warning', '접근 권한이 없어요.');
+      router.push('/');
     });
-  }, [updateUserInfo, router]);
+  }, [updateUserInfo, router, addToast]);
 
   if (isLoading) return <Loading />;
 
@@ -275,7 +278,7 @@ export default function EditNotice(props: DefaultProps) {
           </button>
           <button
             onClick={handleEditNotice}
-            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]"
+            className="flex justify-center items-center gap-[0.375rem] text-[0.8rem] text-white bg-[#3a8af9] px-5 py-[0.5rem] rounded-[7px] font-medium  hover:bg-[#1c6cdb]"
           >
             수정
           </button>

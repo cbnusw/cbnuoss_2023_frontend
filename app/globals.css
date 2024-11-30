@@ -99,31 +99,12 @@
   width: auto; /* 너비는 내용에 따라 자동 조정 */
   max-width: 90%; /* 긴 메시지 제한 */
   word-wrap: break-word; /* 긴 단어 줄바꿈 */
-}
 
-.toast span {
-  &:first-child {
-    display: inline-block;
-    height: 20px;
-    width: 20px;
-    min-width: 20px;
-
-    svg {
-      transform: scale(1.05);
-
-      circle {
-        fill: #ffcf58;
-      }
-
-      path {
-        fill: #333d4b;
-      }
+  span {
+    &:last-child {
+      color: #555e6a;
+      font-weight: 500;
     }
-  }
-
-  &:last-child {
-    color: #555e6a;
-    font-weight: 500;
   }
 }
 
@@ -410,11 +391,18 @@
 }
 
 /* CodeMirror */
+.cm {
+  min-height: 350px !important;
+  height: auto !important;
+}
+
 .cm-editor {
   outline: none !important;
 }
 
 .cm-editor .cm-gutters {
+  min-height: 350px !important;
+  height: auto !important;
   justify-content: end !important;
   min-width: 1.5rem;
 }
@@ -425,6 +413,11 @@
 
 .cm-editor .cm-gutterElement {
   color: #999999 !important;
+}
+
+.cm-content {
+  min-height: 350px !important;
+  height: auto !important;
 }
 
 /* --------------- */

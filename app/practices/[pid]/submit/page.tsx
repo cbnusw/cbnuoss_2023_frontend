@@ -1,6 +1,5 @@
 'use client';
 
-import MyDropzone from '@/app/components/MyDropzone';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -16,6 +15,12 @@ import { UserInfo } from '@/types/user';
 import { OPERATOR_ROLES } from '@/constants/role';
 import SubmitPracticeProblemCodePageLoadingSkeleton from './components/SubmitPracticeProblemCodePageLoadingSkeleton';
 import SmallLoading from '@/app/components/SmallLoading';
+import { ToastInfoStore } from '@/store/ToastInfo';
+import { UploadService } from '@/components/utils/uploadService';
+import { createAndUploadFile } from '@/utils/createAndUploadFile';
+import { submitCodeData } from '@/utils/submitCodeData';
+import { getCodeExtension } from '@/utils/getCodeSubmitResultTypeDescription';
+import ReactCodeMirror from '@uiw/react-codemirror';
 
 // 연습문제 게시글 정보 조회 API
 const fetchPracticeDetailInfo = ({ queryKey }: any) => {
@@ -26,9 +31,15 @@ const fetchPracticeDetailInfo = ({ queryKey }: any) => {
 };
 
 // 코드 제출 API
-const submitCode = ({ pid, params }: { pid: string; params: SubmitCode }) => {
+const submitCode = ({
+  problemId,
+  params,
+}: {
+  problemId: string;
+  params: SubmitCode;
+}) => {
   return axiosInstance.post(
-    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${pid}/submit`,
+    `${process.env.NEXT_PUBLIC_API_VERSION}/practice/${problemId}/submit`,
     params,
   );
 };
@@ -43,6 +54,8 @@ interface DefaultProps {
 export default function SubmitPracticeProblemCode(props: DefaultProps) {
   const pid = props.params.pid;
   const problemId = props.params.pid;
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const { isPending, isError, data, error } = useQuery({
     queryKey: ['practiceDetailInfo', pid],
@@ -61,12 +74,12 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
           router.push(`/practices/${pid}/submits`);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '코드 제출 중에 에러가 발생했어요.');
       }
     },
     onError: (error) => {
       console.error('Error submitting code:', error);
-      alert('코드 제출 중 오류가 발생했습니다.');
+      addToast('error', '코드 제출 중에 에러가 발생했어요.');
     },
     onSettled: () => {
       setIsSubmitting(false);
@@ -81,7 +94,9 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedSubmitLanguage, setSelectedSubmitLanguage] =
     useState('언어 선택 *');
-  const [uploadedCodeFileUrl, setUploadedCodeFileUrl] = useState('');
+  const [code, setCode] = useState('');
+
+  const [uploadService] = useState(new UploadService()); // UploadService 인스턴스 생성
   const [isSubmitBtnEnable, setIsSubmitBtnEnable] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -89,8 +104,6 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
     isSelectedSubmitLanguageValidFail,
     setIsSelectedSubmitLanguageValidFail,
   ] = useState(false);
-  const [isCodeFileUploadingValidFail, setIsCodeFileUploadingValidFail] =
-    useState(false);
 
   const router = useRouter();
 
@@ -105,46 +118,53 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
     setIsSelectedSubmitLanguageValidFail(false);
   };
 
-  const handleSubmitPracticeProblemCode = () => {
+  const handleSubmitPracticeProblemCode = async () => {
     if (isSubmitting) return;
 
     setIsSubmitting(true); // 제출 시작
 
     if (selectedSubmitLanguage === '언어 선택 *') {
-      alert('제출 언어를 선택해 주세요');
+      addToast('warning', '제출 언어를 선택해 주세요.');
       window.scrollTo(0, 0);
       setIsSelectedSubmitLanguageValidFail(true);
       return;
     }
 
-    if (!isCodeFileUploadingValidFail) {
-      alert('소스 코드 파일을 업로드해 주세요');
-      window.scrollTo(0, 0);
+    // 코드 입력 확인
+    if (!code.trim()) {
+      addToast('warning', '코드를 입력해 주세요.');
+      setIsSubmitting(false);
       return;
     }
 
-    const submitCodeData = {
-      parentType: 'Practice',
-      problem: problemId,
-      source: uploadedCodeFileUrl,
-      language: selectedSubmitLanguage.toLowerCase(),
-    };
+    try {
+      const uploadedFileUrl = await createAndUploadFile(
+        code,
+        selectedSubmitLanguage,
+        uploadService,
+      );
 
-    submitCodeMutation.mutate({ pid, params: submitCodeData });
+      await submitCodeData(
+        null,
+        'Practice',
+        problemId,
+        uploadedFileUrl,
+        selectedSubmitLanguage,
+        submitCodeMutation,
+        addToast,
+      );
+    } catch (error) {
+      addToast('error', '코드 제출 중에 에러가 발생했어요.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
-    if (
-      selectedSubmitLanguage !== '언어 선택 *' &&
-      isCodeFileUploadingValidFail
-    )
+    if (selectedSubmitLanguage !== '언어 선택 *' && code !== '')
       setIsSubmitBtnEnable(true);
     else setIsSubmitBtnEnable(false);
-  }, [
-    selectedSubmitLanguage,
-    isCodeFileUploadingValidFail,
-    setIsSubmitBtnEnable,
-  ]);
+  }, [selectedSubmitLanguage, code, setIsSubmitBtnEnable]);
 
   useEffect(() => {
     // (로그인 한) 사용자 정보 조회 및 관리자 권한 확인, 그리고 게시글 작성자인지 확인
@@ -158,11 +178,11 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, practiceInfo, router]);
+  }, [updateUserInfo, practiceInfo, router, addToast]);
 
   if (isLoading) return <SubmitPracticeProblemCodePageLoadingSkeleton />;
 
@@ -253,18 +273,18 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
 
           <div className="flex flex-col gap-1 mt-5">
             <p className="text-lg">소스 코드 파일</p>
-            <MyDropzone
-              type="code"
-              guideMsg="코드 파일을 이곳에 업로드해 주세요"
-              setIsFileUploaded={setIsCodeFileUploadingValidFail}
-              isFileUploaded={isCodeFileUploadingValidFail}
-              initUrl={''}
-              setUploadedFileUrl={setUploadedCodeFileUrl}
+            <ReactCodeMirror
+              value={code}
+              extensions={[getCodeExtension(selectedSubmitLanguage)]}
+              onChange={(code) => {
+                setCode(code);
+              }}
+              className="cm border-y"
             />
           </div>
         </div>
 
-        <div className="mt-5 pb-2 flex justify-end gap-3">
+        <div className="pb-2 flex justify-end gap-3">
           <button
             onClick={handleGoToPracticeProblem}
             className="px-4 py-[0.5rem] rounded-[7px] font-light"
@@ -276,7 +296,7 @@ export default function SubmitPracticeProblemCode(props: DefaultProps) {
             disabled={!isSubmitBtnEnable || isSubmitting}
             className={`${
               isSubmitBtnEnable && !isSubmitting
-                ? 'focus:bg-[#1c6cdb] hover:bg-[#1c6cdb]'
+                ? ' hover:bg-[#1c6cdb]'
                 : 'opacity-70'
             } flex justify-center items-center gap-[0.1rem] text-white ${
               isSubmitting ? 'px-[0.725rem]' : 'px-4'

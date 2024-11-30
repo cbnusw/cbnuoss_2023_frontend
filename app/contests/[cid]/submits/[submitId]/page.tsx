@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import UsersContestSubmitDetailPageLoadingSkeleton from './components/UsersContestSubmitDetailPageLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 코드 제출 정보 조회 API
 const fetchSubmitInfo = ({ queryKey }: any) => {
@@ -37,6 +38,8 @@ const MarkdownPreview = dynamic(
 export default function UsersContestSubmitDetail(props: DefaultProps) {
   const cid = props.params.cid;
   const submitId = props.params.submitId;
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const { isPending, data } = useQuery({
     queryKey: ['submitInfo', submitId],
@@ -70,11 +73,11 @@ export default function UsersContestSubmitDetail(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, submitInfo, router]);
+  }, [updateUserInfo, submitInfo, router, addToast]);
 
   if (isLoading || isPending)
     return <UsersContestSubmitDetailPageLoadingSkeleton />;

@@ -16,6 +16,7 @@ import { ExamInfo, ExamSubmitInfo } from '@/types/exam';
 import * as XLSX from 'xlsx';
 import { getCodeSubmitResultTypeDescription } from '@/utils/getCodeSubmitResultTypeDescription';
 import UsersExamSubmitPageLoadingSkeleton from './components/UsersExamSubmitPageLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 시험 게시글 정보 조회 API
 const fetchExamDetailInfo = ({ queryKey }: any) => {
@@ -40,6 +41,8 @@ interface DefaultProps {
 
 export default function UsersExamSubmits(props: DefaultProps) {
   const eid = props.params.eid;
+
+  const addToast = ToastInfoStore((state) => state.addToast);
 
   const { isPending, data } = useQuery({
     queryKey: ['examDetailInfo', eid],
@@ -93,11 +96,11 @@ export default function UsersExamSubmits(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, examInfo, router]);
+  }, [updateUserInfo, examInfo, router, addToast]);
 
   const downloadSubmitsInfoListAsExcel = (
     contestantSubmitsInfo: ExamSubmitInfo[],

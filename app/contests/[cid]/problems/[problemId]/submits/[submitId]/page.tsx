@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import UserContestSubmitDetailPageLoadingSkeleton from './components/skeleton/UserContestSubmitDetailPageLoadingSkeleton';
 import UserContestSubmitDetailCodeLoadingSkeleton from './components/skeleton/UserContestSubmitDetailCodeLoadingSkeleton';
+import { ToastInfoStore } from '@/store/ToastInfo';
 
 // 대회 문제 열람 비밀번호 확인 API
 const confirmContestPassword = ({
@@ -62,6 +63,8 @@ export default function UserContestSubmitDetail(props: DefaultProps) {
   const problemId = props.params.problemId;
   const submitId = props.params.submitId;
 
+  const addToast = ToastInfoStore((state) => state.addToast);
+
   const confirmContestPasswordMutation = useMutation({
     mutationFn: confirmContestPassword,
     onError: (error: AxiosError) => {
@@ -70,16 +73,16 @@ export default function UserContestSubmitDetail(props: DefaultProps) {
         case 400:
           switch (resData.code) {
             case 'CONTEST_PASSWORD_NOT_MATCH':
-              alert('비밀번호가 일치하지 않습니다.');
+              addToast('warning', '비밀번호가 일치하지 않아요.');
               deleteCookie(cid);
               router.back();
               break;
             default:
-              alert('정의되지 않은 http code입니다.');
+              addToast('error', '비밀번호 확인 중에 에러가 발생했어요.');
           }
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '비밀번호 확인 중에 에러가 발생했어요.');
       }
     },
     onSuccess: (data) => {
@@ -92,7 +95,7 @@ export default function UserContestSubmitDetail(props: DefaultProps) {
           setIsPasswordChecked(true);
           break;
         default:
-          alert('정의되지 않은 http status code입니다');
+          addToast('error', '비밀번호 확인 중에 에러가 발생했어요.');
       }
     },
   });
@@ -162,11 +165,11 @@ export default function UserContestSubmitDetail(props: DefaultProps) {
           return;
         }
 
-        alert('접근 권한이 없습니다.');
-        router.back();
+        addToast('warning', '접근 권한이 없어요.');
+        router.push('/');
       }
     });
-  }, [updateUserInfo, submitInfo, cid, router]);
+  }, [updateUserInfo, submitInfo, cid, router, addToast]);
 
   const handleGoToContestProblems = () => {
     router.push(`/contests/${cid}/problems`);

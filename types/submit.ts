@@ -74,7 +74,7 @@ export interface SubmitInfo {
 }
 
 export interface SubmitCode {
-  parentId?: string;
+  parentId?: string | null;
   parentType: string;
   problem: string;
   source: string;

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Logger } from './Logger';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -47,7 +48,7 @@ axiosInstance.interceptors.response.use(
         case 403:
           switch (error.response.data.code) {
             case 'FORBIDDEN':
-              alert('권한이 없는 요청입니다.');
+              alert('권한이 없는 요청이에요.');
               if (typeof window !== 'undefined') window.history.back();
               return;
           }
@@ -58,14 +59,14 @@ axiosInstance.interceptors.response.use(
             case 'ASSIGNMENT_NOT_FOUND':
             case 'PROBLEM_NOT_FOUND':
             case 'ERR_BAD_REQUEST':
-              alert('존재하지 않는 게시글입니다.');
+              alert('존재하지 않는 게시글이에요.');
               if (typeof window !== 'undefined') window.history.back();
               return;
           }
           break;
         case 500:
           // 500 Internal Server Error 에러 처리
-          alert('서버에 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.');
+          Logger.addToast('error', '서버에 오류가 발생했어요.');
           break;
         default:
       }
