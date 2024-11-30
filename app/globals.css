@@ -392,7 +392,7 @@
 
 /* CodeMirror */
 .cm {
-  min-height: 350px !important;
+  min-height: 250px !important;
   height: auto !important;
 }
 
@@ -401,7 +401,7 @@
 }
 
 .cm-editor .cm-gutters {
-  min-height: 350px !important;
+  min-height: 250px !important;
   height: auto !important;
   justify-content: end !important;
   min-width: 1.5rem;
@@ -416,7 +416,7 @@
 }
 
 .cm-content {
-  min-height: 350px !important;
+  min-height: 250px !important;
   height: auto !important;
 }
 
